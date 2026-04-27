@@ -3,10 +3,10 @@ import {
   CardMedia
 } from '@mui/material'
 
-import CardFields from "@/features/auth/components/CardLoginFields"
+import CardForgotPasswordFields from "@/features/auth/components/CardForgotPasswordFields"
 import cardImage from "@/features/auth/assets/login_background.jpg"
 
-export default function CardLogin() {
+export default function CardForgotPassword() {
 
   return (
     <Card
@@ -24,7 +24,7 @@ export default function CardLogin() {
           objectFit: 'cover',
         }}
       />      
-      <CardFields />
+      <CardForgotPasswordFields />
     </Card>
   )
 }
