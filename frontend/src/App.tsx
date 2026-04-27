@@ -1,14 +1,13 @@
 import { ThemeProvider } from '@mui/material/styles'
-import Typography from '@mui/material/Typography'
+import LoginPage from '@/features/auth/pages/Login'
 
 import { theme } from '@/styles/themes'
+import './styles/global.css'
 
 function App() {
   return (
     <ThemeProvider theme={ theme }>
-      <Typography sx={{
-        color: 'primary.dark'
-      }}>Hello world</Typography>
+      <LoginPage />
     </ThemeProvider>
   )
 }
