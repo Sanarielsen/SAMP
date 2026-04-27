@@ -1,9 +1,15 @@
-function App() {
+import { ThemeProvider } from '@mui/material/styles'
+import Typography from '@mui/material/Typography'
 
+import { theme } from '@/styles/themes'
+
+function App() {
   return (
-    <>
-      <h1>Hello world</h1>
-    </>
+    <ThemeProvider theme={ theme }>
+      <Typography sx={{
+        color: 'primary.dark'
+      }}>Hello world</Typography>
+    </ThemeProvider>
   )
 }
 
