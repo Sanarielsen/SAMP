@@ -1,15 +1,19 @@
-import { ThemeProvider } from '@mui/material/styles'
-import Typography from '@mui/material/Typography'
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles'
+import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 
 import { theme } from '@/styles/themes'
+import Router from './routes'
+import './styles/global.css'
 
 function App() {
   return (
-    <ThemeProvider theme={ theme }>
-      <Typography sx={{
-        color: 'primary.dark'
-      }}>Hello world</Typography>
-    </ThemeProvider>
+    <MuiThemeProvider theme={theme}>
+      <StyledThemeProvider theme={theme}>
+        <Router>
+          {/* Your routes */}
+        </Router>
+      </StyledThemeProvider>
+    </MuiThemeProvider>
   )
 }
 

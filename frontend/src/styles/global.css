@@ -1,0 +1,6 @@
+* {
+  margin: 0;
+  padding: 0;
+  /* Its make the margin and padding never expand width and height in a cases we use this properties */
+  box-sizing: border-box;
+}
