@@ -1,14 +1,19 @@
-import { ThemeProvider } from '@mui/material/styles'
-import ForgotPasswordPage from '@/features/auth/pages/ForgotPassword'
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles'
+import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 
 import { theme } from '@/styles/themes'
+import Router from './routes'
 import './styles/global.css'
 
 function App() {
   return (
-    <ThemeProvider theme={ theme }>
-      <ForgotPasswordPage />
-    </ThemeProvider>
+    <MuiThemeProvider theme={theme}>
+      <StyledThemeProvider theme={theme}>
+        <Router>
+          {/* Your routes */}
+        </Router>
+      </StyledThemeProvider>
+    </MuiThemeProvider>
   )
 }
 
