@@ -1,0 +1,10 @@
+node_modules
+build
+coverage
+
+.env
+/src/generated/prisma
+
+prisma/generated
+/src/generated/prisma
+docker-compose.yml
