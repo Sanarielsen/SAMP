@@ -5,4 +5,4 @@ export const loginSchema = zod.object({
   password: zod.string().min(1, 'Uma senha é obrigatória para essa operacão'),
 })
 
-export type loginSchemaFormData = zod.infer<typeof loginSchema>
+export type LoginSchemaFormData = zod.infer<typeof loginSchema>
