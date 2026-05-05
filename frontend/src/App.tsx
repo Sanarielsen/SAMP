@@ -4,7 +4,7 @@ import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 
 import { theme } from '@/styles/themes'
 import { queryClient } from '@/lib/query-client'
-import Router from './routes/routes'
+import Router from './routes'
 import './styles/global.css'
 import { AuthProvider } from './auth/AuthProvider'
 
