@@ -3,6 +3,7 @@ import { appRoutes } from "@/http/routes";
 import { env } from "./env";
 import { ZodError } from "zod";
 import fastifyJwt from "@fastify/jwt";
+import cors from '@fastify/cors'
 
 export const app = fastify();
 
@@ -11,6 +12,10 @@ app.register(fastifyJwt, {
   sign: {
     expiresIn: '10m'
   }
+})
+
+app.register(cors, {
+  origin: true,
 })
 
 app.register(appRoutes);

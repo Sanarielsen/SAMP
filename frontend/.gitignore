@@ -24,3 +24,9 @@ dist-ssr
 *.sw?
 
 .vite
+
+# Enviroments Ambient 
+.env
+.env.development
+.env.staging
+.env.production
