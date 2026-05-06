@@ -12,11 +12,8 @@ export default function Dashboard() {
   }
 
   return (
-    <div>
-      <header>
-        <HeaderMenu />
-      </header>
-
+    <div>      
+      <HeaderMenu />
       <main>
         <Outlet />
       </main>
