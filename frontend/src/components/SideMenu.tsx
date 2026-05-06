@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useNavigate, useLocation } from "react-router";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ApartmentIcon from '@mui/icons-material/Apartment';
@@ -21,9 +21,13 @@ interface SideMenuProps {
 
 export default function SideMenu({ open, handleChangeStatus }: SideMenuProps) {
 
-  const [active, setActive] = useState("clients");
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  console.log("Menu: ", open)
+  function handleChangePage(targetPage: string) {
+    navigate(targetPage);
+    handleChangeStatus();
+  }
 
   return (
     <ContainerMenu $active={open}>
@@ -36,22 +40,22 @@ export default function SideMenu({ open, handleChangeStatus }: SideMenuProps) {
       </NavHeader>
       <NavBody>
         <MenuItem
-          $active={active === "clients"}
-          onClick={() => setActive("clients")}
+          $active={location.pathname === "/clientes"}
+          onClick={() => handleChangePage("/clientes")}
         >
           <ApartmentIcon />
           <span> Clientes </span>
         </MenuItem>
         <MenuItem
-          $active={active === "representantes"}
-          onClick={() => setActive("representantes")}
+          $active={location.pathname === "/representantes"}
+          onClick={() => handleChangePage("/representantes")}
         >
           <HotelClassIcon />
           <span> Representantes </span>
         </MenuItem>
         <MenuItem
-          $active={active === "about"}
-          onClick={() => setActive("about")}
+          $active={location.pathname === "/sobre"}
+          onClick={() => handleChangePage("/sobre")}
         >
           <InfoIcon />
           <span> Sobre </span>
