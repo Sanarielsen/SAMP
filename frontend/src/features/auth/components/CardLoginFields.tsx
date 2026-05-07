@@ -5,7 +5,6 @@ import {
   TextField 
 } from '@mui/material'
 import { useForm, type SubmitHandler } from "react-hook-form"
-import { useNavigate } from 'react-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { loginSchema, type LoginSchemaFormData } from '@/features/auth/schemas/loginSchema';
