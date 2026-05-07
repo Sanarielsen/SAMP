@@ -1,5 +1,18 @@
-import { Box, Button, Grid, IconButton, Stack, Tooltip, Typography } from "@mui/material";
-import { GridDeleteIcon, GridLoadIcon, GridSearchIcon,type GridColDef } from "@mui/x-data-grid";
+import { 
+  Box, 
+  Button, 
+  Grid, 
+  IconButton, 
+  Stack, 
+  Tooltip, 
+  Typography } from "@mui/material";
+import { 
+  GridDeleteIcon, 
+  GridLoadIcon, 
+  GridSearchIcon,
+  type GridColDef 
+} from "@mui/x-data-grid";
+import { useNavigate } from "react-router";
 
 import DataTable from "@/components/DataTable";
 import SearchInput from "@/components/SearchInput";
@@ -34,87 +47,83 @@ const rows: Client[] = [
   },
 ];
 
-
-const handleView = (client: Client) => {
-  // Access an modal to show all information of this client
-  console.log(client);
-};
-
-const handleEdit = (client: Client) => {
-  // Access an page (/clientes/{id}) to update each information If was necessary
-  console.log(client);
-};
-
-const handleDelete = (id: number) => {
-  // Delete a client and update without refresh the current list
-  console.log("Delete", id);
-};
-
-
-const columns: GridColDef<Client>[] = [
-  {
-    field: "legalName",
-    headerName: "Razao social",
-    flex: 1,
-  },
-  {
-    field: "protocol",
-    headerName: "Protocolo",
-    flex: 1,
-  },
-  {
-    field: "tradeName",
-    headerName: "Nome Fantasia",
-    flex: 1,
-  },
-  {
-    field: "fundationDate",
-    headerName: "Data de fundacão",
-    flex: 1,
-  },
-  {
-    field: "actions",
-    headerName: "Ações",
-    sortable: false,
-    width: 160,
-    renderCell: (params) => (
-      <Stack 
-        direction="row" 
-        spacing={1} 
-        sx={{
-          height: "100%",
-          alignItems: "center",
-        }}
-      >
-        <IconButton
-          onClick={() => handleView(params.row)}
-        >
-          <Tooltip title="Detalhes">
-            <GridSearchIcon />
-          </Tooltip>
-        </IconButton>
-
-        <IconButton
-          onClick={() => handleEdit(params.row)}
-        >          
-          <Tooltip title="Atualizar">
-            <GridLoadIcon />
-          </Tooltip>
-        </IconButton>
-
-        <IconButton
-          onClick={() => handleDelete(params.row.id)}
-        >
-          <Tooltip title="Excluir">
-            <GridDeleteIcon />
-          </Tooltip>
-        </IconButton>
-      </Stack>
-    ),
-  }
-];
-
 export default function ClientPage() {
+
+  const navigate = useNavigate();
+
+  const handleView = (client: Client) => {
+    // Access an modal to show all information of this client
+    console.log(client);
+  };
+
+  const handleDelete = (id: number) => {
+    // Delete a client and update without refresh the current list
+    console.log("Delete", id);
+  };
+
+  const columns: GridColDef<Client>[] = [
+    {
+      field: "legalName",
+      headerName: "Razao social",
+      flex: 1,
+    },
+    {
+      field: "protocol",
+      headerName: "Protocolo",
+      flex: 1,
+    },
+    {
+      field: "tradeName",
+      headerName: "Nome Fantasia",
+      flex: 1,
+    },
+    {
+      field: "fundationDate",
+      headerName: "Data de fundacão",
+      flex: 1,
+    },
+    {
+      field: "actions",
+      headerName: "Ações",
+      sortable: false,
+      width: 160,
+      renderCell: (params) => (
+        <Stack 
+          direction="row" 
+          spacing={1} 
+          sx={{
+            height: "100%",
+            alignItems: "center",
+          }}
+        >
+          <IconButton
+            onClick={() => handleView(params.row)}
+          >
+            <Tooltip title="Detalhes">
+              <GridSearchIcon />
+            </Tooltip>
+          </IconButton>
+
+          <IconButton
+            onClick={() => navigate(`/clientes/${params.id}`)}
+          >          
+            <Tooltip title="Atualizar">
+              <GridLoadIcon />
+            </Tooltip>
+          </IconButton>
+
+          <IconButton
+            onClick={() => handleDelete(params.row.id)}
+          >
+            <Tooltip title="Excluir">
+              <GridDeleteIcon />
+            </Tooltip>
+          </IconButton>
+        </Stack>
+      ),
+    }
+  ];
+
   return (
     <Box component="section" sx={{ p: 2}}>
       <Grid 
