@@ -6,6 +6,7 @@ import Dashboard from "@/layout/Dashboard";
 import ForgotPasswordPage from "@/features/auth/pages/ForgotPassword";
 import LoginPage from "@/features/auth/pages/Login";
 import RepresentativePage from "@/features/representative/pages/RepresentativePage";
+import UpdateClientPage from "@/features/client/pages/UpdateClientPage";
 
 export default function Router() {
   return (
@@ -15,6 +16,8 @@ export default function Router() {
 
       <Route element={<Dashboard />}>
         <Route path="clientes" element={<ClientPage />} />
+        <Route path="clientes/:id" element={<UpdateClientPage />} />
+
         <Route path="representantes" element={<RepresentativePage />} />
         <Route path="sobre" element={<AboutPage />} />
       </Route>
