@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, CircularProgress, Grid, InputAdornment, Modal, TextField, Typography } from "@mui/material";
 import { GridCloseIcon } from "@mui/x-data-grid";
 import { useForm } from "react-hook-form";
-import { InputMaskText } from "@/components/InputMaskText";
+import { ControlledInputMask } from "@/components/ControlledInputMask";
 import { useCep } from "@/api/getAddressByCEP";
 import { ControlledInput } from "./ControlledInputText";
 
@@ -44,8 +44,6 @@ export function ModalAddress({ open, mode, target, address, handleChangeStatus, 
     resolver: zodResolver(addressSchema),
     defaultValues: address ?? emptyAddress,
   });
-
-  console.log(mode)
 
   const labelButtonSubmit = mode === ModeComponent.INSERT ? "Cadastrar endereco" : "Atualizar endereco"
 
@@ -108,7 +106,7 @@ export function ModalAddress({ open, mode, target, address, handleChangeStatus, 
           <Grid container spacing={4} sx={{ pt: 3, pb: 2 }}>
 
             <Grid size={{ xs: 4 }}>
-              <InputMaskText
+              <ControlledInputMask
                 control={control}
                 name="cep"
                 mask="99999-999"                  
@@ -233,8 +231,7 @@ export function ModalAddress({ open, mode, target, address, handleChangeStatus, 
             </Grid>
           </Grid>
 
-          <Grid container spacing={4} sx={{ py: 2 }}>
-
+          <Grid container spacing={4} sx={{ py: 2 }}> 
             <Button
               sx={{ marginTop: 2 }}
               type="button"
