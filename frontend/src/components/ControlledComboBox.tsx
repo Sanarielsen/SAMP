@@ -15,7 +15,7 @@ type Option<TValue> = {
   value: TValue;
 };
 
-type RHFComboBoxProps<
+type ControlledComboBoxProps<
   T extends FieldValues,
   TValue
 > = {
@@ -31,7 +31,7 @@ type RHFComboBoxProps<
   placeholder?: string;
 };
 
-export function RHFComboBox<
+export function ControlledComboBox<
   T extends FieldValues,
   TValue
 >({
@@ -42,7 +42,7 @@ export function RHFComboBox<
   loading = false,
   disabled = false,
   placeholder,
-}: RHFComboBoxProps<T, TValue>) {
+}: ControlledComboBoxProps<T, TValue>) {
   return (
     <Controller
       name={name}

@@ -6,12 +6,25 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateClientSchema, type UpdateSchemaFormData } from "@/features/client/schema/updateClientSchema";
 import { SpanError } from "@/styles/spanError";
-import { RHFComboBox } from "@/components/ControlledComboBox";
+import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ModalAddress } from "@/components/ModalAddress";
 import { useState } from "react";
 import { ModeComponent } from "@/types/mode";
 import { ControlledInput } from "@/components/ControlledInputText";
 import type { AddressSchemaFormData } from "@/schemas/addressSchema";
+import { ControlledInputCalendar } from "@/components/ControlledInputCalendar";
+
+
+const optionsTypePeople = [
+  {
+    label: "PF (Pessoa física)",
+    value: 1,
+  },
+  {
+    label: "PJ (Pessoa jurídica)",
+    value: 2,
+  }
+]
 
 export default function UpdateClientPage() {
 
@@ -46,11 +59,9 @@ export default function UpdateClientPage() {
     if (target === "locationAddress" && hasLocationAddress) {      
       setAddressCurrent(addressLocalization)
       clearErrors("locationAddress");
-      console.log("AAA")
     } else if (target === "correspondenceAddress" && hasCorrespondenceAddress) {
       setAddressCurrent(addressCorrespondence)
       clearErrors("correspondenceAddress");
-      console.log("BBB")
     }
     setOpenModal(true)
   }
@@ -62,10 +73,8 @@ export default function UpdateClientPage() {
   function resetFollowingField(target: string) {
     setOpenModal(false)
     if (target === "locationAddress") {      
-      console.log("AAAAAAAAAAAA")
       clearErrors("locationAddress");
     } else if (target === "correspondenceAddress") {
-      console.log("BBBBBBBBBBBB")
       clearErrors("correspondenceAddress");
     }
   }
@@ -124,60 +133,51 @@ export default function UpdateClientPage() {
 
         <Grid container spacing={4} sx={{ pt: 8, pb: 3 }}>
           <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <TextField 
-              {...register("legalName")}
-              variant="outlined"
-              label="Razao Social"
+            <ControlledInput
+              control={control}
+              name="legalName"
+              label="Razão social"
               fullWidth
-              helperText={
-                errors.legalName && <SpanError>{errors.legalName.message}</SpanError>
-              }
+              error={!!errors.legalName}
+              helperText={errors.legalName?.message}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <TextField 
-              {...register("tradeName")}
-              variant="outlined"
-              id="itTradeName"
-              label="Nome Fantasia"
+            <ControlledInput
+              control={control}
+              name="tradeName"
+              label="Nome fantasia"
               fullWidth
-              helperText={
-                errors.tradeName && <SpanError>{errors.tradeName.message}</SpanError>
-              }
+              error={!!errors.tradeName}
+              helperText={errors.tradeName?.message}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <RHFComboBox
+            <ControlledComboBox
               name="type"
               control={control}
               label="Tipo de cliente"
               placeholder="Select a company"
-              options={[
-                {
-                  label: "PF (Pessoa física)",
-                  value: 1,
-                },
-                {
-                  label: "PJ (Pessoa jurídica)",
-                  value: 2,
-                }
-              ]}
+              options={optionsTypePeople}
             />
 
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <TextField 
-              {...register("protocol")}
-              variant="outlined"
-              id="itProtocol"
-              label="Documento"
+            <ControlledInput
+              control={control}
+              name="protocol"
+              label="Número do documento (RG / CNPJ)"
               fullWidth
-              helperText={
-                errors.protocol && <SpanError>{errors.protocol.message}</SpanError>
-              }
+              error={!!errors.protocol}
+              helperText={errors.protocol?.message}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+            <ControlledInputCalendar
+              control={control}
+              name="fundationDate"
+              label="Data de Fundação"
+            />
             <TextField
               {...register("fundationDate")}
               variant="outlined"

@@ -44,9 +44,7 @@ export function ModalAddress({ open, mode, target, address, handleChangeStatus, 
     resolver: zodResolver(addressSchema),
     defaultValues: address ?? emptyAddress,
   });
-
-  console.log(mode)
-
+  
   const labelButtonSubmit = mode === ModeComponent.INSERT ? "Cadastrar endereco" : "Atualizar endereco"
 
   function handleSaveValuesDependOfField() {    
