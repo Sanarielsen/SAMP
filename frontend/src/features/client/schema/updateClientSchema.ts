@@ -1,34 +1,96 @@
-import * as zod from 'zod';
+import { z } from "zod";
 
-export const updateClientSchema = zod.object({
+export const addressSchema = z.object({
 
-  legalName: zod.string({
-    message: "Informe uma razão social.",
-  }),
-  tradeName: zod.string({
-    message: "Informe um nome fantasia."
-  }),
-  type: zod.number({
-    message: "Informe um tipo de pessoa.",
-  }),
-  protocol: zod.string({
-    message: "Informa o documento desse cliente (CPF ou CNPJ).",
-  }),
-  fundationDate: zod.string({
-    message: "Informa a data de fundacão do cliente.",
-  }),
-  locationAddress: zod.string({
-    message: "Informa um endereco de localizaçao desse cliente."
-  }),
-  correspondenceAddress: zod.string({
-    message: "Informa um endereco de correspondencia desse cliente."
-  }),
-  nameContact: zod.string({
-    message: "Informa o nome deste contato."
-  }),
-  numberContact: zod.string({
-    message: "Informa o número deste contato."
-  }),
-})
+  cep: z
+    .string()
+    .min(1, "Informe o CEP."),
+  street: z
+    .string()
+    .min(1, "Informe o logradouro."),
+  number: z
+    .string()
+    .min(1, "Informe o número."),
+  district: z
+    .string()
+    .min(1, "Informe o bairro."),
+  city: z
+    .string()
+    .min(1, "Informe a cidade."),
+  state: z
+    .string()
+    .min(1, "Informe o estado."),
+  country: z
+    .string()
+    .min(1, "Informe o país."),
+  complement: z
+    .string()
+    .optional(),
+});
 
-export type UpdateSchemaFormData = zod.infer<typeof updateClientSchema>
+export const updateClientSchema = z.object({
+
+  legalName: z
+    .string()
+    .min(1, "Informe a razão social."),
+  tradeName: z
+    .string()
+    .min(1, "Informe o nome fantasia."),
+  protocol: z
+    .string()
+    .min(1, "Informe o protocolo."),
+  fundationDate: z
+    .string()
+    .min(1, "Informe a data de fundação."),
+    type: z.number({
+      message: "Informe o tipo do cliente.",
+    }),
+
+  locationAddress:
+    addressSchema.refine(
+      (value) =>
+        value.cep.trim() !== "" &&
+        value.street.trim() !== "" &&
+        value.number.trim() !== "" &&
+        value.city.trim() !== "",
+      {
+        message:
+          "Informe um endereço de localização.",
+      }
+    ),
+
+  correspondenceAddress:
+    addressSchema.refine(
+      (value) =>
+        value.cep.trim() !== "" &&
+        value.street.trim() !== "" &&
+        value.number.trim() !== "" &&
+        value.city.trim() !== "",
+      {
+        message:
+          "Informe um endereço de correspondência.",
+      }
+    ),
+
+  draft: z
+    .object({
+      locationAddress:
+        addressSchema.optional(),
+      correspondenceAddress:
+        addressSchema.optional(),
+    })
+    .optional(),
+
+  nameContact: z
+    .string()
+    .min(1, "Informe o nome do contato."),
+  numberContact: z
+    .string()
+    .min(1, "Informe o número do contato."),
+});
+
+export type UpdateSchemaFormData =
+  z.infer<typeof updateClientSchema>;
+
+export type AddressSchemaFormData =
+  z.infer<typeof addressSchema>;
