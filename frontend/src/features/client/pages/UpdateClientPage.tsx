@@ -5,13 +5,25 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateClientSchema, type UpdateSchemaFormData } from "@/features/client/schema/updateClientSchema";
-import { SpanError } from "@/styles/spanError";
-import { RHFComboBox } from "@/components/ControlledComboBox";
+import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ModalAddress } from "@/components/ModalAddress";
 import { useState } from "react";
 import { ModeComponent } from "@/types/mode";
 import { ControlledInput } from "@/components/ControlledInputText";
 import type { AddressSchemaFormData } from "@/schemas/addressSchema";
+import { CopyButton } from "@/features/client/components/CopyButton";
+import { ControlledInputMask } from "@/components/ControlledInputMask";
+
+const optionsType = [
+  {
+    label: "PF (Pessoa física)",
+    value: 1,
+  },
+  {
+    label: "PJ (Pessoa jurídica)",
+    value: 2,
+  }
+]
 
 export default function UpdateClientPage() {
 
@@ -19,9 +31,9 @@ export default function UpdateClientPage() {
     control,
     clearErrors,
     getValues,
-    register,
-    setValue,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors }
   } = useForm<UpdateSchemaFormData>({
     resolver: zodResolver(updateClientSchema),
@@ -46,11 +58,9 @@ export default function UpdateClientPage() {
     if (target === "locationAddress" && hasLocationAddress) {      
       setAddressCurrent(addressLocalization)
       clearErrors("locationAddress");
-      console.log("AAA")
     } else if (target === "correspondenceAddress" && hasCorrespondenceAddress) {
       setAddressCurrent(addressCorrespondence)
       clearErrors("correspondenceAddress");
-      console.log("BBB")
     }
     setOpenModal(true)
   }
@@ -62,10 +72,8 @@ export default function UpdateClientPage() {
   function resetFollowingField(target: string) {
     setOpenModal(false)
     if (target === "locationAddress") {      
-      console.log("AAAAAAAAAAAA")
       clearErrors("locationAddress");
     } else if (target === "correspondenceAddress") {
-      console.log("BBBBBBBBBBBB")
       clearErrors("correspondenceAddress");
     }
   }
@@ -124,75 +132,60 @@ export default function UpdateClientPage() {
 
         <Grid container spacing={4} sx={{ pt: 8, pb: 3 }}>
           <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <TextField 
-              {...register("legalName")}
-              variant="outlined"
-              label="Razao Social"
+            <ControlledInput
+              control={control}
+              name="legalName"
+              label="Razão social"
               fullWidth
-              helperText={
-                errors.legalName && <SpanError>{errors.legalName.message}</SpanError>
-              }
+              error={!!errors.legalName}
+              helperText={errors.legalName?.message}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <TextField 
-              {...register("tradeName")}
-              variant="outlined"
-              id="itTradeName"
+            <ControlledInput
+              control={control}
+              name="tradeName"
               label="Nome Fantasia"
               fullWidth
-              helperText={
-                errors.tradeName && <SpanError>{errors.tradeName.message}</SpanError>
-              }
+              error={!!errors.tradeName}
+              helperText={errors.tradeName?.message}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <RHFComboBox
+            <ControlledComboBox
               name="type"
               control={control}
               label="Tipo de cliente"
               placeholder="Select a company"
-              options={[
-                {
-                  label: "PF (Pessoa física)",
-                  value: 1,
-                },
-                {
-                  label: "PJ (Pessoa jurídica)",
-                  value: 2,
-                }
-              ]}
+              options={optionsType}
             />
-
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <TextField 
-              {...register("protocol")}
-              variant="outlined"
-              id="itProtocol"
-              label="Documento"
+            <ControlledInput
+              control={control}
+              name="protocol"
+              label="Protocolo"
               fullWidth
-              helperText={
-                errors.protocol && <SpanError>{errors.protocol.message}</SpanError>
-              }
+              error={!!errors.protocol}
+              helperText={errors.protocol?.message}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-            <TextField
-              {...register("fundationDate")}
+            <ControlledInputMask
+              control={control}
+              name="fundationDate"
+              mask="99/99/9999"                  
               variant="outlined"
-              id="itFundationDate"
-              label="Data de Fundacão"
+              label="Data de fundação"
               fullWidth
-              helperText={
-                errors.fundationDate && <SpanError>{errors.fundationDate.message}</SpanError>
-              }
+              error={!!errors.fundationDate}
+              helperText={errors.fundationDate?.message}
             />
           </Grid>
         </Grid>
 
         <Grid container spacing={4} sx={{ py: 2 }}>
-          <Grid size={{ xs: 11, sm: 11 }}>
+          <Grid size={{ xs: 12 }} sx={{ display: 'flex', gap: 1 }}>
             <ControlledInput
               control={control}
               name="locationAddress"
@@ -202,14 +195,12 @@ export default function UpdateClientPage() {
               error={!!errors.locationAddress}
               helperText={errors.locationAddress?.message}
             />
-          </Grid>
-          <Grid size={{ xs: 1, sm: 1 }} sx={{ display: 'flex', alignItems: 'center' }}>
-            <ContentCopyIcon fontSize="large" />
+            <CopyButton value={watch("locationAddress")} />
           </Grid>
         </Grid>
         
         <Grid container spacing={4} sx={{ py: 3 }}>
-          <Grid size={{ xs: 11, sm: 11 }}>
+          <Grid size={{ xs: 12 }} sx={{ display: 'flex', gap: 1 }}>
             <ControlledInput
               control={control}
               name="correspondenceAddress"
@@ -218,10 +209,8 @@ export default function UpdateClientPage() {
               onClick={() => handleManageCurrentAddress(hasCorrespondenceAddress, "correspondenceAddress")}
               error={!!errors.correspondenceAddress}
               helperText={errors.correspondenceAddress?.message}
-            />       
-          </Grid>
-          <Grid size={{ xs: 1, sm: 1 }} sx={{ display: 'flex', alignItems: 'center' }}>
-            <ContentCopyIcon fontSize="large" />
+            />
+            <CopyButton value={watch("correspondenceAddress")} />
           </Grid>
         </Grid>
         
@@ -237,25 +226,23 @@ export default function UpdateClientPage() {
             </Typography>
           </Grid>
           <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <TextField
-              {...register("nameContact")}
-              variant="outlined"
-              label="Nome"
+            <ControlledInput
+              control={control}
+              name="nameContact"
+              label="Nome do contato"
               fullWidth
-              helperText={
-                errors.nameContact && <SpanError>{errors.nameContact.message}</SpanError>
-              }
+              error={!!errors.nameContact}
+              helperText={errors.nameContact?.message}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <TextField
-              {...register("numberContact")}
-              variant="outlined"
+            <ControlledInput
+              control={control}
+              name="numberContact"
               label="Contato"
               fullWidth
-              helperText={
-                errors.numberContact && <SpanError>{errors.numberContact.message}</SpanError>
-              }
+              error={!!errors.numberContact}
+              helperText={errors.numberContact?.message}
             />
           </Grid>
         </Grid>

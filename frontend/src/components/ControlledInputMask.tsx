@@ -7,7 +7,7 @@ import {
   type Path,
 } from "react-hook-form";
 
-type InputMaskTextProps<T extends FieldValues> = {
+type ControlledInputMaskProps<T extends FieldValues> = {
   control: Control<T>;
   name: Path<T>;
   mask: string;
@@ -35,12 +35,12 @@ function applyMask(value: string, mask: string) {
   return result;
 }
 
-export function InputMaskText<T extends FieldValues>({
+export function ControlledInputMask<T extends FieldValues>({
   control,
   name,
   mask,
   ...textFieldProps
-}: InputMaskTextProps<T>) {
+}: ControlledInputMaskProps<T>) {
   return (
     <Controller
       name={name}

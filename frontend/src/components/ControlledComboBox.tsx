@@ -31,7 +31,7 @@ type RHFComboBoxProps<
   placeholder?: string;
 };
 
-export function RHFComboBox<
+export function ControlledComboBox<
   T extends FieldValues,
   TValue
 >({
