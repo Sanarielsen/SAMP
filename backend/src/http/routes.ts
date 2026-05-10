@@ -7,5 +7,8 @@ export async function appRoutes(app: FastifyInstance) {
 
   app.post('/users', register)
 
+  //@Routes - Client
+  app.get('/clients', authenticate)
+
   app.post('/session', authenticate)
 }
