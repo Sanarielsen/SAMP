@@ -1,18 +1,22 @@
+import { useState } from "react";
+import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
+
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
 import ApartmentIcon from '@mui/icons-material/Apartment';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateClientSchema, type UpdateSchemaFormData } from "@/features/client/schema/updateClientSchema";
+
 import { ControlledComboBox } from "@/components/ControlledComboBox";
-import { ModalAddress } from "@/components/ModalAddress";
-import { useState } from "react";
-import { ModeComponent } from "@/types/mode";
 import { ControlledInput } from "@/components/ControlledInputText";
-import type { AddressSchemaFormData } from "@/schemas/addressSchema";
-import { CopyButton } from "@/features/client/components/CopyButton";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
+import type { AddressSchemaFormData } from "@/schemas/addressSchema";
+import { ModeComponent } from "@/types/mode";
+
+import { ModalAddress } from "@/features/client/components/ModalAddress";
+import { CopyButton } from "@/features/client/components/CopyButton";
+import { getErrorMessage } from "@/features/client/utils/getErrorMessage";
+import { formatAddress } from "@/features/client/utils/formatAddress";
 
 const optionsType = [
   {
@@ -25,7 +29,40 @@ const optionsType = [
   }
 ]
 
+const emptyAddress = {
+  cep: "",
+  street: "",
+  number: "",
+  district: "",
+  city: "",
+  state: "",
+  country: "",
+  complement: "",
+};
+
 export default function UpdateClientPage() {
+
+  const form = useForm<UpdateSchemaFormData>({
+    resolver: zodResolver(updateClientSchema),
+    defaultValues: {
+      legalName: "",
+      tradeName: "",
+      nameContact: "",
+      numberContact: "",
+      fundationDate: "",
+      protocol: "",
+      type: "",
+
+      locationAddress: emptyAddress,
+
+      correspondenceAddress: emptyAddress,
+
+      draft: {
+        locationAddress: emptyAddress,
+        correspondenceAddress: emptyAddress,
+      },
+    },
+    });
 
   const {
     control,
@@ -35,42 +72,115 @@ export default function UpdateClientPage() {
     setValue,
     watch,
     formState: { errors }
-  } = useForm<UpdateSchemaFormData>({
-    resolver: zodResolver(updateClientSchema),
-  });
+  } = form
 
-  const [openModal, setOpenModal] = useState(false);
+  const [openModalAddressLocation, setOpenModalAddressLocation] = useState(false);
+  const [openModalAddressCorrespondence, setOpenModalAddressCorrespondence] = useState(false);
   const [modeModal, setModeModal] = useState<ModeComponent>(ModeComponent.INSERT);
   const [targetModal, setTargetModal] = useState("");
 
-  const [addressCurrent, setAddressCurrent] = useState<AddressSchemaFormData | null>(null);
+  const [localAddress, setLocalAddress] = useState<AddressSchemaFormData | null>(null);
   const [addressLocalization, setAddressLocalization] = useState<AddressSchemaFormData | null>(null);
   const [addressCorrespondence, setAddressCorrespondence] = useState<AddressSchemaFormData | null>(null);
 
   const hasLocationAddress = !!getValues("locationAddress");
   const hasCorrespondenceAddress = !!getValues("correspondenceAddress");
 
-  function handleManageCurrentAddress(hasNewAddress: boolean, target: string) {
-    setModeModal(!hasNewAddress ? ModeComponent.INSERT : ModeComponent.UPDATE)
-    setTargetModal(target)
-    setAddressCurrent(null)
+    // function handleOpenLocationModal() {
+  
+    //   const current =
+    //     getValues("locationAddress");
+  
+    //   setLocalAddress(
+    //     current || emptyAddress
+    //   );
+  
+    //   setOpenModalAddressLocation(true);
+    // }
+  
+    // function handleOpenCorrespondenceModal() {
+  
+    //   const current =
+    //     getValues("correspondenceAddress");
+  
+    //   setLocalAddress(
+    //     current || emptyAddress
+    //   );
+  
+    //   setOpenModalAddressCorrespondence(true);
+    // }
 
-    if (target === "locationAddress" && hasLocationAddress) {      
-      setAddressCurrent(addressLocalization)
-      clearErrors("locationAddress");
-    } else if (target === "correspondenceAddress" && hasCorrespondenceAddress) {
-      setAddressCurrent(addressCorrespondence)
-      clearErrors("correspondenceAddress");
+  // function handleManageCurrentAddress(hasNewAddress: boolean, target: string) {
+  //   setModeModal(!hasNewAddress ? ModeComponent.INSERT : ModeComponent.UPDATE)
+  //   setTargetModal(target)
+  //   setAddressCurrent(null)
+
+  //   if (target === "locationAddress" && hasLocationAddress) {      
+  //     setAddressCurrent(addressLocalization)
+  //     clearErrors("locationAddress");
+  //   } else if (target === "correspondenceAddress" && hasCorrespondenceAddress) {
+  //     setAddressCurrent(addressCorrespondence)
+  //     clearErrors("correspondenceAddress");
+  //   }
+  //   //setOpenModal(true)
+  // }
+
+  const locationAddressVisual = watch("locationAddress");
+
+  function handlePasteCompleteAddress(target: string, address: AddressSchemaFormData) {
+    switch (target) {
+      case "locationAddress":
+        setValue("locationAddress", address)
+        break;
+      case "correspondenceAddress":
+        setValue("correspondenceAddress", address)
+        break;
     }
-    setOpenModal(true)
   }
+
+  function handleOpenLocationModal() {
+
+  setValue(
+    "draft.locationAddress",
+
+    getValues("locationAddress")
+  );
+
+  setOpenModalAddressLocation(true);
+}
+
+function handleOpenCorrespondenceModal() {
+
+  setValue(
+    "draft.correspondenceAddress",
+
+    getValues(
+      "correspondenceAddress"
+    )
+  );
+
+  setOpenModalAddressCorrespondence(
+    true
+  );
+}
 
   const onSubmit: SubmitHandler<UpdateSchemaFormData> = async (data) => {
     console.log(data);
   }
 
+  function handleCloseModalManageAddress(whichModal: string) {
+    switch (whichModal) {
+      case "locationAddress":
+        setOpenModalAddressLocation(false);
+        break;
+      case "correspondenceAddress":
+        setOpenModalAddressCorrespondence(false);
+        break;
+    }
+  }
+
   function resetFollowingField(target: string) {
-    setOpenModal(false)
+    //setOpenModal(false)
     if (target === "locationAddress") {      
       clearErrors("locationAddress");
     } else if (target === "correspondenceAddress") {
@@ -92,185 +202,235 @@ export default function UpdateClientPage() {
 
     if (field === "locationAddress") {
       setAddressLocalization(data);
-      setValue("locationAddress", Object.values(address).join(", "))
+      // setValue("locationAddress", Object.values(address).join(", "))
     } else if (field === "correspondenceAddress") {
       setAddressCorrespondence(data);
-      setValue("correspondenceAddress", Object.values(address).join(", "))
+      // setValue("correspondenceAddress", Object.values(address).join(", "))
     }    
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Box component="section" sx={{ p: 8 }}>
-        <Grid
-          container 
-          spacing={4} 
-          sx={{
-            textAlign: { xs: "center", md: "left" }
-          }}
-        >
-          <Grid 
-            size={{ xs: 12}}
+    <FormProvider {...form}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Box component="section" sx={{ p: 8 }}>
+          <Grid
+            container 
+            spacing={4} 
             sx={{
-              textAlign:"center"
+              textAlign: { xs: "center", md: "left" }
             }}
           >
-            <Typography variant="h4" component="h1">
-              Adicionar novo cliente
-            </Typography>
-          </Grid>
-
-          <Grid 
-            size={{ xs: 12}}
-            sx={{
-              textAlign:"center"
-            }}
-          >
-            <ApartmentIcon fontSize="large" />
-          </Grid>    
-        </Grid>
-
-        <Grid container spacing={4} sx={{ pt: 8, pb: 3 }}>
-          <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <ControlledInput
-              control={control}
-              name="legalName"
-              label="Razão social"
-              fullWidth
-              error={!!errors.legalName}
-              helperText={errors.legalName?.message}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <ControlledInput
-              control={control}
-              name="tradeName"
-              label="Nome Fantasia"
-              fullWidth
-              error={!!errors.tradeName}
-              helperText={errors.tradeName?.message}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <ControlledComboBox
-              name="type"
-              control={control}
-              label="Tipo de cliente"
-              placeholder="Select a company"
-              options={optionsType}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <ControlledInput
-              control={control}
-              name="protocol"
-              label="Protocolo"
-              fullWidth
-              error={!!errors.protocol}
-              helperText={errors.protocol?.message}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
-            <ControlledInputMask
-              control={control}
-              name="fundationDate"
-              mask="99/99/9999"                  
-              variant="outlined"
-              label="Data de fundação"
-              fullWidth
-              error={!!errors.fundationDate}
-              helperText={errors.fundationDate?.message}
-            />
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={4} sx={{ py: 2 }}>
-          <Grid size={{ xs: 12 }} sx={{ display: 'flex', gap: 1 }}>
-            <ControlledInput
-              control={control}
-              name="locationAddress"
-              label="Endereco de localizacão"
-              fullWidth
-              onClick={() => handleManageCurrentAddress(hasLocationAddress, "locationAddress")}
-              error={!!errors.locationAddress}
-              helperText={errors.locationAddress?.message}
-            />
-            <CopyButton value={watch("locationAddress")} />
-          </Grid>
-        </Grid>
-        
-        <Grid container spacing={4} sx={{ py: 3 }}>
-          <Grid size={{ xs: 12 }} sx={{ display: 'flex', gap: 1 }}>
-            <ControlledInput
-              control={control}
-              name="correspondenceAddress"
-              label="Endereco de correspondencia"
-              fullWidth
-              onClick={() => handleManageCurrentAddress(hasCorrespondenceAddress, "correspondenceAddress")}
-              error={!!errors.correspondenceAddress}
-              helperText={errors.correspondenceAddress?.message}
-            />
-            <CopyButton value={watch("correspondenceAddress")} />
-          </Grid>
-        </Grid>
-        
-        <Grid container spacing={4} sx={{ py: 2 }}>
-          <Grid size={{ xs: 12, lg: 4 }} 
-            sx={{ 
-              display: 'flex', 
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Typography variant="h5" component="h5">
-              Informacões de contato:
-            </Typography>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <ControlledInput
-              control={control}
-              name="nameContact"
-              label="Nome do contato"
-              fullWidth
-              error={!!errors.nameContact}
-              helperText={errors.nameContact?.message}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-            <ControlledInput
-              control={control}
-              name="numberContact"
-              label="Contato"
-              fullWidth
-              error={!!errors.numberContact}
-              helperText={errors.numberContact?.message}
-            />
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={4} >
-          <Grid size={{ xs: 12 }}>
-            <Button
-              type="submit"
-              variant="contained"
-              size="large"
-              fullWidth
-              sx={{ marginTop: 2 }}
+            <Grid 
+              size={{ xs: 12}}
+              sx={{
+                textAlign:"center"
+              }}
             >
-              Entrar
-            </Button>
+              <Typography variant="h4" component="h1">
+                Adicionar novo cliente
+              </Typography>
+            </Grid>
+
+            <Grid 
+              size={{ xs: 12}}
+              sx={{
+                textAlign:"center"
+              }}
+            >
+              <ApartmentIcon fontSize="large" />
+            </Grid>    
           </Grid>
-        </Grid>
-      </Box>
-      
-      <ModalAddress 
-        key={JSON.stringify(addressCurrent)}
-        open={openModal}
-        mode={modeModal}
-        target={targetModal}
-        address={addressCurrent}
-        handleChangeStatus={(target) => resetFollowingField(target)}
-        handleSaveValues={(values, target) => handleSaveAddressCorrectly(values, target)}
-      />
-    </form>
+
+          <Grid container spacing={4} sx={{ pt: 8, pb: 3 }}>
+            <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
+              <ControlledInput
+                control={control}
+                name="legalName"
+                label="Razão social"
+                fullWidth
+                error={!!errors.legalName}
+                helperText={errors.legalName?.message}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
+              <ControlledInput
+                control={control}
+                name="tradeName"
+                label="Nome Fantasia"
+                fullWidth
+                error={!!errors.tradeName}
+                helperText={errors.tradeName?.message}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
+              <ControlledComboBox
+                name="type"
+                control={control}
+                label="Tipo de cliente"
+                placeholder="Select a company"
+                options={optionsType}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <ControlledInput
+                control={control}
+                name="protocol"
+                label="Protocolo"
+                fullWidth
+                error={!!errors.protocol}
+                helperText={errors.protocol?.message}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 12, lg: 6 }}>
+              <ControlledInputMask
+                control={control}
+                name="fundationDate"
+                mask="99/99/9999"                  
+                variant="outlined"
+                label="Data de fundação"
+                fullWidth
+                error={!!errors.fundationDate}
+                helperText={errors.fundationDate?.message}
+              />
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={4} sx={{ py: 2 }}>
+            <Grid size={{ xs: 12 }} sx={{ display: 'flex', gap: 1 }}>
+              <TextField
+                label="Endereço de localização"
+
+                fullWidth
+
+                value={formatAddress(
+                  watch("locationAddress")
+                )}
+                onClick={handleOpenLocationModal}
+
+                error={!!errors.locationAddress}
+
+                helperText={
+                  getErrorMessage(
+                    errors.locationAddress
+                  )
+                }
+
+                slotProps={{
+                  input: {
+                    readOnly: true,
+                  },
+                }}
+              />
+              <CopyButton
+                value={formatAddress(
+                  watch("locationAddress")
+                )}
+              />
+            </Grid>
+          </Grid>
+          
+          <Grid container spacing={4} sx={{ py: 3 }}>
+            <Grid size={{ xs: 12 }} sx={{ display: 'flex', gap: 1 }}>
+              <TextField
+                label="Endereço de correspondencia"
+
+                fullWidth
+
+                value={formatAddress(
+                  watch("correspondenceAddress")
+                )}
+                onClick={handleOpenCorrespondenceModal}
+
+                error={!!errors.correspondenceAddress}
+
+                helperText={
+                  getErrorMessage(
+                    errors.correspondenceAddress
+                  )
+                }
+
+                slotProps={{
+                  input: {
+                    readOnly: true,
+                  },
+                }}
+              />
+              <CopyButton
+                value={formatAddress(
+                  watch("correspondenceAddress")
+                )}
+              />
+            </Grid>
+          </Grid>
+          
+          <Grid container spacing={4} sx={{ py: 2 }}>
+            <Grid size={{ xs: 12, lg: 4 }} 
+              sx={{ 
+                display: 'flex', 
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Typography variant="h5" component="h5">
+                Informacões de contato:
+              </Typography>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
+              <ControlledInput
+                control={control}
+                name="nameContact"
+                label="Nome do contato"
+                fullWidth
+                error={!!errors.nameContact}
+                helperText={errors.nameContact?.message}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
+              <ControlledInput
+                control={control}
+                name="numberContact"
+                label="Contato"
+                fullWidth
+                error={!!errors.numberContact}
+                helperText={errors.numberContact?.message}
+              />
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={4} >
+            <Grid size={{ xs: 12 }}>
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                fullWidth
+                sx={{ marginTop: 2 }}
+              >
+                Entrar
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+        
+        <ModalAddress
+          key={"locationAddress"}
+          open={openModalAddressLocation}
+          mode={ModeComponent.INSERT}
+          target="locationAddress"
+          destination="locationAddress"
+          handleCloseModal={handleCloseModalManageAddress}
+          handlePasteAddress={handlePasteCompleteAddress}
+        />
+
+        <ModalAddress
+          key={"correspondenceAddress"}
+          open={openModalAddressCorrespondence}
+          mode={ModeComponent.INSERT}
+          target="correspondenceAddress"
+          destination="correspondenceAddress"
+          handleCloseModal={handleCloseModalManageAddress}
+          handlePasteAddress={handlePasteCompleteAddress}
+        />
+      </form>
+    </FormProvider>
   );
 }
