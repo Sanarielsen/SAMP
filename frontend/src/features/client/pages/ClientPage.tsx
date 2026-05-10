@@ -105,7 +105,7 @@ export default function ClientPage() {
           </IconButton>
 
           <IconButton
-            onClick={() => navigate(`/clientes/${params.id}`)}
+            onClick={() => navigate(`/cliente/${params.id}`)}
           >          
             <Tooltip title="Atualizar">
               <GridLoadIcon />
@@ -145,9 +145,10 @@ export default function ClientPage() {
           }}
         >
           <Button
-            type="submit"
+            type="button"
             variant="contained"
             sx={{ width: { xs: "100%", md: "auto" }, }}
+            onClick={() => navigate("/cliente")}
           >
             Inserir Novo cliente
           </Button>
