@@ -13,29 +13,39 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
+  id            String   @id @default(uuid())
   name          String
-  email         String    @unique
+  email         String   @unique
   password_hash String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now())
-  clientsKey    Client[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+  createdByUser Client[] @relation("CreatedBy")
+  linkedByUser  Client[] @relation("ResponsibleBy")
 
   @@map("users")
 }
 
 model Client {
-  id            String   @id @default(uuid())
-  name          String
-  type          String
-  protocol      String
-  tradeName     String
-  dataFundation DateTime
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now())
+  id String @id @default(uuid())
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
+  legalName             String
+  tradeName             String
+  type                  Int
+  protocol              String @unique
+  dataFundation         DateTime
+  locationAddress       String
+  correspondenceAddress String
+  nameContact           String
+  numberContact         String
+  isActivated           Boolean
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime?
+
+  createdById     String
+  responsibleById String
+
+  createdBy     User @relation("CreatedBy", fields: [createdById], references: [id])
+  responsibleBy User @relation("ResponsibleBy", fields: [responsibleById], references: [id])
 
   @@map("clients")
 }
