@@ -1,4 +1,5 @@
 import { ResourceAlreadyExistsError } from '@/services/errors/resource-already-exists-error';
+import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 import { makeChangeStatusClientUseCase } from '@/services/factories/make-change-status-client-use-case';
 import { makeCreateClientUseCase } from '@/services/factories/make-create-client-use-case';
 import { makeGetClientProfileUseCase } from '@/services/factories/make-get-client-use-case'
@@ -12,16 +13,19 @@ export async function getClient(request: FastifyRequest, reply: FastifyReply) {
 
   const { id } = request.params as { id: string }
 
-  const profile = await getClientProfile.execute({
-    clientId: id
-  })
+  try {
+    const client = await getClientProfile.execute({
+      clientId: id
+    })
 
-  return reply.status(200).send({
-    client: {
-      ...profile,
-      password_hash: undefined
+    return reply.status(200).send(client);
+  } catch (err) {
+    if (err instanceof ResourceNotFoundError) {
+      return reply.status(409).send({
+        message: err.message,
+      })
     }
-  });
+  }
 }
 
 export async function postClient(request: FastifyRequest, reply: FastifyReply) {
@@ -89,13 +93,21 @@ export async function postClient(request: FastifyRequest, reply: FastifyReply) {
 export async function listClient(request: FastifyRequest, reply: FastifyReply) {
   const listClient = makeListClientUseCase();
 
-  const { idUser } = request.params as { idUser: string }
+  const { id } = request.params as { id: string }
 
-  const clients = await listClient.execute({
-    responsibleById: idUser
-  })
+  try {
+    const clients = await listClient.execute({
+      responsibleById: id
+    })
 
-  return reply.status(200).send(clients);
+    return reply.status(200).send(clients);
+  } catch (err) {
+    if (err instanceof ResourceNotFoundError) {
+      return reply.status(409).send({
+        message: err.message,
+      })
+    }
+  }
 }
 
 export async function updateClient(
