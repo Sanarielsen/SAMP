@@ -1,3 +1,12 @@
+# Requisitos funcionais
+
+- Um usuário consiga adicionar um novo cliente dentro da aplicacão;
+- Um usuário consiga retornar os dados de um cliente que ele cadastrou;
+- Um usuário consiga retonar todos os clientes que ele cadastrou;
+- Um usuário consiga desativar um cliente
+- Um usuário consiga atualizar os dados de um cliente dele;
+
+
 
 - Clients
   - id
