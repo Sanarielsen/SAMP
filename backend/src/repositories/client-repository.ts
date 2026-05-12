@@ -8,4 +8,5 @@ export interface ClientRepository {
 
   create(data: CreateClientDTO): Promise<Client>
   update(id: string, data: Partial<CreateClientDTO>): Promise<Client>
+  updateStatus(id: string, data: Partial<CreateClientDTO>): Promise<Client>
 }

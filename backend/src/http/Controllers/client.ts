@@ -1,4 +1,5 @@
 import { ResourceAlreadyExistsError } from '@/services/errors/resource-already-exists-error';
+import { makeChangeStatusClientUseCase } from '@/services/factories/make-change-status-client-use-case';
 import { makeCreateClientUseCase } from '@/services/factories/make-create-client-use-case';
 import { makeGetClientProfileUseCase } from '@/services/factories/make-get-client-use-case'
 import { makeListClientUseCase } from '@/services/factories/make-list-client-use-case';
@@ -128,6 +129,33 @@ export async function updateClient(
     id: id,
     ...data,
   })
+
+  return reply.status(200).send(client)
+}
+
+
+export async function updateClientStatus(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {  
+  const { id } = request.params as { id: string }
+
+  const bodySchema = z.object({
+    isActivated: z.boolean(),
+  })
+
+  const { isActivated } = bodySchema.parse(
+    request.body,
+  )
+
+  const updateClientStatusUseCase =
+    makeChangeStatusClientUseCase()
+
+  const client =
+    await updateClientStatusUseCase.execute({
+      id,
+      isActivated,
+    })
 
   return reply.status(200).send(client)
 }

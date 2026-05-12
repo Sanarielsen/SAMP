@@ -53,4 +53,17 @@ export class PrismaClientRepository implements ClientRepository {
 
     return client
   }
+
+  async updateStatus(
+    id: string,
+    data: Partial<CreateClientDTO>,
+  ): Promise<Client> {
+
+    return prisma.client.update({
+      where: {
+        id,
+      },
+      data,
+    })
+  }
 }
