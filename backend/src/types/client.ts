@@ -11,6 +11,6 @@ export type CreateClientDTO = {
   numberContact: string
   createdAt: Date
   isActivated: boolean
-  createdBy: string
-  responsibleBy: string
+  createdById: string
+  responsibleById: string
 }

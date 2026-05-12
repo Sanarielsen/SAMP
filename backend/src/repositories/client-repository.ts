@@ -3,6 +3,7 @@ import { CreateClientDTO } from "@/types/client"
 
 export interface ClientRepository {
   findById(id: string): Promise<Client | null>
+  findByIdUserResponsable(idUser: string): Promise<Client[]>
   findByProtocol(protocol: string): Promise<Client|null>
   create(data: CreateClientDTO): Promise<Client>
 }

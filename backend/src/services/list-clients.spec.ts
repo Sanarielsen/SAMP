@@ -1,21 +1,23 @@
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 
 import { expect, describe, it, beforeEach } from 'vitest'
+import { hash } from 'bcryptjs'
+import { ListClientUseCase } from '@/services/list-clients'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { InMemoryClientsRepository } from '@/repositories/in-memory/in-memory-client-repository'
-import { GetClientUseCase } from './get-client'
 
 let clientRepository: InMemoryClientsRepository
-let sut: GetClientUseCase
+let sut: ListClientUseCase
 
-describe('Get User Profile Use Case', () => {
+describe('List User Use Case', () => {
   beforeEach(() => {
     clientRepository = new InMemoryClientsRepository()
-    sut = new GetClientUseCase(clientRepository)
+    sut = new ListClientUseCase(clientRepository)
   })
 
-  it('should be able to get user profile', async () => {
-    const createdClient = await clientRepository.create({
+  it('should be return all users of one responsable', async () => {
+
+    await clientRepository.create({
       id: "client-1",
       legalName: "Sanarielsen Teste",
       tradeName: "Sanarielsen Teste composto",
@@ -29,19 +31,21 @@ describe('Get User Profile Use Case', () => {
       isActivated: true,
       createdAt: new Date(Date.now()),
       createdById: "user-1",
-      responsibleById: "user-1"       
+      responsibleById: "user-1" 
     })
 
-    const { client } = await sut.execute({
-      clientId: createdClient.id
+    const clients = await sut.execute({
+      responsibleById: 'user-1',
     })
-    
-    expect(client.legalName).toEqual("Sanarielsen Teste")
+
+    expect(clients).toHaveLength(1)
   })
 
-  it('should not be able to get user profile with wrong id', async () => {
-    await expect(() => sut.execute({
-      clientId: "non-existing-id"
-    })).rejects.toBeInstanceOf(ResourceNotFoundError)
+  it('should not return clients when user has no clients', async () => {
+    await expect(() =>
+      sut.execute({
+        responsibleById: 'user-2',
+      }),
+    ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })
