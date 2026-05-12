@@ -4,7 +4,7 @@ import { authenticate } from "@/http/Controllers/authenticate";
 import { profile } from "@/http/Controllers/profile";
 import { register } from "@/http/Controllers/register";
 import { verifyJWT } from "./middlewares/verify-jwt";
-import { getClient, listClient, postClient } from "./Controllers/client";
+import { getClient, listClient, postClient, updateClient } from "./Controllers/client";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -15,7 +15,8 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/me', {onRequest: [verifyJWT]}, profile)
 
   app.get('/client/:id', {onRequest: [verifyJWT]}, getClient)
-  app.post('/client', {onRequest: [verifyJWT]}, postClient)
+  app.get('/client/user/:id', {onRequest: [verifyJWT]}, listClient)
 
-  app.get('/user/clients/:id', {onRequest: [verifyJWT]}, listClient)
+  app.post('/client', {onRequest: [verifyJWT]}, postClient)
+  app.patch('/client/:id', {onRequest: [verifyJWT]}, updateClient)
 }
