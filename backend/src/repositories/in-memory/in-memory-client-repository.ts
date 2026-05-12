@@ -42,4 +42,24 @@ export class InMemoryClientsRepository implements ClientRepository {
     return client
   }
 
+  async update(
+    id: string,
+    data: Partial<CreateClientDTO>,
+  ): Promise<Client> {
+
+    const client = this.items.findIndex(client => {
+      return client.id === id
+    })
+
+    const updatedClient = {
+      ...this.items[client],
+      ...data,
+      updatedAt: new Date(),
+    }
+
+    this.items[client] = updatedClient
+
+    return updatedClient
+  }
+
 }

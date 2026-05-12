@@ -38,4 +38,19 @@ export class PrismaClientRepository implements ClientRepository {
 
     return client;
   }
+
+  async update(
+    id: string,
+    data: Partial<CreateClientDTO>,
+  ): Promise<Client> {
+
+    const client = await prisma.client.update({
+      where: {
+        id,
+      },
+      data,
+    })
+
+    return client
+  }
 }

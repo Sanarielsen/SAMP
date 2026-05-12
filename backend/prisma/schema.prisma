@@ -39,7 +39,7 @@ model Client {
   numberContact         String
   isActivated           Boolean
   createdAt             DateTime  @default(now())
-  updatedAt             DateTime?
+  updatedAt             DateTime? @updatedAt
 
   createdById     String
   responsibleById String

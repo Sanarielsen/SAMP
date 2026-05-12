@@ -2,6 +2,7 @@ import { ResourceAlreadyExistsError } from '@/services/errors/resource-already-e
 import { makeCreateClientUseCase } from '@/services/factories/make-create-client-use-case';
 import { makeGetClientProfileUseCase } from '@/services/factories/make-get-client-use-case'
 import { makeListClientUseCase } from '@/services/factories/make-list-client-use-case';
+import { makeUpdateClientUseCase } from '@/services/factories/make-update-client-use-case';
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z, ZodError } from 'zod';
 
@@ -94,4 +95,39 @@ export async function listClient(request: FastifyRequest, reply: FastifyReply) {
   })
 
   return reply.status(200).send(clients);
+}
+
+export async function updateClient(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const updateClientBodySchema = z.object({
+    legalName: z.string().optional(),
+    tradeName: z.string().optional(),
+    type: z.number().optional(),
+    protocol: z.string().optional(),
+    dataFundation: z.coerce.date().optional(),
+    locationAddress: z.string().optional(),
+    correspondenceAddress: z.string().optional(),
+    nameContact: z.string().optional(),
+    numberContact: z.string().optional(),
+    isActivated: z.boolean().optional(),
+    responsibleById: z.string().optional(),
+  })
+
+  const { id } = request.params as { id: string }
+
+  const data = updateClientBodySchema.parse(
+    request.body,
+  )
+
+  const updateClientUseCase =
+    makeUpdateClientUseCase()
+
+  const client = await updateClientUseCase.execute({
+    id: id,
+    ...data,
+  })
+
+  return reply.status(200).send(client)
 }
