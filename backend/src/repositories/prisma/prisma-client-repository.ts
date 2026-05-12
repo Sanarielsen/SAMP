@@ -13,13 +13,12 @@ export class PrismaClientRepository implements ClientRepository {
     return client
   }
   async findByProtocol(protocol: string): Promise<Client | null> {
-    const client = await prisma.client.findUnique({
+    return await prisma.client.findUnique({
       where: {
         protocol,
       },
     })
-
-    return client
+    
   }
   
   async create(data: Prisma.ClientCreateInput): Promise<Client> {
