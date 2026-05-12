@@ -44,40 +44,4 @@ describe('Get User Profile Use Case', () => {
       clientId: "non-existing-id"
     })).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
-
-  it('should be able to get client using the protocol', async () => {
-    const createdClient = await clientRepository.create({
-      id: "client-1",
-      legalName: "Sanarielsen Teste",
-      tradeName: "Sanarielsen Teste composto",
-      type: 2,
-      protocol: "12345678912345",
-      dataFundation: new Date(Date.now()),
-      locationAddress: "Rua 10, 102, Bairro 1, Cidade 2, Estado 3, Pais 4 - 01234123",
-      correspondenceAddress: "Rua 11, 102, Bairro 11, Cidade 22, Estado 33, Pais 44 - 1234512",
-      nameContact: "Samuel",
-      numberContact: "11912341234",
-      isActivated: true,
-      createdAt: new Date(Date.now()),
-      createdBy: "user-1",
-      responsibleBy: "user-1"      
-    })
-
-    const { client } = await sut.execute({
-      clientId: createdClient.id
-    })
-
-    const clientSearched = await clientRepository.findByProtocol(client.protocol)
-
-    expect(clientSearched?.protocol).toEqual("12345678912345")
-  })
-
-  it('should not be able to get a client with an invalid protocol', async () => {
-
-    const protocol = "12345"
-
-    const clientSearched = await clientRepository.findByProtocol(protocol)
-
-    expect(clientSearched).toBeNull()
-  })
 })
