@@ -1,6 +1,7 @@
 import { ResourceAlreadyExistsError } from '@/services/errors/resource-already-exists-error';
 import { makeCreateClientUseCase } from '@/services/factories/make-create-client-use-case';
 import { makeGetClientProfileUseCase } from '@/services/factories/make-get-client-use-case'
+import { makeListClientUseCase } from '@/services/factories/make-list-client-use-case';
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z, ZodError } from 'zod';
 
@@ -81,4 +82,16 @@ export async function postClient(request: FastifyRequest, reply: FastifyReply) {
   }
 
   return reply.status(201).send({ message: "Cliente adicionado com sucesso." });
+}
+
+export async function listClient(request: FastifyRequest, reply: FastifyReply) {
+  const listClient = makeListClientUseCase();
+
+  const { idUser } = request.params as { idUser: string }
+
+  const clients = await listClient.execute({
+    responsibleById: idUser
+  })
+
+  return reply.status(200).send(clients);
 }

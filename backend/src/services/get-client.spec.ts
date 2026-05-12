@@ -30,8 +30,8 @@ describe('Get Client Use Case', () => {
       numberContact: "11912341234",
       isActivated: true,
       createdAt: new Date(Date.now()),
-      createdBy: "user-1",
-      responsibleBy: "user-1"      
+      createdById: "user-1",
+      responsibleById: "user-1"      
     })
 
     const clientSearched = await clientRepository.findById("client-1")
@@ -54,8 +54,8 @@ describe('Get Client Use Case', () => {
       numberContact: "11912341234",
       isActivated: true,
       createdAt: new Date(Date.now()),
-      createdBy: "user-1",
-      responsibleBy: "user-1"      
+      createdById: "user-1",
+      responsibleById: "user-1"      
     })
 
     const clientSearched = await clientRepository.findById("client-2");
@@ -77,8 +77,8 @@ describe('Get Client Use Case', () => {
       numberContact: "11912341234",
       isActivated: true,
       createdAt: new Date(Date.now()),
-      createdBy: "user-1",
-      responsibleBy: "user-1"      
+      createdById: "user-1",
+      responsibleById: "user-1"      
     })
 
     const { client } = await sut.execute({

@@ -66,8 +66,8 @@ export class CreateClientUseCase {
       numberContact: String(numberContact),
       isActivated: isActivated,
       createdAt: new Date(Date.now()),
-      createdBy: idUser,
-      responsibleBy: idUser
+      createdById: idUser,
+      responsibleById: idUser
     });
 
     return {

@@ -1,8 +1,18 @@
 import { prisma } from "@/lib/prisma";
 import { Client, Prisma } from "@prisma/client"
 import { ClientRepository } from "../client-repository";
+import { CreateClientDTO } from "@/types/client";
 
 export class PrismaClientRepository implements ClientRepository {
+  async findByIdUserResponsable(idUser: string): Promise<Client[]> {
+    const clients = await prisma.client.findMany({
+      where: {
+        responsibleById: idUser
+      },
+    })
+
+    return clients
+  }
   async findById(id: string): Promise<Client | null> {
     const client = await prisma.client.findUnique({
       where: {
@@ -21,7 +31,7 @@ export class PrismaClientRepository implements ClientRepository {
     
   }
   
-  async create(data: Prisma.ClientCreateInput): Promise<Client> {
+  async create(data: CreateClientDTO): Promise<Client> {
     const client = await prisma.client.create({
       data
     })
