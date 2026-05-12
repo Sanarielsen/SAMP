@@ -8,7 +8,7 @@ interface GetClientUseCaseRequest {
 }
 
 interface GetClientUseCaseResponse {
-  user: Client
+  client: Client
 }
 
 export class GetClientUseCase {
@@ -18,14 +18,14 @@ export class GetClientUseCase {
     clientId,
   }: GetClientUseCaseRequest): Promise<GetClientUseCaseResponse> {
     
-    const user = await this.clientRepository.findById(clientId)
+    const client = await this.clientRepository.findById(clientId)
 
-    if (!user) {
+    if (!client) {
       throw new ResourceNotFoundError()
     }
 
     return {
-      user,
+      client,
     }
   }
 }

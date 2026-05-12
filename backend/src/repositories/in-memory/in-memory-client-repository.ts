@@ -1,5 +1,6 @@
 import { Client, Prisma } from "@prisma/client";
 import { ClientRepository } from "@/repositories/client-repository"
+import { CreateClientDTO } from "@/types/client";
 
 export class InMemoryClientsRepository implements ClientRepository {
   public items: Client[] = []
@@ -24,23 +25,14 @@ export class InMemoryClientsRepository implements ClientRepository {
     return Client
   }
 
-  async create(data: Prisma.ClientCreateInput) {
-    const client = {
+  async create(data: CreateClientDTO) {
+    const client: Client = {
       id: crypto.randomUUID(),
-      legalName: "XPTO LTDA",
-      tradeName: "XPTO",
-      type: 1,
-      protocol: "123",
-      dataFundation: new Date(),
-      locationAddress: "Address 1",
-      correspondenceAddress: "Address 2",
-      nameContact: "Samuel",
-      numberContact: "11999999999",
-      isActivated: true,
+      ...data,
+      createdById: "user-1",
+      responsibleById: "user-1",
       createdAt: new Date(),
       updatedAt: new Date(),
-      createdById: "user-1",
-      responsibleById: "user-2",
     }
     
     this.items.push(client)
