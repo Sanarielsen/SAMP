@@ -23,6 +23,9 @@ import { optionsQueryClient } from "../api/queryClients";
 import { formatCPF } from "@/utils/formatCPF";
 import { formatCNPJ } from "@/utils/formatCNPJ";
 import { useAuth } from "@/auth/AuthProvider";
+import { useState } from "react";
+import ModalClientDetails from "../components/ModalClientDetails";
+import { clientFields } from "../utils/getRowDetailClient";
 
 
 export default function ClientPage() {
@@ -32,9 +35,12 @@ export default function ClientPage() {
 
   const userId = getUserId()
 
+  const [clientClicked, setClientClicked] = useState<Client>();
+  const [openModalDetails, setOpenModalDetails] = useState(false);
+
   const handleView = (client: Client) => {
-    // Access an modal to show all information of this client
-    console.log(client);
+    setClientClicked(client);
+    setOpenModalDetails(true);
   };
 
   const handleDelete = (id: number) => {
@@ -128,55 +134,68 @@ export default function ClientPage() {
   ];
 
   return (
-    <Box component="section" sx={{ p: 2}}>
-      <Grid 
-        container 
-        spacing={2} 
-        sx={{
-          textAlign: { xs: "center", md: "left" }
-        }}
-      >
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Typography variant="h4" component="h1">
-            Listagem de clientes
-          </Typography>
-        </Grid>
+    <>
+      <Box component="section" sx={{ p: 2}}>
         <Grid 
-          size={{ xs: 12, md: 6 }}
+          container 
+          spacing={2} 
           sx={{
-            textAlign: { xs: "center", md: "right" }
+            textAlign: { xs: "center", md: "left" }
           }}
         >
-          <Button
-            type="button"
-            variant="contained"
-            sx={{ width: { xs: "100%", md: "auto" }, }}
-            onClick={() => navigate("/cliente")}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Typography variant="h4" component="h1">
+              Listagem de clientes
+            </Typography>
+          </Grid>
+          <Grid 
+            size={{ xs: 12, md: 6 }}
+            sx={{
+              textAlign: { xs: "center", md: "right" }
+            }}
           >
-            Inserir Novo cliente
-          </Button>
-        </Grid>        
-      </Grid>
+            <Button
+              type="button"
+              variant="contained"
+              sx={{ width: { xs: "100%", md: "auto" }, }}
+              onClick={() => navigate("/cliente")}
+            >
+              Inserir Novo cliente
+            </Button>
+          </Grid>        
+        </Grid>
 
-      <Box component="section" sx={{ p: 2}}>
-        <SearchInput
-          name="srhClients"
-          label="Busque um cliente cadastrado pelo nome"
-          data={MOCK_CLIENTS}
-        />
+        <Box component="section" sx={{ p: 2}}>
+          <SearchInput
+            name="srhClients"
+            label="Busque um cliente cadastrado pelo nome"
+            data={MOCK_CLIENTS}
+          />
+        </Box>
+
+        <Box component="section" sx={{ p: 2}}>
+          <DataTable
+            state={
+              isSuccess ? "SUCCESS" : 
+              isLoading ? "LOADING" :
+              isError ? "ERROR" : "IDLE"
+            }
+            rows={listClients ?? []}
+            columns={columns}
+          />
+        </Box>
       </Box>
 
-      <Box component="section" sx={{ p: 2}}>
-        <DataTable
-          state={
-            isSuccess ? "SUCCESS" : 
-            isLoading ? "LOADING" :
-            isError ? "ERROR" : "IDLE"
-          }
-          rows={listClients ?? []}
-          columns={columns}
+      {clientClicked && (
+        <ModalClientDetails 
+          open={openModalDetails}
+          client={clientClicked}
+          fields={clientFields}
+          handleClose={() => setOpenModalDetails(false)}
         />
-      </Box>
-    </Box>
+      )}
+
+      
+    </>
   )
 }
