@@ -11,6 +11,7 @@ import { loginSchema, type LoginSchemaFormData } from '@/features/auth/schemas/l
 import { SpanError } from '@/styles/spanError';
 import { useAuth } from '@/auth/AuthProvider';
 import { useLogin } from '@/features/auth/api/AuthMutation';
+import { useNavigate } from 'react-router';
 
 export default function CardLoginFields() {
   
@@ -34,7 +35,7 @@ export default function CardLoginFields() {
       const response = await mutation.mutateAsync(data)
 
       signIn(response.token)
-      navigate('/dashboard')
+      navigate('/clientes')
     } catch {
       setError('password', {
         type: 'manual',

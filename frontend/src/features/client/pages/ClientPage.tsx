@@ -18,38 +18,19 @@ import DataTable from "@/components/DataTable";
 import SearchInput from "@/components/SearchInput";
 import { MOCK_CLIENTS } from "@/features/client/utils/mockConstants"
 import type { Client } from "@/features/client/types/clients";
+import { useQuery } from "@tanstack/react-query";
+import { optionsQueryClient } from "../api/queryClients";
+import { formatCPF } from "@/utils/formatCPF";
+import { formatCNPJ } from "@/utils/formatCNPJ";
+import { useAuth } from "@/auth/AuthProvider";
 
-// /clients
-const rows: Client[] = [
-  { 
-    id: 1, 
-    legalName: "Samuel Henrique",
-    type: "Física",
-    protocol: "111.222.333-85",
-    tradeName: "Sanarielsen",
-    fundationDate: new Date()
-  },
-  { 
-    id: 2, 
-    legalName: "Abilio Correa",
-    type: "Física",
-    protocol: "111.222.333-85",
-    tradeName: "Sanarielsen 2",
-    fundationDate: new Date()
-  },
-  { 
-    id: 3, 
-    legalName: "Matilde Aparecida",
-    type: "Juridica",
-    protocol: "111.222.333-85",
-    tradeName: "Sanarielsen 3",
-    fundationDate: new Date()
-  },
-];
 
 export default function ClientPage() {
-
+  
   const navigate = useNavigate();
+  const { getUserId } = useAuth();
+
+  const userId = getUserId()
 
   const handleView = (client: Client) => {
     // Access an modal to show all information of this client
@@ -61,6 +42,15 @@ export default function ClientPage() {
     console.log("Delete", id);
   };
 
+  const { 
+    data: listClients, 
+    isError,
+    isSuccess, 
+    isLoading
+  } = useQuery(
+    optionsQueryClient(String(userId))
+  )
+
   const columns: GridColDef<Client>[] = [
     {
       field: "legalName",
@@ -71,6 +61,15 @@ export default function ClientPage() {
       field: "protocol",
       headerName: "Protocolo",
       flex: 1,
+      valueFormatter: (value: string) => {
+        if (value.length === 11) {
+          return formatCPF(value)
+        }
+
+        if (value.length === 14) {
+          return formatCNPJ(value)
+        }
+      },
     },
     {
       field: "tradeName",
@@ -78,9 +77,13 @@ export default function ClientPage() {
       flex: 1,
     },
     {
-      field: "fundationDate",
+      field: "dataFundation",
       headerName: "Data de fundacão",
       flex: 1,
+      valueFormatter: (value) => {
+        if (!value) return "-"
+        return new Date(value).toLocaleDateString("pt-BR")
+      },
     },
     {
       field: "actions",
@@ -165,7 +168,12 @@ export default function ClientPage() {
 
       <Box component="section" sx={{ p: 2}}>
         <DataTable
-          rows={rows}
+          state={
+            isSuccess ? "SUCCESS" : 
+            isLoading ? "LOADING" :
+            isError ? "ERROR" : "IDLE"
+          }
+          rows={listClients ?? []}
           columns={columns}
         />
       </Box>
