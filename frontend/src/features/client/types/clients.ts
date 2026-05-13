@@ -9,5 +9,6 @@ export interface Client {
   nameContact: string
   numberContact: string
   createdAt: Date
+  updatedAt: Date
   isActivated: boolean
 }
