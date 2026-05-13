@@ -1,9 +1,6 @@
 import { InMemoryClientsRepository } from '@/repositories/in-memory/in-memory-client-repository'
 
-import { AuthenticateUseCase } from './authenticate'
 import { expect, describe, it, beforeEach } from 'vitest'
-import { hash } from 'bcryptjs'
-import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 import { GetClientUseCase } from './get-client'
 
 let clientRepository: InMemoryClientsRepository
@@ -81,7 +78,7 @@ describe('Get Client Use Case', () => {
       responsibleById: "user-1"      
     })
 
-    const { client } = await sut.execute({
+    const client = await sut.execute({
       clientId: createdClient.id
     })
 

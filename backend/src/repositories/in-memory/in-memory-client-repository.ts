@@ -3,6 +3,15 @@ import { ClientRepository } from "@/repositories/client-repository"
 import { CreateClientDTO } from "@/types/client";
 
 export class InMemoryClientsRepository implements ClientRepository {
+  async findByIdUserResponsableAndSearch(idUser: string, search: string): Promise<Client[]> {
+    const clients = this.items.filter(
+      item =>
+        item.responsibleById === idUser &&
+        item.legalName.includes(search)
+    )
+
+    return clients
+  }
   async findByIdUserResponsable(idUser: string): Promise<Client[]> {
     return this.items.filter(client => {
       return client.responsibleById === idUser

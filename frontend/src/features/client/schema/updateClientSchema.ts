@@ -42,10 +42,11 @@ export const updateClientSchema = z.object({
   fundationDate: z
     .string()
     .min(1, "Informe a data de fundação."),
-    type: z.number({
-      message: "Informe o tipo do cliente.",
-    }),
-
+  type: z
+  .number({
+    message: "Informe o tipo do cliente.",
+  })
+  .min(1, "Informe o tipo do cliente."),
   locationAddress:
     addressSchema.refine(
       (value) =>

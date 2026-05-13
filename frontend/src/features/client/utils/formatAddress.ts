@@ -1,4 +1,4 @@
-import type { AddressSchemaFormData } from "../schema/updateClientSchema";
+import type { AddressSchemaFormData } from "@/features/client/schema/updateClientSchema";
 
 export function formatAddress(
   address?: AddressSchemaFormData
