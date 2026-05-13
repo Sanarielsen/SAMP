@@ -6,7 +6,7 @@ import { ResourceNotFoundError } from "./errors/resource-not-found-error"
 let clientRepository: InMemoryClientsRepository
 let sut: UpdateClientStatusUseCase
 
-describe('Get User Profile Use Case', () => {
+describe('Update Status Client Use Case', () => {
   beforeEach(() => {
     clientRepository = new InMemoryClientsRepository()
     sut = new UpdateClientStatusUseCase(clientRepository)

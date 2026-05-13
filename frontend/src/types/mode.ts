@@ -1,4 +1,1 @@
-export enum ModeComponent {
-  INSERT= "Insert",
-  UPDATE= "Update",
-}
+export type ModeComponent = 'insert' | 'update'

@@ -8,7 +8,7 @@ export const addressSchema = zod.object({
   city: zod.string().min(1, "Informe uma cidade para posseguir."),
   state: zod.string().min(1, "Informe um estado para posseguir."),
   country: zod.string().min(1, "Informe um pais para posseguir."),
-  complement: zod.string(),
+  complement: zod.string().optional(),
 })
 
 export type AddressSchemaFormData = zod.infer<typeof addressSchema>
