@@ -1,12 +1,13 @@
 import { QueryClientProvider } from '@tanstack/react-query'
+
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles'
 import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 
-import { theme } from '@/styles/themes'
+import { AuthProvider } from '@/auth/AuthProvider'
 import { queryClient } from '@/lib/query-client'
-import Router from './routes'
-import './styles/global.css'
-import { AuthProvider } from './auth/AuthProvider'
+import { theme } from '@/styles/themes'
+import Router from '@/routes'
+import '@/styles/global.css'
 
 function App() {
   return (

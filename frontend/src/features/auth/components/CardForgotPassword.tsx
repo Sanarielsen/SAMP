@@ -6,6 +6,7 @@ import {
 import CardForgotPasswordFields from "@/features/auth/components/CardForgotPasswordFields"
 import cardImage from "@/features/auth/assets/login_background.jpg"
 
+
 export default function CardForgotPassword() {
 
   return (

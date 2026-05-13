@@ -1,0 +1,1 @@
+export type StateQuery = "IDLE" | "LOADING" | "SUCCESS" | "ERROR"
