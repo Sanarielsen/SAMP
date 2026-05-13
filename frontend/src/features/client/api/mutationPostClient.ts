@@ -1,19 +1,9 @@
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query'
 import { api } from '@/api/axios'
+import type { Client } from '@/features/client/types/clients'
 
-export type ClientPostPayload = {
+export type ClientPostPayload = Client & {
   idUser: string
-  legalName: string
-  tradeName: string
-  type: number
-  protocol: string
-  dataFundation: Date
-  locationAddress: string
-  correspondenceAddress: string
-  nameContact: string
-  numberContact: string
-  createdAt: Date
-  isActivated: boolean
 }
 
 type ClientPostResponse = {

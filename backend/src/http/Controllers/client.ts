@@ -137,6 +137,8 @@ export async function updateClient(
   const updateClientUseCase =
     makeUpdateClientUseCase()
 
+  console.log(id)
+
   const client = await updateClientUseCase.execute({
     id: id,
     ...data,

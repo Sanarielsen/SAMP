@@ -8,7 +8,21 @@ interface GetClientUseCaseRequest {
 }
 
 interface GetClientUseCaseResponse {
-  client: Client
+  id: string
+  legalName: string
+  tradeName: string
+  type: number
+  protocol: string
+  dataFundation: Date
+  locationAddress: string
+  correspondenceAddress: string
+  nameContact: string
+  numberContact: string
+  isActivated: boolean
+  createdAt: Date
+  updatedAt: Date | null
+  createdById: string
+  responsibleById: string
 }
 
 export class GetClientUseCase {
@@ -25,7 +39,21 @@ export class GetClientUseCase {
     }
 
     return {
-      client,
+      id: client.id,
+      legalName: client.legalName,
+      tradeName: client.tradeName,
+      type: client.type,
+      protocol: client.protocol,
+      dataFundation: client.dataFundation,
+      locationAddress: client.locationAddress,
+      correspondenceAddress: client.correspondenceAddress,
+      nameContact: client.nameContact,
+      numberContact: client.numberContact,
+      isActivated: client.isActivated,
+      createdAt: client.createdAt,
+      updatedAt: client.updatedAt,
+      createdById: client.createdById,
+      responsibleById: client.responsibleById
     }
   }
 }
