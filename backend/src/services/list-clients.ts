@@ -5,6 +5,7 @@ import { Client } from '@prisma/client'
 
 interface ListClientUseCaseRequest {
   responsibleById: string
+  search: string
 }
 
 type ListClientUseCaseResponse = Client[]
@@ -14,13 +15,10 @@ export class ListClientUseCase {
 
   async execute({
     responsibleById,
+    search,
   }: ListClientUseCaseRequest): Promise<ListClientUseCaseResponse> {
     
-    const clients = await this.clientRepository.findByIdUserResponsable(responsibleById)
-
-    if (clients.length === 0) {
-      throw new ResourceNotFoundError()
-    }
+    const clients = await this.clientRepository.findByIdUserResponsableAndSearch(responsibleById, search)
 
     return clients
   }

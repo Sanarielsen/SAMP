@@ -1,11 +1,12 @@
 import { useState } from 'react';
 
-import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MenuIcon from '@mui/icons-material/Menu';
+import { Tooltip } from '@mui/material';
 
 import { ButtonIcon, ContainerHeader } from '@/styles/headerContainer';
-import { Tooltip } from '@mui/material';
-import SideMenu from './SideMenu';
+import SideMenu from '@/components/SideMenu';
+
 
 export default function HeaderMenu() {
 

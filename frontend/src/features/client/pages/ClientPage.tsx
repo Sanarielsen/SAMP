@@ -4,6 +4,7 @@ import {
   Grid, 
   IconButton, 
   Stack, 
+  TextField, 
   Tooltip, 
   Typography } from "@mui/material";
 import { 
@@ -15,53 +16,77 @@ import {
 import { useNavigate } from "react-router";
 
 import DataTable from "@/components/DataTable";
-import SearchInput from "@/components/SearchInput";
-import { MOCK_CLIENTS } from "@/features/client/utils/mockConstants"
-import type { Client } from "@/features/client/types/clients";
+import type { ClientDetails } from "@/features/client/types/clients";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { optionsQueryClient } from "../api/queryClients";
+import { formatCPF } from "@/utils/formatCPF";
+import { formatCNPJ } from "@/utils/formatCNPJ";
+import { useAuth } from "@/auth/AuthProvider";
+import { useState } from "react";
+import ModalClientDetails from "../components/ModalClientDetails";
+import { clientFields } from "../utils/getRowDetailClient";
+import { useMutationChangeStatusClient } from "@/features/client/api/mutationPatchChangeStatusClient";
+import ModalConfirmation from "@/components/ModalConfirmation";
+import ToastContainer from "@/components/Toast"
 
-// /clients
-const rows: Client[] = [
-  { 
-    id: 1, 
-    legalName: "Samuel Henrique",
-    type: "Física",
-    protocol: "111.222.333-85",
-    tradeName: "Sanarielsen",
-    fundationDate: new Date()
-  },
-  { 
-    id: 2, 
-    legalName: "Abilio Correa",
-    type: "Física",
-    protocol: "111.222.333-85",
-    tradeName: "Sanarielsen 2",
-    fundationDate: new Date()
-  },
-  { 
-    id: 3, 
-    legalName: "Matilde Aparecida",
-    type: "Juridica",
-    protocol: "111.222.333-85",
-    tradeName: "Sanarielsen 3",
-    fundationDate: new Date()
-  },
-];
 
 export default function ClientPage() {
-
+  
   const navigate = useNavigate();
+  const { getUserId } = useAuth();
 
-  const handleView = (client: Client) => {
-    // Access an modal to show all information of this client
-    console.log(client);
+  const userId = getUserId()
+
+  const [searchBar, setSearchBar] = useState("");
+  const [searchApplied, setSearchApplied] = useState("")
+  const [clientClicked, setClientClicked] = useState<ClientDetails>();
+  const [openModalDetails, setOpenModalDetails] = useState(false);
+  const [openModalConfirmation, setOpenModalConfirmation] = useState(false)
+  const [openToast, setOpenToast] = useState("")
+
+  const queryClient = useQueryClient()
+
+  const { 
+    data: listClients,  
+    isError,
+    isSuccess, 
+    isLoading,
+  } = useQuery(
+    optionsQueryClient(String(userId), searchApplied)
+  )
+
+  const mutationChangeStatusClient =
+    useMutationChangeStatusClient({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['clients'] })
+      setOpenToast("success"); 
+    },
+    onError: () => {
+      setOpenToast("error"); 
+    },
+  })
+  
+  const handleView = (client: ClientDetails) => {
+    setClientClicked(client);
+    setOpenModalDetails(true);
   };
 
-  const handleDelete = (id: number) => {
-    // Delete a client and update without refresh the current list
-    console.log("Delete", id);
+  const handleDelete = (client: ClientDetails) => {
+    setClientClicked(client)
+    setOpenModalConfirmation(true)
   };
 
-  const columns: GridColDef<Client>[] = [
+  function handleDeactivateClient(){
+    setOpenModalConfirmation(false)
+    
+    if (!clientClicked) return
+    mutationChangeStatusClient.mutate({
+      id: clientClicked.id,
+      isActivated: !clientClicked.isActivated,
+    })
+  }
+
+  const columns: GridColDef<ClientDetails>[] = [
     {
       field: "legalName",
       headerName: "Razao social",
@@ -71,6 +96,15 @@ export default function ClientPage() {
       field: "protocol",
       headerName: "Protocolo",
       flex: 1,
+      valueFormatter: (value: string) => {
+        if (value.length === 11) {
+          return formatCPF(value)
+        }
+
+        if (value.length === 14) {
+          return formatCNPJ(value)
+        }
+      },
     },
     {
       field: "tradeName",
@@ -78,9 +112,13 @@ export default function ClientPage() {
       flex: 1,
     },
     {
-      field: "fundationDate",
+      field: "dataFundation",
       headerName: "Data de fundacão",
       flex: 1,
+      valueFormatter: (value) => {
+        if (!value) return "-"
+        return new Date(value).toLocaleDateString("pt-BR")
+      },
     },
     {
       field: "actions",
@@ -113,7 +151,7 @@ export default function ClientPage() {
           </IconButton>
 
           <IconButton
-            onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleDelete(params.row)}
           >
             <Tooltip title="Excluir">
               <GridDeleteIcon />
@@ -125,50 +163,99 @@ export default function ClientPage() {
   ];
 
   return (
-    <Box component="section" sx={{ p: 2}}>
-      <Grid 
-        container 
-        spacing={2} 
-        sx={{
-          textAlign: { xs: "center", md: "left" }
-        }}
-      >
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Typography variant="h4" component="h1">
-            Listagem de clientes
-          </Typography>
-        </Grid>
+    <>
+      <Box component="section" sx={{ p: 2}}>
         <Grid 
-          size={{ xs: 12, md: 6 }}
+          container 
+          spacing={2} 
           sx={{
-            textAlign: { xs: "center", md: "right" }
+            textAlign: { xs: "center", md: "left" }
           }}
         >
-          <Button
-            type="button"
-            variant="contained"
-            sx={{ width: { xs: "100%", md: "auto" }, }}
-            onClick={() => navigate("/cliente")}
+          <Grid 
+            size={{ xs: 12, md: 6 }}
+            sx={{ pl: 2 }}
           >
-            Inserir Novo cliente
-          </Button>
-        </Grid>        
-      </Grid>
+            <Typography variant="h4" component="h1">
+              Listagem de clientes
+            </Typography>
+          </Grid>
+          <Grid 
+            size={{ xs: 12, md: 6 }}
+            sx={{
+              pr: 2, textAlign: { xs: "center", md: "right" }
+            }}
+          >
+            <Button
+              type="button"
+              variant="contained"
+              sx={{ width: { xs: "100%", md: "auto" }, }}
+              onClick={() => navigate("/cliente")}
+            >
+              Inserir Novo cliente
+            </Button>
+          </Grid>        
+        </Grid>
 
-      <Box component="section" sx={{ p: 2}}>
-        <SearchInput
-          name="srhClients"
-          label="Busque um cliente cadastrado pelo nome"
-          data={MOCK_CLIENTS}
-        />
+        <Box component="section" sx={{ p: 2}}>
+          <TextField
+            label="Pesquisa na listagem de clientes"
+            value={searchBar}
+            onChange={(e) => setSearchBar(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                setSearchApplied(searchBar)
+                queryClient.invalidateQueries({ queryKey: ['clients'] })
+              }
+            }}
+            fullWidth
+          />
+        </Box>
+
+        <Box component="section" sx={{ p: 2}}>
+          <DataTable
+            state={
+              isSuccess ? "SUCCESS" : 
+              isLoading ? "LOADING" :
+              isError ? "ERROR" : "IDLE"
+            }
+            rows={listClients ?? []}
+            columns={columns}
+          />
+        </Box>
       </Box>
 
-      <Box component="section" sx={{ p: 2}}>
-        <DataTable
-          rows={rows}
-          columns={columns}
+      <ToastContainer
+        open={openToast === "success"}
+        message="Cliente desativado com sucesso."
+        severity="success"
+        onClose={() => setOpenToast("")}
+      />
+
+      <ToastContainer
+        open={openToast === "error"}
+        message="Ocorreu um erro ao desativar esse cliente."
+        severity="error"
+        onClose={() => setOpenToast("")}
+      />
+
+      {clientClicked && (
+        <ModalClientDetails 
+          open={openModalDetails}
+          client={clientClicked}
+          fields={clientFields}
+          handleClose={() => setOpenModalDetails(false)}
         />
-      </Box>
-    </Box>
+      )}
+
+      <ModalConfirmation
+        open={openModalConfirmation}
+        title={"Desativar o cliente atual"}
+        description={`Tem certeza que gostaria de desativar o cliente atual? Essa operacão não é inversivel.`}
+        handleClose={() => setOpenModalConfirmation(false)}
+        handleAnswer={handleDeactivateClient}
+      />
+      
+    </>
   )
 }

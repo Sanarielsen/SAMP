@@ -8,7 +8,7 @@ import { GetClientUseCase } from './get-client'
 let clientRepository: InMemoryClientsRepository
 let sut: GetClientUseCase
 
-describe('Get User Profile Use Case', () => {
+describe('Post User Profile Use Case', () => {
   beforeEach(() => {
     clientRepository = new InMemoryClientsRepository()
     sut = new GetClientUseCase(clientRepository)
@@ -32,7 +32,7 @@ describe('Get User Profile Use Case', () => {
       responsibleById: "user-1"       
     })
 
-    const { client } = await sut.execute({
+    const client = await sut.execute({
       clientId: createdClient.id
     })
     
