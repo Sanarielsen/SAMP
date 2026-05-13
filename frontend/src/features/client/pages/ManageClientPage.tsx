@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
-import { useParams } from "react-router";
+import { FormProvider, useForm, useWatch, type SubmitHandler } from "react-hook-form";
+import { useNavigate, useParams } from "react-router";
 
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
@@ -19,6 +19,9 @@ import { CopyButton } from "@/features/client/components/CopyButton";
 import { getErrorMessage } from "@/features/client/utils/getErrorMessage";
 import { formatAddress } from "@/features/client/utils/formatAddress";
 import { emptyClient, mockClient } from "@/features/client/utils/mockConstants";
+import { useMutationPostClient, type ClientPostPayload } from "../api/mutationPostClient";
+import { useAuth } from "@/auth/AuthProvider";
+import { getDocumentMask } from "@/features/client/utils/getDocumentMask";
 
 const optionsType = [
   {
@@ -33,8 +36,11 @@ const optionsType = [
 
 export default function ManageClientPage() {
 
-  const { id } = useParams();
+  const { getUserId } = useAuth();
+  const userId = getUserId()
 
+  const navigate = useNavigate();
+  const { id } = useParams();
   const isEditing = !!id;
 
   const form = useForm<UpdateSchemaFormData>({
@@ -59,6 +65,13 @@ export default function ManageClientPage() {
   const [openModalAddressLocation, setOpenModalAddressLocation] = useState(false);
   const [openModalAddressCorrespondence, setOpenModalAddressCorrespondence] = useState(false);
 
+  const documentType = useWatch({
+    control,
+    name: 'type',
+  })
+  const protocolMask =
+    getDocumentMask(documentType)
+
   function handlePasteCompleteAddress(target: string, address: AddressSchemaFormData) {
     switch (target) {
       case "locationAddress":
@@ -80,8 +93,31 @@ export default function ManageClientPage() {
     setOpenModalAddressCorrespondence(true);
   }
 
+  const { mutate, isPending } =
+    useMutationPostClient({
+      onSuccess: () => {
+        navigate('/clientes')
+      },
+  }) 
+
   const onSubmit: SubmitHandler<UpdateSchemaFormData> = async (data) => {
-    console.log(data);
+
+    const payload: ClientPostPayload = {
+      idUser: userId ?? "",
+      legalName: data.legalName,
+      tradeName: data.tradeName,
+      protocol: data.protocol,
+      type: data.type,
+      dataFundation: new Date(data.fundationDate),
+      locationAddress: formatAddress(data.locationAddress),
+      correspondenceAddress: formatAddress(data.correspondenceAddress),
+      nameContact: data.nameContact,
+      numberContact: data.numberContact,
+      createdAt: new Date(),
+      isActivated: true
+    }
+
+    mutate(payload)
   }
 
   function handleCloseModalManageAddress(whichModal: string) {
@@ -158,10 +194,13 @@ export default function ManageClientPage() {
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <ControlledInput
+              <ControlledInputMask
                 control={control}
                 name="protocol"
-                label="Protocolo"
+                mask={protocolMask}
+                variant="outlined"
+                disabled={!documentType}
+                label="Documento"
                 fullWidth
                 error={!!errors.protocol}
                 helperText={errors.protocol?.message}
@@ -185,22 +224,17 @@ export default function ManageClientPage() {
             <Grid size={{ xs: 12 }} sx={{ display: 'flex', gap: 1 }}>
               <TextField
                 label="Endereço de localização"
-
                 fullWidth
-
                 value={formatAddress(
                   watch("locationAddress")
                 )}
                 onClick={handleOpenLocationModal}
-
                 error={!!errors.locationAddress}
-
                 helperText={
                   getErrorMessage(
                     errors.locationAddress
                   )
                 }
-
                 slotProps={{
                   input: {
                     readOnly: true,
@@ -266,9 +300,11 @@ export default function ManageClientPage() {
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-              <ControlledInput
+              <ControlledInputMask
                 control={control}
                 name="numberContact"
+                mask="(99) 99999-9999"                  
+                variant="outlined"
                 label="Contato"
                 fullWidth
                 error={!!errors.numberContact}
@@ -283,6 +319,7 @@ export default function ManageClientPage() {
                 type="submit"
                 variant="contained"
                 size="large"
+                loading={isPending}
                 fullWidth
                 sx={{ marginTop: 2 }}
               >
