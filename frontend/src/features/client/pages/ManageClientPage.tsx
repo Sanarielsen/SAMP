@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 
@@ -18,10 +18,17 @@ import { ModalAddress } from "@/features/client/components/ModalAddress";
 import { CopyButton } from "@/features/client/components/CopyButton";
 import { getErrorMessage } from "@/features/client/utils/getErrorMessage";
 import { formatAddress } from "@/features/client/utils/formatAddress";
-import { emptyClient, mockClient } from "@/features/client/utils/mockConstants";
-import { useMutationPostClient, type ClientPostPayload } from "../api/mutationPostClient";
+import { emptyClient } from "@/features/client/utils/mockConstants";
+import { useMutationPostClient, type ClientPostPayload } from "@/features/client/api/mutationPostClient";
+import { useMutationPatchClient, type ClientPatchPayload } from "@/features/client/api/mutationPatchClient";
 import { useAuth } from "@/auth/AuthProvider";
 import { getDocumentMask } from "@/features/client/utils/getDocumentMask";
+import { optionsQueryGetClient } from "@/features/client/api/queryGetClient";
+import { useQuery } from "@tanstack/react-query";
+import { formatDocument } from "../utils/formatDocument";
+import { formatAsVisualDate } from "../utils/formatAsAVisualDate";
+import { parseAddress } from "../utils/formatAddressFromAPI";
+import { cleanValue } from "@/utils/cleanValue";
 
 const optionsType = [
   {
@@ -43,13 +50,19 @@ export default function ManageClientPage() {
   const { id } = useParams();
   const isEditing = !!id;
 
+  const { 
+    data: currentClient, 
+  } = useQuery(
+    optionsQueryGetClient(String(id))
+  )
+
   const form = useForm<UpdateSchemaFormData>({
     resolver:
       zodResolver(updateClientSchema),
 
     defaultValues:
       isEditing
-        ? mockClient
+        ? currentClient
         : emptyClient,
   });
 
@@ -57,6 +70,7 @@ export default function ManageClientPage() {
     control,
     getValues,
     handleSubmit,
+    reset,
     setValue,
     watch,
     formState: { errors }
@@ -71,6 +85,24 @@ export default function ManageClientPage() {
   })
   const protocolMask =
     getDocumentMask(documentType)
+
+
+  useEffect(() => {
+    if (currentClient) {
+      reset({
+        ...currentClient,
+
+        protocol: formatDocument(
+          currentClient.protocol
+        ),
+        fundationDate: formatAsVisualDate(
+          currentClient.dataFundation
+        ),
+        locationAddress: parseAddress(currentClient.locationAddress),
+        correspondenceAddress: parseAddress(currentClient.correspondenceAddress)
+      })
+    }
+  }, [currentClient, reset])
 
   function handlePasteCompleteAddress(target: string, address: AddressSchemaFormData) {
     switch (target) {
@@ -93,31 +125,59 @@ export default function ManageClientPage() {
     setOpenModalAddressCorrespondence(true);
   }
 
-  const { mutate, isPending } =
+  const mutationPostClient =
     useMutationPostClient({
       onSuccess: () => {
         navigate('/clientes')
       },
-  }) 
+  })
+
+  const mutationPatchClient = 
+    useMutationPatchClient({
+      onSuccess: () => {
+        navigate('/clientes')
+      },
+  })
 
   const onSubmit: SubmitHandler<UpdateSchemaFormData> = async (data) => {
+
+    if ( isEditing ) {
+      const payload: ClientPatchPayload = {
+        idUser: userId ?? "",
+        id: id,
+        legalName: data.legalName,
+        tradeName: data.tradeName,
+        protocol: cleanValue(data.protocol),
+        type: data.type,
+        dataFundation: new Date(data.fundationDate),
+        locationAddress: formatAddress(data.locationAddress),
+        correspondenceAddress: formatAddress(data.correspondenceAddress),
+        nameContact: data.nameContact,
+        numberContact: cleanValue(data.numberContact),
+        createdAt: new Date(),
+        isActivated: true
+      }
+
+      mutationPatchClient.mutate(payload)
+      return
+    }
 
     const payload: ClientPostPayload = {
       idUser: userId ?? "",
       legalName: data.legalName,
       tradeName: data.tradeName,
-      protocol: data.protocol,
+      protocol: cleanValue(data.protocol),
       type: data.type,
       dataFundation: new Date(data.fundationDate),
       locationAddress: formatAddress(data.locationAddress),
       correspondenceAddress: formatAddress(data.correspondenceAddress),
       nameContact: data.nameContact,
-      numberContact: data.numberContact,
+      numberContact: cleanValue(data.numberContact),
       createdAt: new Date(),
       isActivated: true
     }
 
-    mutate(payload)
+    mutationPostClient.mutate(payload)
   }
 
   function handleCloseModalManageAddress(whichModal: string) {
@@ -270,11 +330,13 @@ export default function ManageClientPage() {
                   },
                 }}
               />
-              <CopyButton
+              { isEditing && ( 
+                <CopyButton
                 value={formatAddress(
                   watch("correspondenceAddress")
                 )}
               />
+              ) }
             </Grid>
           </Grid>
           
@@ -319,7 +381,7 @@ export default function ManageClientPage() {
                 type="submit"
                 variant="contained"
                 size="large"
-                loading={isPending}
+                loading={isEditing ? mutationPatchClient.isPending :  mutationPostClient.isPending}
                 fullWidth
                 sx={{ marginTop: 2 }}
               >

@@ -1,8 +1,13 @@
 export interface Client {
-  id: number;
-  legalName: string;
-  type: string;
-  protocol: string;
-  tradeName: string;
-  fundationDate: Date;
+  legalName: string
+  tradeName: string
+  type: number
+  protocol: string
+  dataFundation: Date
+  locationAddress: string
+  correspondenceAddress: string
+  nameContact: string
+  numberContact: string
+  createdAt: Date
+  isActivated: boolean
 }
