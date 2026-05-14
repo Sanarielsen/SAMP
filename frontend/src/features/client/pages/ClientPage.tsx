@@ -60,7 +60,6 @@ export default function ClientPage() {
       queryClient.invalidateQueries({ queryKey: ['clients'] })
       setOpenToast("success"); 
     },
-
     onError: () => {
       setOpenToast("error"); 
     },

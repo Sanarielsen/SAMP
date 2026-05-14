@@ -28,6 +28,7 @@ import { formatDocument } from "../utils/formatDocument";
 import { formatAsVisualDate } from "../utils/formatAsAVisualDate";
 import { parseAddress } from "../utils/formatAddressFromAPI";
 import { cleanValue } from "@/utils/cleanValue";
+import ToastContainer from "@/components/Toast";
 
 const optionsType = [
   {
@@ -77,6 +78,7 @@ export default function ManageClientPage() {
 
   const [openModalAddressLocation, setOpenModalAddressLocation] = useState(false);
   const [openModalAddressCorrespondence, setOpenModalAddressCorrespondence] = useState(false);
+  const [openToast, setOpenToast] = useState("")
 
   const documentType = useWatch({
     control,
@@ -84,7 +86,6 @@ export default function ManageClientPage() {
   })
   const protocolMask =
     getDocumentMask(documentType)
-
 
   useEffect(() => {
     if (currentClient) {
@@ -102,6 +103,15 @@ export default function ManageClientPage() {
       })
     }
   }, [currentClient, reset])
+
+  function executeActionAfterRequest(result: string) {
+    setOpenToast(result);
+    if (result === "success") {
+      setTimeout(() => {
+        navigate("/clientes");
+      }, 5000);
+    }
+  }
 
   function handlePasteCompleteAddress(target: string, address: AddressSchemaFormData) {
     switch (target) {
@@ -127,14 +137,20 @@ export default function ManageClientPage() {
   const mutationPostClient =
     useMutationPostClient({
       onSuccess: () => {
-        navigate('/clientes')
+        executeActionAfterRequest("success");
+      },
+      onError: () => {
+        executeActionAfterRequest("error");
       },
   })
 
   const mutationPatchClient = 
     useMutationPatchClient({
       onSuccess: () => {
-        navigate('/clientes')
+        executeActionAfterRequest("success");
+      },
+      onError: () => {
+        executeActionAfterRequest("error");
       },
   })
 
@@ -302,11 +318,13 @@ export default function ManageClientPage() {
                   },
                 }}
               />
-              <CopyButton
-                value={formatAddress(
-                  watch("locationAddress")
-                )}
-              />
+              { isEditing && ( 
+                <CopyButton
+                  value={formatAddress(
+                    watch("locationAddress")
+                  )}
+                />
+              )}
             </Grid>
           </Grid>
           
@@ -391,6 +409,20 @@ export default function ManageClientPage() {
             </Grid>
           </Grid>
         </Box>
+
+        <ToastContainer
+          open={openToast === "success"}
+          message={ isEditing ? "Cliente atualizado com sucesso." : "Cliente cadastrado com sucesso." }
+          severity="success"
+          onClose={() => setOpenToast("")}
+        />
+  
+        <ToastContainer
+          open={openToast === "error"}
+          message={ isEditing ? "Ocorreu um erro ao atualizar esse cliente." : "Ocorreu um erro ao cadastrar esse cliente." }
+          severity="error"
+          onClose={() => setOpenToast("")}
+        />
         
         <ModalAddress
           key={"locationAddress"}
