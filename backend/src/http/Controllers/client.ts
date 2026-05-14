@@ -94,10 +94,12 @@ export async function listClient(request: FastifyRequest, reply: FastifyReply) {
   const listClient = makeListClientUseCase();
 
   const { id } = request.params as { id: string }
+  const { word: search } = request.query as { word: string }
 
   try {
     const clients = await listClient.execute({
-      responsibleById: id
+      responsibleById: id,
+      search
     })
 
     return reply.status(200).send(clients);
@@ -146,7 +148,6 @@ export async function updateClient(
 
   return reply.status(200).send(client)
 }
-
 
 export async function updateClientStatus(
   request: FastifyRequest,
