@@ -28,6 +28,7 @@ import ModalClientDetails from "../components/ModalClientDetails";
 import { clientFields } from "../utils/getRowDetailClient";
 import { useMutationChangeStatusClient } from "@/features/client/api/mutationPatchChangeStatusClient";
 import ModalConfirmation from "@/components/ModalConfirmation";
+import ToastContainer from "@/components/Toast"
 
 
 export default function ClientPage() {
@@ -40,6 +41,7 @@ export default function ClientPage() {
   const [clientClicked, setClientClicked] = useState<ClientDetails>();
   const [openModalDetails, setOpenModalDetails] = useState(false);
   const [openModalConfirmation, setOpenModalConfirmation] = useState(false)
+  const [openToast, setOpenToast] = useState("")
 
   const queryClient = useQueryClient()
 
@@ -56,7 +58,12 @@ export default function ClientPage() {
     useMutationChangeStatusClient({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clients'] })
-    }
+      setOpenToast("success"); 
+    },
+
+    onError: () => {
+      setOpenToast("error"); 
+    },
   })
   
   const handleView = (client: ClientDetails) => {
@@ -75,7 +82,7 @@ export default function ClientPage() {
     if (!clientClicked) return
     mutationChangeStatusClient.mutate({
       id: clientClicked.id,
-      isActivated: clientClicked.isActivated,
+      isActivated: !clientClicked.isActivated,
     })
   }
 
@@ -208,6 +215,20 @@ export default function ClientPage() {
         </Box>
       </Box>
 
+      <ToastContainer
+        open={openToast === "success"}
+        message="Cliente desativado com sucesso."
+        severity="success"
+        onClose={() => setOpenToast("")}
+      />
+
+      <ToastContainer
+        open={openToast === "error"}
+        message="Ocorreu um erro ao desativar esse cliente."
+        severity="error"
+        onClose={() => setOpenToast("")}
+      />
+
       {clientClicked && (
         <ModalClientDetails 
           open={openModalDetails}
@@ -224,7 +245,6 @@ export default function ClientPage() {
         handleClose={() => setOpenModalConfirmation(false)}
         handleAnswer={handleDeactivateClient}
       />
-
       
     </>
   )
