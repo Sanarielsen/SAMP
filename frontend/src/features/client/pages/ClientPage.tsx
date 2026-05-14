@@ -4,6 +4,7 @@ import {
   Grid, 
   IconButton, 
   Stack, 
+  TextField, 
   Tooltip, 
   Typography } from "@mui/material";
 import { 
@@ -15,8 +16,6 @@ import {
 import { useNavigate } from "react-router";
 
 import DataTable from "@/components/DataTable";
-import SearchInput from "@/components/SearchInput";
-import { MOCK_CLIENTS } from "@/features/client/utils/mockConstants"
 import type { ClientDetails } from "@/features/client/types/clients";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { optionsQueryClient } from "../api/queryClients";
@@ -38,6 +37,8 @@ export default function ClientPage() {
 
   const userId = getUserId()
 
+  const [searchBar, setSearchBar] = useState("");
+  const [searchApplied, setSearchApplied] = useState("")
   const [clientClicked, setClientClicked] = useState<ClientDetails>();
   const [openModalDetails, setOpenModalDetails] = useState(false);
   const [openModalConfirmation, setOpenModalConfirmation] = useState(false)
@@ -51,7 +52,7 @@ export default function ClientPage() {
     isSuccess, 
     isLoading,
   } = useQuery(
-    optionsQueryClient(String(userId))
+    optionsQueryClient(String(userId), searchApplied)
   )
 
   const mutationChangeStatusClient =
@@ -194,10 +195,16 @@ export default function ClientPage() {
         </Grid>
 
         <Box component="section" sx={{ p: 2}}>
-          <SearchInput
-            name="srhClients"
-            label="Busque um cliente cadastrado pelo nome"
-            data={MOCK_CLIENTS}
+          <TextField
+            label="Search client"
+            value={searchBar}
+            onChange={(e) => setSearchBar(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                setSearchApplied(searchBar)
+                queryClient.invalidateQueries({ queryKey: ['clients'] })
+              }
+            }}
           />
         </Box>
 
