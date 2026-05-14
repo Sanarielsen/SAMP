@@ -12,3 +12,7 @@ export interface Client {
   updatedAt: Date
   isActivated: boolean
 }
+
+export interface ClientDetails extends Client {
+  id: string,
+}

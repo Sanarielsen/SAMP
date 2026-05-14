@@ -17,8 +17,8 @@ import { useNavigate } from "react-router";
 import DataTable from "@/components/DataTable";
 import SearchInput from "@/components/SearchInput";
 import { MOCK_CLIENTS } from "@/features/client/utils/mockConstants"
-import type { Client } from "@/features/client/types/clients";
-import { useQuery } from "@tanstack/react-query";
+import type { ClientDetails } from "@/features/client/types/clients";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { optionsQueryClient } from "../api/queryClients";
 import { formatCPF } from "@/utils/formatCPF";
 import { formatCNPJ } from "@/utils/formatCNPJ";
@@ -26,6 +26,8 @@ import { useAuth } from "@/auth/AuthProvider";
 import { useState } from "react";
 import ModalClientDetails from "../components/ModalClientDetails";
 import { clientFields } from "../utils/getRowDetailClient";
+import { useMutationChangeStatusClient } from "@/features/client/api/mutationPatchChangeStatusClient";
+import ModalConfirmation from "@/components/ModalConfirmation";
 
 
 export default function ClientPage() {
@@ -35,29 +37,49 @@ export default function ClientPage() {
 
   const userId = getUserId()
 
-  const [clientClicked, setClientClicked] = useState<Client>();
+  const [clientClicked, setClientClicked] = useState<ClientDetails>();
   const [openModalDetails, setOpenModalDetails] = useState(false);
+  const [openModalConfirmation, setOpenModalConfirmation] = useState(false)
 
-  const handleView = (client: Client) => {
-    setClientClicked(client);
-    setOpenModalDetails(true);
-  };
-
-  const handleDelete = (id: number) => {
-    // Delete a client and update without refresh the current list
-    console.log("Delete", id);
-  };
+  const queryClient = useQueryClient()
 
   const { 
-    data: listClients, 
+    data: listClients,  
     isError,
     isSuccess, 
-    isLoading
+    isLoading,
   } = useQuery(
     optionsQueryClient(String(userId))
   )
 
-  const columns: GridColDef<Client>[] = [
+  const mutationChangeStatusClient =
+    useMutationChangeStatusClient({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['clients'] })
+    }
+  })
+  
+  const handleView = (client: ClientDetails) => {
+    setClientClicked(client);
+    setOpenModalDetails(true);
+  };
+
+  const handleDelete = (client: ClientDetails) => {
+    setClientClicked(client)
+    setOpenModalConfirmation(true)
+  };
+
+  function handleDeactivateClient(){
+    setOpenModalConfirmation(false)
+    
+    if (!clientClicked) return
+    mutationChangeStatusClient.mutate({
+      id: clientClicked.id,
+      isActivated: clientClicked.isActivated,
+    })
+  }
+
+  const columns: GridColDef<ClientDetails>[] = [
     {
       field: "legalName",
       headerName: "Razao social",
@@ -122,7 +144,7 @@ export default function ClientPage() {
           </IconButton>
 
           <IconButton
-            onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleDelete(params.row)}
           >
             <Tooltip title="Excluir">
               <GridDeleteIcon />
@@ -194,6 +216,14 @@ export default function ClientPage() {
           handleClose={() => setOpenModalDetails(false)}
         />
       )}
+
+      <ModalConfirmation
+        open={openModalConfirmation}
+        title={"Desativar o cliente atual"}
+        description={`Tem certeza que gostaria de desativar o cliente atual? Essa operacão não é inversivel.`}
+        handleClose={() => setOpenModalConfirmation(false)}
+        handleAnswer={handleDeactivateClient}
+      />
 
       
     </>
