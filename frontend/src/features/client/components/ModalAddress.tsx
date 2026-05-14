@@ -18,9 +18,9 @@ import { useCep } from "@/api/getAddressByCEP";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import { mappingAddressToVisualComponent } from "@/features/client/utils/mappingAddressToVisualComponent";
-import type { UpdateSchemaFormData } from "@/features/client/schema/updateClientSchema";
 import type { AddressSchemaFormData } from "@/schemas/addressSchema";
-import { ModeComponent } from "@/types/mode";
+import type { UpdateSchemaFormData } from "@/features/client/schema/updateClientSchema";
+import type { ModeComponent } from "@/types/mode";
 
 interface ModalAddressProps {
   open: boolean;
@@ -61,13 +61,14 @@ export function ModalAddress({
   } = useFormContext<UpdateSchemaFormData>();
 
   const labelButtonSubmit =
-    mode === ModeComponent.INSERT
+    mode === "insert"
       ? "Cadastrar endereço"
       : "Atualizar endereço";
 
   const fieldError =
     errors?.draft?.[
       destination
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
     ] as FieldErrors<any>;
 
   const cep =
@@ -87,10 +88,11 @@ export function ModalAddress({
       `draft.${destination}.country`,
     ]);
 
-    if (!valid) {
-      return;
-    }
-    const newObject: AddressSchemaFormData = mappingAddressToVisualComponent(getValues(`draft.${destination}`))
+    const draftAddress = getValues(`draft.${destination}`)
+
+    if (!valid || !draftAddress) return
+    
+    const newObject: AddressSchemaFormData = mappingAddressToVisualComponent(draftAddress)
     handlePasteAddress(target, newObject);
     resetField(`draft.${destination}`);
     handleCloseModal(target);

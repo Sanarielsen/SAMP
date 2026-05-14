@@ -1,8 +1,20 @@
-import { DataGrid, type GridColDef, type GridValidRowModel } from "@mui/x-data-grid";
-import { Box, CircularProgress, Paper, Typography } from "@mui/material";
-import type { StateQuery } from "@/types/stateQuery";
+import { 
+  Box,
+  CircularProgress,
+  Paper,
+  Typography
+} from "@mui/material";
+import { 
+  DataGrid, 
+  type GridColDef, 
+  type GridValidRowModel 
+} from "@mui/x-data-grid";
+
 import ErrorIcon from '@mui/icons-material/Error';
 import BusinessIcon from '@mui/icons-material/Business';
+
+import type { StateQuery } from "@/types/stateQuery";
+
 
 interface DataTableProps<T extends GridValidRowModel> {
   state: StateQuery;

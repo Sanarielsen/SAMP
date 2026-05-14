@@ -1,13 +1,13 @@
 type Address = {
   street: string
   number: string
-  complement?: string
+  complement: string
   district: string
   city: string
   state: string
   country: string
   cep: string
-}
+} 
 
 //Anotacão: Pelo amor de deus, dá fix nisso...
 export function parseAddress(input: string): Address {
@@ -59,7 +59,19 @@ export function parseAddress(input: string): Address {
       city,
       state,
       country,
-      cep
+      cep,
+      complement: ""
     }
+  }
+
+  return {
+    street: "",
+    number: "",
+    district: "",
+    city: "",
+    state: "",
+    country: "",
+    cep: "",
+    complement: ""
   }
 }

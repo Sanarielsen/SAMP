@@ -12,7 +12,6 @@ import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import type { AddressSchemaFormData } from "@/schemas/addressSchema";
-import { ModeComponent } from "@/types/mode";
 
 import { ModalAddress } from "@/features/client/components/ModalAddress";
 import { CopyButton } from "@/features/client/components/CopyButton";
@@ -155,6 +154,7 @@ export default function ManageClientPage() {
         nameContact: data.nameContact,
         numberContact: cleanValue(data.numberContact),
         createdAt: new Date(),
+        updatedAt: new Date(),
         isActivated: true
       }
 
@@ -174,6 +174,7 @@ export default function ManageClientPage() {
       nameContact: data.nameContact,
       numberContact: cleanValue(data.numberContact),
       createdAt: new Date(),
+      updatedAt: new Date(),
       isActivated: true
     }
 
@@ -394,7 +395,7 @@ export default function ManageClientPage() {
         <ModalAddress
           key={"locationAddress"}
           open={openModalAddressLocation}
-          mode={isEditing ? ModeComponent.UPDATE : ModeComponent.INSERT}
+          mode={isEditing ? "update" : "insert"}
           target="locationAddress"
           destination="locationAddress"
           handleCloseModal={handleCloseModalManageAddress}
@@ -404,7 +405,7 @@ export default function ManageClientPage() {
         <ModalAddress
           key={"correspondenceAddress"}
           open={openModalAddressCorrespondence}
-          mode={isEditing ? ModeComponent.UPDATE : ModeComponent.INSERT}
+          mode={isEditing ? "update" : "insert"}
           target="correspondenceAddress"
           destination="correspondenceAddress"
           handleCloseModal={handleCloseModalManageAddress}

@@ -1,6 +1,8 @@
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query'
+
 import { api } from '@/api/axios'
 import type { Client } from '@/features/client/types/clients'
+
 
 export type ClientPatchPayload = Client & {
   id: string

@@ -1,5 +1,12 @@
-import { Box, Button, Grid, Modal, Typography } from "@mui/material"
+import { 
+  Box,
+  Button,
+  Grid,
+  Modal,
+  Typography
+} from "@mui/material"
 import { GridCloseIcon } from "@mui/x-data-grid"
+
 
 interface ModalConfirmationProps {
   open: boolean

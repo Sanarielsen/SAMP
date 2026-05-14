@@ -1,4 +1,4 @@
-import type { UpdateSchemaFormData } from "../schema/updateClientSchema";
+import type { UpdateSchemaFormData } from "@/features/client/schema/updateClientSchema";
 
 //Mock List Clients => /clients
 export const MOCK_CLIENTS = [
@@ -65,7 +65,7 @@ export const emptyClient:
   protocol: "",
   fundationDate: "",
 
-  type: null,
+  type: 0,
 
   locationAddress: {
     cep: "",
