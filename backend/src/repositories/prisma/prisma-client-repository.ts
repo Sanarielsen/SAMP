@@ -7,7 +7,8 @@ export class PrismaClientRepository implements ClientRepository {
   async findByIdUserResponsable(idUser: string): Promise<Client[]> {
     const clients = await prisma.client.findMany({
       where: {
-        responsibleById: idUser
+        responsibleById: idUser,
+        isActivated: true,
       },
     })
 
