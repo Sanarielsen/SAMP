@@ -6,6 +6,7 @@ import {
 import CardFields from "@/features/auth/components/CardLoginFields"
 import cardImage from "@/features/auth/assets/login_background.jpg"
 
+
 export default function CardLogin() {
 
   return (

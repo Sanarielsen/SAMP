@@ -1,7 +1,22 @@
-import { Box, Button, Grid, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
+import { 
+  Box,
+  Button,
+  Grid,
+  Modal,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography
+} from "@mui/material"
 import { GridCloseIcon } from "@mui/x-data-grid"
+
 import type { Client } from "@/features/client/types/clients"
 import type { Field } from "@/utils/field"
+
 
 interface ModalClientDetailsProps {
   open: boolean

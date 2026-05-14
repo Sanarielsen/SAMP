@@ -51,6 +51,7 @@ export function AuthProvider({ children }: AuthContextProps) {
   )
 }
 
+/* eslint-disable react-refresh/only-export-components */
 export const useAuth = () => {
   return useContext(AuthContext)
 };

@@ -1,5 +1,7 @@
 import { queryOptions } from "@tanstack/react-query"
+
 import { api } from "@/api/axios"
+
 
 export function optionsQueryGetClient(clientId: string) { 
   return queryOptions({

@@ -1,5 +1,5 @@
+import type { Client } from "@/features/client/types/clients";
 import type { Field } from "@/utils/field";
-import type { Client } from "../types/clients";
 
 export const clientFields: Field<Client>[] = [
   {
