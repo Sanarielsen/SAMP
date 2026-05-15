@@ -1,7 +1,7 @@
 import { InMemoryClientsRepository } from '@/repositories/in-memory/in-memory-client-repository'
 
 import { expect, describe, it, beforeEach } from 'vitest'
-import { GetClientUseCase } from './get-client'
+import { GetClientUseCase } from './get'
 
 let clientRepository: InMemoryClientsRepository
 let sut: GetClientUseCase

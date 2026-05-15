@@ -1,0 +1,134 @@
+import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
+import { makeGetRepresentativeUseCase } from "@/services/factories/representatives/make-get-use-case";
+import { makeListRepresentativeUseCase } from "@/services/factories/representatives/make-list-use-case";
+import { makePostRepresentativeUseCase } from "@/services/factories/representatives/make-post-use-case";
+import { makeUpdateRepresentativeUseCase } from "@/services/factories/representatives/make-update-use-case";
+import { makeDeleteRepresentativeUseCase } from "@/services/factories/representatives/make-delete-use-case";
+import { FastifyRegister, FastifyReply, FastifyRequest } from "fastify";
+import { z, ZodError } from "zod";
+
+
+export async function listRepresentative(request: FastifyRequest, reply: FastifyReply) {
+  const listRepresentativeUseCase = makeListRepresentativeUseCase();
+
+  const { id } = request.params as { id: string }
+  const { search } = request.query as { search: string }
+
+  try {
+    const representatives = await listRepresentativeUseCase.execute({
+      idClient: id,
+      search
+    })
+
+    return reply.status(200).send(representatives);
+  } catch (err) {
+    if (err instanceof ResourceNotFoundError) {
+      return reply.status(409).send({
+        message: err.message,
+      })
+    }
+  }
+}
+
+export async function postRepresentative(request: FastifyRequest, reply: FastifyReply) {
+
+  const createRepresentativeBodySchema = z.object({
+    name: z.string().min(1),
+    nacionality: z.string().min(1),
+    documentRG: z.string().min(8).max(9),
+    documentCPF: z.string().min(11).max(12),
+    titleJob: z.string().min(1),
+    roleJob: z.string().min(1)
+  })
+
+  const {
+    name,
+    nacionality,
+    documentRG,
+    documentCPF,
+    titleJob,
+    roleJob
+  } = createRepresentativeBodySchema.parse(request.body)
+
+  const postRepresentativeUseCase = makePostRepresentativeUseCase();
+
+  const { id } = request.params as { id: string }
+
+  try {
+    await postRepresentativeUseCase.execute({
+      idClient: id,
+      name,
+      nacionality,
+      documentRG,
+      documentCPF,
+      titleJob, 
+      roleJob,
+      createdAt: new Date(Date.now())
+    })
+  } catch (err) {
+    if (err instanceof ZodError) {
+      return reply.status(400).send({
+        message: 'Validation error.',
+        issues: err.flatten().fieldErrors,
+      })
+    }
+
+    throw err;
+  }
+}
+
+export async function getRepresentative(request: FastifyRequest, reply: FastifyReply) {
+  const getRepresentative = makeGetRepresentativeUseCase();
+
+  const { id } = 
+    request.params as { id: string }
+
+  const representative = await getRepresentative.execute({
+    id
+  })
+
+  return reply.status(200).send(representative);
+}
+
+export async function updateRepresentative(request: FastifyRequest, reply: FastifyReply) {
+  const updateRepresentativeBodySchema = z.object({
+    name: z.string().min(1).optional(),
+    nacionality: z.string().min(1).optional(),
+    documentRG: z.string().min(8).max(9).optional(),
+    documentCPF: z.string().min(11).max(12).optional(),
+    titleJob: z.string().min(1).optional(),
+    roleJob: z.string().min(1).optional()
+  })
+
+  const { idClient, idRepresentative } = request.params as { idClient: string, idRepresentative: string }
+
+  const data = updateRepresentativeBodySchema.parse(
+    request.body,
+  )
+
+  const updateRepresentativeUseCase =
+      makeUpdateRepresentativeUseCase()
+
+  const representative = await updateRepresentativeUseCase.execute({
+    id: idRepresentative,
+    idClient,
+    ...data,
+  })
+
+  return reply.status(200).send(representative)
+}
+
+export async function deleteRepresentative(request: FastifyRequest, reply: FastifyReply) {
+
+  const paramsDeleteSchema = z.object({
+    id: z.string().uuid(),
+  })
+
+  const { id } = paramsDeleteSchema.parse(request.params)
+
+  const deleteClientUseCase = makeDeleteRepresentativeUseCase();
+
+  await deleteClientUseCase.execute({ id })
+
+  return reply.status(204).send()
+}

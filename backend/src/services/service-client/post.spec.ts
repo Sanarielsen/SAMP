@@ -1,9 +1,9 @@
-import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
-
 import { expect, describe, it, beforeEach } from 'vitest'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
+
+import { GetClientUseCase } from '@/services/service-client/get'
+import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
+
 import { InMemoryClientsRepository } from '@/repositories/in-memory/in-memory-client-repository'
-import { GetClientUseCase } from './get-client'
 
 let clientRepository: InMemoryClientsRepository
 let sut: GetClientUseCase
