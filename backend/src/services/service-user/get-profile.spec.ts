@@ -1,11 +1,9 @@
-import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
+import { expect, describe, it, beforeEach } from 'vitest';
+import { hash } from 'bcryptjs';
 
-import { AuthenticateUseCase } from './authenticate'
-import { expect, describe, it, beforeEach } from 'vitest'
-import { hash } from 'bcryptjs'
-import { InvalidCredentialsError } from './errors/invalid-credentials-error'
-import { GetUserProfileUseCase } from './get-user-profile'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository';
+import { GetUserProfileUseCase } from '@/services/service-user/get-profile';
+import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 
 let usersRepository: InMemoryUsersRepository
 let sut: GetUserProfileUseCase

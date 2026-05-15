@@ -31,7 +31,7 @@ model Client {
   legalName             String
   tradeName             String
   type                  Int
-  protocol              String @unique
+  protocol              String    @unique
   dataFundation         DateTime
   locationAddress       String
   correspondenceAddress String
@@ -41,6 +41,8 @@ model Client {
   createdAt             DateTime  @default(now())
   updatedAt             DateTime? @updatedAt
 
+  representatives Representative[]
+
   createdById     String
   responsibleById String
 
@@ -48,4 +50,22 @@ model Client {
   responsibleBy User @relation("ResponsibleBy", fields: [responsibleById], references: [id])
 
   @@map("clients")
+}
+
+model Representative {
+  id          String    @id @default(uuid())
+  name        String
+  nacionality String
+  documentRG  String
+  documentCPF String
+  titleJob    String
+  roleJob     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  idClient String
+  client   Client @relation(fields: [idClient], references: [id])
+
+  @@map("Representatives")
 }
