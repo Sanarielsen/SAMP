@@ -3,8 +3,22 @@ import { FastifyInstance } from "fastify";
 import { authenticate } from "@/http/Controllers/authenticate";
 import { profile } from "@/http/Controllers/profile";
 import { register } from "@/http/Controllers/register";
-import { verifyJWT } from "./middlewares/verify-jwt";
-import { getClient, listClient, postClient, updateClient, updateClientStatus } from "./Controllers/client";
+import { verifyJWT } from "@/http/middlewares/verify-jwt";
+
+import { 
+  getClient,
+  listClient,
+  postClient,
+  updateClient,
+  updateClientStatus 
+} from "@/http/Controllers/client"
+import { 
+  deleteRepresentative,
+  getRepresentative,
+  listRepresentative, 
+  postRepresentative,
+  updateRepresentative
+} from "@/http/Controllers/representative";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -19,4 +33,11 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/client', {onRequest: [verifyJWT]}, postClient)
   app.patch('/client/:id', {onRequest: [verifyJWT]}, updateClient)
   app.patch('/client/:id/status', {onRequest: [verifyJWT]}, updateClientStatus)
+
+  app.get('/client/:id/representatives', {onRequest: [verifyJWT]}, listRepresentative)
+  app.get('/representative/:id', {onRequest: [verifyJWT]}, getRepresentative)
+  app.post('/client/:id/representative', {onRequest: [verifyJWT]}, postRepresentative)
+  app.patch('/client/:idClient/representative/:idRepresentative', {onRequest: [verifyJWT]}, updateRepresentative)
+  app.delete('/representative/:id', {onRequest: [verifyJWT]}, deleteRepresentative)
+
 }
