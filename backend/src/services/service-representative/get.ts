@@ -18,6 +18,8 @@ export class GetRepresentativeUseCase {
 
     const representatives = await this.representativeRepository.findById(id)
 
+    console.log("AAAAAAAAAA: ", representatives)
+
     if (!representatives) {
       throw new ResourceNotFoundError()
     }

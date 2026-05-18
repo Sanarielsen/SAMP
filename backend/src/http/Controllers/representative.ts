@@ -1,4 +1,5 @@
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
+import { makeGetRepresentativeUseCase } from "@/services/factories/representatives/make-get-use-case";
 import { makeListRepresentativeUseCase } from "@/services/factories/representatives/make-list-use-case";
 import { makePostRepresentativeUseCase } from "@/services/factories/representatives/make-post-use-case";
 import { FastifyReply, FastifyRequest } from "fastify";
@@ -72,4 +73,17 @@ export async function postRepresentative(request: FastifyRequest, reply: Fastify
 
     throw err;
   }
+}
+
+export async function getRepresentative(request: FastifyRequest, reply: FastifyReply) {
+  const getRepresentative = makeGetRepresentativeUseCase();
+
+  const { id } = 
+    request.params as { id: string }
+
+  const representative = await getRepresentative.execute({
+    id
+  })
+
+  return reply.status(200).send(representative);
 }
