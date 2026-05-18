@@ -17,6 +17,17 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
     return representative
   }
 
+  async findById(id: string): Promise<RepresentativeEntire | null> {
+  
+    const representative = this.representatives.find(item => item.id == id)
+
+    if (!representative) {
+      return null
+    }
+
+    return representative
+  }
+
   async findManyByUserIdWithSearch(userId: string, search: string): Promise<RepresentativeEntire[] | null> {
 
     const client: Client = {

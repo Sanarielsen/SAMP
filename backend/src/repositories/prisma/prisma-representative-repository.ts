@@ -4,6 +4,23 @@ import { RepresentativeRepository } from "@/repositories/representative-reposito
 
 
 export class PrismaRepresentativeRepository implements RepresentativeRepository {
+  public representatives: RepresentativeEntire[] = []
+
+  async findById(id: string): Promise<RepresentativeEntire | null> {
+    
+    const representative = prisma.representative.findUnique({
+      where: {
+        id,
+      },
+    })
+
+    if (!representative) {
+      return null
+    }
+
+    return representative
+  }
+
   async findManyByUserIdWithSearch(userId: string, search: string): Promise<RepresentativeEntire[] | null> {
     const representatives = await prisma.representative.findMany({
       where: {
