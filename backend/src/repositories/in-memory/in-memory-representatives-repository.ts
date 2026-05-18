@@ -1,5 +1,5 @@
 import { Client } from "@prisma/client";
-import { Representative, RepresentativeEntire } from "../../../../shared/types/representative";
+import { RepresentativeEntire } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 
 

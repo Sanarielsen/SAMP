@@ -1,4 +1,4 @@
-import { RepresentativeEntire } from '@shared/types/representative'
+import { RepresentativeEntire, RepresentativeDTO } from '@shared/types/representative'
 
 export interface RepresentativeRepository {
   create(data: RepresentativeEntire): Promise<RepresentativeEntire>

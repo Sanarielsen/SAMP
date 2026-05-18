@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { RepresentativeEntire } from "@shared/types/representative";
+import { RepresentativeDTO, RepresentativeEntire } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 
 
@@ -53,8 +53,13 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
 
     return representatives
   }
-  create(data: RepresentativeEntire): Promise<RepresentativeEntire> {
-    throw new Error("Method not implemented.");
+  async create(data: RepresentativeEntire): Promise<RepresentativeEntire> {
+    
+    const representative = await prisma.representative.create({
+      data
+    })
+    
+    return representative
   }
   
 }
