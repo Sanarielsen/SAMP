@@ -1,0 +1,16 @@
+export interface Representative {
+  name:         string,
+  nationality:  string,
+  documentRG:   string
+  documentCPF:  string
+  titleJob:     string
+  roleJob:      string
+  createdAt?:   Date
+  updatedAt?:   Date | null
+  deletedAt?:   Date | null
+}
+
+export interface RepresentativeDetails extends Representative {
+  id:       string,
+  idClient: string,
+}
