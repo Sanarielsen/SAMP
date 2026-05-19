@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -26,28 +21,24 @@ model User {
 }
 
 model Client {
-  id String @id @default(uuid())
-
-  legalName             String
+  id                    String           @id @default(uuid())
+  protocol              String           @unique
   tradeName             String
-  type                  Int
-  protocol              String    @unique
   dataFundation         DateTime
-  locationAddress       String
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime?        @updatedAt
   correspondenceAddress String
+  createdById           String
+  isActivated           Boolean
+  legalName             String
+  locationAddress       String
   nameContact           String
   numberContact         String
-  isActivated           Boolean
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime? @updatedAt
-
-  representatives Representative[]
-
-  createdById     String
-  responsibleById String
-
-  createdBy     User @relation("CreatedBy", fields: [createdById], references: [id])
-  responsibleBy User @relation("ResponsibleBy", fields: [responsibleById], references: [id])
+  responsibleById       String
+  type                  Int
+  representatives       Representative[]
+  createdBy             User             @relation("CreatedBy", fields: [createdById], references: [id])
+  responsibleBy         User             @relation("ResponsibleBy", fields: [responsibleById], references: [id])
 
   @@map("clients")
 }
@@ -55,7 +46,7 @@ model Client {
 model Representative {
   id          String    @id @default(uuid())
   name        String
-  nacionality String
+  nationality String
   documentRG  String
   documentCPF String
   titleJob    String
@@ -64,8 +55,8 @@ model Representative {
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
 
-  idClient String
-  client   Client @relation(fields: [idClient], references: [id])
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
 
   @@map("Representatives")
 }

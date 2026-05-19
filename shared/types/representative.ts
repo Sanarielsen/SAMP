@@ -1,57 +1,71 @@
-export type RepresentativeDTO = {
-  idClient:       string
-  name:           string
-  nacionality:    string
-  documentRG:     string
-  documentCPF:    string
-  titleJob:       string
-  roleJob:        string
-  createdAt:      Date
+export interface Representative {
+  id: string
+
+  clientId: string
+
+  name: string
+  nationality: string
+
+  documentRG: string
+  documentCPF: string
+
+  titleJob: string
+  roleJob: string
+
+  createdAt: Date
+  updatedAt: Date | null
+  deletedAt: Date | null
 }
 
-export type RepresentativeEntire = {
-  id:             string
-  idClient:       string
-  name:           string
-  nacionality:    string
-  documentRG:     string
-  documentCPF:    string
-  titleJob:       string
-  roleJob:        string
-  createdAt?:     Date
-  updatedAt?:     Date | null
-  deletedAt?:     Date | null
+export interface CreateRepresentativeDTO {
+  clientId: string
+
+  name: string
+  nationality: string
+
+  documentRG: string
+  documentCPF: string
+
+  titleJob: string
+  roleJob: string
 }
 
+export interface UpdateRepresentativeDTO {
+  id: string
 
-export type RepresentativeList = {
-  id:             string
-  name:           string
-  idClient:       string
-  nacionality:    string
-  documentRG:     string
-  documentCPF:    string
-  titleJob:       string
-  roleJob:        string
-  createdAt:      Date
-  updatedAt:      Date | null
+  clientId?: string
+
+  name?: string
+  nationality?: string
+
+  documentRG?: string
+  documentCPF?: string
+
+  titleJob?: string
+  roleJob?: string
+
+  updatedAt?: Date
 }
 
-export type RepresentativeCustom = {
-  id:             string
-  idClient:       string,
-  name?:          string,
-  nacionality?:   string,
-  documentRG?:    string,
-  documentCPF?:   string,
-  titleJob?:      string,
-  roleJob?:       string,
-  createdAt?:     Date
-  updatedAt?:     Date | null
-  deletedAt?:     Date | null
+export interface RepresentativeDetailsDTO {
+  id: string
+
+  clientId: string
+
+  name: string
+  nationality: string
+
+  documentRG: string
+  documentCPF: string
+
+  titleJob: string
+  roleJob: string
+
+  createdAt: Date
+  updatedAt: Date | null
 }
 
-
-export type RepresentativeReference = {
-  id:            string
+export interface RepresentativeOptionDTO {
+  label: string
+  value: string
 }

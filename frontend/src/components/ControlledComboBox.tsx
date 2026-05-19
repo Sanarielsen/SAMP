@@ -51,18 +51,11 @@ export function ControlledComboBox<
       render={({ field, fieldState }) => {
         const selectedOption =
           options.find(
-            (option) =>
-              JSON.stringify(option.value) ===
-              JSON.stringify(field.value)
+            option => option.value === field.value
           ) ?? null;
 
         return (
-          <Autocomplete<
-            Option<TValue>,
-            false,
-            false,
-            false
-          >
+          <Autocomplete
             options={options}
             disabled={disabled}
             loading={loading}
@@ -70,22 +63,17 @@ export function ControlledComboBox<
             onChange={(_, option) => {
               field.onChange(option?.value ?? null);
             }}
-            isOptionEqualToValue={(a, b) =>
-              JSON.stringify(a.value) ===
-              JSON.stringify(b.value)
+            isOptionEqualToValue={(option, value) =>
+              option.value === value.value
             }
-            getOptionLabel={(option) =>
-              option.label
-            }
+            getOptionLabel={(option) => option.label}
             renderInput={(params) => (
               <TextField
                 {...params}
                 label={label}
                 placeholder={placeholder}
                 error={!!fieldState.error}
-                helperText={
-                  fieldState.error?.message
-                }
+                helperText={fieldState.error?.message}
                 inputRef={field.ref}
               />
             )}

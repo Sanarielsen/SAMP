@@ -4,19 +4,21 @@ import { makeListRepresentativeUseCase } from "@/services/factories/representati
 import { makePostRepresentativeUseCase } from "@/services/factories/representatives/make-post-use-case";
 import { makeUpdateRepresentativeUseCase } from "@/services/factories/representatives/make-update-use-case";
 import { makeDeleteRepresentativeUseCase } from "@/services/factories/representatives/make-delete-use-case";
-import { FastifyRegister, FastifyReply, FastifyRequest } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { z, ZodError } from "zod";
+import { makeGetRepresentativeOfClientsUseCase } from "@/services/factories/representatives/make-get-of-clients-use-case";
 
 
 export async function listRepresentative(request: FastifyRequest, reply: FastifyReply) {
   const listRepresentativeUseCase = makeListRepresentativeUseCase();
 
-  const { id } = request.params as { id: string }
+  const id = request.user.sub;
+
   const { search } = request.query as { search: string }
 
   try {
     const representatives = await listRepresentativeUseCase.execute({
-      idClient: id,
+      idUser: id,
       search
     })
 
@@ -34,36 +36,35 @@ export async function postRepresentative(request: FastifyRequest, reply: Fastify
 
   const createRepresentativeBodySchema = z.object({
     name: z.string().min(1),
-    nacionality: z.string().min(1),
+    nationality: z.string().min(1),
     documentRG: z.string().min(8).max(9),
     documentCPF: z.string().min(11).max(12),
     titleJob: z.string().min(1),
-    roleJob: z.string().min(1)
+    roleJob: z.string().min(1),
+    clientId: z.string().min(1)
   })
 
   const {
     name,
-    nacionality,
+    nationality,
     documentRG,
     documentCPF,
     titleJob,
-    roleJob
+    roleJob,
+    clientId
   } = createRepresentativeBodySchema.parse(request.body)
 
   const postRepresentativeUseCase = makePostRepresentativeUseCase();
 
-  const { id } = request.params as { id: string }
-
   try {
     await postRepresentativeUseCase.execute({
-      idClient: id,
+      clientId,
       name,
-      nacionality,
+      nationality,
       documentRG,
       documentCPF,
       titleJob, 
-      roleJob,
-      createdAt: new Date(Date.now())
+      roleJob
     })
   } catch (err) {
     if (err instanceof ZodError) {
@@ -90,17 +91,31 @@ export async function getRepresentative(request: FastifyRequest, reply: FastifyR
   return reply.status(200).send(representative);
 }
 
+export async function getRepresentativeOfClients(request: FastifyRequest, reply: FastifyReply) {
+  const getRepresentativeOfClients = makeGetRepresentativeOfClientsUseCase();
+
+  const { id } = 
+    request.params as { id: string }
+
+  const representative = await getRepresentativeOfClients.execute({
+    id
+  })
+
+  return reply.status(200).send(representative);
+}
+
 export async function updateRepresentative(request: FastifyRequest, reply: FastifyReply) {
   const updateRepresentativeBodySchema = z.object({
     name: z.string().min(1).optional(),
-    nacionality: z.string().min(1).optional(),
+    nationality: z.string().min(1).optional(),
     documentRG: z.string().min(8).max(9).optional(),
     documentCPF: z.string().min(11).max(12).optional(),
     titleJob: z.string().min(1).optional(),
-    roleJob: z.string().min(1).optional()
+    roleJob: z.string().min(1).optional(),
+    clientId: z.string().min(1)
   })
 
-  const { idClient, idRepresentative } = request.params as { idClient: string, idRepresentative: string }
+  const { id } = request.params as { id: string }
 
   const data = updateRepresentativeBodySchema.parse(
     request.body,
@@ -110,8 +125,7 @@ export async function updateRepresentative(request: FastifyRequest, reply: Fasti
       makeUpdateRepresentativeUseCase()
 
   const representative = await updateRepresentativeUseCase.execute({
-    id: idRepresentative,
-    idClient,
+    id: id,
     ...data,
   })
 

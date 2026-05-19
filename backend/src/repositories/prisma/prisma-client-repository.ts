@@ -4,6 +4,16 @@ import { ClientRepository } from "../client-repository";
 import { CreateClientDTO } from "@/types/client";
 
 export class PrismaClientRepository implements ClientRepository {
+  async findByIdUserResponsableActivated(idUser: string): Promise<Client[] | null> {
+    const clients = await prisma.client.findMany({
+      where: {
+        responsibleById: idUser,        
+        isActivated: true,
+      },
+    })
+
+    return clients
+  }
   async findByIdUserResponsableAndSearch(idUser: string, search: string): Promise<Client[]> {
     const clients = await prisma.client.findMany({
       where: {

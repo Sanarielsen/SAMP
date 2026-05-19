@@ -8,6 +8,7 @@ import { verifyJWT } from "@/http/middlewares/verify-jwt";
 import { 
   getClient,
   listClient,
+  listClientWithOptions,
   postClient,
   updateClient,
   updateClientStatus 
@@ -15,6 +16,7 @@ import {
 import { 
   deleteRepresentative,
   getRepresentative,
+  getRepresentativeOfClients,
   listRepresentative, 
   postRepresentative,
   updateRepresentative
@@ -27,17 +29,18 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/session', authenticate)
 
   app.get('/me', {onRequest: [verifyJWT]}, profile)
-
+  
   app.get('/client/:id', {onRequest: [verifyJWT]}, getClient)
   app.get('/client/user/:id', {onRequest: [verifyJWT]}, listClient)
+  app.get('/clients/options', {onRequest: [verifyJWT]}, listClientWithOptions)
   app.post('/client', {onRequest: [verifyJWT]}, postClient)
   app.patch('/client/:id', {onRequest: [verifyJWT]}, updateClient)
   app.patch('/client/:id/status', {onRequest: [verifyJWT]}, updateClientStatus)
 
-  app.get('/client/:id/representatives', {onRequest: [verifyJWT]}, listRepresentative)
+  app.get('/representatives', {onRequest: [verifyJWT]}, listRepresentative)
   app.get('/representative/:id', {onRequest: [verifyJWT]}, getRepresentative)
-  app.post('/client/:id/representative', {onRequest: [verifyJWT]}, postRepresentative)
-  app.patch('/client/:idClient/representative/:idRepresentative', {onRequest: [verifyJWT]}, updateRepresentative)
+  app.get('/representative/:id/clients', {onRequest: [verifyJWT]}, getRepresentativeOfClients)
+  app.post('/representative', {onRequest: [verifyJWT]}, postRepresentative)
+  app.patch('/representative/:id', {onRequest: [verifyJWT]}, updateRepresentative)
   app.delete('/representative/:id', {onRequest: [verifyJWT]}, deleteRepresentative)
-
 }

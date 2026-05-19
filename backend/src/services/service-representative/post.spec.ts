@@ -17,25 +17,22 @@ let sut: PostRepresentativeUseCase
 
 describe('Post Representative User Case', () => {
   beforeEach(() => {
-    representativeRepository = new InMemoryRepresentativeRepository()
-    clientRepository = new InMemoryClientsRepository()
     userRepository = new InMemoryUsersRepository()
+    clientRepository = new InMemoryClientsRepository()
+    representativeRepository = new InMemoryRepresentativeRepository(clientRepository)
     sut = new PostRepresentativeUseCase(representativeRepository, clientRepository)
   })
 
   it('should be able to create a new representative', async () => {
 
     const newRepresentative = await representativeRepository.create({
-      id: 'representant-1',
-      idClient: 'client-1',
+      clientId: 'client-1',
       name: 'Representante Teste',
-      nacionality: 'Brasileiro',
+      nationality: 'Brasileiro',
       documentRG: '123456789',
       documentCPF: '12312312389',
-      createdAt: new Date(Date.now()),
       titleJob: 'Desenvolvedor de Software',
-      roleJob: 'Junior',
-      updatedAt: null
+      roleJob: 'Junior'
     })
 
     expect(newRepresentative).toBeDefined()
@@ -45,9 +42,9 @@ describe('Post Representative User Case', () => {
 
   //   await expect(
   //     sut.execute({
-  //       idClient: 'client-1',
+  //       clientId: 'client-1',
   //       name: 'Representante Teste',
-  //       nacionality: 'Brasileiro',
+  //       nationality: 'Brasileiro',
   //       documentRG: '123456789',
   //       documentCPF: '12312312389',
   //       titleJob: 'Desenvolvedor de Software',

@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { RepresentativeCustom, RepresentativeDTO, RepresentativeEntire, RepresentativeList } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
+import { CreateRepresentativeDTO, Representative, RepresentativeOptionDTO, UpdateRepresentativeDTO } from "@shared/types/representative";
 
 
 export class PrismaRepresentativeRepository implements RepresentativeRepository {
-  public representatives: RepresentativeEntire[] = []
+  public representatives: Representative[] = []
 
-  async findById(id: string): Promise<RepresentativeEntire | null> {
+  async findById(id: string): Promise<Representative | null> {
     
     const representative = prisma.representative.findUnique({
       where: {
@@ -21,66 +21,13 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
     return representative
   }
 
-  async findByIdClientWithSearchRepresentativesActivated(idClient: string, search: string): Promise<RepresentativeList[] | null> {
+  async findByIdUserWithSearchRepresentativesOnlyClientsActivated(idUser: string, search: string): Promise<Representative[] | null> {
+
     const representatives = await prisma.representative.findMany({
       where: {
-        AND: [
-          {
-            idClient
-          },
-          {
-            deletedAt: null
-          }
-        ],
-        OR: [
-          {
-            name: {
-              contains: search,
-              mode: 'insensitive',
-            },
-          },
-          {
-            nacionality: {
-              contains: search,
-              mode: 'insensitive',
-            },
-          },
-          {
-            documentRG: {
-              contains: search,
-              mode: 'insensitive',
-            },
-          },
-          {
-            documentCPF: {
-              contains: search,
-              mode: 'insensitive',
-            },
-          },
-                    {
-            titleJob: {
-              contains: search,
-              mode: 'insensitive',
-            },
-          },
-                    {
-            roleJob: {
-              contains: search,
-              mode: 'insensitive',
-            },
-          },
-        ],
-      }
-    })
-
-    return representatives
-  }
-
-  async findManyByUserIdWithSearch(userId: string, search: string): Promise<RepresentativeEntire[] | null> {
-    const representatives = await prisma.representative.findMany({
-      where: {
+        deletedAt: null,
         client: {
-          createdById: userId,
+          responsibleById: idUser
         },
         OR: [
           {
@@ -90,7 +37,7 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
             },
           },
           {
-            nacionality: {
+            nationality: {
               contains: search,
               mode: 'insensitive',
             },
@@ -125,8 +72,86 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
 
     return representatives
   }
-  async create(data: RepresentativeEntire): Promise<RepresentativeEntire> {
-    
+
+  async findManyByUserIdWithSearch(userId: string, search: string): Promise<Representative[] | null> {
+    const representatives = await prisma.representative.findMany({
+      where: {
+        client: {
+          createdById: userId,
+        },
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            nationality: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            documentRG: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            documentCPF: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+                    {
+            titleJob: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+                    {
+            roleJob: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+    })
+
+    return representatives
+  }
+
+  async findManyRepresentsOnClientsId(id: string): Promise<RepresentativeOptionDTO[] | null> {
+    const representatives =
+      await prisma.representative.findMany({
+        where: {
+          id,
+          deletedAt: null,
+        },
+        select: {
+          client: {
+            select: {
+              id: true,
+              legalName: true,
+            },
+          },
+        },
+      })
+
+    if (!representatives.length) {
+      return null
+    }
+
+    return representatives.map(representative => ({
+      label: representative.client.legalName,
+      value: representative.client.id,
+    }))
+  }
+
+  async create(data: CreateRepresentativeDTO): Promise<Representative> {
+
     const representative = await prisma.representative.create({
       data
     })
@@ -134,7 +159,7 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
     return representative
   }
 
-  async update(data: RepresentativeCustom): Promise<RepresentativeCustom> {
+  async update(data: UpdateRepresentativeDTO): Promise<Representative> {
 
     return prisma.representative.update({
       where: {
