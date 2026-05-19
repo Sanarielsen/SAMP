@@ -62,6 +62,7 @@ model Representative {
   roleJob     String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
 
   idClient String
   client   Client @relation(fields: [idClient], references: [id])

@@ -13,6 +13,7 @@ import {
   updateClientStatus 
 } from "@/http/Controllers/client"
 import { 
+  deleteRepresentative,
   getRepresentative,
   listRepresentative, 
   postRepresentative,
@@ -37,5 +38,6 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/representative/:id', {onRequest: [verifyJWT]}, getRepresentative)
   app.post('/client/:id/representative', {onRequest: [verifyJWT]}, postRepresentative)
   app.patch('/client/:idClient/representative/:idRepresentative', {onRequest: [verifyJWT]}, updateRepresentative)
+  app.delete('/representative/:id', {onRequest: [verifyJWT]}, deleteRepresentative)
 
 }

@@ -1,5 +1,5 @@
 import { Client } from "@prisma/client";
-import { RepresentativeCustom, RepresentativeEntire } from "@shared/types/representative";
+import { RepresentativeCustom, RepresentativeEntire, RepresentativeList } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 
 
@@ -45,6 +45,21 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
     return representative
   }
 
+  async findByIdClientWithSearchRepresentativesActivated(
+    idClient: string,
+    search: string,
+  ): Promise<RepresentativeEntire[] | null> {
+    const representatives = this.representatives.filter(representative =>
+      representative.idClient === idClient &&
+      representative.deletedAt === null &&
+      representative.name
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    )
+
+    return representatives
+  }
+
   async findManyByUserIdWithSearch(userId: string, search: string): Promise<RepresentativeEntire[] | null> {
 
     const client: Client = {
@@ -77,5 +92,9 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
     return this.representatives.filter(representative => 
       representative.name.includes(search) 
       && clientIds.includes(representative.idClient))
-  }  
+  }
+
+  delete(id: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
 }

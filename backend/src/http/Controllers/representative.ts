@@ -3,6 +3,7 @@ import { makeGetRepresentativeUseCase } from "@/services/factories/representativ
 import { makeListRepresentativeUseCase } from "@/services/factories/representatives/make-list-use-case";
 import { makePostRepresentativeUseCase } from "@/services/factories/representatives/make-post-use-case";
 import { makeUpdateRepresentativeUseCase } from "@/services/factories/representatives/make-update-use-case";
+import { makeDeleteRepresentativeUseCase } from "@/services/factories/representatives/make-delete-use-case";
 import { FastifyRegister, FastifyReply, FastifyRequest } from "fastify";
 import { z, ZodError } from "zod";
 
@@ -15,7 +16,7 @@ export async function listRepresentative(request: FastifyRequest, reply: Fastify
 
   try {
     const representatives = await listRepresentativeUseCase.execute({
-      idUser: id,
+      idClient: id,
       search
     })
 
@@ -115,4 +116,19 @@ export async function updateRepresentative(request: FastifyRequest, reply: Fasti
   })
 
   return reply.status(200).send(representative)
+}
+
+export async function deleteRepresentative(request: FastifyRequest, reply: FastifyReply) {
+
+  const paramsDeleteSchema = z.object({
+    id: z.string().uuid(),
+  })
+
+  const { id } = paramsDeleteSchema.parse(request.params)
+
+  const deleteClientUseCase = makeDeleteRepresentativeUseCase();
+
+  await deleteClientUseCase.execute({ id })
+
+  return reply.status(204).send()
 }

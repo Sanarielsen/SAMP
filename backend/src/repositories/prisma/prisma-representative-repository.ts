@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { RepresentativeCustom, RepresentativeDTO, RepresentativeEntire } from "@shared/types/representative";
+import { RepresentativeCustom, RepresentativeDTO, RepresentativeEntire, RepresentativeList } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 
 
@@ -19,6 +19,61 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
     }
 
     return representative
+  }
+
+  async findByIdClientWithSearchRepresentativesActivated(idClient: string, search: string): Promise<RepresentativeList[] | null> {
+    const representatives = await prisma.representative.findMany({
+      where: {
+        AND: [
+          {
+            idClient
+          },
+          {
+            deletedAt: null
+          }
+        ],
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            nacionality: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            documentRG: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            documentCPF: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+                    {
+            titleJob: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+                    {
+            roleJob: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      }
+    })
+
+    return representatives
   }
 
   async findManyByUserIdWithSearch(userId: string, search: string): Promise<RepresentativeEntire[] | null> {
@@ -86,6 +141,18 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
         id: data.id,
       },
       data,
+    })
+  }
+
+  async delete(id: string): Promise<void> {
+
+    await prisma.representative.update({
+      where: {
+        id
+      },
+      data: {
+        deletedAt: new Date(Date.now())
+      },
     })
   }
   
