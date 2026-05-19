@@ -2,7 +2,6 @@ import { ClientRepository } from "@/repositories/client-repository";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 
 import { RepresentativeDTO } from "@shared/types/representative";
-import { UsersRepository } from "@/repositories/users-repository";
 
 import { InvalidInactiveClientError } from "@/services/errors/invalid-inactive-client-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";

@@ -4,7 +4,7 @@ import { ClientRepository }
   from '@/repositories/client-repository'
 
 import { ResourceNotFoundError }
-  from './errors/resource-not-found-error'
+  from '@/services/errors/resource-not-found-error'
 
 interface UpdateClientStatusUseCaseRequest {
   id: string
