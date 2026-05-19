@@ -15,7 +15,8 @@ import {
 import { 
   getRepresentative,
   listRepresentative, 
-  postRepresentative
+  postRepresentative,
+  updateRepresentative
 } from "@/http/Controllers/representative";
 
 export async function appRoutes(app: FastifyInstance) {
@@ -35,5 +36,6 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/client/:id/representatives', {onRequest: [verifyJWT]}, listRepresentative)
   app.get('/representative/:id', {onRequest: [verifyJWT]}, getRepresentative)
   app.post('/client/:id/representative', {onRequest: [verifyJWT]}, postRepresentative)
+  app.patch('/client/:idClient/representative/:idRepresentative', {onRequest: [verifyJWT]}, updateRepresentative)
 
 }

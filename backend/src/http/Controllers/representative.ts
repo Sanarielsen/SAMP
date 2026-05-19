@@ -2,7 +2,8 @@ import { ResourceNotFoundError } from "@/services/errors/resource-not-found-erro
 import { makeGetRepresentativeUseCase } from "@/services/factories/representatives/make-get-use-case";
 import { makeListRepresentativeUseCase } from "@/services/factories/representatives/make-list-use-case";
 import { makePostRepresentativeUseCase } from "@/services/factories/representatives/make-post-use-case";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { makeUpdateRepresentativeUseCase } from "@/services/factories/representatives/make-update-use-case";
+import { FastifyRegister, FastifyReply, FastifyRequest } from "fastify";
 import { z, ZodError } from "zod";
 
 
@@ -86,4 +87,32 @@ export async function getRepresentative(request: FastifyRequest, reply: FastifyR
   })
 
   return reply.status(200).send(representative);
+}
+
+export async function updateRepresentative(request: FastifyRequest, reply: FastifyReply) {
+  const updateRepresentativeBodySchema = z.object({
+    name: z.string().min(1).optional(),
+    nacionality: z.string().min(1).optional(),
+    documentRG: z.string().min(8).max(9).optional(),
+    documentCPF: z.string().min(11).max(12).optional(),
+    titleJob: z.string().min(1).optional(),
+    roleJob: z.string().min(1).optional()
+  })
+
+  const { idClient, idRepresentative } = request.params as { idClient: string, idRepresentative: string }
+
+  const data = updateRepresentativeBodySchema.parse(
+    request.body,
+  )
+
+  const updateRepresentativeUseCase =
+      makeUpdateRepresentativeUseCase()
+
+  const representative = await updateRepresentativeUseCase.execute({
+    id: idRepresentative,
+    idClient,
+    ...data,
+  })
+
+  return reply.status(200).send(representative)
 }

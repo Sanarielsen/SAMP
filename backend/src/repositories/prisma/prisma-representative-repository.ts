@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { RepresentativeDTO, RepresentativeEntire } from "@shared/types/representative";
+import { RepresentativeCustom, RepresentativeDTO, RepresentativeEntire } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 
 
@@ -77,6 +77,16 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
     })
     
     return representative
+  }
+
+  async update(data: RepresentativeCustom): Promise<RepresentativeCustom> {
+
+    return prisma.representative.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    })
   }
   
 }

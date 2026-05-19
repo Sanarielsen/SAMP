@@ -1,5 +1,5 @@
 import { Client } from "@prisma/client";
-import { RepresentativeEntire } from "@shared/types/representative";
+import { RepresentativeCustom, RepresentativeEntire } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 
 
@@ -15,6 +15,23 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
     this.representatives.push(data)
 
     return representative
+  }
+
+  async update(data: RepresentativeCustom): Promise<RepresentativeCustom> {
+    
+    const representative = this.representatives.findIndex(representative => {
+      return representative.id === data.id
+    })
+
+    const updatedClient = {
+      ...this.representatives[representative],
+      ...data,
+      updatedAt: new Date(),
+    }
+
+    this.representatives[representative] = updatedClient
+
+    return updatedClient
   }
 
   async findById(id: string): Promise<RepresentativeEntire | null> {
