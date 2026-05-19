@@ -5,6 +5,7 @@ export interface ClientRepository {
   create(data: CreateClientDTO): Promise<Client>
 
   findById(id: string): Promise<Client | null>
+  findByIdUserResponsableActivated(idUser: string): Promise<Client[] | null>
   findByIdUserResponsableAndSearch(idUser: string, search: string): Promise<Client[]>
   findByProtocol(protocol: string): Promise<Client|null>
 

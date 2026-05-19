@@ -10,7 +10,7 @@ export type ClientPatchPayload = Client & {
 }
 
 type ClientPatchResponse = {
-  idClient: string
+  clientId: string
 }
 
 async function patchClient(

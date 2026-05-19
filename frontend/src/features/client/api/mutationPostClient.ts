@@ -9,7 +9,7 @@ export type ClientPostPayload = Client & {
 }
 
 type ClientPostResponse = {
-  idClient: string
+  clientId: string
 }
 
 async function postClient(
