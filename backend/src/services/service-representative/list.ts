@@ -1,24 +1,28 @@
-import { RepresentativeEntire, RepresentativeList } from "@shared/types/representative";
+import { RepresentativeEntire } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 
 interface ListRepresentativeUseCaseRequest {
-  idClient: string,
+  idUser: string,
   search: string,
 }
 
 export class ListRepresentativeUseCase {
   constructor(
-    private representativeRepository: RepresentativeRepository
+    private representativeRepository: RepresentativeRepository,
   ) {}
 
   async execute({
-    idClient,
+    idUser,
     search
   }: ListRepresentativeUseCaseRequest): Promise<RepresentativeEntire[]> {
 
-    const representatives = await this.representativeRepository.findByIdClientWithSearchRepresentativesActivated(idClient, search)
+    const representatives = 
+      await this.representativeRepository.findByIdUserWithSearchRepresentativesOnlyClientsActivated(
+        idUser, 
+        search
+    )
 
     if (!representatives) {
       throw new ResourceNotFoundError()

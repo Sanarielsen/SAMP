@@ -7,6 +7,7 @@ import ForgotPasswordPage from "@/features/auth/pages/ForgotPassword";
 import LoginPage from "@/features/auth/pages/Login";
 import ManageClientPage from "@/features/client/pages/ManageClientPage";
 import RepresentativePage from "@/features/representative/pages/RepresentativePage";
+import RepresentativeManagePage from "@/features/representative/pages/RepresentativeManagePage";
 
 export default function Router() {
   return (
@@ -16,11 +17,13 @@ export default function Router() {
 
       <Route element={<Dashboard />}>
         <Route path="clientes" element={<ClientPage />} />
-
         <Route path="cliente" element={<ManageClientPage />} />
         <Route path="cliente/:id" element={<ManageClientPage />} />
 
         <Route path="representantes" element={<RepresentativePage />} />
+        <Route path="representante" element={<RepresentativeManagePage />} />
+        <Route path="representante/:id" element={<RepresentativeManagePage />} />
+        
         <Route path="sobre" element={<AboutPage />} />
       </Route>
     </Routes>

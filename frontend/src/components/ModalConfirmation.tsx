@@ -88,7 +88,7 @@ export default function ModalConfirmation({ open, title, description, handleAnsw
               type="button"
               variant="outlined"
               fullWidth
-              onClick={() => handleAnswer(true)}
+              onClick={() => handleAnswer(false)}
             >
               Não
             </Button>
@@ -102,7 +102,7 @@ export default function ModalConfirmation({ open, title, description, handleAnsw
               variant="contained"
               color={"primary"}
               fullWidth
-              onClick={() => handleAnswer(false)}
+              onClick={() => handleAnswer(true)}
             >
               Sim
             </Button>
