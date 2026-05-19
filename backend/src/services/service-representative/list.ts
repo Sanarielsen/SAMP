@@ -3,18 +3,18 @@ import { RepresentativeRepository } from "@/repositories/representative-reposito
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 
-interface GetRepresentativeUseCaseRequest {
+interface ListRepresentativeUseCaseRequest {
   id: string
 }
 
-export class GetRepresentativeUseCase {
+export class ListRepresentativeUseCase {
   constructor(
     private representativeRepository: RepresentativeRepository
   ) {}
 
   async execute({
     id,
-  }: GetRepresentativeUseCaseRequest): Promise<RepresentativeEntire> {
+  }: ListRepresentativeUseCaseRequest): Promise<RepresentativeEntire> {
 
     const representatives = await this.representativeRepository.findById(id)
 

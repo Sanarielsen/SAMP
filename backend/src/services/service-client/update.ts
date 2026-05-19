@@ -1,6 +1,6 @@
 import { ClientRepository } from "@/repositories/client-repository"
 import { Client } from "@prisma/client"
-import { ResourceNotFoundError } from "./errors/resource-not-found-error"
+import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error"
 
 interface UpdateClientUseCaseRequest {
   id: string

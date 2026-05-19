@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it } from "vitest"
-import { UpdateClientStatusUseCase } from "./change-status-client"
+
 import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository"
-import { ResourceNotFoundError } from "./errors/resource-not-found-error"
+import { UpdateClientStatusUseCase } from "@/services/service-client/change-status"
+
+import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error"
 
 let clientRepository: InMemoryClientsRepository
 let sut: UpdateClientStatusUseCase
