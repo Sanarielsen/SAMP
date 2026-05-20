@@ -5,6 +5,18 @@ import { CreateClientDTO } from "@/types/client";
 export class InMemoryClientsRepository implements ClientRepository {
   public items: Client[] = []
 
+  async findByIdUserResponsableActivated(
+    id: string,
+  ): Promise<Client[] | null> {
+
+    const clients = this.items.filter(client =>
+      client.responsibleById === id &&
+      client.isActivated === true
+    )
+
+    return clients
+  }
+
   async findByIdUserResponsableAndSearch(idUser: string, search: string): Promise<Client[]> {
     const clients = this.items.filter(
       item =>

@@ -4,9 +4,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
-import { optionsQueryClient } from "@/features/representative/api/listRepresentatives";
-import { columnsRepresentatives } from "@/features/representative/components/DataTableColumnsRepresentatives";
+import DataTableColumnsRepresentative from "@/features/representative/components/DataTableColumnsRepresentatives";
 import DataTable from "@/components/DataTable";
+import { optionsQueryClient } from "../api/listRepresentatives";
 
 
 export default function RepresentativePage() {
@@ -30,7 +30,7 @@ export default function RepresentativePage() {
   const stateQuery = 
     isSuccess ? "SUCCESS" : 
     isLoading ? "LOADING" :
-    isError ? "ERROR" : "IDLE"
+    isError ? "ERROR" : "IDLE";
 
   return (
     <>
@@ -86,7 +86,9 @@ export default function RepresentativePage() {
           <DataTable
             state={stateQuery}
             rows={listRepresentatives}
-            columns={columnsRepresentatives}
+            columns={DataTableColumnsRepresentative({
+              onClickUpdateItem: (id) => navigate(`/representante/${id}`),
+            })}
           />
         </Box>
       </Box>

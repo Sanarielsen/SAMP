@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 
 import { Box, Button, Grid, Typography } from "@mui/material";
+import { useQuery } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import HotelClassIcon from '@mui/icons-material/HotelClass';
 
@@ -12,37 +14,64 @@ import {
 import { ControlledComboBox } from '@/components/ControlledComboBox';
 import { ControlledInputMask } from '@/components/ControlledInputMask';
 import { ControlledInput } from '@/components/ControlledInputText';
+import { emptyRepresentative } from '@/features/representative/utils/mockRepresentative';
+import { optionsGetRepresentative } from '@/features/representative/api/getRepresentative';
+import { optionsQueryListClientWithOptions } from '@/features/representative/api/listRepresentativesWithOptions';
 
 export default function RepresentativeManagePage() {
 
   const { id } = useParams();
   const isEditing = !!id;
 
-  // const { 
-  //   data: currentRepresentative, 
-  // } = useQuery(
-  //   optionsQueryGetClient(String(id))
-  // )
+  const { 
+    data: currentRepresentative, 
+  } = useQuery(
+    optionsGetRepresentative(String(id))
+  )
+
+  const { 
+    data: listClients,
+    isSuccess: isSuccessListClients
+  } = useQuery(
+    optionsQueryListClientWithOptions()
+  )
 
   const form = useForm<ManageRepresentativeSchemaFormData>({
     resolver:
       zodResolver(manageRepresentativeSchema),
 
-    // defaultValues:
-    //   isEditing
-    //     ? currentClient
-    //     : emptyClient,
+    defaultValues:
+      isEditing
+        ? currentRepresentative
+        : emptyRepresentative,
   });
   
   const {
     control,
     // getValues,
     handleSubmit,
-    // reset,
+    reset,
     // setValue,
     // watch,
     formState: { errors }
     } = form
+
+  useEffect(() => {
+    if (currentRepresentative) {
+      reset(
+        currentRepresentative
+
+        // protocol: formatDocument(
+        //   currentRepresentative.protocol
+        // ),
+        // fundationDate: formatAsVisualDate(
+        //   currentClient.dataFundation
+        // ),
+        // locationAddress: parseAddress(currentClient.locationAddress),
+        // correspondenceAddress: parseAddress(currentClient.correspondenceAddress)
+      )
+    }
+  }, [currentRepresentative, reset])
 
   const onSubmit: SubmitHandler<ManageRepresentativeSchemaFormData> = async (data) => {
   
@@ -87,7 +116,7 @@ export default function RepresentativeManagePage() {
               name={'idClient'}
               label='Cliente atrelado'
               placeholder='Clientes responsáveis por ti cadastrados'
-              options={[{ label: "Teste", value: '1' }]}
+              options={isSuccessListClients ? listClients : []}
             />
           </Grid>
         </Grid>
