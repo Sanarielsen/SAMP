@@ -1,10 +1,34 @@
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
+import { optionsQueryClient } from "@/features/representative/api/listRepresentatives";
 import { columnsRepresentatives } from "@/features/representative/components/DataTableColumnsRepresentatives";
 import DataTable from "@/components/DataTable";
 
 
 export default function RepresentativePage() {
+
+  const [searchBar, setSearchBar] = useState("");
+  const [searchApplied, setSearchApplied] = useState("")
+
+  const { 
+    data: listRepresentatives,
+    isError,
+    isSuccess, 
+    isLoading,
+  } = useQuery(
+    optionsQueryClient(String("5d4c6cdb-5138-43fc-b207-cca024742b31"), searchApplied)
+  )
+
+  const queryClient = useQueryClient()
+
+  const stateQuery = 
+    isSuccess ? "SUCCESS" : 
+    isLoading ? "LOADING" :
+    isError ? "ERROR" : "IDLE"
+
   return (
     <>
       <Box component="section" sx={{ p: 2}}>
@@ -43,13 +67,13 @@ export default function RepresentativePage() {
         <Box component="section" sx={{ p: 2}}>
           <TextField
             label="Pesquisa na listagem de representantes"
-            value={null}
-            onChange={() => console.log("Texto mudou")}
-            onKeyDown={() => {
-              // if (e.key === 'Enter') {
-              //   setSearchApplied(searchBar)
-              //   queryClient.invalidateQueries({ queryKey: ['clients'] })
-              // }
+            value={searchBar}
+            onChange={(e) => setSearchBar(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                setSearchApplied(searchBar)
+                queryClient.invalidateQueries({ queryKey: ['representatives'] })
+              }
             }}
             fullWidth
           />
@@ -57,8 +81,8 @@ export default function RepresentativePage() {
 
         <Box component="section" sx={{ p: 2}}>
           <DataTable
-            state={"SUCCESS"}
-            rows={[]}
+            state={stateQuery}
+            rows={listRepresentatives}
             columns={columnsRepresentatives}
           />
         </Box>
