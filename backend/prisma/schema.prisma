@@ -55,7 +55,7 @@ model Client {
 model Representative {
   id          String    @id @default(uuid())
   name        String
-  nacionality String
+  nationality String
   documentRG  String
   documentCPF String
   titleJob    String

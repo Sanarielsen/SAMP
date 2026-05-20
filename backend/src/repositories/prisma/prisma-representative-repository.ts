@@ -36,7 +36,7 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
             },
           },
           {
-            nacionality: {
+            nationality: {
               contains: search,
               mode: 'insensitive',
             },
@@ -86,7 +86,7 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
             },
           },
           {
-            nacionality: {
+            nationality: {
               contains: search,
               mode: 'insensitive',
             },

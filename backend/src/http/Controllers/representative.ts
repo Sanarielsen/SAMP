@@ -35,7 +35,7 @@ export async function postRepresentative(request: FastifyRequest, reply: Fastify
 
   const createRepresentativeBodySchema = z.object({
     name: z.string().min(1),
-    nacionality: z.string().min(1),
+    nationality: z.string().min(1),
     documentRG: z.string().min(8).max(9),
     documentCPF: z.string().min(11).max(12),
     titleJob: z.string().min(1),
@@ -44,7 +44,7 @@ export async function postRepresentative(request: FastifyRequest, reply: Fastify
 
   const {
     name,
-    nacionality,
+    nationality,
     documentRG,
     documentCPF,
     titleJob,
@@ -59,7 +59,7 @@ export async function postRepresentative(request: FastifyRequest, reply: Fastify
     await postRepresentativeUseCase.execute({
       idClient: id,
       name,
-      nacionality,
+      nationality,
       documentRG,
       documentCPF,
       titleJob, 
@@ -94,7 +94,7 @@ export async function getRepresentative(request: FastifyRequest, reply: FastifyR
 export async function updateRepresentative(request: FastifyRequest, reply: FastifyReply) {
   const updateRepresentativeBodySchema = z.object({
     name: z.string().min(1).optional(),
-    nacionality: z.string().min(1).optional(),
+    nationality: z.string().min(1).optional(),
     documentRG: z.string().min(8).max(9).optional(),
     documentCPF: z.string().min(11).max(12).optional(),
     titleJob: z.string().min(1).optional(),

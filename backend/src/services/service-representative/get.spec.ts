@@ -26,7 +26,7 @@ describe('Get Representative Use Case', () => {
       id: 'representative-1',
       idClient: 'client-1',
       name: 'Representante Teste 1',
-      nacionality: 'brasileiro',
+      nationality: 'brasileiro',
       documentRG: '001113338',
       documentCPF: '12378945',
       titleJob: 'Testador',

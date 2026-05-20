@@ -29,7 +29,7 @@ describe('Post Representative User Case', () => {
       id: 'representant-1',
       idClient: 'client-1',
       name: 'Representante Teste',
-      nacionality: 'Brasileiro',
+      nationality: 'Brasileiro',
       documentRG: '123456789',
       documentCPF: '12312312389',
       createdAt: new Date(Date.now()),
@@ -47,7 +47,7 @@ describe('Post Representative User Case', () => {
   //     sut.execute({
   //       idClient: 'client-1',
   //       name: 'Representante Teste',
-  //       nacionality: 'Brasileiro',
+  //       nationality: 'Brasileiro',
   //       documentRG: '123456789',
   //       documentCPF: '12312312389',
   //       titleJob: 'Desenvolvedor de Software',

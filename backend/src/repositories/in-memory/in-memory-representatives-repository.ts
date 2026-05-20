@@ -64,7 +64,7 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
     const representatives = this.representatives.filter(representative =>
       clientIds.includes(representative.idClient) &&
       representative.deletedAt === null &&
-      representative.nacionality
+      representative.nationality
         .toLowerCase()
         .includes(search.toLowerCase())
     )
