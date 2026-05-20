@@ -40,7 +40,9 @@ export class PostRepresentativeUseCase {
       documentCPF: data.documentCPF,
       titleJob: data.titleJob,
       roleJob: data.roleJob,
-      createdAt: new Date(Date.now())
+      createdAt: new Date(Date.now()),
+      updatedAt: null,
+      deletedAt: null
     }
 
     const newRegister = await this.representativeRepository.create(newRepresentative);

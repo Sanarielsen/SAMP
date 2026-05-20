@@ -4,7 +4,7 @@ import { makeListRepresentativeUseCase } from "@/services/factories/representati
 import { makePostRepresentativeUseCase } from "@/services/factories/representatives/make-post-use-case";
 import { makeUpdateRepresentativeUseCase } from "@/services/factories/representatives/make-update-use-case";
 import { makeDeleteRepresentativeUseCase } from "@/services/factories/representatives/make-delete-use-case";
-import { FastifyRegister, FastifyReply, FastifyRequest } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { z, ZodError } from "zod";
 
 
