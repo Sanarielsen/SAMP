@@ -2,12 +2,12 @@ import { queryOptions } from "@tanstack/react-query"
 
 import { api } from "@/api/axios"
 
-export function optionsQueryClient(idClient: string, search: string) { 
+export function optionsQueryClient(search: string) { 
   return queryOptions({
-    queryKey: ["representatives", idClient],
+    queryKey: ["representatives"],
 
     queryFn: async () => {
-      const { data } = await api.get(`/client/${idClient}/representatives`,
+      const { data } = await api.get(`/representatives`,
         {
           params: {
             search,

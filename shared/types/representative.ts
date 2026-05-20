@@ -18,9 +18,9 @@ export type RepresentativeEntire = {
   documentCPF:    string
   titleJob:       string
   roleJob:        string
-  createdAt?:     Date
-  updatedAt?:     Date | null
-  deletedAt?:     Date | null
+  createdAt:      Date
+  updatedAt:      Date | null
+  deletedAt:      Date | null
 }
 
 

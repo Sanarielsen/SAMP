@@ -11,12 +11,13 @@ import { z, ZodError } from "zod";
 export async function listRepresentative(request: FastifyRequest, reply: FastifyReply) {
   const listRepresentativeUseCase = makeListRepresentativeUseCase();
 
-  const { id } = request.params as { id: string }
+  const id = request.user.sub;
+
   const { search } = request.query as { search: string }
 
   try {
     const representatives = await listRepresentativeUseCase.execute({
-      idClient: id,
+      idUser: id,
       search
     })
 
