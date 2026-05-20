@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
@@ -21,6 +22,8 @@ export default function RepresentativePage() {
   } = useQuery(
     optionsQueryClient(searchApplied)
   )
+
+  const navigate = useNavigate();
 
   const queryClient = useQueryClient()
 
@@ -57,7 +60,7 @@ export default function RepresentativePage() {
               type="button"
               variant="contained"
               sx={{ width: { xs: "100%", md: "auto" }, }}
-              onClick={() => console.log("Muda pra pagina de novo representante")}
+              onClick={() => navigate('/representante')}
             >
               Inserir Novo Representante
             </Button>
