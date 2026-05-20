@@ -8,6 +8,7 @@ import { verifyJWT } from "@/http/middlewares/verify-jwt";
 import { 
   getClient,
   listClient,
+  listClientWithOptions,
   postClient,
   updateClient,
   updateClientStatus 
@@ -28,8 +29,10 @@ export async function appRoutes(app: FastifyInstance) {
 
   app.get('/me', {onRequest: [verifyJWT]}, profile)
 
+  
   app.get('/client/:id', {onRequest: [verifyJWT]}, getClient)
   app.get('/client/user/:id', {onRequest: [verifyJWT]}, listClient)
+  app.get('/clients/options', {onRequest: [verifyJWT]}, listClientWithOptions)
   app.post('/client', {onRequest: [verifyJWT]}, postClient)
   app.patch('/client/:id', {onRequest: [verifyJWT]}, updateClient)
   app.patch('/client/:id/status', {onRequest: [verifyJWT]}, updateClientStatus)

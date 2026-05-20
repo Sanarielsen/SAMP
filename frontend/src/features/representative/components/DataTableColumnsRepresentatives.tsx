@@ -3,7 +3,14 @@ import { GridDeleteIcon, GridLoadIcon, GridSearchIcon, type GridColDef } from "@
 import type { RepresentativeDetails } from "@/features/representative/types/representative";
 import { IconButton, Stack, Tooltip } from "@mui/material";
 
-export const columnsRepresentatives: GridColDef<RepresentativeDetails>[] = [
+type ColumnsRepresentativesProps = {
+  onClickUpdateItem: (id: string) => void
+}
+
+export default function DataTableColumnsRepresentative({
+  onClickUpdateItem
+}: ColumnsRepresentativesProps ): GridColDef<RepresentativeDetails>[] {
+  return [
     {
       field: "name",
       headerName: "Nome",
@@ -64,7 +71,7 @@ export const columnsRepresentatives: GridColDef<RepresentativeDetails>[] = [
           </IconButton>
 
           <IconButton
-            onClick={() => console.log("navega a página de detalhe")}
+            onClick={() => onClickUpdateItem(params.row.id)}
           >          
             <Tooltip title="Atualizar">
               <GridLoadIcon />
@@ -81,4 +88,5 @@ export const columnsRepresentatives: GridColDef<RepresentativeDetails>[] = [
         </Stack>
       ),
     }
-  ];
+  ]
+}

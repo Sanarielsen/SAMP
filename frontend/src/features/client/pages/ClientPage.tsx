@@ -18,7 +18,7 @@ import { useNavigate } from "react-router";
 import DataTable from "@/components/DataTable";
 import type { ClientDetails } from "@/features/client/types/clients";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { optionsQueryClient } from "../api/queryClients";
+import { optionsQueryClient } from "../../../api/queryClients";
 import { formatCPF } from "@/utils/formatCPF";
 import { formatCNPJ } from "@/utils/formatCNPJ";
 import { useAuth } from "@/auth/AuthProvider";

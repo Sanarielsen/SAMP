@@ -1,12 +1,14 @@
-import { ResourceAlreadyExistsError } from '@/services/errors/resource-already-exists-error';
-import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
+import { FastifyRequest, FastifyReply } from 'fastify'
+import { z, ZodError } from 'zod';
+
 import { makeChangeStatusClientUseCase } from '@/services/factories/make-change-status-client-use-case';
 import { makeCreateClientUseCase } from '@/services/factories/make-create-client-use-case';
 import { makeGetClientProfileUseCase } from '@/services/factories/make-get-client-use-case'
 import { makeListClientUseCase } from '@/services/factories/make-list-client-use-case';
+import { makeListClientWithOptionsUseCase } from '@/services/factories/make-list-client-with-options';
 import { makeUpdateClientUseCase } from '@/services/factories/make-update-client-use-case';
-import { FastifyRequest, FastifyReply } from 'fastify'
-import { z, ZodError } from 'zod';
+import { ResourceAlreadyExistsError } from '@/services/errors/resource-already-exists-error';
+import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 
 export async function getClient(request: FastifyRequest, reply: FastifyReply) {
   const getClientProfile = makeGetClientProfileUseCase();
@@ -110,6 +112,27 @@ export async function listClient(request: FastifyRequest, reply: FastifyReply) {
       })
     }
   }
+}
+
+export async function listClientWithOptions(request: FastifyRequest, reply: FastifyReply) {
+  const listClientWithOptions = makeListClientWithOptionsUseCase();
+
+  const id = request.user.sub;
+
+  try {
+    const clients = await listClientWithOptions.execute({
+      responsibleById: id
+    })
+
+    return reply.status(200).send(clients);
+  } catch (err) {
+    if (err instanceof ResourceNotFoundError) {
+      return reply.status(409).send({
+        message: err.message,
+      })
+    }
+  }
+
 }
 
 export async function updateClient(
