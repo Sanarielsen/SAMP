@@ -6,7 +6,6 @@ import { PostRepresentativeUseCase } from '@/services/service-representative/pos
 export function makePostRepresentativeUseCase() {
   const representativeRepository = new PrismaRepresentativeRepository()
   const clientRepository = new PrismaClientRepository()
-  const userRepository = new PrismaUsersRepository()
   const useCase = new PostRepresentativeUseCase(representativeRepository, clientRepository)
 
   return useCase

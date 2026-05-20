@@ -22,6 +22,7 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
   }
 
   async findByIdUserWithSearchRepresentativesOnlyClientsActivated(idUser: string, search: string): Promise<RepresentativeList[] | null> {
+
     const representatives = await prisma.representative.findMany({
       where: {
         deletedAt: null,
@@ -122,9 +123,20 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
     return representatives
   }
   async create(data: RepresentativeEntire): Promise<RepresentativeEntire> {
-    
     const representative = await prisma.representative.create({
-      data
+      data: {
+        name: data.name,
+        nationality: data.nationality,
+        documentCPF: data.documentCPF,
+        documentRG: data.documentRG,
+        titleJob: data.titleJob,
+        roleJob: data.roleJob,
+        client: {
+          connect: {
+            id: data.idClient
+          }
+        }
+      }
     })
     
     return representative
