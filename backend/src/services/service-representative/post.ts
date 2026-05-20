@@ -35,7 +35,7 @@ export class PostRepresentativeUseCase {
       id: 'new-representative',
       idClient: data.idClient,
       name: data.name,
-      nacionality: data.nacionality,
+      nationality: data.nationality,
       documentRG: data.documentRG,
       documentCPF: data.documentCPF,
       titleJob: data.titleJob,

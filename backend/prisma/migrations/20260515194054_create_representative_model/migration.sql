@@ -2,7 +2,7 @@
 CREATE TABLE "Representatives" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "nacionality" TEXT NOT NULL,
+    "nationality" TEXT NOT NULL,
     "documentRG" TEXT NOT NULL,
     "documentCPF" TEXT NOT NULL,
     "titleJob" TEXT NOT NULL,

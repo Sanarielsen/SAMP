@@ -1,7 +1,7 @@
 export type RepresentativeDTO = {
   idClient:       string
   name:           string
-  nacionality:    string
+  nationality:    string
   documentRG:     string
   documentCPF:    string
   titleJob:       string
@@ -13,7 +13,7 @@ export type RepresentativeEntire = {
   id:             string
   idClient:       string
   name:           string
-  nacionality:    string
+  nationality:    string
   documentRG:     string
   documentCPF:    string
   titleJob:       string
@@ -28,7 +28,7 @@ export type RepresentativeList = {
   id:             string
   name:           string
   idClient:       string
-  nacionality:    string
+  nationality:    string
   documentRG:     string
   documentCPF:    string
   titleJob:       string
@@ -41,7 +41,7 @@ export type RepresentativeCustom = {
   id:             string
   idClient:       string,
   name?:          string,
-  nacionality?:   string,
+  nationality?:   string,
   documentRG?:    string,
   documentCPF?:   string,
   titleJob?:      string,

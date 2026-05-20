@@ -7,7 +7,7 @@ interface UpdateRepresentativeUseCaseRequest {
   id: string,
   idClient: string,
   name?: string,
-  nacionality?: string,
+  nationality?: string,
   documentRG?: string,
   documentCPF?: string,
   titleJob?: string,

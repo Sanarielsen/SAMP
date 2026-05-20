@@ -35,7 +35,7 @@ Etapas a serem desenvolvidas:
 
 Todo cliente possui seu representante, dentre ele, temos as seguintes propriedades a serem considerados:
 - name          string
-- nacionality   string
+- nationality   string
 - documentRG    string
 - documentCPF   string
 - titleJob      string
@@ -52,14 +52,14 @@ As informacões adicionais desse objeto, serão:
 ##### Route
 - GET /client/:id/representatives?search=
 ##### Response
-- [name, nacionality, documentRG, documentCPF, titleJob, roleJob]
+- [name, nationality, documentRG, documentCPF, titleJob, roleJob]
 <br>
 
 > Listagem de um representante correspondente deste cliente;
 ##### Route
 - GET /client/:id/representative/:idRepresentative
 ##### Response
-- {name, nacionality, documentRG, documentCPF, titleJob, roleJob}
+- {name, nationality, documentRG, documentCPF, titleJob, roleJob}
 <br>
 
 > Novo representante para esse cliente
@@ -72,7 +72,7 @@ As informacões adicionais desse objeto, serão:
 ##### Route
 - PATCH /client/:id/representative
 ##### Payload
-- {name, nacionality, documentRG, documentCPF, titleJob, roleJob}
+- {name, nationality, documentRG, documentCPF, titleJob, roleJob}
 ##### Response
 - id
 

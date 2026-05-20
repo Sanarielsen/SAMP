@@ -19,7 +19,7 @@ describe('Update Representative Use Case', () => {
       id: 'representative-1',
       idClient: 'client-1',
       name: 'Representante Teste',
-      nacionality: 'Brasileiro',
+      nationality: 'Brasileiro',
       documentRG: '123456789',
       documentCPF: '12312312389',
       createdAt: new Date(Date.now()),
@@ -33,14 +33,14 @@ describe('Update Representative Use Case', () => {
       id: 'representative-1',
       idClient: 'client-1',
       name: 'New Representative Name',
-      nacionality: 'New nacionality name',
+      nationality: 'New nationality name',
     })
 
     expect(representativeUpdated.name)
       .toBe('New Representative Name')
 
-    expect(representativeUpdated.nacionality)
-      .toBe('New nacionality name')
+    expect(representativeUpdated.nationality)
+      .toBe('New nationality name')
 
     expect(representativeUpdated.id)
       .toBe('representative-1')
