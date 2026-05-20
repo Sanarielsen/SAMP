@@ -1,11 +1,17 @@
-import { Client } from "@prisma/client";
+import { Client, User } from "@prisma/client";
 import { RepresentativeCustom, RepresentativeEntire, RepresentativeList } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
+import { InMemoryClientsRepository } from "./in-memory-client-repository";
 
 
 export class InMemoryRepresentativeRepository implements RepresentativeRepository {
+  constructor(
+    private clientRepository: InMemoryClientsRepository,
+  ) {}
+
   public representatives: RepresentativeEntire[] = []
   public clients: Client[] = []
+  public users: User[] = []
 
   async create(data: RepresentativeEntire): Promise<RepresentativeEntire> {
     const representative = {
@@ -45,14 +51,20 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
     return representative
   }
 
-  async findByIdClientWithSearchRepresentativesActivated(
-    idClient: string,
+  async findByIdUserWithSearchRepresentativesOnlyClientsActivated(
+    idUser: string,
     search: string,
   ): Promise<RepresentativeEntire[] | null> {
+    const clientsFromUser = this.clientRepository.items.filter(client =>
+      client.responsibleById === idUser
+    )
+
+    const clientIds = clientsFromUser.map(client => client.id)
+
     const representatives = this.representatives.filter(representative =>
-      representative.idClient === idClient &&
+      clientIds.includes(representative.idClient) &&
       representative.deletedAt === null &&
-      representative.name
+      representative.nacionality
         .toLowerCase()
         .includes(search.toLowerCase())
     )

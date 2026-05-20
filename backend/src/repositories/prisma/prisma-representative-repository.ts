@@ -21,17 +21,13 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
     return representative
   }
 
-  async findByIdClientWithSearchRepresentativesActivated(idClient: string, search: string): Promise<RepresentativeList[] | null> {
+  async findByIdUserWithSearchRepresentativesOnlyClientsActivated(idUser: string, search: string): Promise<RepresentativeList[] | null> {
     const representatives = await prisma.representative.findMany({
       where: {
-        AND: [
-          {
-            idClient
-          },
-          {
-            deletedAt: null
-          }
-        ],
+        deletedAt: null,
+        client: {
+          responsibleById: idUser
+        },
         OR: [
           {
             name: {

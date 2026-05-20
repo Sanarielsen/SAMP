@@ -8,6 +8,6 @@ export interface RepresentativeRepository {
   delete(id: string): Promise<void>
 
   findById(id: string): Promise<RepresentativeEntire | null>
-  findByIdClientWithSearchRepresentativesActivated(idClient: string, search: string): Promise<RepresentativeEntire[] | null>
+  findByIdUserWithSearchRepresentativesOnlyClientsActivated(idUser: string, search: string): Promise<RepresentativeEntire[] | null>
   findManyByUserIdWithSearch(userId: string, search: string): Promise<RepresentativeEntire[] | null>
 }

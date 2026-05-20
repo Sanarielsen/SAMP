@@ -34,7 +34,11 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/client/:id', {onRequest: [verifyJWT]}, updateClient)
   app.patch('/client/:id/status', {onRequest: [verifyJWT]}, updateClientStatus)
 
-  app.get('/client/:id/representatives', {onRequest: [verifyJWT]}, listRepresentative)
+  //O problema é que tem mais de um cliente atrelado a um user,
+  //Ou seja, nao dá pra passar apenas UM cliente ou VARIOS na execucao
+  //Corrija a rota para /representatives utilizando o idUser do usuario logado
+  //Para trazer todos os clientes responsáveis desse usuário;
+  app.get('/representatives', {onRequest: [verifyJWT]}, listRepresentative)
   app.get('/representative/:id', {onRequest: [verifyJWT]}, getRepresentative)
   app.post('/client/:id/representative', {onRequest: [verifyJWT]}, postRepresentative)
   app.patch('/client/:idClient/representative/:idRepresentative', {onRequest: [verifyJWT]}, updateRepresentative)

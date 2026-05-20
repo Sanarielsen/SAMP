@@ -19,7 +19,7 @@ export default function RepresentativePage() {
     isSuccess, 
     isLoading,
   } = useQuery(
-    optionsQueryClient(String("5d4c6cdb-5138-43fc-b207-cca024742b31"), searchApplied)
+    optionsQueryClient(searchApplied)
   )
 
   const queryClient = useQueryClient()
