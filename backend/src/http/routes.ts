@@ -38,7 +38,7 @@ export async function appRoutes(app: FastifyInstance) {
 
   app.get('/representatives', {onRequest: [verifyJWT]}, listRepresentative)
   app.get('/representative/:id', {onRequest: [verifyJWT]}, getRepresentative)
-  app.post('/client/:id/representative', {onRequest: [verifyJWT]}, postRepresentative)
+  app.post('/representative', {onRequest: [verifyJWT]}, postRepresentative)
   app.patch('/client/:clientId/representative/:idRepresentative', {onRequest: [verifyJWT]}, updateRepresentative)
   app.delete('/representative/:id', {onRequest: [verifyJWT]}, deleteRepresentative)
 }
