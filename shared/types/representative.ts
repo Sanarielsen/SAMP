@@ -62,6 +62,7 @@ export interface RepresentativeDetailsDTO {
   roleJob: string
 
   createdAt: Date
+  updatedAt: Date | null
 }
 
 export interface RepresentativeOptionDTO {

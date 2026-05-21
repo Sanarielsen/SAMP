@@ -1,15 +1,17 @@
 import { GridDeleteIcon, GridLoadIcon, GridSearchIcon, type GridColDef } from "@mui/x-data-grid";
-
-import type { RepresentativeDetails } from "@/features/representative/types/representative";
 import { IconButton, Stack, Tooltip } from "@mui/material";
+
+import { formatDocument } from "@/features/client/utils/formatDocument";
+import type { RepresentativeDetailsDTO } from "@shared/types/representative";
 
 type ColumnsRepresentativesProps = {
   onClickUpdateItem: (id: string) => void
+  onClickSeeItem: (currentItem: RepresentativeDetailsDTO) => void
 }
 
 export default function DataTableColumnsRepresentative({
-  onClickUpdateItem
-}: ColumnsRepresentativesProps ): GridColDef<RepresentativeDetails>[] {
+  onClickUpdateItem, onClickSeeItem
+}: ColumnsRepresentativesProps ): GridColDef<RepresentativeDetailsDTO>[] {
   return [
     {
       field: "name",
@@ -17,25 +19,21 @@ export default function DataTableColumnsRepresentative({
       flex: 1,
     },
     {
-      field: "protocol",
-      headerName: "Protocolo",
+      field: "documentCPF",
+      headerName: "Documento (CPF)",
       flex: 1,
-      //Coloca o CPF ou RG aqui? Provavel que seja o CPF
-      // valueFormatter: (value: string) => {
-      //   if (value.length === 11) {
-      //     return formatCPF(value)
-      //   }
-
-      //   if (value.length === 14) {
-      //     return formatCNPJ(value)
-      //   }
-      // },
+      valueFormatter: (value: string) => {
+        return formatDocument(value)
+      },
     },
     {
       //roleJob tambem...
       field: "titleJob",
       headerName: "Cargo/Funcão",
       flex: 1,
+      valueFormatter: (value: string) => {
+        return value
+      },
     },
     {
       //Como colocar a empresa que ele corresponde aqui
@@ -63,7 +61,7 @@ export default function DataTableColumnsRepresentative({
           }}
         >
           <IconButton
-            onClick={() => console.log("navega a página de dados", params.row.documentCPF)}
+            onClick={() => onClickSeeItem(params.row)}
           >
             <Tooltip title="Detalhes">
               <GridSearchIcon />
