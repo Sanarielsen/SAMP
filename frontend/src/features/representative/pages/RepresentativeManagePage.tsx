@@ -10,6 +10,7 @@ import HotelClassIcon from '@mui/icons-material/HotelClass';
 import { optionsGetRepresentative } from '@/features/representative/api/getRepresentative';
 import { optionsQueryListClientWithOptions } from '@/features/representative/api/listRepresentativesWithOptions';
 import { useMutationPostRepresentative } from '@/features/representative/api/mutationPostRepresentative';
+import { useMutationPatchRepresentative } from '@/features/representative/api/mutationPatchRepresentative';
 import { ControlledComboBox } from '@/components/ControlledComboBox';
 import { ControlledInputMask } from '@/components/ControlledInputMask';
 import { ControlledInput } from '@/components/ControlledInputText';
@@ -22,12 +23,13 @@ import {
 import { emptyRepresentative } from '@/features/representative/utils/mockRepresentative';
 import { cleanValue } from '@/utils/cleanValue';
 
-import type { CreateRepresentativeDTO } from '@shared/types/representative';
+import type { CreateRepresentativeDTO, UpdateRepresentativeDTO } from '@shared/types/representative';
+
 
 export default function RepresentativeManagePage() {
 
   const [openToast, setOpenToast] = useState("")
-  
+
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = !!id;
@@ -87,7 +89,33 @@ export default function RepresentativeManagePage() {
       },
   })
 
+  const mutationPatchRepresentative =
+    useMutationPatchRepresentative({
+      onSuccess: () => {
+        executeActionAfterRequest("success")
+      },
+      onError: () => {
+        executeActionAfterRequest("error")
+      },
+  })
+
   const onSubmit: SubmitHandler<ManageRepresentativeSchemaFormData> = async (data) => {
+
+    if ( isEditing ) {
+      const payload: UpdateRepresentativeDTO = {
+        id,
+        clientId: data.clientId,
+        name: data.name,
+        nationality: data.nationality,
+        documentRG: cleanValue(data.documentRG),
+        documentCPF: cleanValue(data.documentCPF),
+        titleJob: data.titleJob,
+        roleJob: data.roleJob
+      }
+
+      mutationPatchRepresentative.mutate(payload)
+      return
+    }
   
     const payload: CreateRepresentativeDTO = {
       clientId: data.clientId,
@@ -99,8 +127,7 @@ export default function RepresentativeManagePage() {
       roleJob: data.roleJob
     }
 
-    mutationPostRepresentative.mutate(payload)
-    return  
+    mutationPostRepresentative.mutate(payload)  
   }
 
   return (
