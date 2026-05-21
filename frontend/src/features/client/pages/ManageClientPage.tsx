@@ -24,7 +24,7 @@ import { useAuth } from "@/auth/AuthProvider";
 import { getDocumentMask } from "@/features/client/utils/getDocumentMask";
 import { optionsQueryGetClient } from "@/features/client/api/queryGetClient";
 import { useQuery } from "@tanstack/react-query";
-import { formatDocument } from "../utils/formatDocument";
+import { formatDocument } from "../../../utils/formatDocument";
 import { formatAsVisualDate } from "../utils/formatAsAVisualDate";
 import { parseAddress } from "../utils/formatAddressFromAPI";
 import { cleanValue } from "@/utils/cleanValue";

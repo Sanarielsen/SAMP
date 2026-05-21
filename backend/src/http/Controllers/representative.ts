@@ -6,6 +6,7 @@ import { makeUpdateRepresentativeUseCase } from "@/services/factories/representa
 import { makeDeleteRepresentativeUseCase } from "@/services/factories/representatives/make-delete-use-case";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z, ZodError } from "zod";
+import { makeGetRepresentativeOfClientsUseCase } from "@/services/factories/representatives/make-get-of-clients-use-case";
 
 
 export async function listRepresentative(request: FastifyRequest, reply: FastifyReply) {
@@ -84,6 +85,19 @@ export async function getRepresentative(request: FastifyRequest, reply: FastifyR
     request.params as { id: string }
 
   const representative = await getRepresentative.execute({
+    id
+  })
+
+  return reply.status(200).send(representative);
+}
+
+export async function getRepresentativeOfClients(request: FastifyRequest, reply: FastifyReply) {
+  const getRepresentativeOfClients = makeGetRepresentativeOfClientsUseCase();
+
+  const { id } = 
+    request.params as { id: string }
+
+  const representative = await getRepresentativeOfClients.execute({
     id
   })
 
