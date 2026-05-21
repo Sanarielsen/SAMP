@@ -7,10 +7,11 @@ import type { RepresentativeDetailsDTO } from "@shared/types/representative";
 type ColumnsRepresentativesProps = {
   onClickUpdateItem: (id: string) => void
   onClickSeeItem: (currentItem: RepresentativeDetailsDTO) => void
+  onClickDeleteItem: (currentItem: RepresentativeDetailsDTO) => void
 }
 
 export default function DataTableColumnsRepresentative({
-  onClickUpdateItem, onClickSeeItem
+  onClickUpdateItem, onClickSeeItem, onClickDeleteItem
 }: ColumnsRepresentativesProps ): GridColDef<RepresentativeDetailsDTO>[] {
   return [
     {
@@ -77,7 +78,7 @@ export default function DataTableColumnsRepresentative({
           </IconButton>
 
           <IconButton
-            onClick={() => console.log("navega a página de exclusao")}
+            onClick={() => onClickDeleteItem(params.row)}
           >
             <Tooltip title="Excluir">
               <GridDeleteIcon />
