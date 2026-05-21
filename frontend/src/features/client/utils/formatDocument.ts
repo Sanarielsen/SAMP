@@ -7,6 +7,14 @@ export function formatDocument(value: string) {
       .replace(/(\d{3})(\d)/, '$1.$2')
       .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
   }
+  
+  if (numbers.length == 9) {
+    return numbers
+      .replace(/\D/g, '')
+      .replace(/(\d{2})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1})$/, '$1-$2')
+  }
 
   return numbers
     .replace(/^(\d{2})(\d)/, '$1.$2')

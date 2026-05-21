@@ -4,15 +4,20 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
+import { optionsQueryClient } from "@/features/representative/api/listRepresentatives";
 import DataTableColumnsRepresentative from "@/features/representative/components/DataTableColumnsRepresentatives";
+import ModalRepresentativeDetails from "@/features/representative/components/ModalRepresentativeDetails";
 import DataTable from "@/components/DataTable";
-import { optionsQueryClient } from "../api/listRepresentatives";
+import { representativeFields } from "@/features/representative/utils/getRowDetailRepresentative";
+import type { RepresentativeDetailsDTO } from "@shared/types/representative";
 
 
 export default function RepresentativePage() {
 
   const [searchBar, setSearchBar] = useState("");
   const [searchApplied, setSearchApplied] = useState("")
+  const [representativeClicked, setRepresentativeClicked] = useState<RepresentativeDetailsDTO>();
+  const [openModalDetails, setOpenModalDetails] = useState(false);
 
   const { 
     data: listRepresentatives,
@@ -31,6 +36,11 @@ export default function RepresentativePage() {
     isSuccess ? "SUCCESS" : 
     isLoading ? "LOADING" :
     isError ? "ERROR" : "IDLE";
+
+  const handleView = (representative: RepresentativeDetailsDTO) => {
+    setRepresentativeClicked(representative);
+    setOpenModalDetails(true);
+  };
 
   return (
     <>
@@ -88,10 +98,20 @@ export default function RepresentativePage() {
             rows={listRepresentatives}
             columns={DataTableColumnsRepresentative({
               onClickUpdateItem: (id) => navigate(`/representante/${id}`),
+              onClickSeeItem: (current) => handleView(current) 
             })}
           />
         </Box>
       </Box>
+
+      {representativeClicked && (
+        <ModalRepresentativeDetails 
+          open={openModalDetails}
+          representative={representativeClicked}
+          fields={representativeFields}
+          handleClose={() => setOpenModalDetails(false)}
+        />
+      )}
     </>
   )
 }
