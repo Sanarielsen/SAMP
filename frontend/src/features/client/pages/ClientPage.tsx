@@ -51,6 +51,7 @@ export default function ClientPage() {
     isError,
     isSuccess, 
     isLoading,
+    refetch,
   } = useQuery(
     optionsQueryClient(String(userId), searchApplied)
   )
@@ -76,14 +77,17 @@ export default function ClientPage() {
     setOpenModalConfirmation(true)
   };
 
-  function handleDeactivateClient(){
-    setOpenModalConfirmation(false)
+  function handleDeactivateClient(action: boolean){
     
-    if (!clientClicked) return
+    setOpenModalConfirmation(false)
+    if (!action || !clientClicked) return
+    
     mutationChangeStatusClient.mutate({
       id: clientClicked.id,
       isActivated: !clientClicked.isActivated,
     })
+
+    refetch()
   }
 
   const columns: GridColDef<ClientDetails>[] = [
