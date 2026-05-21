@@ -16,6 +16,7 @@ import {
 import { 
   deleteRepresentative,
   getRepresentative,
+  getRepresentativeOfClients,
   listRepresentative, 
   postRepresentative,
   updateRepresentative
@@ -38,6 +39,7 @@ export async function appRoutes(app: FastifyInstance) {
 
   app.get('/representatives', {onRequest: [verifyJWT]}, listRepresentative)
   app.get('/representative/:id', {onRequest: [verifyJWT]}, getRepresentative)
+  app.get('/representative/:id/clients', {onRequest: [verifyJWT]}, getRepresentativeOfClients)
   app.post('/representative', {onRequest: [verifyJWT]}, postRepresentative)
   app.patch('/representative/:id', {onRequest: [verifyJWT]}, updateRepresentative)
   app.delete('/representative/:id', {onRequest: [verifyJWT]}, deleteRepresentative)

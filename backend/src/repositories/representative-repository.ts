@@ -1,4 +1,4 @@
-import { CreateRepresentativeDTO, Representative, UpdateRepresentativeDTO } from "@shared/types/representative"
+import { CreateRepresentativeDTO, Representative, RepresentativeOptionDTO, UpdateRepresentativeDTO } from "@shared/types/representative"
 
 export interface RepresentativeRepository {
   create(data: CreateRepresentativeDTO): Promise<Representative>
@@ -10,4 +10,5 @@ export interface RepresentativeRepository {
   findById(id: string): Promise<Representative | null>
   findByIdUserWithSearchRepresentativesOnlyClientsActivated(idUser: string, search: string): Promise<Representative[] | null>
   findManyByUserIdWithSearch(userId: string, search: string): Promise<Representative[] | null>
+  findManyRepresentsOnClientsId(idClient: string): Promise<RepresentativeOptionDTO[] | null>
 }

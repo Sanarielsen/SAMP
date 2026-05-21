@@ -24,6 +24,7 @@ import { emptyRepresentative } from '@/features/representative/utils/mockReprese
 import { cleanValue } from '@/utils/cleanValue';
 
 import type { CreateRepresentativeDTO, UpdateRepresentativeDTO } from '@shared/types/representative';
+import { formatDocument } from '@/utils/formatDocument';
 
 
 export default function RepresentativeManagePage() {
@@ -66,7 +67,11 @@ export default function RepresentativeManagePage() {
 
   useEffect(() => {
     if (currentRepresentative) {
-      reset(currentRepresentative)
+      reset({
+        ...currentRepresentative,
+        documentRG: formatDocument(currentRepresentative.documentRG),
+        documentCPF: formatDocument(currentRepresentative.documentCPF)
+      })
     }
   }, [currentRepresentative, reset])
 

@@ -1,4 +1,4 @@
-import { formatDocument } from "@/features/client/utils/formatDocument";
+import { formatDocument } from "@/utils/formatDocument";
 import type { Field } from "@/utils/field";
 import type { RepresentativeDetailsDTO } from "@shared/types/representative";
 

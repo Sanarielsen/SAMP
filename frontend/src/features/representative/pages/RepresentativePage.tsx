@@ -8,6 +8,7 @@ import { optionsQueryClient } from "@/features/representative/api/listRepresenta
 import { useMutationDeleteRepresentative } from "@/features/representative/api/mutationDeleteRepresentative";
 import { representativeFields } from "@/features/representative/utils/getRowDetailRepresentative";
 import DataTableColumnsRepresentative from "@/features/representative/components/DataTableColumnsRepresentatives";
+import ModalListClientsOnRepresentative from "@/features/representative/components/ModalListClientsOnRepresentative";
 import ModalRepresentativeDetails from "@/features/representative/components/ModalRepresentativeDetails";
 import DataTable from "@/components/DataTable";
 import ModalConfirmation from "@/components/ModalConfirmation";
@@ -22,6 +23,7 @@ export default function RepresentativePage() {
   const [searchApplied, setSearchApplied] = useState("")
   const [representativeClicked, setRepresentativeClicked] = useState<RepresentativeDetailsDTO>();
   const [openModalDetails, setOpenModalDetails] = useState(false);
+  const [openModalClients, setOpenModalClients] = useState(false);
   const [openModalConfirmation, setOpenModalConfirmation] = useState(false)
   const [openToast, setOpenToast] = useState("")
 
@@ -54,6 +56,11 @@ export default function RepresentativePage() {
     isSuccess ? "SUCCESS" : 
     isLoading ? "LOADING" :
     isError ? "ERROR" : "IDLE";
+
+  const handleListClients = (representative: RepresentativeDetailsDTO) => {
+    setRepresentativeClicked(representative);
+    setOpenModalClients(true);
+  };
 
   const handleView = (representative: RepresentativeDetailsDTO) => {
     setRepresentativeClicked(representative);
@@ -134,7 +141,8 @@ export default function RepresentativePage() {
             columns={DataTableColumnsRepresentative({
               onClickUpdateItem: (id) => navigate(`/representante/${id}`),
               onClickSeeItem: (current) => handleView(current), 
-              onClickDeleteItem: (current) => handleDelete(current)
+              onClickDeleteItem: (current) => handleDelete(current),
+              onClickListClientsItem: (current) => handleListClients(current), 
             })}
           />
         </Box>
@@ -155,12 +163,20 @@ export default function RepresentativePage() {
       />
 
       {representativeClicked && (
-        <ModalRepresentativeDetails 
-          open={openModalDetails}
-          representative={representativeClicked}
-          fields={representativeFields}
-          handleClose={() => setOpenModalDetails(false)}
-        />
+        <>
+          <ModalRepresentativeDetails 
+            open={openModalDetails}
+            representative={representativeClicked}
+            fields={representativeFields}
+            handleClose={() => setOpenModalDetails(false)}
+          />
+
+          <ModalListClientsOnRepresentative 
+            open={openModalClients}
+            representative={representativeClicked}
+            handleClose={() => setOpenModalClients(false)}
+          />
+        </>
       )}
 
       <ModalConfirmation

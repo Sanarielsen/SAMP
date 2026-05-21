@@ -1,17 +1,19 @@
 import { GridDeleteIcon, GridLoadIcon, GridSearchIcon, type GridColDef } from "@mui/x-data-grid";
 import { IconButton, Stack, Tooltip } from "@mui/material";
+import InfoIcon from '@mui/icons-material/Info';
 
-import { formatDocument } from "@/features/client/utils/formatDocument";
+import { formatDocument } from "@/utils/formatDocument";
 import type { RepresentativeDetailsDTO } from "@shared/types/representative";
 
 type ColumnsRepresentativesProps = {
   onClickUpdateItem: (id: string) => void
   onClickSeeItem: (currentItem: RepresentativeDetailsDTO) => void
   onClickDeleteItem: (currentItem: RepresentativeDetailsDTO) => void
+  onClickListClientsItem: (currentItem: RepresentativeDetailsDTO) => void
 }
 
 export default function DataTableColumnsRepresentative({
-  onClickUpdateItem, onClickSeeItem, onClickDeleteItem
+  onClickUpdateItem, onClickSeeItem, onClickDeleteItem, onClickListClientsItem
 }: ColumnsRepresentativesProps ): GridColDef<RepresentativeDetailsDTO>[] {
   return [
     {
@@ -28,7 +30,6 @@ export default function DataTableColumnsRepresentative({
       },
     },
     {
-      //roleJob tambem...
       field: "titleJob",
       headerName: "Cargo/Funcão",
       flex: 1,
@@ -37,15 +38,18 @@ export default function DataTableColumnsRepresentative({
       },
     },
     {
-      //Como colocar a empresa que ele corresponde aqui
-      //E se ele tiver mais de uma...
       field: "dataFundation",
       headerName: "Correspondente á",
       flex: 1,
-      valueFormatter: (value) => {
-        if (!value) return "-"
-        return new Date(value).toLocaleDateString("pt-BR")
-      },
+      renderCell: (params) => (
+        <IconButton
+            onClick={() => onClickListClientsItem(params.row)}
+          >
+            <Tooltip title="Detalhes">
+              <InfoIcon />
+            </Tooltip>
+          </IconButton>
+      )
     },
     {
       field: "actions",

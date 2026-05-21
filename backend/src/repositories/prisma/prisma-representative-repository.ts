@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
-import { CreateRepresentativeDTO, Representative, UpdateRepresentativeDTO } from "@shared/types/representative";
+import { CreateRepresentativeDTO, Representative, RepresentativeOptionDTO, UpdateRepresentativeDTO } from "@shared/types/representative";
 
 
 export class PrismaRepresentativeRepository implements RepresentativeRepository {
@@ -67,7 +67,7 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
             },
           },
         ],
-      }
+      },
     })
 
     return representatives
@@ -122,6 +122,34 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
 
     return representatives
   }
+
+  async findManyRepresentsOnClientsId(id: string): Promise<RepresentativeOptionDTO[] | null> {
+    const representatives =
+      await prisma.representative.findMany({
+        where: {
+          id,
+          deletedAt: null,
+        },
+        select: {
+          client: {
+            select: {
+              id: true,
+              legalName: true,
+            },
+          },
+        },
+      })
+
+    if (!representatives.length) {
+      return null
+    }
+
+    return representatives.map(representative => ({
+      label: representative.client.legalName,
+      value: representative.client.id,
+    }))
+  }
+
   async create(data: CreateRepresentativeDTO): Promise<Representative> {
 
     const representative = await prisma.representative.create({
