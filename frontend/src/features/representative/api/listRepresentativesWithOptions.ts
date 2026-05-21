@@ -4,7 +4,7 @@ import { api } from "@/api/axios"
 
 export function optionsQueryListClientWithOptions() { 
   return queryOptions({
-    queryKey: ["representatives"],
+    queryKey: ["representatives-with-options"],
 
     queryFn: async () => {
       const { data } = await api.get(`/clients/options`)

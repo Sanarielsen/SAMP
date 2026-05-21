@@ -4,7 +4,7 @@ import { api } from "@/api/axios"
 
 export function optionsQueryClient(search: string) { 
   return queryOptions({
-    queryKey: ["representatives"],
+    queryKey: ["representatives", search],
 
     queryFn: async () => {
       const { data } = await api.get(`/representatives`,
