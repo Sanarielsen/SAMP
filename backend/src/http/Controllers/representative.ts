@@ -39,7 +39,8 @@ export async function postRepresentative(request: FastifyRequest, reply: Fastify
     documentRG: z.string().min(8).max(9),
     documentCPF: z.string().min(11).max(12),
     titleJob: z.string().min(1),
-    roleJob: z.string().min(1)
+    roleJob: z.string().min(1),
+    clientId: z.string().min(1)
   })
 
   const {
@@ -48,23 +49,21 @@ export async function postRepresentative(request: FastifyRequest, reply: Fastify
     documentRG,
     documentCPF,
     titleJob,
-    roleJob
+    roleJob,
+    clientId
   } = createRepresentativeBodySchema.parse(request.body)
 
   const postRepresentativeUseCase = makePostRepresentativeUseCase();
 
-  const { id } = request.params as { id: string }
-
   try {
     await postRepresentativeUseCase.execute({
-      clientId: id,
+      clientId,
       name,
       nationality,
       documentRG,
       documentCPF,
       titleJob, 
-      roleJob,
-      createdAt: new Date(Date.now())
+      roleJob
     })
   } catch (err) {
     if (err instanceof ZodError) {

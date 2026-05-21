@@ -1,5 +1,6 @@
 export interface Representative {
   name:         string,
+  clientId:     string,
   nationality:  string,
   documentRG:   string
   documentCPF:  string
