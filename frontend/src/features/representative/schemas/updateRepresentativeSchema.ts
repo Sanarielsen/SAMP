@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const manageRepresentativeSchema = z.object({
 
-  idClient: z.string({error: 'Informe a empresa que esse representante responde.'}),
+  clientId: z.string({error: 'Informe a empresa que esse representante responde.'}),
   name: z.string({error: 'Informe o nome do representante.'}).trim(),
   nationality: z.string({error: 'Informe a nacionalidade do representante.'}).trim(),
   documentRG: z.string({error: 'Informe o RG do representante.'}).trim(),

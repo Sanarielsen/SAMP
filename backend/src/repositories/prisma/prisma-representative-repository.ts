@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { RepresentativeCustom, RepresentativeDTO, RepresentativeEntire, RepresentativeList } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
+import { CreateRepresentativeDTO, Representative, UpdateRepresentativeDTO } from "@shared/types/representative";
 
 
 export class PrismaRepresentativeRepository implements RepresentativeRepository {
-  public representatives: RepresentativeEntire[] = []
+  public representatives: Representative[] = []
 
-  async findById(id: string): Promise<RepresentativeEntire | null> {
+  async findById(id: string): Promise<Representative | null> {
     
     const representative = prisma.representative.findUnique({
       where: {
@@ -21,7 +21,7 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
     return representative
   }
 
-  async findByIdUserWithSearchRepresentativesOnlyClientsActivated(idUser: string, search: string): Promise<RepresentativeList[] | null> {
+  async findByIdUserWithSearchRepresentativesOnlyClientsActivated(idUser: string, search: string): Promise<Representative[] | null> {
 
     const representatives = await prisma.representative.findMany({
       where: {
@@ -73,7 +73,7 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
     return representatives
   }
 
-  async findManyByUserIdWithSearch(userId: string, search: string): Promise<RepresentativeEntire[] | null> {
+  async findManyByUserIdWithSearch(userId: string, search: string): Promise<Representative[] | null> {
     const representatives = await prisma.representative.findMany({
       where: {
         client: {
@@ -122,27 +122,16 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
 
     return representatives
   }
-  async create(data: RepresentativeEntire): Promise<RepresentativeEntire> {
+  async create(data: CreateRepresentativeDTO): Promise<Representative> {
+
     const representative = await prisma.representative.create({
-      data: {
-        name: data.name,
-        nationality: data.nationality,
-        documentCPF: data.documentCPF,
-        documentRG: data.documentRG,
-        titleJob: data.titleJob,
-        roleJob: data.roleJob,
-        client: {
-          connect: {
-            id: data.idClient
-          }
-        }
-      }
+      data
     })
     
     return representative
   }
 
-  async update(data: RepresentativeCustom): Promise<RepresentativeCustom> {
+  async update(data: UpdateRepresentativeDTO): Promise<Representative> {
 
     return prisma.representative.update({
       where: {

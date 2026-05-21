@@ -57,7 +57,7 @@ export async function postRepresentative(request: FastifyRequest, reply: Fastify
 
   try {
     await postRepresentativeUseCase.execute({
-      idClient: id,
+      clientId: id,
       name,
       nationality,
       documentRG,
@@ -101,7 +101,7 @@ export async function updateRepresentative(request: FastifyRequest, reply: Fasti
     roleJob: z.string().min(1).optional()
   })
 
-  const { idClient, idRepresentative } = request.params as { idClient: string, idRepresentative: string }
+  const { clientId, idRepresentative } = request.params as { clientId: string, idRepresentative: string }
 
   const data = updateRepresentativeBodySchema.parse(
     request.body,
@@ -112,7 +112,7 @@ export async function updateRepresentative(request: FastifyRequest, reply: Fasti
 
   const representative = await updateRepresentativeUseCase.execute({
     id: idRepresentative,
-    idClient,
+    clientId,
     ...data,
   })
 

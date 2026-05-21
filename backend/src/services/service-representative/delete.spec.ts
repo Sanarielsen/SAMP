@@ -42,15 +42,11 @@ describe('Delete Representative Use Case', () => {
   it('should apply soft delete when representative is valid', async () => {
     
     await representativeRepository.create({
-      id: 'representant-1',
-      idClient: 'client-1',
+      clientId: 'client-1',
       name: 'Representante Teste',
       nationality: 'Brasileiro',
       documentRG: '123456789',
       documentCPF: '12312312389',
-      createdAt: new Date(Date.now()),
-      updatedAt: null,
-      deletedAt: null,
       titleJob: 'Desenvolvedor de Software',
       roleJob: 'Junior',
     })
@@ -63,15 +59,11 @@ describe('Delete Representative Use Case', () => {
   it('should not apply soft delete when representative does not exist', async () => {
 
     await representativeRepository.create({
-      id: 'representant-1',
-      idClient: 'client-1',
+      clientId: 'client-1',
       name: 'Representante Teste',
       nationality: 'Brasileiro',
       documentRG: '123456789',
       documentCPF: '12312312389',
-      createdAt: new Date(Date.now()),
-      updatedAt: null,
-      deletedAt: new Date(Date.now()),
       titleJob: 'Desenvolvedor de Software',
       roleJob: 'Junior',
     })

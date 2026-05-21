@@ -3,7 +3,7 @@ import type { ManageRepresentativeSchemaFormData } from "@/features/representati
 export const emptyRepresentative:
   ManageRepresentativeSchemaFormData = {
 
-  idClient: '',
+  clientId: '',
   name: '',
   nationality: '',
   documentRG: '',

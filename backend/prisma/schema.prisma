@@ -53,9 +53,10 @@ model Representative {
   roleJob     String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
-  idClient    String
   deletedAt   DateTime?
-  client      Client    @relation(fields: [idClient], references: [id])
+
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
 
   @@map("Representatives")
 }

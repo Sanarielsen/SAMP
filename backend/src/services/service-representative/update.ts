@@ -1,11 +1,11 @@
-import { RepresentativeCustom } from "@shared/types/representative";
+import { Representative } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 
 interface UpdateRepresentativeUseCaseRequest {
   id: string,
-  idClient: string,
+  clientId: string,
   name?: string,
   nationality?: string,
   documentRG?: string,
@@ -21,9 +21,9 @@ export class UpdateRepresentativeUseCase {
 
   async execute({
     id,
-    idClient,
+    clientId,
     ...data
-  }: UpdateRepresentativeUseCaseRequest): Promise<RepresentativeCustom> {
+  }: UpdateRepresentativeUseCaseRequest): Promise<Representative> {
 
     const representatives = await this.representativeRepository.findById(id)
 
@@ -32,7 +32,7 @@ export class UpdateRepresentativeUseCase {
     }
 
     const updatedClient =
-      await this.representativeRepository.update({ id, idClient, ...data })
+      await this.representativeRepository.update({ id, clientId, ...data })
 
     return updatedClient
   }

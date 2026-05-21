@@ -52,45 +52,34 @@ describe('List Representative Use Case', () => {
   it('should be able to get a list of representative using user id', async () => {
 
     await representativeRepository.create({
-      id: 'representant-1',
-      idClient: 'client-1',
+      clientId: 'client-1',
       name: 'Gustavo Rossi',
       nationality: 'Brasileiro',
       documentRG: '123456789',
-      documentCPF: '12312312389',
-      createdAt: new Date(Date.now()),      
+      documentCPF: '12312312389',  
       titleJob: 'Desenvolvedor de Software',
-      roleJob: 'Junior',
-      updatedAt: null,
-      deletedAt: null
+      roleJob: 'Junior'
     })
 
     await representativeRepository.create({
-      id: 'representant-2',
-      idClient: 'client-2',
+
+      clientId: 'client-2',
       name: 'Guilherme Zaldini',
       nationality: 'Frances',
       documentRG: '123456788',
       documentCPF: '12312312387',
-      createdAt: new Date(Date.now()),
       titleJob: 'Desenvolvedor de Software',
       roleJob: 'Senior',
-      updatedAt: null,
-      deletedAt: null
     })
 
     await representativeRepository.create({
-      id: 'representant-3',
-      idClient: 'client-1',
+      clientId: 'client-1',
       name: 'Abilio Correa',
       nationality: 'Brasileiro',
       documentRG: '123456789',
       documentCPF: '12312312381',
-      createdAt: new Date(Date.now()),
       titleJob: 'Desenvolvedor de Software',
-      roleJob: 'Pleno',
-      updatedAt: null,
-      deletedAt: null
+      roleJob: 'Pleno'
     })
 
     const representedSearched = await representativeRepository
@@ -102,31 +91,23 @@ describe('List Representative Use Case', () => {
   it('should be not able to get a list of representative using user id you not responsable', async () => {
 
     await representativeRepository.create({
-      id: 'representant-1',
-      idClient: 'client-2',
+      clientId: 'client-2',
       name: 'Gustavo Rossi',
       nationality: 'Gustavo Rossi',
       documentRG: '123456789',
       documentCPF: '12312312389',
-      createdAt: new Date(Date.now()),
       titleJob: 'Desenvolvedor de Software',
-      roleJob: 'Junior',
-      updatedAt: null,
-      deletedAt: null
+      roleJob: 'Junior'
     })
 
     await representativeRepository.create({
-      id: 'representant-2',
-      idClient: 'client-3',
+      clientId: 'client-3',
       name: 'Gustavo Rossi',
       nationality: 'Brasileiro',
       documentRG: '123456789',
       documentCPF: '12312312389',
-      createdAt: new Date(Date.now()),
       titleJob: 'Desenvolvedor de Software',
-      roleJob: 'Junior',
-      updatedAt: null,
-      deletedAt: null
+      roleJob: 'Junior'
     })
 
     const representedSearched = await representativeRepository.findByIdUserWithSearchRepresentativesOnlyClientsActivated('user-1', 'Brasileiro');

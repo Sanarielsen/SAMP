@@ -1,7 +1,7 @@
 import { ClientRepository } from "@/repositories/client-repository";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 
-import { RepresentativeDTO } from "@shared/types/representative";
+import { CreateRepresentativeDTO } from "@shared/types/representative";
 
 import { InvalidInactiveClientError } from "@/services/errors/invalid-inactive-client-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
@@ -16,11 +16,11 @@ export class PostRepresentativeUseCase {
     private clientRepository: ClientRepository
   ) {}
 
-  async execute(data: RepresentativeDTO): Promise<PostRepresentativeUseCaseResponse> {
+  async execute(data: CreateRepresentativeDTO): Promise<PostRepresentativeUseCaseResponse> {
 
     const client =
       await this.clientRepository.findById(
-        data.idClient,
+        data.clientId,
       )
 
     if (!client) {
@@ -32,8 +32,7 @@ export class PostRepresentativeUseCase {
     }
 
     const newRepresentative = {
-      id: 'new-representative',
-      idClient: data.idClient,
+      clientId: data.clientId,
       name: data.name,
       nationality: data.nationality,
       documentRG: data.documentRG,

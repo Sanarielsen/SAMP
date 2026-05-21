@@ -16,15 +16,15 @@ let sut: GetRepresentativeUseCase
 
 describe('Get Representative Use Case', () => {
   beforeEach(() => {
-    representativeRepository = new InMemoryRepresentativeRepository();
+    clientRepository = new InMemoryClientsRepository
+    representativeRepository = new InMemoryRepresentativeRepository(clientRepository);
     sut = new GetRepresentativeUseCase(representativeRepository);
   })
 
   it('should be return a represent of valid', async () => {
 
     await representativeRepository.create({
-      id: 'representative-1',
-      idClient: 'client-1',
+      clientId: 'client-1',
       name: 'Representante Teste 1',
       nationality: 'brasileiro',
       documentRG: '001113338',
@@ -33,8 +33,8 @@ describe('Get Representative Use Case', () => {
       roleJob: 'Testador premium'      
     })
 
-    const representativeSearched = await representativeRepository.findById("representative-1")
-    
+    const representativeSearched = await representativeRepository.findById("new-representative")
+
     expect(representativeSearched?.id).toEqual(expect.any(String))
   })
 

@@ -12,5 +12,5 @@ export interface Representative {
 
 export interface RepresentativeDetails extends Representative {
   id:       string,
-  idClient: string,
+  clientId: string,
 }

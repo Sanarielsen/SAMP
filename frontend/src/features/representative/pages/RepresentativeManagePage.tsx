@@ -113,7 +113,7 @@ export default function RepresentativeManagePage() {
           <Grid size={{ xs: 12 }}>
             <ControlledComboBox
               control={control}
-              name={'idClient'}
+              name={'clientId'}
               label='Cliente atrelado'
               placeholder='Clientes responsáveis por ti cadastrados'
               options={isSuccessListClients ? listClients : []}

@@ -1,7 +1,7 @@
 import { Client, User } from "@prisma/client";
-import { RepresentativeCustom, RepresentativeEntire, RepresentativeList } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 import { InMemoryClientsRepository } from "./in-memory-client-repository";
+import { CreateRepresentativeDTO, Representative, UpdateRepresentativeDTO } from "@shared/types/representative";
 
 
 export class InMemoryRepresentativeRepository implements RepresentativeRepository {
@@ -9,21 +9,36 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
     private clientRepository: InMemoryClientsRepository,
   ) {}
 
-  public representatives: RepresentativeEntire[] = []
+  public representatives: Representative[] = []
   public clients: Client[] = []
   public users: User[] = []
 
-  async create(data: RepresentativeEntire): Promise<RepresentativeEntire> {
+  async create(data: CreateRepresentativeDTO): Promise<Representative> {
     const representative = {
-      ...data,
+      id: 'new-representative',
+
+      clientId: data.clientId,
+
+      name: data.name,
+      nationality: data.nationality,
+
+      documentRG: data.documentRG,
+      documentCPF: data.documentCPF,
+
+      titleJob: data.titleJob,
+      roleJob: data.roleJob,
+
+      createdAt: new Date(),
+      updatedAt: null,
+      deletedAt: null,
     }
 
-    this.representatives.push(data)
+    this.representatives.push(representative)
 
     return representative
   }
 
-  async update(data: RepresentativeCustom): Promise<RepresentativeCustom> {
+  async update(data: UpdateRepresentativeDTO): Promise<Representative> {
     
     const representative = this.representatives.findIndex(representative => {
       return representative.id === data.id
@@ -40,8 +55,8 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
     return updatedClient
   }
 
-  async findById(id: string): Promise<RepresentativeEntire | null> {
-  
+  async findById(id: string): Promise<Representative | null> {
+
     const representative = this.representatives.find(item => item.id == id)
 
     if (!representative) {
@@ -54,7 +69,7 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
   async findByIdUserWithSearchRepresentativesOnlyClientsActivated(
     idUser: string,
     search: string,
-  ): Promise<RepresentativeEntire[] | null> {
+  ): Promise<Representative[] | null> {
     const clientsFromUser = this.clientRepository.items.filter(client =>
       client.responsibleById === idUser
     )
@@ -62,7 +77,7 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
     const clientIds = clientsFromUser.map(client => client.id)
 
     const representatives = this.representatives.filter(representative =>
-      clientIds.includes(representative.idClient) &&
+      clientIds.includes(representative.clientId) &&
       representative.deletedAt === null &&
       representative.nationality
         .toLowerCase()
@@ -72,7 +87,7 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
     return representatives
   }
 
-  async findManyByUserIdWithSearch(userId: string, search: string): Promise<RepresentativeEntire[] | null> {
+  async findManyByUserIdWithSearch(userId: string, search: string): Promise<Representative[] | null> {
 
     const client: Client = {
       id: "client-1",
@@ -103,7 +118,7 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
 
     return this.representatives.filter(representative => 
       representative.name.includes(search) 
-      && clientIds.includes(representative.idClient))
+      && clientIds.includes(representative.clientId))
   }
 
   delete(id: string): Promise<void> {
