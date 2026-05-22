@@ -114,6 +114,8 @@ export default function CardLoginFields() {
         <Button
           type="submit"
           variant="contained"
+          loading={mutation.isPending}
+          disabled={mutation.isPending}
           fullWidth
           sx={{ marginTop: 2 }}
         >

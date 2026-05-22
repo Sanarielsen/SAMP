@@ -37,7 +37,7 @@ export default function RepresentativePage() {
     optionsQueryClient(searchApplied)
   )
 
-  const mutationChangeStatusClient =
+  const mutationChangeDeleteRepresentative =
     useMutationDeleteRepresentative({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['representatives'] })
@@ -77,7 +77,7 @@ export default function RepresentativePage() {
     setOpenModalConfirmation(false)
     if (!action || !representativeClicked) return
     
-    mutationChangeStatusClient.mutate({
+    mutationChangeDeleteRepresentative.mutate({
       id: representativeClicked.id
     })
 
