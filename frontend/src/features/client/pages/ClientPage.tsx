@@ -94,7 +94,7 @@ export default function ClientPage() {
   const columns: GridColDef<ClientDetails>[] = [
     {
       field: "legalName",
-      headerName: "Razao social",
+      headerName: "Razão social",
       flex: 1,
     },
     {
@@ -118,7 +118,7 @@ export default function ClientPage() {
     },
     {
       field: "dataFundation",
-      headerName: "Data de fundacão",
+      headerName: "Data de fundação",
       flex: 1,
       valueFormatter: (value) => {
         if (!value) return "-"
