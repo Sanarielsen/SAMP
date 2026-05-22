@@ -27,7 +27,7 @@ export const clientFields: Field<Client>[] = [
     get: (c: Client) => c.locationAddress,
   },
   {
-    title: 'Endereco de correspondencia',
+    title: 'Endereco de correspondência',
     get: (c: Client) => c.correspondenceAddress,
   },
   {

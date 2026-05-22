@@ -331,7 +331,7 @@ export default function ManageClientPage() {
           <Grid container spacing={4} sx={{ py: 3 }}>
             <Grid size={{ xs: 12 }} sx={{ display: 'flex', gap: 1 }}>
               <TextField
-                label="Endereço de correspondencia"
+                label="Endereço de correspondência"
                 fullWidth
                 value={formatAddress(
                   watch("correspondenceAddress")
