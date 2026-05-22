@@ -101,14 +101,63 @@ Separacão das branchs da feature a ser desenvolvida:
 - SMP-10-05: add flow was created to add a representative
 - SMP-10-06: add flow was created to update a representative
 
-### Orders and Payments
+### Orders (3 days)
+- Start date on 25/05
 
-- SMP-11: create server flow about orders
-- SMP-12: create pages about orders
-- SMP-13: create server flow about payments
-- SMP-14: create pages about payments
+### Dados da Entidade
+
+Ordens de serviço todos os usuários podem criar solicitaçoes correspondentes a uma empresa ou cliente. Onde posteriormente podem atrelar a um ou mais pagamentos atrelados a esse serviço.
+
+- clientId      string
+- title         string
+- description   string
+- obs           string
+- data          string
+
+#### SMP-11: create server flow about orders
+
+- SMP-11-01: create route and test to add order
+- SMP-11-02: create route and test to list orders
+- SMP-11-03: create route and test to get order
+- SMP-11-04: create route and test to update order
+- SMP-11-05: create route and test to soft delete order
+
+#### SMP-12: create pages about orders
+
+- SMP-12-01: create page skeleton to list orders
+- SMP-12-02: create integration to list orders
+- SMP-12-03: create page skeleton to add order
+- SMP-12-04: create integration to add order
+- SMP-12-05: create page skeleton to update order
+- SMP-12-06: create integration to update order
+- SMP-12-07: create integration to delete order
+
+### Payments (3 days)
+- Start date on 02/06
+
+Todas as ordens de serviço terão um ou mais pagamentos atrelados a ele. A ideia é construir a estrutura de centralização de informações de cada pedido de serviço acionado por determinada empresa.
+
+#### SMP-13: create server flow about payments
+- SMP-13-01: create route and test to add order
+- SMP-13-02: create route and test to list orders
+- SMP-13-03: create route and test to get order
+- SMP-13-04: create route and test to update order
+- SMP-13-05: create route and test to soft delete order
+
+#### SMP-14: create pages about payments
+- SMP-14-01: create page skeleton to list orders
+- SMP-14-02: create integration to list orders
+- SMP-14-03: create page skeleton to add order
+- SMP-14-04: create integration to add order
+- SMP-14-05: create page skeleton to update order
+- SMP-14-06: create integration to update order
+- SMP-14-07: create integration to delete order
+
+### Process (3 days)
+
+Essa é a sessão principal da aplicação. Onde basicamente serão atrelados os clientes de acordo com cada processo registrado por revista no INPI que gera a cada semana.
 
 ### Fixes
-- Visualizacao do dashboard;
-- Visualizacao do modal de endereco no mobile;
-- Aumento do tempo da sessão ativa;
+- [ ] Visualizacao do dashboard;
+- [x] Visualizacao do modal de endereco no mobile;
+- [ ] Aumento do tempo da sessão ativa;
