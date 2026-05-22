@@ -19,6 +19,8 @@ export const ContainerMenu = styled.div<ItemProps>`
 
   color: white;
 
+  z-index: 999;
+
   .parent::before {
     content: "";
     position: absolute;
