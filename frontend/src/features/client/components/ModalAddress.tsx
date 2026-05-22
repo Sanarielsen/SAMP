@@ -17,6 +17,7 @@ import { GridCloseIcon } from "@mui/x-data-grid";
 import { useCep } from "@/api/getAddressByCEP";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
+import { ModalContainer } from "@/features/client/styles/modalAddressContainer";
 import { mappingAddressToVisualComponent } from "@/features/client/utils/mappingAddressToVisualComponent";
 import type { AddressSchemaFormData } from "@/schemas/addressSchema";
 import type { UpdateSchemaFormData } from "@/features/client/schema/updateClientSchema";
@@ -111,20 +112,7 @@ export function ModalAddress({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-
-          width: "70%",
-          bgcolor: "background.paper",
-          borderRadius: 2,
-          boxShadow: 24,
-          p: 4,
-        }}
-      >
+      <ModalContainer>
         <Box
           sx={{
             display: "flex",
@@ -150,7 +138,7 @@ export function ModalAddress({
           spacing={4}
           sx={{ pt: 3, pb: 2 }}
         >
-          <Grid size={{ xs: 4 }}>
+          <Grid size={{ xs: 6, sm: 4 }}>
             <ControlledInputMask
               control={control}
               name={`draft.${destination}.cep`}
@@ -333,7 +321,7 @@ export function ModalAddress({
             {labelButtonSubmit}
           </Button>
         </Grid>
-      </Box>
+      </ModalContainer>
     </Modal>
   );
 }
