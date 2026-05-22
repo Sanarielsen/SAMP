@@ -400,7 +400,14 @@ export default function ManageClientPage() {
                 type="submit"
                 variant="contained"
                 size="large"
-                loading={isEditing ? mutationPatchClient.isPending :  mutationPostClient.isPending}
+                loading={isEditing ?
+                  mutationPatchClient.isPending || mutationPatchClient.isSuccess : 
+                  mutationPostClient.isPending || mutationPostClient.isSuccess
+                }
+                disabled={isEditing ?
+                  mutationPatchClient.isPending || mutationPatchClient.isSuccess : 
+                  mutationPostClient.isPending || mutationPostClient.isSuccess
+                }
                 fullWidth
                 sx={{ marginTop: 2 }}
               >

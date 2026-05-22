@@ -1,3 +1,7 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { 
   Box, 
   Button, 
@@ -13,21 +17,18 @@ import {
   GridSearchIcon,
   type GridColDef 
 } from "@mui/x-data-grid";
-import { useNavigate } from "react-router";
 
-import DataTable from "@/components/DataTable";
-import type { ClientDetails } from "@/features/client/types/clients";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { optionsQueryClient } from "../../../api/queryClients";
-import { formatCPF } from "@/utils/formatCPF";
-import { formatCNPJ } from "@/utils/formatCNPJ";
 import { useAuth } from "@/auth/AuthProvider";
-import { useState } from "react";
-import ModalClientDetails from "../components/ModalClientDetails";
-import { clientFields } from "../utils/getRowDetailClient";
 import { useMutationChangeStatusClient } from "@/features/client/api/mutationPatchChangeStatusClient";
+import { optionsQueryClient } from "@/api/queryClients";
+import ModalClientDetails from "@/features/client/components/ModalClientDetails";
+import DataTable from "@/components/DataTable";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast"
+import type { ClientDetails } from "@/features/client/types/clients";
+import { clientFields } from "@/features/client/utils/getRowDetailClient";
+import { formatCPF } from "@/utils/formatCPF";
+import { formatCNPJ } from "@/utils/formatCNPJ";
 
 
 export default function ClientPage() {
@@ -155,6 +156,7 @@ export default function ClientPage() {
           </IconButton>
 
           <IconButton
+            disabled={mutationChangeStatusClient.isPending || mutationChangeStatusClient.isSuccess}
             onClick={() => handleDelete(params.row)}
           >
             <Tooltip title="Excluir">

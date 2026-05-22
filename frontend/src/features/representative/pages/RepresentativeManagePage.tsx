@@ -254,7 +254,14 @@ export default function RepresentativeManagePage() {
                 type="submit"
                 variant="contained"
                 size="large"
-                //loading={isEditing ? mutationPatchClient.isPending :  mutationPostClient.isPending}
+                loading={isEditing ? 
+                  mutationPatchRepresentative.isPending :
+                  mutationPostRepresentative.isPending
+                }
+                disabled={isEditing ? 
+                  mutationPatchRepresentative.isPending :
+                  mutationPostRepresentative.isPending
+                }  
                 fullWidth
                 sx={{ marginTop: 4 }}
               >
