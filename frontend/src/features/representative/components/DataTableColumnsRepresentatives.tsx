@@ -31,7 +31,7 @@ export default function DataTableColumnsRepresentative({
     },
     {
       field: "titleJob",
-      headerName: "Cargo/Funcão",
+      headerName: "Cargo/Função",
       flex: 1,
       valueFormatter: (value: string) => {
         return value
