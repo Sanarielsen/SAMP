@@ -79,7 +79,7 @@ var InvalidCredentialsError = class extends Error {
   }
 };
 
-// src/services/authenticate.ts
+// src/services/service-user/authenticate.ts
 var import_bcryptjs = require("bcryptjs");
 var AuthenticateUseCase = class {
   constructor(usersRepository) {

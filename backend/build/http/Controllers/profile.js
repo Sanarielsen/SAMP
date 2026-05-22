@@ -79,7 +79,7 @@ var ResourceNotFoundError = class extends Error {
   }
 };
 
-// src/services/get-user-profile.ts
+// src/services/service-user/get-profile.ts
 var GetUserProfileUseCase = class {
   constructor(usersRepository) {
     this.usersRepository = usersRepository;

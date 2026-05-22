@@ -22,25 +22,13 @@ var client_exports = {};
 __export(client_exports, {
   getClient: () => getClient,
   listClient: () => listClient,
+  listClientWithOptions: () => listClientWithOptions,
   postClient: () => postClient,
   updateClient: () => updateClient,
   updateClientStatus: () => updateClientStatus
 });
 module.exports = __toCommonJS(client_exports);
-
-// src/services/errors/resource-already-exists-error.ts
-var ResourceAlreadyExistsError = class extends Error {
-  constructor() {
-    super("Resource already exists");
-  }
-};
-
-// src/services/errors/resource-not-found-error.ts
-var ResourceNotFoundError = class extends Error {
-  constructor() {
-    super("Resource not found.");
-  }
-};
+var import_zod2 = require("zod");
 
 // src/env/index.ts
 var import_config = require("dotenv/config");
@@ -66,6 +54,15 @@ var prisma = new import_client.PrismaClient({
 
 // src/repositories/prisma/prisma-client-repository.ts
 var PrismaClientRepository = class {
+  async findByIdUserResponsableActivated(idUser) {
+    const clients = await prisma.client.findMany({
+      where: {
+        responsibleById: idUser,
+        isActivated: true
+      }
+    });
+    return clients;
+  }
   async findByIdUserResponsableAndSearch(idUser, search) {
     const clients = await prisma.client.findMany({
       where: {
@@ -135,7 +132,14 @@ var PrismaClientRepository = class {
   }
 };
 
-// src/services/change-status-client.ts
+// src/services/errors/resource-not-found-error.ts
+var ResourceNotFoundError = class extends Error {
+  constructor() {
+    super("Resource not found.");
+  }
+};
+
+// src/services/service-client/change-status.ts
 var UpdateClientStatusUseCase = class {
   constructor(clientRepository) {
     this.clientRepository = clientRepository;
@@ -162,6 +166,13 @@ function makeChangeStatusClientUseCase() {
   return useCase;
 }
 
+// src/services/errors/resource-already-exists-error.ts
+var ResourceAlreadyExistsError = class extends Error {
+  constructor() {
+    super("Resource already exists");
+  }
+};
+
 // src/services/errors/non-exist-user-error.ts
 var NonExistUserError = class extends Error {
   constructor() {
@@ -169,7 +180,7 @@ var NonExistUserError = class extends Error {
   }
 };
 
-// src/services/post-client.ts
+// src/services/service-client/post.ts
 var CreateClientUseCase = class {
   constructor(clientRepository, userRepository) {
     this.clientRepository = clientRepository;
@@ -251,7 +262,7 @@ function makeCreateClientUseCase() {
   return useCase;
 }
 
-// src/services/get-client.ts
+// src/services/service-client/get.ts
 var GetClientUseCase = class {
   constructor(clientRepository) {
     this.clientRepository = clientRepository;
@@ -290,7 +301,7 @@ function makeGetClientProfileUseCase() {
   return useCase;
 }
 
-// src/services/list-clients.ts
+// src/services/service-client/list.ts
 var ListClientUseCase = class {
   constructor(clientRepository) {
     this.clientRepository = clientRepository;
@@ -311,7 +322,42 @@ function makeListClientUseCase() {
   return useCase;
 }
 
-// src/services/update-client.ts
+// src/utils/formatDocument.ts
+function formatDocument(value) {
+  const numbers = value.replace(/\D/g, "");
+  if (numbers.length <= 11) {
+    return numbers.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  }
+  return numbers.replace(/^(\d{2})(\d)/, "$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3").replace(/\.(\d{3})(\d)/, ".$1/$2").replace(/(\d{4})(\d)/, "$1-$2");
+}
+
+// src/services/service-client/list-with-options.ts
+var ListClientWithOptionsUseCase = class {
+  constructor(clientRepository) {
+    this.clientRepository = clientRepository;
+  }
+  async execute({
+    responsibleById
+  }) {
+    const clients = await this.clientRepository.findByIdUserResponsableActivated(responsibleById);
+    if (!clients) {
+      return [];
+    }
+    return clients.map((client) => ({
+      label: client.tradeName + " - " + formatDocument(client.protocol),
+      value: client.id
+    }));
+  }
+};
+
+// src/services/factories/make-list-client-with-options.ts
+function makeListClientWithOptionsUseCase() {
+  const clientRepository = new PrismaClientRepository();
+  const useCase = new ListClientWithOptionsUseCase(clientRepository);
+  return useCase;
+}
+
+// src/services/service-client/update.ts
 var UpdateClientUseCase = class {
   constructor(clientRepository) {
     this.clientRepository = clientRepository;
@@ -337,7 +383,6 @@ function makeUpdateClientUseCase() {
 }
 
 // src/http/Controllers/client.ts
-var import_zod2 = require("zod");
 async function getClient(request, reply) {
   const getClientProfile = makeGetClientProfileUseCase();
   const { id } = request.params;
@@ -428,6 +473,22 @@ async function listClient(request, reply) {
     }
   }
 }
+async function listClientWithOptions(request, reply) {
+  const listClientWithOptions2 = makeListClientWithOptionsUseCase();
+  const id = request.user.sub;
+  try {
+    const clients = await listClientWithOptions2.execute({
+      responsibleById: id
+    });
+    return reply.status(200).send(clients);
+  } catch (err) {
+    if (err instanceof ResourceNotFoundError) {
+      return reply.status(409).send({
+        message: err.message
+      });
+    }
+  }
+}
 async function updateClient(request, reply) {
   const updateClientBodySchema = import_zod2.z.object({
     legalName: import_zod2.z.string().optional(),
@@ -447,7 +508,6 @@ async function updateClient(request, reply) {
     request.body
   );
   const updateClientUseCase = makeUpdateClientUseCase();
-  console.log(id);
   const client = await updateClientUseCase.execute({
     id,
     ...data
@@ -473,6 +533,7 @@ async function updateClientStatus(request, reply) {
 0 && (module.exports = {
   getClient,
   listClient,
+  listClientWithOptions,
   postClient,
   updateClient,
   updateClientStatus

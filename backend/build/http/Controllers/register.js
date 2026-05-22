@@ -73,7 +73,7 @@ var PrismaUsersRepository = class {
   }
 };
 
-// src/services/register.ts
+// src/services/service-user/register.ts
 var import_bcryptjs = require("bcryptjs");
 
 // src/services/errors/user-already-exists.ts
@@ -83,7 +83,7 @@ var UserAlreadyExistsError = class extends Error {
   }
 };
 
-// src/services/register.ts
+// src/services/service-user/register.ts
 var RegisterUseCase = class {
   constructor(usersRepository) {
     this.usersRepository = usersRepository;

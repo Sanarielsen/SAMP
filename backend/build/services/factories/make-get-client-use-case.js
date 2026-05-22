@@ -48,6 +48,15 @@ var prisma = new import_client.PrismaClient({
 
 // src/repositories/prisma/prisma-client-repository.ts
 var PrismaClientRepository = class {
+  async findByIdUserResponsableActivated(idUser) {
+    const clients = await prisma.client.findMany({
+      where: {
+        responsibleById: idUser,
+        isActivated: true
+      }
+    });
+    return clients;
+  }
   async findByIdUserResponsableAndSearch(idUser, search) {
     const clients = await prisma.client.findMany({
       where: {
@@ -124,7 +133,7 @@ var ResourceNotFoundError = class extends Error {
   }
 };
 
-// src/services/get-client.ts
+// src/services/service-client/get.ts
 var GetClientUseCase = class {
   constructor(clientRepository) {
     this.clientRepository = clientRepository;

@@ -27,6 +27,12 @@ var InMemoryClientsRepository = class {
   constructor() {
     this.items = [];
   }
+  async findByIdUserResponsableActivated(id) {
+    const clients = this.items.filter(
+      (client) => client.responsibleById === id && client.isActivated === true
+    );
+    return clients;
+  }
   async findByIdUserResponsableAndSearch(idUser, search) {
     const clients = this.items.filter(
       (item) => item.responsibleById === idUser && item.legalName.includes(search)

@@ -48,6 +48,15 @@ var prisma = new import_client.PrismaClient({
 
 // src/repositories/prisma/prisma-client-repository.ts
 var PrismaClientRepository = class {
+  async findByIdUserResponsableActivated(idUser) {
+    const clients = await prisma.client.findMany({
+      where: {
+        responsibleById: idUser,
+        isActivated: true
+      }
+    });
+    return clients;
+  }
   async findByIdUserResponsableAndSearch(idUser, search) {
     const clients = await prisma.client.findMany({
       where: {
@@ -131,7 +140,7 @@ var NonExistUserError = class extends Error {
   }
 };
 
-// src/services/post-client.ts
+// src/services/service-client/post.ts
 var CreateClientUseCase = class {
   constructor(clientRepository, userRepository) {
     this.clientRepository = clientRepository;

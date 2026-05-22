@@ -83,7 +83,7 @@ var PrismaUsersRepository = class {
   }
 };
 
-// src/services/authenticate.ts
+// src/services/service-user/authenticate.ts
 var import_bcryptjs = require("bcryptjs");
 var AuthenticateUseCase = class {
   constructor(usersRepository) {
@@ -150,7 +150,7 @@ var ResourceNotFoundError = class extends Error {
   }
 };
 
-// src/services/get-user-profile.ts
+// src/services/service-user/get-profile.ts
 var GetUserProfileUseCase = class {
   constructor(usersRepository) {
     this.usersRepository = usersRepository;
@@ -192,7 +192,7 @@ async function profile(request, reply) {
 // src/http/Controllers/register.ts
 var import_zod3 = require("zod");
 
-// src/services/register.ts
+// src/services/service-user/register.ts
 var import_bcryptjs2 = require("bcryptjs");
 
 // src/services/errors/user-already-exists.ts
@@ -202,7 +202,7 @@ var UserAlreadyExistsError = class extends Error {
   }
 };
 
-// src/services/register.ts
+// src/services/service-user/register.ts
 var RegisterUseCase = class {
   constructor(usersRepository) {
     this.usersRepository = usersRepository;
@@ -268,15 +268,20 @@ async function verifyJWT(request, reply) {
   }
 }
 
-// src/services/errors/resource-already-exists-error.ts
-var ResourceAlreadyExistsError = class extends Error {
-  constructor() {
-    super("Resource already exists");
-  }
-};
+// src/http/Controllers/client.ts
+var import_zod4 = require("zod");
 
 // src/repositories/prisma/prisma-client-repository.ts
 var PrismaClientRepository = class {
+  async findByIdUserResponsableActivated(idUser) {
+    const clients = await prisma.client.findMany({
+      where: {
+        responsibleById: idUser,
+        isActivated: true
+      }
+    });
+    return clients;
+  }
   async findByIdUserResponsableAndSearch(idUser, search) {
     const clients = await prisma.client.findMany({
       where: {
@@ -346,7 +351,7 @@ var PrismaClientRepository = class {
   }
 };
 
-// src/services/change-status-client.ts
+// src/services/service-client/change-status.ts
 var UpdateClientStatusUseCase = class {
   constructor(clientRepository) {
     this.clientRepository = clientRepository;
@@ -373,6 +378,13 @@ function makeChangeStatusClientUseCase() {
   return useCase;
 }
 
+// src/services/errors/resource-already-exists-error.ts
+var ResourceAlreadyExistsError = class extends Error {
+  constructor() {
+    super("Resource already exists");
+  }
+};
+
 // src/services/errors/non-exist-user-error.ts
 var NonExistUserError = class extends Error {
   constructor() {
@@ -380,7 +392,7 @@ var NonExistUserError = class extends Error {
   }
 };
 
-// src/services/post-client.ts
+// src/services/service-client/post.ts
 var CreateClientUseCase = class {
   constructor(clientRepository, userRepository) {
     this.clientRepository = clientRepository;
@@ -436,7 +448,7 @@ function makeCreateClientUseCase() {
   return useCase;
 }
 
-// src/services/get-client.ts
+// src/services/service-client/get.ts
 var GetClientUseCase = class {
   constructor(clientRepository) {
     this.clientRepository = clientRepository;
@@ -475,7 +487,7 @@ function makeGetClientProfileUseCase() {
   return useCase;
 }
 
-// src/services/list-clients.ts
+// src/services/service-client/list.ts
 var ListClientUseCase = class {
   constructor(clientRepository) {
     this.clientRepository = clientRepository;
@@ -496,7 +508,42 @@ function makeListClientUseCase() {
   return useCase;
 }
 
-// src/services/update-client.ts
+// src/utils/formatDocument.ts
+function formatDocument(value) {
+  const numbers = value.replace(/\D/g, "");
+  if (numbers.length <= 11) {
+    return numbers.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  }
+  return numbers.replace(/^(\d{2})(\d)/, "$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3").replace(/\.(\d{3})(\d)/, ".$1/$2").replace(/(\d{4})(\d)/, "$1-$2");
+}
+
+// src/services/service-client/list-with-options.ts
+var ListClientWithOptionsUseCase = class {
+  constructor(clientRepository) {
+    this.clientRepository = clientRepository;
+  }
+  async execute({
+    responsibleById
+  }) {
+    const clients = await this.clientRepository.findByIdUserResponsableActivated(responsibleById);
+    if (!clients) {
+      return [];
+    }
+    return clients.map((client) => ({
+      label: client.tradeName + " - " + formatDocument(client.protocol),
+      value: client.id
+    }));
+  }
+};
+
+// src/services/factories/make-list-client-with-options.ts
+function makeListClientWithOptionsUseCase() {
+  const clientRepository = new PrismaClientRepository();
+  const useCase = new ListClientWithOptionsUseCase(clientRepository);
+  return useCase;
+}
+
+// src/services/service-client/update.ts
 var UpdateClientUseCase = class {
   constructor(clientRepository) {
     this.clientRepository = clientRepository;
@@ -522,7 +569,6 @@ function makeUpdateClientUseCase() {
 }
 
 // src/http/Controllers/client.ts
-var import_zod4 = require("zod");
 async function getClient(request, reply) {
   const getClientProfile = makeGetClientProfileUseCase();
   const { id } = request.params;
@@ -613,6 +659,22 @@ async function listClient(request, reply) {
     }
   }
 }
+async function listClientWithOptions(request, reply) {
+  const listClientWithOptions2 = makeListClientWithOptionsUseCase();
+  const id = request.user.sub;
+  try {
+    const clients = await listClientWithOptions2.execute({
+      responsibleById: id
+    });
+    return reply.status(200).send(clients);
+  } catch (err) {
+    if (err instanceof ResourceNotFoundError) {
+      return reply.status(409).send({
+        message: err.message
+      });
+    }
+  }
+}
 async function updateClient(request, reply) {
   const updateClientBodySchema = import_zod4.z.object({
     legalName: import_zod4.z.string().optional(),
@@ -632,7 +694,6 @@ async function updateClient(request, reply) {
     request.body
   );
   const updateClientUseCase = makeUpdateClientUseCase();
-  console.log(id);
   const client = await updateClientUseCase.execute({
     id,
     ...data
@@ -655,6 +716,447 @@ async function updateClientStatus(request, reply) {
   return reply.status(200).send(client);
 }
 
+// src/repositories/prisma/prisma-representative-repository.ts
+var PrismaRepresentativeRepository = class {
+  constructor() {
+    this.representatives = [];
+  }
+  async findById(id) {
+    const representative = prisma.representative.findUnique({
+      where: {
+        id
+      }
+    });
+    if (!representative) {
+      return null;
+    }
+    return representative;
+  }
+  async findByIdUserWithSearchRepresentativesOnlyClientsActivated(idUser, search) {
+    const representatives = await prisma.representative.findMany({
+      where: {
+        deletedAt: null,
+        client: {
+          responsibleById: idUser
+        },
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: "insensitive"
+            }
+          },
+          {
+            nationality: {
+              contains: search,
+              mode: "insensitive"
+            }
+          },
+          {
+            documentRG: {
+              contains: search,
+              mode: "insensitive"
+            }
+          },
+          {
+            documentCPF: {
+              contains: search,
+              mode: "insensitive"
+            }
+          },
+          {
+            titleJob: {
+              contains: search,
+              mode: "insensitive"
+            }
+          },
+          {
+            roleJob: {
+              contains: search,
+              mode: "insensitive"
+            }
+          }
+        ]
+      }
+    });
+    return representatives;
+  }
+  async findManyByUserIdWithSearch(userId, search) {
+    const representatives = await prisma.representative.findMany({
+      where: {
+        client: {
+          createdById: userId
+        },
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: "insensitive"
+            }
+          },
+          {
+            nationality: {
+              contains: search,
+              mode: "insensitive"
+            }
+          },
+          {
+            documentRG: {
+              contains: search,
+              mode: "insensitive"
+            }
+          },
+          {
+            documentCPF: {
+              contains: search,
+              mode: "insensitive"
+            }
+          },
+          {
+            titleJob: {
+              contains: search,
+              mode: "insensitive"
+            }
+          },
+          {
+            roleJob: {
+              contains: search,
+              mode: "insensitive"
+            }
+          }
+        ]
+      }
+    });
+    return representatives;
+  }
+  async findManyRepresentsOnClientsId(id) {
+    const representatives = await prisma.representative.findMany({
+      where: {
+        id,
+        deletedAt: null
+      },
+      select: {
+        client: {
+          select: {
+            id: true,
+            legalName: true
+          }
+        }
+      }
+    });
+    if (!representatives.length) {
+      return null;
+    }
+    return representatives.map((representative) => ({
+      label: representative.client.legalName,
+      value: representative.client.id
+    }));
+  }
+  async create(data) {
+    const representative = await prisma.representative.create({
+      data
+    });
+    return representative;
+  }
+  async update(data) {
+    return prisma.representative.update({
+      where: {
+        id: data.id
+      },
+      data
+    });
+  }
+  async delete(id) {
+    await prisma.representative.update({
+      where: {
+        id
+      },
+      data: {
+        deletedAt: new Date(Date.now())
+      }
+    });
+  }
+};
+
+// src/services/service-representative/get.ts
+var GetRepresentativeUseCase = class {
+  constructor(representativeRepository) {
+    this.representativeRepository = representativeRepository;
+  }
+  async execute({
+    id
+  }) {
+    const representatives = await this.representativeRepository.findById(id);
+    if (!representatives) {
+      throw new ResourceNotFoundError();
+    }
+    return representatives;
+  }
+};
+
+// src/services/factories/representatives/make-get-use-case.ts
+function makeGetRepresentativeUseCase() {
+  const representativeRepository = new PrismaRepresentativeRepository();
+  const useCase = new GetRepresentativeUseCase(representativeRepository);
+  return useCase;
+}
+
+// src/services/service-representative/list.ts
+var ListRepresentativeUseCase = class {
+  constructor(representativeRepository) {
+    this.representativeRepository = representativeRepository;
+  }
+  async execute({
+    idUser,
+    search
+  }) {
+    const representatives = await this.representativeRepository.findByIdUserWithSearchRepresentativesOnlyClientsActivated(
+      idUser,
+      search
+    );
+    if (!representatives) {
+      throw new ResourceNotFoundError();
+    }
+    return representatives;
+  }
+};
+
+// src/services/factories/representatives/make-list-use-case.ts
+function makeListRepresentativeUseCase() {
+  const representativeRepository = new PrismaRepresentativeRepository();
+  const useCase = new ListRepresentativeUseCase(representativeRepository);
+  return useCase;
+}
+
+// src/services/errors/invalid-inactive-client-error.ts
+var InvalidInactiveClientError = class extends Error {
+  constructor() {
+    super("Cannot proceed with deactivated client");
+  }
+};
+
+// src/services/service-representative/post.ts
+var PostRepresentativeUseCase = class {
+  constructor(representativeRepository, clientRepository) {
+    this.representativeRepository = representativeRepository;
+    this.clientRepository = clientRepository;
+  }
+  async execute(data) {
+    const client = await this.clientRepository.findById(
+      data.clientId
+    );
+    if (!client) {
+      throw new ResourceNotFoundError();
+    }
+    if (!client.isActivated) {
+      throw new InvalidInactiveClientError();
+    }
+    const newRepresentative = {
+      clientId: data.clientId,
+      name: data.name,
+      nationality: data.nationality,
+      documentRG: data.documentRG,
+      documentCPF: data.documentCPF,
+      titleJob: data.titleJob,
+      roleJob: data.roleJob,
+      createdAt: new Date(Date.now()),
+      updatedAt: null,
+      deletedAt: null
+    };
+    const newRegister = await this.representativeRepository.create(newRepresentative);
+    return { id: newRegister.id };
+  }
+};
+
+// src/services/factories/representatives/make-post-use-case.ts
+function makePostRepresentativeUseCase() {
+  const representativeRepository = new PrismaRepresentativeRepository();
+  const clientRepository = new PrismaClientRepository();
+  const useCase = new PostRepresentativeUseCase(representativeRepository, clientRepository);
+  return useCase;
+}
+
+// src/services/service-representative/update.ts
+var UpdateRepresentativeUseCase = class {
+  constructor(representativeRepository) {
+    this.representativeRepository = representativeRepository;
+  }
+  async execute({
+    id,
+    clientId,
+    ...data
+  }) {
+    const representatives = await this.representativeRepository.findById(id);
+    if (!representatives) {
+      throw new ResourceNotFoundError();
+    }
+    const updatedClient = await this.representativeRepository.update({ id, clientId, ...data });
+    return updatedClient;
+  }
+};
+
+// src/services/factories/representatives/make-update-use-case.ts
+function makeUpdateRepresentativeUseCase() {
+  const representativeRepository = new PrismaRepresentativeRepository();
+  const useCase = new UpdateRepresentativeUseCase(representativeRepository);
+  return useCase;
+}
+
+// src/services/service-representative/delete.ts
+var DeleteRepresentativeUseCase = class {
+  constructor(representativeRepository) {
+    this.representativeRepository = representativeRepository;
+  }
+  async execute({
+    id
+  }) {
+    const representatives = await this.representativeRepository.findById(id);
+    if (!representatives) {
+      throw new ResourceNotFoundError();
+    }
+    await this.representativeRepository.delete(id);
+  }
+};
+
+// src/services/factories/representatives/make-delete-use-case.ts
+function makeDeleteRepresentativeUseCase() {
+  const representativeRepository = new PrismaRepresentativeRepository();
+  const useCase = new DeleteRepresentativeUseCase(representativeRepository);
+  return useCase;
+}
+
+// src/http/Controllers/representative.ts
+var import_zod5 = require("zod");
+
+// src/services/service-representative/get-of-clients.ts
+var GetRepresentativeOfClientsUseCase = class {
+  constructor(representativeRepository) {
+    this.representativeRepository = representativeRepository;
+  }
+  async execute({
+    id
+  }) {
+    const representatives = await this.representativeRepository.findManyRepresentsOnClientsId(id);
+    if (!representatives) {
+      throw new ResourceNotFoundError();
+    }
+    return representatives;
+  }
+};
+
+// src/services/factories/representatives/make-get-of-clients-use-case.ts
+function makeGetRepresentativeOfClientsUseCase() {
+  const representativeRepository = new PrismaRepresentativeRepository();
+  const useCase = new GetRepresentativeOfClientsUseCase(representativeRepository);
+  return useCase;
+}
+
+// src/http/Controllers/representative.ts
+async function listRepresentative(request, reply) {
+  const listRepresentativeUseCase = makeListRepresentativeUseCase();
+  const id = request.user.sub;
+  const { search } = request.query;
+  try {
+    const representatives = await listRepresentativeUseCase.execute({
+      idUser: id,
+      search
+    });
+    return reply.status(200).send(representatives);
+  } catch (err) {
+    if (err instanceof ResourceNotFoundError) {
+      return reply.status(409).send({
+        message: err.message
+      });
+    }
+  }
+}
+async function postRepresentative(request, reply) {
+  const createRepresentativeBodySchema = import_zod5.z.object({
+    name: import_zod5.z.string().min(1),
+    nationality: import_zod5.z.string().min(1),
+    documentRG: import_zod5.z.string().min(8).max(9),
+    documentCPF: import_zod5.z.string().min(11).max(12),
+    titleJob: import_zod5.z.string().min(1),
+    roleJob: import_zod5.z.string().min(1),
+    clientId: import_zod5.z.string().min(1)
+  });
+  const {
+    name,
+    nationality,
+    documentRG,
+    documentCPF,
+    titleJob,
+    roleJob,
+    clientId
+  } = createRepresentativeBodySchema.parse(request.body);
+  const postRepresentativeUseCase = makePostRepresentativeUseCase();
+  try {
+    await postRepresentativeUseCase.execute({
+      clientId,
+      name,
+      nationality,
+      documentRG,
+      documentCPF,
+      titleJob,
+      roleJob
+    });
+  } catch (err) {
+    if (err instanceof import_zod5.ZodError) {
+      return reply.status(400).send({
+        message: "Validation error.",
+        issues: err.flatten().fieldErrors
+      });
+    }
+    throw err;
+  }
+}
+async function getRepresentative(request, reply) {
+  const getRepresentative2 = makeGetRepresentativeUseCase();
+  const { id } = request.params;
+  const representative = await getRepresentative2.execute({
+    id
+  });
+  return reply.status(200).send(representative);
+}
+async function getRepresentativeOfClients(request, reply) {
+  const getRepresentativeOfClients2 = makeGetRepresentativeOfClientsUseCase();
+  const { id } = request.params;
+  const representative = await getRepresentativeOfClients2.execute({
+    id
+  });
+  return reply.status(200).send(representative);
+}
+async function updateRepresentative(request, reply) {
+  const updateRepresentativeBodySchema = import_zod5.z.object({
+    name: import_zod5.z.string().min(1).optional(),
+    nationality: import_zod5.z.string().min(1).optional(),
+    documentRG: import_zod5.z.string().min(8).max(9).optional(),
+    documentCPF: import_zod5.z.string().min(11).max(12).optional(),
+    titleJob: import_zod5.z.string().min(1).optional(),
+    roleJob: import_zod5.z.string().min(1).optional(),
+    clientId: import_zod5.z.string().min(1)
+  });
+  const { id } = request.params;
+  const data = updateRepresentativeBodySchema.parse(
+    request.body
+  );
+  const updateRepresentativeUseCase = makeUpdateRepresentativeUseCase();
+  const representative = await updateRepresentativeUseCase.execute({
+    id,
+    ...data
+  });
+  return reply.status(200).send(representative);
+}
+async function deleteRepresentative(request, reply) {
+  const paramsDeleteSchema = import_zod5.z.object({
+    id: import_zod5.z.string().uuid()
+  });
+  const { id } = paramsDeleteSchema.parse(request.params);
+  const deleteClientUseCase = makeDeleteRepresentativeUseCase();
+  await deleteClientUseCase.execute({ id });
+  return reply.status(204).send();
+}
+
 // src/http/routes.ts
 async function appRoutes(app2) {
   app2.post("/users", register);
@@ -662,13 +1164,20 @@ async function appRoutes(app2) {
   app2.get("/me", { onRequest: [verifyJWT] }, profile);
   app2.get("/client/:id", { onRequest: [verifyJWT] }, getClient);
   app2.get("/client/user/:id", { onRequest: [verifyJWT] }, listClient);
+  app2.get("/clients/options", { onRequest: [verifyJWT] }, listClientWithOptions);
   app2.post("/client", { onRequest: [verifyJWT] }, postClient);
   app2.patch("/client/:id", { onRequest: [verifyJWT] }, updateClient);
   app2.patch("/client/:id/status", { onRequest: [verifyJWT] }, updateClientStatus);
+  app2.get("/representatives", { onRequest: [verifyJWT] }, listRepresentative);
+  app2.get("/representative/:id", { onRequest: [verifyJWT] }, getRepresentative);
+  app2.get("/representative/:id/clients", { onRequest: [verifyJWT] }, getRepresentativeOfClients);
+  app2.post("/representative", { onRequest: [verifyJWT] }, postRepresentative);
+  app2.patch("/representative/:id", { onRequest: [verifyJWT] }, updateRepresentative);
+  app2.delete("/representative/:id", { onRequest: [verifyJWT] }, deleteRepresentative);
 }
 
 // src/app.ts
-var import_zod5 = require("zod");
+var import_zod6 = require("zod");
 var import_jwt = __toESM(require("@fastify/jwt"));
 var import_cors = __toESM(require("@fastify/cors"));
 var app = (0, import_fastify.default)();
@@ -683,7 +1192,7 @@ app.register(import_cors.default, {
 });
 app.register(appRoutes);
 app.setErrorHandler((error, _, reply) => {
-  if (error instanceof import_zod5.ZodError) {
+  if (error instanceof import_zod6.ZodError) {
     return reply.status(400).send({
       message: "Validation error.",
       issues: error.format()
