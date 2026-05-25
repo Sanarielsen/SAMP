@@ -39,6 +39,7 @@ model Client {
   representatives       Representative[]
   createdBy             User             @relation("CreatedBy", fields: [createdById], references: [id])
   responsibleBy         User             @relation("ResponsibleBy", fields: [responsibleById], references: [id])
+  orders                Order[]
 
   @@map("clients")
 }
@@ -58,5 +59,34 @@ model Representative {
   clientId String
   client   Client @relation(fields: [clientId], references: [id])
 
-  @@map("Representatives")
+  @@map("representatives")
+}
+
+model OrderType {
+  id          Int       @id @default(autoincrement())
+  title       String
+  descripton  String
+  observation String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+  orders      Order[]
+
+  @@map("order_types")
+}
+
+model Order {
+  id          String    @id @default(uuid())
+  clientId    String
+  orderTypeId Int
+  observation String?
+  eventDate   DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  client    Client    @relation(fields: [clientId], references: [id])
+  orderType OrderType @relation(fields: [orderTypeId], references: [id])
+
+  @@map("orders")
 }
