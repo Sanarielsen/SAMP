@@ -80,7 +80,7 @@ model Order {
   clientId    String
   orderTypeId Int
   observation String?
-  data        String
+  eventDate   DateTime
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?

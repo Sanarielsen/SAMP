@@ -21,6 +21,7 @@ import {
   postRepresentative,
   updateRepresentative
 } from "@/http/Controllers/representative";
+import { postOrder } from "@/http/Controllers/order/post";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -43,4 +44,6 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/representative', {onRequest: [verifyJWT]}, postRepresentative)
   app.patch('/representative/:id', {onRequest: [verifyJWT]}, updateRepresentative)
   app.delete('/representative/:id', {onRequest: [verifyJWT]}, deleteRepresentative)
+
+  app.post('/order', {onRequest: [verifyJWT]}, postOrder)
 }
