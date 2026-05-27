@@ -1167,6 +1167,406 @@ async function deleteRepresentative(request, reply) {
   return reply.status(204).send();
 }
 
+// src/http/Controllers/order/post.ts
+var import_zod6 = require("zod");
+
+// src/services/service-orders/post.ts
+var CreateOrderUseCase = class {
+  constructor(userRepository, clientRepository, orderRepository) {
+    this.userRepository = userRepository;
+    this.clientRepository = clientRepository;
+    this.orderRepository = orderRepository;
+  }
+  async execute({
+    userId,
+    order
+  }) {
+    const userLogged = await this.userRepository.findById(userId);
+    if (!userLogged)
+      throw new NonExistUserError();
+    const clientExists = await this.clientRepository.findById(order.clientId);
+    if (!clientExists)
+      throw new ResourceNotFoundError();
+    const newOrder = await this.orderRepository.create({
+      clientId: order.clientId,
+      orderTypeId: order.orderTypeId,
+      description: order.description,
+      observation: order.observation,
+      eventDate: new Date(Date.now())
+    });
+    return newOrder;
+  }
+};
+
+// src/repositories/prisma/prisma-order-repository.ts
+var PrismaOrderRepository = class {
+  async create(data) {
+    const order = await prisma.order.create({
+      data
+    });
+    return order;
+  }
+  update(data) {
+    return prisma.order.update({
+      where: {
+        id: data.id
+      },
+      data
+    });
+  }
+  delete(id) {
+    return prisma.order.update({
+      where: {
+        id
+      },
+      data: {
+        deletedAt: new Date(Date.now())
+      }
+    });
+  }
+  async findById(id) {
+    const order = await prisma.order.findUnique({
+      where: {
+        id
+      }
+    });
+    return order;
+  }
+  async findManyByClientId(clientId, search) {
+    const orders = await prisma.order.findMany({
+      where: {
+        clientId,
+        deletedAt: null,
+        OR: [
+          {
+            observation: {
+              contains: search,
+              mode: "insensitive"
+            }
+          },
+          {
+            client: {
+              legalName: {
+                contains: search,
+                mode: "insensitive"
+              },
+              tradeName: {
+                contains: search,
+                mode: "insensitive"
+              }
+            }
+          },
+          {
+            orderType: {
+              title: {
+                contains: search,
+                mode: "insensitive"
+              },
+              descripton: {
+                contains: search,
+                mode: "insensitive"
+              }
+            }
+          }
+        ]
+      },
+      include: {
+        orderType: {
+          select: {
+            id: true,
+            title: true
+          }
+        },
+        client: {
+          select: {
+            id: true,
+            legalName: true
+          }
+        }
+      }
+    });
+    const formattedOrders = orders.map(
+      (order) => ({
+        id: order.id,
+        orderTypeId: order.orderTypeId,
+        orderTypeTitle: order.orderType.title,
+        description: order.description,
+        eventDate: order.eventDate,
+        clientId: order.clientId,
+        clientName: order.client.legalName
+      })
+    );
+    return formattedOrders;
+  }
+};
+
+// src/services/factories/order/make-post-use-case.ts
+function makePostOrderUseCase() {
+  const userRepository = new PrismaUsersRepository();
+  const clientRepository = new PrismaClientRepository();
+  const orderRepository = new PrismaOrderRepository();
+  const useCase = new CreateOrderUseCase(
+    userRepository,
+    clientRepository,
+    orderRepository
+  );
+  return useCase;
+}
+
+// src/http/Controllers/order/post.ts
+async function postOrder(request, reply) {
+  const postBodySchema = import_zod6.z.object({
+    clientId: import_zod6.z.string(),
+    orderTypeId: import_zod6.z.number(),
+    description: import_zod6.z.string(),
+    observation: import_zod6.z.string().nullable(),
+    eventDate: import_zod6.z.coerce.date()
+  });
+  const resultBody = postBodySchema.parse(request.body);
+  try {
+    const orderUseCase = makePostOrderUseCase();
+    await orderUseCase.execute({
+      userId: request.user.sub,
+      order: resultBody
+    });
+  } catch (err) {
+    if (err instanceof ResourceNotFoundError || err instanceof NonExistUserError) {
+      return reply.status(409).send({ message: err.message });
+    }
+    throw err;
+  }
+  return reply.status(201).send();
+}
+
+// src/services/service-orders/get.ts
+var GetOrderUseCase = class {
+  constructor(userRepository, orderRepository) {
+    this.userRepository = userRepository;
+    this.orderRepository = orderRepository;
+  }
+  async execute({
+    id,
+    userId
+  }) {
+    const userLogged = await this.userRepository.findById(userId);
+    if (!userLogged) {
+      throw new InvalidCredentialsError();
+    }
+    const order = await this.orderRepository.findById(id);
+    return order;
+  }
+};
+
+// src/services/factories/order/make-get-use-case.ts
+function makeGetOrderUseCase() {
+  const userRepository = new PrismaUsersRepository();
+  const orderRepository = new PrismaOrderRepository();
+  const useCase = new GetOrderUseCase(
+    userRepository,
+    orderRepository
+  );
+  return useCase;
+}
+
+// src/http/Controllers/order/get.ts
+async function getOrder(request, reply) {
+  const { id } = request.params;
+  try {
+    const orderUseCase = makeGetOrderUseCase();
+    const order = await orderUseCase.execute({
+      id,
+      userId: request.user.sub
+    });
+    return reply.status(200).send(order);
+  } catch (err) {
+    if (err instanceof InvalidCredentialsError) {
+      return reply.status(404).send({ message: err.message });
+    }
+    throw err;
+  }
+}
+
+// src/services/service-orders/list.ts
+var ListOrderUseCase = class {
+  constructor(userRepository, orderRepository) {
+    this.userRepository = userRepository;
+    this.orderRepository = orderRepository;
+  }
+  async execute({
+    search,
+    clientId,
+    userId
+  }) {
+    const userLogged = await this.userRepository.findById(userId);
+    if (!userLogged) {
+      throw new InvalidCredentialsError();
+    }
+    const order = await this.orderRepository.findManyByClientId(clientId, search);
+    return order;
+  }
+};
+
+// src/services/factories/order/make-list-use-case.ts
+function makeListOrderUseCase() {
+  const userRepository = new PrismaUsersRepository();
+  const orderRepository = new PrismaOrderRepository();
+  const useCase = new ListOrderUseCase(
+    userRepository,
+    orderRepository
+  );
+  return useCase;
+}
+
+// src/http/Controllers/order/list.ts
+async function listOrder(request, reply) {
+  const { id: clientId } = request.params;
+  const { search } = request.query;
+  try {
+    const orderUseCase = makeListOrderUseCase();
+    const order = await orderUseCase.execute({
+      clientId,
+      userId: request.user.sub,
+      search
+    });
+    return reply.status(200).send(order);
+  } catch (err) {
+    if (err instanceof InvalidCredentialsError) {
+      return reply.status(404).send({ message: err.message });
+    }
+    throw err;
+  }
+}
+
+// src/http/Controllers/order/update.ts
+var import_zod7 = require("zod");
+
+// src/services/service-orders/update.ts
+var UpdateOrderUseCase = class {
+  constructor(ordersRepository) {
+    this.ordersRepository = ordersRepository;
+  }
+  async execute(data) {
+    const order = await this.ordersRepository.findById(data.id);
+    if (!order) {
+      throw new ResourceNotFoundError();
+    }
+    const updatedClient = await this.ordersRepository.update({
+      ...data
+    });
+    return updatedClient;
+  }
+};
+
+// src/services/factories/order/make-update-use-case.ts
+function makeUpdateOrderUseCase() {
+  const orderRepository = new PrismaOrderRepository();
+  const useCase = new UpdateOrderUseCase(orderRepository);
+  return useCase;
+}
+
+// src/http/Controllers/order/update.ts
+async function updateOrder(request, reply) {
+  const updateOrderBodySchema = import_zod7.z.object({
+    clientId: import_zod7.z.string().optional(),
+    orderTypeId: import_zod7.z.number().optional(),
+    description: import_zod7.z.string().optional(),
+    observation: import_zod7.z.string().optional(),
+    eventDate: import_zod7.z.coerce.date().optional()
+  });
+  const resultBody = updateOrderBodySchema.parse(request.body);
+  const { id } = request.params;
+  try {
+    const orderUseCase = makeUpdateOrderUseCase();
+    const order = await orderUseCase.execute({
+      ...resultBody,
+      id
+    });
+    return reply.status(200).send(order);
+  } catch (err) {
+    if (err instanceof ResourceNotFoundError) {
+      return reply.status(404).send({ message: err.message });
+    }
+    throw err;
+  }
+}
+
+// src/services/service-orders/delete.ts
+var DeleteOrderUseCase = class {
+  constructor(orderRepository) {
+    this.orderRepository = orderRepository;
+  }
+  async execute(id) {
+    const order = await this.orderRepository.findById(id);
+    if (!order) {
+      throw new ResourceNotFoundError();
+    }
+    const DeletedClient = await this.orderRepository.delete(id);
+    return DeletedClient;
+  }
+};
+
+// src/services/factories/order/make-delete-use-case.ts
+function makeDeleteOrderUseCase() {
+  const orderRepository = new PrismaOrderRepository();
+  const useCase = new DeleteOrderUseCase(
+    orderRepository
+  );
+  return useCase;
+}
+
+// src/http/Controllers/order/delete.ts
+async function deleteOrder(request, reply) {
+  const { id } = request.params;
+  try {
+    const orderUseCase = makeDeleteOrderUseCase();
+    await orderUseCase.execute(id);
+    return reply.status(204).send();
+  } catch (err) {
+    if (err instanceof InvalidCredentialsError) {
+      return reply.status(404).send({ message: err.message });
+    }
+    throw err;
+  }
+}
+
+// src/repositories/prisma/prisma-order-type-repository.ts
+var PrismaOrderTypeRepository = class {
+  async findAllOptions() {
+    const orderTypes = await prisma.orderType.findMany();
+    const formattedOrderTypes = orderTypes.map(
+      (order) => ({
+        label: order.title,
+        value: String(order.id)
+      })
+    );
+    return formattedOrderTypes;
+  }
+};
+
+// src/services/service-order-types/list.ts
+var ListOrderTypeUseCase = class {
+  constructor(orderTypeRepository) {
+    this.orderTypeRepository = orderTypeRepository;
+  }
+  async execute() {
+    return await this.orderTypeRepository.findAllOptions();
+  }
+};
+
+// src/services/factories/order-type/make-list-options-use-case.ts
+function makeListOptionsOrderTypeUseCase() {
+  const orderTypeRepository = new PrismaOrderTypeRepository();
+  const useCase = new ListOrderTypeUseCase(orderTypeRepository);
+  return useCase;
+}
+
+// src/http/Controllers/orderTypes/list.ts
+async function listOrderType(request, reply) {
+  const orderTypeUseCase = makeListOptionsOrderTypeUseCase();
+  const order = await orderTypeUseCase.execute();
+  return reply.status(200).send(order);
+}
+
 // src/http/routes.ts
 async function appRoutes(app2) {
   app2.post("/users", register);
@@ -1184,10 +1584,16 @@ async function appRoutes(app2) {
   app2.post("/representative", { onRequest: [verifyJWT] }, postRepresentative);
   app2.patch("/representative/:id", { onRequest: [verifyJWT] }, updateRepresentative);
   app2.delete("/representative/:id", { onRequest: [verifyJWT] }, deleteRepresentative);
+  app2.post("/order", { onRequest: [verifyJWT] }, postOrder);
+  app2.get("/order/:id", { onRequest: [verifyJWT] }, getOrder);
+  app2.get("/orders", { onRequest: [verifyJWT] }, listOrder);
+  app2.patch("/order/:id", { onRequest: [verifyJWT] }, updateOrder);
+  app2.delete("/order/:id", { onRequest: [verifyJWT] }, deleteOrder);
+  app2.get("/order/types", { onRequest: [verifyJWT] }, listOrderType);
 }
 
 // src/app.ts
-var import_zod6 = require("zod");
+var import_zod8 = require("zod");
 var import_jwt = __toESM(require("@fastify/jwt"));
 var import_cors = __toESM(require("@fastify/cors"));
 var app = (0, import_fastify.default)();
@@ -1202,7 +1608,7 @@ app.register(import_cors.default, {
 });
 app.register(appRoutes);
 app.setErrorHandler((error, _, reply) => {
-  if (error instanceof import_zod6.ZodError) {
+  if (error instanceof import_zod8.ZodError) {
     return reply.status(400).send({
       message: "Validation error.",
       issues: error.format()
