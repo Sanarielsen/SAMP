@@ -29,4 +29,14 @@ export class InMemoryOrderRepository implements OrderRepository {
 
     return order
   }
+
+  async findManyByClientId(clientId: string): Promise<Order[] | null> {
+    const orders = this.items.filter(item => item.clientId == clientId)
+
+    if (!orders) {
+      return null
+    }
+
+    return orders
+  }
 }
