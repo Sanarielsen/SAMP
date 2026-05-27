@@ -1,4 +1,4 @@
-import { CreateOrderDTO, Order, UpdateOrderDTO } from "@shared/types/orders"
+import { CreateOrderDTO, Order, OrderDetailTable, UpdateOrderDTO } from "@shared/types/orders"
 
 
 export interface OrderRepository {
@@ -7,5 +7,5 @@ export interface OrderRepository {
   delete(id: string): Promise<Order>
 
   findById(id: string): Promise<Order | null>
-  findManyByClientId(clientId: string): Promise<Order[] | null>
+  findManyByClientId(clientId: string, search: string): Promise<OrderDetailTable[] | null>
 }

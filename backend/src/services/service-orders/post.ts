@@ -35,6 +35,7 @@ export class CreateOrderUseCase {
     const newOrder = await this.orderRepository.create({
       clientId: order.clientId,
       orderTypeId: order.orderTypeId,
+      description: order.description,
       observation: order.observation,
       eventDate: new Date(Date.now())
     })

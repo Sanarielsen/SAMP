@@ -79,6 +79,7 @@ model Order {
   id          String    @id @default(uuid())
   clientId    String
   orderTypeId Int
+  description String
   observation String?
   eventDate   DateTime
   createdAt   DateTime  @default(now())

@@ -3,9 +3,10 @@ import { UsersRepository } from "@/repositories/users-repository";
 
 import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";
 
-import { Order } from "@shared/types/orders";
+import { OrderDetailTable } from "@shared/types/orders";
 
 interface ListOrderUseCaseRequest {
+  search: string,
   clientId: string
   userId: string,
 }
@@ -17,9 +18,10 @@ export class ListOrderUseCase {
   ) {}
 
   async execute({
+    search,
     clientId,
     userId
-  }: ListOrderUseCaseRequest): Promise<Order[] | null> {
+  }: ListOrderUseCaseRequest): Promise<OrderDetailTable[] | null> {
     
     const userLogged = await this.userRepository.findById(userId)
 
@@ -27,7 +29,7 @@ export class ListOrderUseCase {
       throw new InvalidCredentialsError()
     }
 
-    const order = await this.orderRepository.findManyByClientId(clientId)
+    const order = await this.orderRepository.findManyByClientId(clientId, search)
 
     return order
   }
