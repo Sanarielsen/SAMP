@@ -67,10 +67,6 @@ export class InMemoryOrderRepository implements OrderRepository {
       item.clientId == clientId && item.deletedAt == null
     )
 
-    if (!orders) {
-      return null
-    }
-
     return orders
   }
 }

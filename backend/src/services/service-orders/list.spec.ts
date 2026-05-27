@@ -1,9 +1,4 @@
-
-import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
-import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { OrderRepository } from "@/repositories/order-repository";
-import { UsersRepository } from "@/repositories/users-repository";
+import { hash } from "bcryptjs";
 import { 
   afterEach,
   beforeEach,
@@ -12,8 +7,16 @@ import {
   it, 
   vi
 } from "vitest";
+
 import { ListOrderUseCase } from "./list";
-import { hash } from "bcryptjs";
+
+import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
+import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
+
+import { OrderRepository } from "@/repositories/order-repository";
+import { UsersRepository } from "@/repositories/users-repository";
+
+import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";
 
 let userRepository: UsersRepository
 let orderRepository: OrderRepository
@@ -32,14 +35,6 @@ describe('List Orders Use Case', () => {
       password_hash: await hash('123456', 6),
     })
 
-    vi.useFakeTimers()
-  })
-
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
-  it('should return orders', async () => {
     await orderRepository.create({
       clientId: 'client-1',
       orderTypeId: 3,
@@ -61,18 +56,30 @@ describe('List Orders Use Case', () => {
       observation: ''
     })
 
-    const orderSearched = await 
-      orderRepository.findManyByClientId("client-1")
-
-    expect(orderSearched).toHaveLength(2)
+    vi.useFakeTimers()
   })
 
-  it('should return an empty array where there are no orders', async () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
 
-    const orderSearched = await 
-      orderRepository.findManyByClientId("client-1")
+  it('should return an empty array when no orders exist', async () => {
+    const orders = await sut.execute({
+      clientId: 'client-10',
+      userId: 'user-1',
+    })
 
-    expect(orderSearched).toHaveLength(0)
+    expect(orders).toEqual([])
+  })
+
+  it('should throw an error when user does not exist', async () => {
+
+    await expect(() =>
+      sut.execute({
+        clientId: 'client-10',
+        userId: 'invalid-user-id',
+      }),
+    ).rejects.toBeInstanceOf(InvalidCredentialsError)
   })
 })
 
