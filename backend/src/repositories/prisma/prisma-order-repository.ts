@@ -23,6 +23,17 @@ export class PrismaOrderRepository implements OrderRepository {
     })
   }
 
+  delete(id: string): Promise<Order> {
+    return prisma.order.update({
+      where: {
+        id
+      },
+      data: {
+        deletedAt: new Date(Date.now())
+      }
+    })
+  }
+
   async findById(id: string): Promise<Order | null> {
     const order = await prisma.order.findUnique({
       where: {
@@ -37,6 +48,7 @@ export class PrismaOrderRepository implements OrderRepository {
     const orders = await prisma.order.findMany({
       where: {
         clientId,
+        deletedAt: null
       },
     })
 
