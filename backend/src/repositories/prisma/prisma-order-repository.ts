@@ -23,5 +23,15 @@ export class PrismaOrderRepository implements OrderRepository {
 
     return order
   }
+
+  async findManyByClientId(clientId: string): Promise<Order[] | null> {
+    const orders = await prisma.order.findMany({
+      where: {
+        clientId,
+      },
+    })
+
+    return orders
+  }
   
 }

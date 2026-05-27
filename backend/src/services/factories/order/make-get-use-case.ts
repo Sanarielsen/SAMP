@@ -7,10 +7,10 @@ export function makeGetOrderUseCase() {
   const userRepository = new PrismaUsersRepository();
   const orderRepository = new PrismaOrderRepository();
 
-  const createOrderUseCase = new GetOrderUseCase(
+  const useCase = new GetOrderUseCase(
     userRepository, 
     orderRepository
   );
   
-  return createOrderUseCase
+  return useCase
 }
