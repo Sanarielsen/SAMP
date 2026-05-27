@@ -36,6 +36,22 @@ export class InMemoryOrderRepository implements OrderRepository {
     return updatedOrder
   }
 
+  async delete(id: string): Promise<Order> {
+    
+    const order = this.items.findIndex(order => {
+      return order.id === id
+    })
+
+    const disabledOrder = {
+      ...this.items[order],
+      deletedAt: new Date(),
+    }
+
+    this.items[order] = disabledOrder
+
+    return disabledOrder
+  }
+
   async findById(id: string): Promise<Order | null> {
     const order = this.items.find(item => item.id == id)
 
@@ -47,7 +63,9 @@ export class InMemoryOrderRepository implements OrderRepository {
   }
 
   async findManyByClientId(clientId: string): Promise<Order[] | null> {
-    const orders = this.items.filter(item => item.clientId == clientId)
+    const orders = this.items.filter(item => 
+      item.clientId == clientId && item.deletedAt == null
+    )
 
     if (!orders) {
       return null
