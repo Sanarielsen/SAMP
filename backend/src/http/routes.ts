@@ -24,6 +24,7 @@ import {
 import { postOrder } from "@/http/Controllers/order/post";
 import { getOrder } from "@/http/Controllers/order/get";
 import { listOrder } from "@/http/Controllers/order/list";
+import { updateOrder } from "@/http/Controllers/order/update";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -50,4 +51,5 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/order', {onRequest: [verifyJWT]}, postOrder)
   app.get('/order/:id', {onRequest: [verifyJWT]}, getOrder)
   app.get('/orders', {onRequest: [verifyJWT]}, listOrder)
+  app.patch('/order/:id', {onRequest: [verifyJWT]}, updateOrder)
 }
