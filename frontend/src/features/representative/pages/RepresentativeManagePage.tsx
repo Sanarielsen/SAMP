@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import HotelClassIcon from '@mui/icons-material/HotelClass';
 
 import { optionsGetRepresentative } from '@/features/representative/api/getRepresentative';
-import { optionsQueryListClientWithOptions } from '@/features/representative/api/listRepresentativesWithOptions';
+import { optionsQueryListClientWithOptions } from '@/api/listClientsWithOptions';
 import { useMutationPostRepresentative } from '@/features/representative/api/mutationPostRepresentative';
 import { useMutationPatchRepresentative } from '@/features/representative/api/mutationPatchRepresentative';
 import { ControlledComboBox } from '@/components/ControlledComboBox';

@@ -9,7 +9,8 @@ export async function postOrder(request: FastifyRequest, reply: FastifyReply) {
   const postBodySchema = z.object({
     clientId: z.string(),
     orderTypeId: z.number(),
-    observation: z.string(),
+    description: z.string(),
+    observation: z.string().nullable(),
     eventDate: z.coerce.date(),
   })
 
