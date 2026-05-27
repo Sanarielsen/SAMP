@@ -22,6 +22,7 @@ import {
   updateRepresentative
 } from "@/http/Controllers/representative";
 import { postOrder } from "@/http/Controllers/order/post";
+import { getOrder } from "@/http/Controllers/order/get";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -46,4 +47,5 @@ export async function appRoutes(app: FastifyInstance) {
   app.delete('/representative/:id', {onRequest: [verifyJWT]}, deleteRepresentative)
 
   app.post('/order', {onRequest: [verifyJWT]}, postOrder)
+  app.get('/order/:id', {onRequest: [verifyJWT]}, getOrder)
 }
