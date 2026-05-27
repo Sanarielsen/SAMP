@@ -5,6 +5,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import CloseIcon from '@mui/icons-material/Close';
 import HotelClassIcon from '@mui/icons-material/HotelClass';
 import InfoIcon from '@mui/icons-material/Info';
+import AllInboxIcon from '@mui/icons-material/AllInbox';
 
 import { 
   ContainerMenu,
@@ -52,6 +53,13 @@ export default function SideMenu({ open, handleChangeStatus }: SideMenuProps) {
         >
           <HotelClassIcon />
           <span> Representantes </span>
+        </MenuItem>
+        <MenuItem
+          $active={location.pathname === "/oss"}
+          onClick={() => handleChangePage("/oss")}
+        >
+          <AllInboxIcon />
+          <span> O.S </span>
         </MenuItem>
         <MenuItem
           $active={location.pathname === "/sobre"}
