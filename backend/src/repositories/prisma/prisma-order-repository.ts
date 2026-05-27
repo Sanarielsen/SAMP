@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 
 import { OrderRepository } from "@/repositories/order-repository";
 
-import { CreateOrderDTO, Order, UpdateOrderDTO } from "@shared/types/orders";
+import { CreateOrderDTO, Order, OrderDetailTable, UpdateOrderDTO } from "@shared/types/orders";
 
 
 export class PrismaOrderRepository implements OrderRepository {
@@ -44,15 +44,73 @@ export class PrismaOrderRepository implements OrderRepository {
     return order
   }
 
-  async findManyByClientId(clientId: string): Promise<Order[] | null> {
+  async findManyByClientId(clientId: string, search: string): Promise<OrderDetailTable[] | null> {
     const orders = await prisma.order.findMany({
       where: {
         clientId,
-        deletedAt: null
+        deletedAt: null,
+        OR: [
+          {
+            observation: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            client: {
+              legalName: {
+                contains: search,
+                mode: 'insensitive'
+              },
+              tradeName: {
+                contains: search,
+                mode: 'insensitive'
+              }
+            }
+          },
+          {
+            orderType: {
+              title: {
+                contains: search,
+                mode: 'insensitive'
+              },
+              descripton: {
+                contains: search,
+                mode: 'insensitive'
+              }
+            }
+          }
+        ],
       },
+      include: {
+        orderType: {
+          select: {
+            id: true,
+            title: true
+          }
+        },
+        client: {
+          select: {
+            id: true,
+            legalName: true
+          }
+        }
+      }
     })
 
-    return orders
+    const formattedOrders: OrderDetailTable[] = orders.map(
+      order => ({
+        id: order.id,
+        orderTypeId: order.orderTypeId,
+        orderTypeTitle: order.orderType.title,
+        description: order.description,
+        eventDate: order.eventDate,
+        clientId: order.clientId,
+        clientName: order.client.legalName,
+      }),
+    )
+
+    return formattedOrders
   }
   
 }

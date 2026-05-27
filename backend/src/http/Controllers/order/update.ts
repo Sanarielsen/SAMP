@@ -8,6 +8,7 @@ export async function updateOrder(request: FastifyRequest, reply: FastifyReply) 
   const updateOrderBodySchema = z.object({
     clientId: z.string().optional(),
     orderTypeId: z.number().optional(),
+    description: z.string().optional(),
     observation: z.string().optional(),
     eventDate: z.coerce.date().optional(),
   })

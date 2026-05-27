@@ -1,13 +1,20 @@
 import { Routes, Route } from "react-router";
 
-import AboutPage from "@/features/about/pages/AboutPage";
-import ClientPage from "@/features/client/pages/ClientPage";
 import Dashboard from "@/layout/Dashboard";
-import ForgotPasswordPage from "@/features/auth/pages/ForgotPassword";
+
 import LoginPage from "@/features/auth/pages/Login";
+import ForgotPasswordPage from "@/features/auth/pages/ForgotPassword";
+
+import ClientPage from "@/features/client/pages/ClientPage";
 import ManageClientPage from "@/features/client/pages/ManageClientPage";
+
 import RepresentativePage from "@/features/representative/pages/RepresentativePage";
 import RepresentativeManagePage from "@/features/representative/pages/RepresentativeManagePage";
+
+import OrderServicesPage from "@/features/order/pages/OrderServicesPage";
+import OrderServiceManagePage from "@/features/order/pages/OrderServicesManagePage";
+
+import AboutPage from "@/features/about/pages/AboutPage";
 
 export default function Router() {
   return (
@@ -23,6 +30,10 @@ export default function Router() {
         <Route path="representantes" element={<RepresentativePage />} />
         <Route path="representante" element={<RepresentativeManagePage />} />
         <Route path="representante/:id" element={<RepresentativeManagePage />} />
+
+        <Route path="oss" element={<OrderServicesPage />} />
+        <Route path="os/" element={<OrderServiceManagePage />} />
+        <Route path="os/:id" element={<OrderServiceManagePage />} />
         
         <Route path="sobre" element={<AboutPage />} />
       </Route>
