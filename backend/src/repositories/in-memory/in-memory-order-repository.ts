@@ -1,6 +1,6 @@
 import { OrderRepository } from "@/repositories/order-repository";
 
-import { CreateOrderDTO, Order } from "@shared/types/orders";
+import { CreateOrderDTO, Order, UpdateOrderDTO } from "@shared/types/orders";
 
 
 export class InMemoryOrderRepository implements OrderRepository {
@@ -18,6 +18,22 @@ export class InMemoryOrderRepository implements OrderRepository {
     this.items.push(order)
 
     return order
+  }
+
+  async update(data: UpdateOrderDTO): Promise<Order> {
+    const order = this.items.findIndex(order => {
+      return order.id === data.id
+    })
+
+    const updatedOrder = {
+      ...this.items[order],
+      ...data,
+      updatedAt: new Date(),
+    }
+
+    this.items[order] = updatedOrder
+
+    return updatedOrder
   }
 
   async findById(id: string): Promise<Order | null> {

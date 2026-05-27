@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 
 import { OrderRepository } from "@/repositories/order-repository";
 
-import { CreateOrderDTO, Order } from "@shared/types/orders";
+import { CreateOrderDTO, Order, UpdateOrderDTO } from "@shared/types/orders";
 
 
 export class PrismaOrderRepository implements OrderRepository {
@@ -10,8 +10,17 @@ export class PrismaOrderRepository implements OrderRepository {
     const order = await prisma.order.create({
       data
     })
-
+    
     return order;
+  }
+
+  update(data: Partial<UpdateOrderDTO>): Promise<Order> {
+    return prisma.order.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    })
   }
 
   async findById(id: string): Promise<Order | null> {
