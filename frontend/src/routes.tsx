@@ -11,7 +11,7 @@ import ManageClientPage from "@/features/client/pages/ManageClientPage";
 import RepresentativePage from "@/features/representative/pages/RepresentativePage";
 import RepresentativeManagePage from "@/features/representative/pages/RepresentativeManagePage";
 
-import OrderServicesPage from "@/features/order/page/OrderServicesPage";
+import OrderServicesPage from "@/features/order/pages/OrderServicesPage";
 
 import AboutPage from "@/features/about/pages/AboutPage";
 

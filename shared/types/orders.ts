@@ -37,3 +37,13 @@ export interface OrderDetailDTO {
   updatedAt:    Date | null
   deletedAt:    Date | null
 }
+
+export interface OrderDetailTable {
+  id: string,
+  orderTypeId: number,
+  orderTypeTitle: string,
+  description: string | null,
+  eventDate: Date,
+  clientId: string,
+  clientName: string,
+}
