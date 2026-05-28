@@ -103,7 +103,7 @@ export class PrismaOrderRepository implements OrderRepository {
         id: order.id,
         orderTypeId: order.orderTypeId,
         orderTypeTitle: order.orderType.title,
-        description: order.observation,
+        description: order.description,
         eventDate: order.eventDate,
         clientId: order.clientId,
         clientName: order.client.legalName,

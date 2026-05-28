@@ -12,6 +12,7 @@ import RepresentativePage from "@/features/representative/pages/RepresentativePa
 import RepresentativeManagePage from "@/features/representative/pages/RepresentativeManagePage";
 
 import OrderServicesPage from "@/features/order/pages/OrderServicesPage";
+import OrderServiceManagePage from "@/features/order/pages/OrderServicesManagePage";
 
 import AboutPage from "@/features/about/pages/AboutPage";
 
@@ -31,6 +32,7 @@ export default function Router() {
         <Route path="representante/:id" element={<RepresentativeManagePage />} />
 
         <Route path="oss" element={<OrderServicesPage />} />
+        <Route path="os" element={<OrderServiceManagePage />} />
         
         <Route path="sobre" element={<AboutPage />} />
       </Route>

@@ -12,6 +12,7 @@ export interface Order {
 export interface CreateOrderDTO {
   clientId:     string
   orderTypeId:  number
+  description:  string
   observation:  string | null
   eventDate:    Date
 }
@@ -21,6 +22,7 @@ export interface UpdateOrderDTO {
 
   clientId?:    string
   orderTypeId?: number
+  description?: string
   observation?: string
   eventDate?:   Date
 }
@@ -30,6 +32,7 @@ export interface OrderDetailDTO {
 
   clientId?:    string
   orderTypeId?: number
+  description?: string
   observation?: string
   eventDate?:   Date
 
