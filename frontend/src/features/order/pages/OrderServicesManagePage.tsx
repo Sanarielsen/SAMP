@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 
@@ -14,10 +14,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { 
   manageOrderServiceSchema, 
-  type ManageOrderServiceSchemaFormData 
+  type ManageOrderSchemaFormData 
 } from "@/features/order/schemas/manageOrderServiceSchema";
 
 import { optionsQueryListOrderTypesWithOptions } from "@/features/order/api/queryListOrderTypes";
+import { useMutationPatchOrder } from "@/features/order/api/mutationPatchOrder";
 import { useMutationPostOrder } from "@/features/order/api/mutationPostOrder";
 import { optionsQueryListClientWithOptions } from "@/api/listClientsWithOptions";
 
@@ -26,13 +27,18 @@ import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import ToastContainer from "@/components/Toast";
 
-import type { CreateOrderDTO } from "@shared/types/orders";
+import type { CreateOrderDTO, OrderDetailDTO } from "@shared/types/orders";
+import { emptyOrder } from "@/features/representative/utils/emptyOrder";
+import { optionsQueryGetOrder } from "../api/queryGetOrder";
+import { formatAsVisualDate } from "@/features/client/utils/formatAsAVisualDate";
+import { parseBRDate } from "@/utils/formatDate";
 
 export default function OrderServiceManagePage() {
 
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = !!id;
+  const titleHeader = isEditing ? "Atualiza a ordem de servico" : "Adicionar nova ordem de servico"
 
   const [openToast, setOpenToast] = useState("")
 
@@ -44,16 +50,50 @@ export default function OrderServiceManagePage() {
   )
 
   const { 
+    data: currentOrder,
+  } = useQuery(
+    optionsQueryGetOrder(String(id), isEditing),
+  )
+
+  const { 
     data: listOrderTypeWithOptions,
     isSuccess: isSuccessOrderTypeWithOptions
   } = useQuery(
     optionsQueryListOrderTypesWithOptions()
   )
 
-  const form = useForm<ManageOrderServiceSchemaFormData>({
+  const form = useForm<ManageOrderSchemaFormData>({
     resolver:
       zodResolver(manageOrderServiceSchema),
+
+    defaultValues:
+      isEditing
+        ? currentOrder
+        : emptyOrder,
   })
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = form
+
+  useEffect(() => {
+    if (currentOrder) {
+      reset({
+        ...currentOrder,
+        eventDate: formatAsVisualDate(
+          currentOrder.eventDate
+        ),
+        orderTypeId: String(
+          currentOrder.orderTypeId
+        ),
+        observation:
+          currentOrder.observation ?? '',
+      })
+    }
+  }, [currentOrder, reset])
 
   function executeActionAfterRequest(result: string) {
     setOpenToast(result);
@@ -63,12 +103,6 @@ export default function OrderServiceManagePage() {
       }, 5000);
     }
   }
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors }
-  } = form
 
   const mutationPostOrder =
     useMutationPostOrder({
@@ -80,11 +114,29 @@ export default function OrderServiceManagePage() {
       },
   })
 
-  const onSubmit: SubmitHandler<ManageOrderServiceSchemaFormData> = async (data) => {
+  const mutationPatchOrder =
+    useMutationPatchOrder({
+      onSuccess: () => {
+        executeActionAfterRequest("success")
+      },
+      onError: () => {
+        executeActionAfterRequest("error")
+      },
+  })
+
+  const onSubmit: SubmitHandler<ManageOrderSchemaFormData> = async (data) => {
   
     if (isEditing) {
-      console.log("edita")
+      const payload: OrderDetailDTO = {
+        id: id,
+        clientId: data.clientId,
+        orderTypeId: Number(data.orderTypeId),
+        description: data.description,
+        observation: data.observation ?? '',
+        eventDate: parseBRDate(data.eventDate)
+      }
 
+      mutationPatchOrder.mutate(payload)
       return
     }
 
@@ -92,8 +144,8 @@ export default function OrderServiceManagePage() {
       clientId: data.clientId,
       orderTypeId: Number(data.orderTypeId),
       description: data.description,
-      observation: data.observation ?? null,
-      eventDate: new Date(data.eventDate)
+      observation: data.observation ?? '',
+      eventDate: parseBRDate(data.eventDate)
     }
 
     mutationPostOrder.mutate(payload)
@@ -117,7 +169,7 @@ export default function OrderServiceManagePage() {
               }}
             >
               <Typography variant="h4" component="h1">
-                Adicionar nova ordem de servico
+                { titleHeader }
               </Typography>
             </Grid>
 
@@ -208,13 +260,13 @@ export default function OrderServiceManagePage() {
                 variant="contained"
                 type="submit"
                 size="large"
-                loading={isEditing &&
-                  mutationPostOrder.isPending 
-                  //mutationPostRepresentative.isPending
+                loading={isEditing ?
+                  mutationPostOrder.isPending :
+                  mutationPatchOrder.isPending
                 }
-                disabled={isEditing && 
-                  mutationPostOrder.isPending 
-                  //mutationPostRepresentative.isPending
+                disabled={isEditing ?
+                  mutationPostOrder.isPending :
+                  mutationPatchOrder.isPending
                 }  
                 fullWidth
               >

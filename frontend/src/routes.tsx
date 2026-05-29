@@ -32,7 +32,8 @@ export default function Router() {
         <Route path="representante/:id" element={<RepresentativeManagePage />} />
 
         <Route path="oss" element={<OrderServicesPage />} />
-        <Route path="os" element={<OrderServiceManagePage />} />
+        <Route path="os/" element={<OrderServiceManagePage />} />
+        <Route path="os/:id" element={<OrderServiceManagePage />} />
         
         <Route path="sobre" element={<AboutPage />} />
       </Route>

@@ -118,7 +118,7 @@ export default function OrderServicesPage() {
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 setSearchApplied(searchBar)
-                queryClient.invalidateQueries({ queryKey: ['representatives'] })
+                queryClient.invalidateQueries({ queryKey: ['orders'] })
               }
             }}
             fullWidth
@@ -130,7 +130,7 @@ export default function OrderServicesPage() {
             state={stateQuery}
             rows={listOrders}
             columns={DataTableColumnsOrder({
-              onClickUpdateItem: (id) => navigate(`/representante/${id}`),
+              onClickUpdateItem: (id) => navigate(`/os/${id}`),
               onClickSeeItem: (current) => handleView(current), 
               onClickDeleteItem: (current) => handleDelete(current),
             })}
