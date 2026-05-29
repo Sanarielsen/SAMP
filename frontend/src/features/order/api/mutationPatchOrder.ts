@@ -1,10 +1,10 @@
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query'
 
 import { api } from '@/api/axios'
-import type { OrderDetailDTO } from '@shared/types/orders'
+import type { UpdateOrderDTO } from '@shared/types/orders'
 
 
-export type OrderPatchPayload = OrderDetailDTO 
+export type OrderPatchPayload = UpdateOrderDTO 
 
 async function patchOrder(
   payload: OrderPatchPayload

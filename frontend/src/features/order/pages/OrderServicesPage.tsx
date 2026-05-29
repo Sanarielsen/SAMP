@@ -8,6 +8,7 @@ import DataTable from "@/components/DataTable";
 import DataTableColumnsOrder from "@/features/order/components/DataTableColumnsOrders";
 import ToastContainer from "@/components/Toast";
 import ModalConfirmation from "@/components/ModalConfirmation";
+import { useMutationDeleteOrder } from "../api/mutationDeleteOrder";
 
 interface OrderDetailDTO {
   id:           string
@@ -46,6 +47,17 @@ export default function OrderServicesPage() {
     optionsQueryListOrders(searchApplied)
   )
 
+  const mutationDeleteOrder =
+    useMutationDeleteOrder({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+      setOpenToast("success"); 
+    },
+    onError: () => {
+      setOpenToast("error"); 
+    },
+  })
+
   const stateQuery = 
     isSuccess ? "SUCCESS" : 
     isLoading ? "LOADING" :
@@ -66,9 +78,7 @@ export default function OrderServicesPage() {
     setOpenModalConfirmation(false)
     if (!action || !orderClicked) return
     
-    // mutationChangeDeleteRepresentative.mutate({
-    //   id: orderClicked.id
-    // })
+    mutationDeleteOrder.mutate(orderClicked.id)
 
     refetch()
   }

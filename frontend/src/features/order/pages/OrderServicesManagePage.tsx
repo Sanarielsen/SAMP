@@ -17,6 +17,7 @@ import {
   type ManageOrderSchemaFormData 
 } from "@/features/order/schemas/manageOrderServiceSchema";
 
+import { optionsQueryGetOrder } from "@/features/order/api/queryGetOrder";
 import { optionsQueryListOrderTypesWithOptions } from "@/features/order/api/queryListOrderTypes";
 import { useMutationPatchOrder } from "@/features/order/api/mutationPatchOrder";
 import { useMutationPostOrder } from "@/features/order/api/mutationPostOrder";
@@ -27,11 +28,11 @@ import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import ToastContainer from "@/components/Toast";
 
-import type { CreateOrderDTO, OrderDetailDTO } from "@shared/types/orders";
-import { emptyOrder } from "@/features/representative/utils/emptyOrder";
-import { optionsQueryGetOrder } from "../api/queryGetOrder";
+import { emptyOrder } from "@/features/order/utils/emptyOrder";
 import { formatAsVisualDate } from "@/features/client/utils/formatAsAVisualDate";
 import { parseBRDate } from "@/utils/formatDate";
+
+import type { CreateOrderDTO, UpdateOrderDTO } from "@shared/types/orders";
 
 export default function OrderServiceManagePage() {
 
@@ -127,7 +128,7 @@ export default function OrderServiceManagePage() {
   const onSubmit: SubmitHandler<ManageOrderSchemaFormData> = async (data) => {
   
     if (isEditing) {
-      const payload: OrderDetailDTO = {
+      const payload: UpdateOrderDTO = {
         id: id,
         clientId: data.clientId,
         orderTypeId: Number(data.orderTypeId),
