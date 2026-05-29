@@ -2,8 +2,8 @@ export interface Order {
   id:           string
   clientId:     string
   orderTypeId:  number
-  observation:  string | null
-  eventDate:    Date
+  observation:  string
+  eventDate:    string
   createdAt:    Date
   updatedAt:    Date | null
   deletedAt:    Date | null
@@ -13,7 +13,7 @@ export interface CreateOrderDTO {
   clientId:     string
   orderTypeId:  number
   description:  string
-  observation:  string | null
+  observation:  string
   eventDate:    Date
 }
 
@@ -36,9 +36,9 @@ export interface OrderDetailDTO {
   observation?: string
   eventDate?:   Date
 
-  createdAt:    Date
-  updatedAt:    Date | null
-  deletedAt:    Date | null
+  createdAt?:    Date
+  updatedAt?:    Date | null
+  deletedAt?:    Date | null
 }
 
 export interface OrderDetailTable {

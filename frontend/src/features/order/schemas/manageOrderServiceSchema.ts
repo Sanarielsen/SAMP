@@ -17,5 +17,5 @@ export const manageOrderServiceSchema = z.object({
   }).trim().min(1, 'Informe quando será a data desse processo.'),
 });
 
-export type ManageOrderServiceSchemaFormData =
+export type ManageOrderSchemaFormData =
   z.infer<typeof manageOrderServiceSchema>;
