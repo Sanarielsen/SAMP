@@ -98,7 +98,7 @@ export default function OrderServicesPage() {
             sx={{ pl: 2 }}
           >
             <Typography variant="h4" component="h1">
-              Listagem de processos
+              Listagem de ordem de serviços
             </Typography>
           </Grid>
 
@@ -114,7 +114,7 @@ export default function OrderServicesPage() {
               sx={{ width: { xs: "100%", md: "auto" }, }}
               onClick={() => navigate('/os')}
             >
-              Cadastrar novo processo
+              Cadastrar nova ordem de serviço
             </Button>
           </Grid>
 
@@ -122,7 +122,7 @@ export default function OrderServicesPage() {
 
         <Box component="section" sx={{ p: 2}}>
           <TextField
-            label="Pesquisa na listagem de processos"
+            label="Pesquisa na listagem de ordem de serviço"
             value={searchBar}
             onChange={(e) => setSearchBar(e.target.value)}
             onKeyDown={(e) => {

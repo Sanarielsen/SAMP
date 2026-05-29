@@ -34,7 +34,7 @@ export default function DataTable<T extends { id: number | string }>({
     return (
       <Paper sx={{ height: 400, width: "100%", display: "flex", justifyContent: "center", alignItems: "center", gap: 4 }}>
         <CircularProgress aria-label="Loading…" />
-        <Typography variant="body2"> Carregando os dados de cliente... aguarde. </Typography>
+        <Typography variant="body2"> Carregando os dados... aguarde. </Typography>
       </Paper>
     )
   }
@@ -52,7 +52,7 @@ export default function DataTable<T extends { id: number | string }>({
     return (
       <Paper sx={{ height: 400, width: "100%", display: "flex", justifyContent: "center", alignItems: "center", gap: 4 }}>
         <BusinessIcon fontSize="large" />
-        <Typography variant="body2"> Cadastre novos clientes para que sejam exibidos aqui. </Typography>
+        <Typography variant="body2"> Cadastre novos dessa sessão para que sejam exibidos aqui. </Typography>
       </Paper>
     )
   }
