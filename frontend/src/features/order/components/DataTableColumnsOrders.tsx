@@ -32,12 +32,12 @@ export default function DataTableColumnsOrder({
     },
     {
       field: "description",
-      headerName: "Descricao",
+      headerName: "Descrição",
       flex: 1,
     },
     {
       field: "eventDate",
-      headerName: "Criacao",
+      headerName: "Criação",
       flex: 1,
       valueFormatter: (value) => {
         if (!value) return "-"
