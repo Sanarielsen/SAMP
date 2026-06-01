@@ -16,6 +16,10 @@ import OrderServiceManagePage from "@/features/order/pages/OrderServicesManagePa
 
 import AboutPage from "@/features/about/pages/AboutPage";
 
+import ProfilePage from "@/features/profile/pages/ProfilePage";
+import AdminManageClientsPage from "@/features/admin/page/AdminManageClientsPage";
+import AdminManageVariablesPage from "@/features/admin/page/AdminManageVariablesPage";
+
 export default function Router() {
   return (
     <Routes>
@@ -34,6 +38,10 @@ export default function Router() {
         <Route path="oss" element={<OrderServicesPage />} />
         <Route path="os/" element={<OrderServiceManagePage />} />
         <Route path="os/:id" element={<OrderServiceManagePage />} />
+
+        <Route path="perfil" element={<ProfilePage />} />
+        <Route path="admin/variaveis" element={<AdminManageVariablesPage />} />
+        <Route path="admin/usuarios" element={<AdminManageClientsPage  />} />
         
         <Route path="sobre" element={<AboutPage />} />
       </Route>
