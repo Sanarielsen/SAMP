@@ -99,6 +99,7 @@ export default function DataTable<T extends { id: number | string }>({
                   },
                 },
               }}
+              disableColumnMenu
             />
           ) : state === "LOADING" ? (
             <CircularProgress aria-label="Loading…" /> 
