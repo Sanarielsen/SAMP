@@ -6,9 +6,7 @@ interface GetUserProfileUseCaseRequest {
   userId: string
 }
 
-interface GetUserProfileUseCaseResponse {
-  user: User
-}
+type GetUserProfileUseCaseResponse = User
 
 export class GetUserProfileUseCase {
   constructor(private usersRepository: UsersRepository) {}
@@ -22,8 +20,6 @@ export class GetUserProfileUseCase {
       throw new ResourceNotFoundError()
     }
 
-    return {
-      user,
-    }
+    return user
   }
 }

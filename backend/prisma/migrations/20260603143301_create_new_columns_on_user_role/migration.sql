@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "user_roles" ADD COLUMN     "deletedAt" TIMESTAMP(3),
+ADD COLUMN     "level" INTEGER NOT NULL DEFAULT 1,
+ALTER COLUMN "updatedAt" DROP NOT NULL,
+ALTER COLUMN "updatedAt" DROP DEFAULT;
+
+-- AlterTable
+ALTER TABLE "users" ALTER COLUMN "updatedAt" DROP DEFAULT;
