@@ -1,5 +1,7 @@
 import { User, Prisma } from "@prisma/client";
-import { UsersRepository } from "../users-repository";
+import { UsersRepository } from "@/repositories/users-repository";
+
+import { UpdateUserDTO } from "@shared/types/user";
 
 
 export class InMemoryUsersRepository implements UsersRepository {
@@ -30,6 +32,7 @@ export class InMemoryUsersRepository implements UsersRepository {
       id: 'user-1',
       name: data.name,
       email: data.email,
+      role: data.role,
       password_hash: data.password_hash,
       createdAt: new Date(),
       updatedAt: new Date()
@@ -38,6 +41,21 @@ export class InMemoryUsersRepository implements UsersRepository {
     this.items.push(user)
 
     return user
+  }
+
+  async update(data: UpdateUserDTO) {
+    const userIdenitity = this.items.findIndex(user => {
+      return user.id === data.id
+    })
+
+    const updatedUser = {
+      ...this.items[userIdenitity],
+      ...data,
+    }
+
+    this.items[userIdenitity] = updatedUser
+
+    return updatedUser
   }
 
 }

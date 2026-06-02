@@ -1,10 +1,13 @@
 import { FastifyInstance } from "fastify";
 
-import { authenticate } from "@/http/Controllers/authenticate";
-import { profile } from "@/http/Controllers/profile";
-import { register } from "@/http/Controllers/register";
 import { verifyJWT } from "@/http/middlewares/verify-jwt";
 
+import { authenticate } from "@/http/Controllers/authenticate";
+import { register } from "@/http/Controllers/register";
+import { 
+  profile, 
+  updateProfile 
+} from "@/http/Controllers/profile";
 import { 
   getClient,
   listClient,
@@ -35,6 +38,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/session', authenticate)
 
   app.get('/me', {onRequest: [verifyJWT]}, profile)
+  app.patch('/me', {onRequest: [verifyJWT]}, updateProfile)
   
   app.get('/client/:id', {onRequest: [verifyJWT]}, getClient)
   app.get('/client/user/:id', {onRequest: [verifyJWT]}, listClient)
