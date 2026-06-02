@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 
@@ -12,26 +13,29 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { optionsQueryGetUser } from "@/features/profile/api/queryGetMe";
+import { useMutationPatchUserProfile } from "@/features/profile/api/mutationUpdateMe";
 import { 
   updateProfileSchema, 
   type UpdateProfileSchemaFormData 
 } from "@/features/profile/schema/updateProfileSchema";
+import { formatAsVisualDate } from "@/features/client/utils/formatAsAVisualDate";
 
 import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
-
 import HeaderPage from "@/components/HeaderPage";
+import ToastContainer from "@/components/Toast";
 
 import { type UserRoleOptionDTO } from "@shared/types/user"
-import { formatAsVisualDate } from "@/features/client/utils/formatAsAVisualDate";
+
 
 const userRoles: UserRoleOptionDTO[] = [
   { label: "Usuário", value: "user" },
   { label: "Administrador", value: "admin" },
 ]
 
-
 export default function ProfilePage() {
+
+  const [openToast, setOpenToast] = useState("")
 
   const {
     data: currentUser
@@ -50,14 +54,28 @@ export default function ProfilePage() {
     } : undefined
   });
 
-  const onSubmit: SubmitHandler<UpdateProfileSchemaFormData> = async (data) => {
-    console.log("Perfil enviado: ", data)
-  }
+  const mutationPatchUserProfile =
+    useMutationPatchUserProfile({
+      onSuccess: () => {
+        setOpenToast("success");
+      },
+      onError: () => {
+        setOpenToast("error");
+      },
+  })
 
   const nameuser = useWatch({
     control,
     name: "name",
   });
+
+  const onSubmit: SubmitHandler<UpdateProfileSchemaFormData> = async (data) => {
+    mutationPatchUserProfile.mutate({
+      ...data,
+      id: "user",
+      role: data.roleId
+    })
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}> 
@@ -136,8 +154,8 @@ export default function ProfilePage() {
               variant="contained"
               size="large"
               color="primary"
-              //loading={}
-              //disabled={}
+              loading={mutationPatchUserProfile.isPending}
+              disabled={mutationPatchUserProfile.isPending}
               fullWidth
               sx={{ marginTop: 4 }}
             >
@@ -165,6 +183,20 @@ export default function ProfilePage() {
           Atualizado: {formatAsVisualDate(currentUser?.updatedAt)}
         </Typography>
       </Box>
+
+      <ToastContainer
+        open={openToast === "success"}
+        message="Perfil atualizado com sucesso."
+        severity="success"
+        onClose={() => setOpenToast("")}
+      />
+
+      <ToastContainer
+        open={openToast === "error"}
+        message="Ocorreu um erro ao atualizar esse perfil."
+        severity="error"
+        onClose={() => setOpenToast("")}
+      />
     </form>
   )
 }
