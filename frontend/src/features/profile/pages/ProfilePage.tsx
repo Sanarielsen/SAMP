@@ -73,7 +73,6 @@ export default function ProfilePage() {
     mutationPatchUserProfile.mutate({
       ...data,
       id: "user",
-      role: data.roleId
     })
   }
 

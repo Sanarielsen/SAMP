@@ -7,16 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model UserRole {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  users       User[]
+
+  @@map("user_roles")
+}
+
 model User {
   id            String   @id @default(uuid())
   name          String
   email         String   @unique
   password_hash String
-  role          String   @default("user")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @default(now())
-  createdByUser Client[] @relation("CreatedBy")
-  linkedByUser  Client[] @relation("ResponsibleBy")
+
+  roleId        String @default("e133af4f-dfa8-4e97-9393-6d9ad237b755")
+  userRole      UserRole? @relation(fields: [roleId], references: [id])
+
+  createdByUser Client[]  @relation("CreatedBy")
+  linkedByUser  Client[]  @relation("ResponsibleBy")
 
   @@map("users")
 }
