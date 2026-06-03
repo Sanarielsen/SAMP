@@ -8,11 +8,14 @@ datasource db {
 }
 
 model UserRole {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   name        String
   description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+  level       Int       @default(1)
+  joker       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
   users       User[]
 
   @@map("user_roles")
@@ -24,13 +27,13 @@ model User {
   email         String   @unique
   password_hash String
   createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now())
+  updatedAt     DateTime
 
-  roleId        String @default("e133af4f-dfa8-4e97-9393-6d9ad237b755")
-  userRole      UserRole? @relation(fields: [roleId], references: [id])
+  roleId   String    @default("e133af4f-dfa8-4e97-9393-6d9ad237b755")
+  userRole UserRole? @relation(fields: [roleId], references: [id])
 
-  createdByUser Client[]  @relation("CreatedBy")
-  linkedByUser  Client[]  @relation("ResponsibleBy")
+  createdByUser Client[] @relation("CreatedBy")
+  linkedByUser  Client[] @relation("ResponsibleBy")
 
   @@map("users")
 }

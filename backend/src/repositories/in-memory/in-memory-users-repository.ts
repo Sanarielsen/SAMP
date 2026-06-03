@@ -1,7 +1,7 @@
 import { User, Prisma } from "@prisma/client";
 import { UsersRepository } from "@/repositories/users-repository";
 
-import { UpdateUserDTO } from "@shared/types/user";
+import { CreateUserDTO, UpdateUserDTO } from "@shared/types/user";
 
 
 export class InMemoryUsersRepository implements UsersRepository {
@@ -26,13 +26,13 @@ export class InMemoryUsersRepository implements UsersRepository {
 
     return user
   }
-  async create(data: Prisma.UserCreateInput) {
+  async create(data: CreateUserDTO) {
 
     const user = {
       id: 'user-1',
       name: data.name,
       email: data.email,
-      role: data.role,
+      roleId: data.roleId,
       password_hash: data.password_hash,
       createdAt: new Date(),
       updatedAt: new Date()
