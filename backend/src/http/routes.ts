@@ -30,6 +30,7 @@ import { listOrder } from "@/http/Controllers/order/list";
 import { updateOrder } from "@/http/Controllers/order/update";
 import { deleteOrder } from "@/http/Controllers/order/delete";
 import { listOrderType } from "@/http/Controllers/orderTypes/list";
+import { listUserRoleLevelAuthorized } from "./Controllers/userRole/list-level-authorized";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -39,6 +40,8 @@ export async function appRoutes(app: FastifyInstance) {
 
   app.get('/me', {onRequest: [verifyJWT]}, profile)
   app.patch('/me', {onRequest: [verifyJWT]}, updateProfile)
+
+  app.get('/user/roles', {onRequest: [verifyJWT]}, listUserRoleLevelAuthorized)
   
   app.get('/client/:id', {onRequest: [verifyJWT]}, getClient)
   app.get('/client/user/:id', {onRequest: [verifyJWT]}, listClient)

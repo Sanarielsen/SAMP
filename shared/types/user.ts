@@ -11,6 +11,15 @@ export interface User {
   //deletedAt: Date | null
 }
 
+export interface CreateUserDTO {
+  id:       string
+
+  name:    string,
+  email:   string,
+  roleId:  string,
+  password_hash: string,
+}
+
 export interface UpdateUserDTO {
   id:       string
 
