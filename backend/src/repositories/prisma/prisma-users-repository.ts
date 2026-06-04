@@ -39,7 +39,7 @@ export class PrismaUsersRepository implements UsersRepository {
   update(data: UpdateUserDTO): Promise<User> {
     return prisma.user.update({
       where: {
-        id: data.id,
+        id: data.id
       },
       data,
     })

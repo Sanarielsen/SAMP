@@ -13,29 +13,28 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { optionsQueryGetUser } from "@/features/profile/api/queryGetMe";
+import { optionsQueryListAuthorizedRoles } from "@/features/profile/api/queryListRolesAuthorized";
 import { useMutationPatchUserProfile } from "@/features/profile/api/mutationUpdateMe";
 import { 
   updateProfileSchema, 
   type UpdateProfileSchemaFormData 
 } from "@/features/profile/schema/updateProfileSchema";
-import { formatAsVisualDate } from "@/features/client/utils/formatAsAVisualDate";
-
 import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import HeaderPage from "@/components/HeaderPage";
 import ToastContainer from "@/components/Toast";
+import { formatAsVisualDate } from "@/utils/formatAsAVisualDate";
 
-import { type UserRoleOptionDTO } from "@shared/types/user"
-
-
-const userRoles: UserRoleOptionDTO[] = [
-  { label: "Usuário", value: "user" },
-  { label: "Administrador", value: "admin" },
-]
 
 export default function ProfilePage() {
 
   const [openToast, setOpenToast] = useState("")
+
+  const {
+    data: queryAuthorizedRoles,
+    isLoading: isLoadingAuthorizedRoles,
+    isSuccess: isSuccessAuthorizedRoles
+  } = useQuery(optionsQueryListAuthorizedRoles())
 
   const {
     data: currentUser
@@ -50,7 +49,7 @@ export default function ProfilePage() {
     values: currentUser ? { 
       name: currentUser.name, 
       email: currentUser.email,
-      roleId: currentUser.role 
+      roleId: currentUser.roleId 
     } : undefined
   });
 
@@ -143,7 +142,8 @@ export default function ProfilePage() {
               name="roleId"
               label='Cargo'
               placeholder='Cargos'
-              options={userRoles}
+              loading={isLoadingAuthorizedRoles}
+              options={isSuccessAuthorizedRoles ? queryAuthorizedRoles : []}
             />
           </Grid>
 

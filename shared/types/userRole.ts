@@ -15,3 +15,8 @@ export interface CreateUserRoleDTO {
   level:        number
   createdAt:    Date
 }
+
+export type UserRoleOptionDTO = {
+  label: string
+  value: string
+}

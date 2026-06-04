@@ -1,34 +1,33 @@
 import { useEffect, useState } from "react";
 import { FormProvider, useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateClientSchema, type UpdateSchemaFormData } from "@/features/client/schema/updateClientSchema";
 
+import { useAuth } from "@/auth/AuthProvider";
+import { optionsQueryGetClient } from "@/features/client/api/queryGetClient";
+import { useMutationPostClient, type ClientPostPayload } from "@/features/client/api/mutationPostClient";
+import { useMutationPatchClient, type ClientPatchPayload } from "@/features/client/api/mutationPatchClient";
+import { ModalAddress } from "@/features/client/components/ModalAddress";
+import { CopyButton } from "@/features/client/components/CopyButton";
 import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
+import ToastContainer from "@/components/Toast";
+import { updateClientSchema, type UpdateSchemaFormData } from "@/features/client/schema/updateClientSchema";
 import type { AddressSchemaFormData } from "@/schemas/addressSchema";
-
-import { ModalAddress } from "@/features/client/components/ModalAddress";
-import { CopyButton } from "@/features/client/components/CopyButton";
 import { getErrorMessage } from "@/features/client/utils/getErrorMessage";
 import { formatAddress } from "@/features/client/utils/formatAddress";
 import { emptyClient } from "@/features/client/utils/mockConstants";
-import { useMutationPostClient, type ClientPostPayload } from "@/features/client/api/mutationPostClient";
-import { useMutationPatchClient, type ClientPatchPayload } from "@/features/client/api/mutationPatchClient";
-import { useAuth } from "@/auth/AuthProvider";
 import { getDocumentMask } from "@/features/client/utils/getDocumentMask";
-import { optionsQueryGetClient } from "@/features/client/api/queryGetClient";
-import { useQuery } from "@tanstack/react-query";
-import { formatDocument } from "../../../utils/formatDocument";
-import { formatAsVisualDate } from "../utils/formatAsAVisualDate";
-import { parseAddress } from "../utils/formatAddressFromAPI";
+import { parseAddress } from "@/features/client/utils/formatAddressFromAPI";
+import { formatDocument } from "@/utils/formatDocument";
+import { formatAsVisualDate } from "@/utils/formatAsAVisualDate";
 import { cleanValue } from "@/utils/cleanValue";
-import ToastContainer from "@/components/Toast";
 
 const optionsType = [
   {

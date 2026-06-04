@@ -5,6 +5,7 @@ export interface User {
   email:         string,
   roleId:        string,
   password_hash: string,
+  joker:         number,
 
   createdAt:     Date,
   updatedAt:     Date | null,
@@ -12,11 +13,12 @@ export interface User {
 }
 
 export interface CreateUserDTO {
-  id:       string
+  id?:       string
 
   name:    string,
   email:   string,
   roleId:  string,
+  joker:   number,
   password_hash: string,
 }
 
@@ -35,9 +37,4 @@ export type UserDetailDTO = {
   roleId:     string,
   createdAt:  Date,
   updatedAt:  Date
-}
-
-export type UserRoleOptionDTO = {
-  label: string
-  value: string
 }

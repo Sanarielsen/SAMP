@@ -1,7 +1,6 @@
-import { User, Prisma } from "@prisma/client";
 import { UsersRepository } from "@/repositories/users-repository";
 
-import { CreateUserDTO, UpdateUserDTO } from "@shared/types/user";
+import { CreateUserDTO, UpdateUserDTO, User } from "@shared/types/user";
 
 
 export class InMemoryUsersRepository implements UsersRepository {
@@ -33,6 +32,7 @@ export class InMemoryUsersRepository implements UsersRepository {
       name: data.name,
       email: data.email,
       roleId: data.roleId,
+      joker: data.joker,
       password_hash: data.password_hash,
       createdAt: new Date(),
       updatedAt: new Date()

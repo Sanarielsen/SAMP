@@ -21,6 +21,7 @@ describe('Register Use Case', () => {
       name: 'Samuel Henrique',
       email: 'samuel.henrique@emai.com',
       password: '123456',
+      roleId: 'role-1'
     })
     
     expect(user.id).toEqual(expect.any(String))
@@ -33,6 +34,7 @@ describe('Register Use Case', () => {
       name: 'Samuel Henrique',
       email: 'samuel.henrique@emai.com',
       password: '123456',
+      roleId: 'role-1'
     })
 
     const isPasswordCorrectlyHashed = await compare('123456', user.password_hash)
@@ -48,12 +50,14 @@ describe('Register Use Case', () => {
       name: 'Samuel Henrique',
       email: email,
       password: '123456',
+      roleId: 'role-1'
     })
 
     await expect(() => sut.execute({
       name: 'Samuel Henrique',
       email: email,
       password: '123456',
+      roleId: 'role-1'
     })).rejects.toBeInstanceOf(UserAlreadyExistsError)
   })
 })

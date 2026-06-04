@@ -43,6 +43,14 @@ describe('Get User Role Use Case', () => {
       createdAt: new Date(Date.now())
     })
 
+    await userRoleRepository.create({
+      id: 'role-3',
+      name: 'register',
+      description: 'user to test more',
+      level:  3,
+      createdAt: new Date(Date.now())
+    })
+
     vi.useFakeTimers()
   })
 
@@ -50,13 +58,14 @@ describe('Get User Role Use Case', () => {
     vi.useRealTimers()
   })
 
-  it('should query available roles', async () => {
+  it('should query available roles if the logged user dont have joker condition', async () => {
 
     await userRepository.create({
       id: 'user-1',
       name: 'Samuel de Paula',
       email: 'samuel@gmail.com',
-      roleId: 'role-1',
+      roleId: 'role-2',
+      joker: 0,
       password_hash: await hash('123456', 6),
     })
 
@@ -67,6 +76,24 @@ describe('Get User Role Use Case', () => {
     expect(userRolesAvaliables).toHaveLength(2)
   })
 
+  it('should query all available roles if the logged user is a joker', async () => {
+    
+    await userRepository.create({
+      id: 'user-1',
+      name: 'Samuel de Paula',
+      email: 'samuel@gmail.com',
+      roleId: 'role-2',
+      joker: 1,
+      password_hash: await hash('123456', 6),
+    })
+
+    const userRolesAvaliables = await sut.execute({
+      userId: 'user-1',
+    })
+
+    expect(userRolesAvaliables).toHaveLength(3)
+  })
+
   it('should query only permitted roles when the user is not an admin', async () => {
 
     await userRepository.create({
@@ -74,6 +101,7 @@ describe('Get User Role Use Case', () => {
       name: 'Samuel de Paula',
       email: 'samuel@gmail.com',
       roleId: 'role-2',
+      joker: 0,
       password_hash: await hash('123456', 6),
     })
 
@@ -81,7 +109,26 @@ describe('Get User Role Use Case', () => {
       userId: 'user-1'
     })
 
-    expect(userRolesAvaliables).toHaveLength(1)
+    expect(userRolesAvaliables).toHaveLength(2)
+  })
+
+  it('should create a user with default fields', async () => {
+    const user = await userRoleRepository.create({
+      name: 'admin',
+      description: 'admin to test',
+      level:  1,
+      createdAt: new Date(Date.now())
+    })
+
+    expect(user).toEqual(
+      expect.objectContaining({
+        id: expect.any(String),
+        name: 'admin',
+        createdAt: expect.any(Date),
+        updatedAt: null,
+        deletedAt: null,
+      }),
+    )
   })
 
   it('should not query when the current user doesnt exist', async () => {
@@ -98,6 +145,7 @@ describe('Get User Role Use Case', () => {
       name: 'Samuel de Paula',
       email: 'samuel@gmail.com',
       roleId: 'role-invalid',
+      joker: 0,
       password_hash: await hash('123456', 6),
     })
 

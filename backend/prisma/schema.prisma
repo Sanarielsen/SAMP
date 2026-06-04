@@ -12,7 +12,6 @@ model UserRole {
   name        String
   description String
   level       Int       @default(1)
-  joker       Int       @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
@@ -26,6 +25,7 @@ model User {
   name          String
   email         String   @unique
   password_hash String
+  joker         Int      @default(0)
   createdAt     DateTime @default(now())
   updatedAt     DateTime
 

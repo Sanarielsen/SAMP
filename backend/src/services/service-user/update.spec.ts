@@ -30,15 +30,15 @@ describe('Update User Profile Use Case', () => {
       name: "Samuel Teste",
       email: "Samuel@teste.com",
       password_hash: String(hash("123456", 6)),
-      role: "user",
-      createdAt: new Date(Date.now())
+      joker: 1,
+      roleId: "user",
     })
 
     await sut.execute({
       id: "user-1",
       name: "Samuel Teste Novo",
       email: "Eitaaa@teste.com",
-      role: "user"
+      roleId: "user"
     })
 
     expect(userRepository.items[0].name).toBe("Samuel Teste Novo")
@@ -52,8 +52,8 @@ describe('Update User Profile Use Case', () => {
       name: "Samuel Teste",
       email: "Samuel@teste.com",
       password_hash: String(hash("123456", 6)),
-      role: "user",
-      createdAt: new Date(Date.now())
+      joker: 1,
+      roleId: "user",
     })
 
     await userRepository.create({
@@ -61,8 +61,8 @@ describe('Update User Profile Use Case', () => {
       name: "Henrique Teste",
       email: "henrique@teste.com",
       password_hash: String(hash("123456", 6)),
-      role: "user",
-      createdAt: new Date(Date.now())
+      joker: 1,
+      roleId: "user",
     })
 
     expect( async () =>
@@ -70,7 +70,7 @@ describe('Update User Profile Use Case', () => {
         id: "user-1",
         name: "Samuel Teste Novo",
         email: "henrique@teste.com",
-        role: "user"
+        roleId: "user"
       })
     ).rejects.toBeInstanceOf(UserAlreadyExistsError)
   })
@@ -82,8 +82,8 @@ describe('Update User Profile Use Case', () => {
       name: "Samuel Teste",
       email: "Samuel@teste.com",
       password_hash: String(hash("123456", 6)),
-      role: "user",
-      createdAt: new Date(Date.now())
+      joker: 1,
+      roleId: "user",
     })
 
     expect( async () =>
@@ -91,7 +91,7 @@ describe('Update User Profile Use Case', () => {
         id: "user-1",
         name: "Samuel Teste Novo",
         email: "Eitaa____teste.com",
-        role: "user"
+        roleId: "user"
       })
     ).rejects.toBeInstanceOf(EmailInvalidError)
   })
@@ -103,7 +103,7 @@ describe('Update User Profile Use Case', () => {
         id: "user-1",
         name: "Samuel Teste Novo",
         email: "Eitaa____teste.com",
-        role: "user"
+        roleId: "user"
       })
     ).rejects.toBeInstanceOf(NonExistUserError)
   })

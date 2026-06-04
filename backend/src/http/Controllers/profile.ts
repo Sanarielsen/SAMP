@@ -22,12 +22,10 @@ export async function profile(request: FastifyRequest, reply: FastifyReply) {
 }
 
 export async function updateProfile(request: FastifyRequest, reply: FastifyReply) {
-
-  
   const updateUserProfileBodySchema = z.object({
     name: z.string().optional(),
     email: z.string().optional(),
-    role: z.string().optional(),
+    roleId: z.string().optional(),
   })
   
   const resultBody = updateUserProfileBodySchema.parse(request.body)

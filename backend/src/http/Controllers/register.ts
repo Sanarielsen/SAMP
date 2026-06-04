@@ -8,10 +8,11 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
   const registerBodySchema = z.object({
     name: z.string(),
     email: z.string(),
-    password: z.string().min(6)
+    password: z.string().min(6),
+    roleId: z.string().min(6)
   })
 
-  const { name, email, password } = registerBodySchema.parse(request.body)
+  const { name, email, password, roleId } = registerBodySchema.parse(request.body)
 
   try {
     const registerUseCase = makeRegisterUseCase();
@@ -19,7 +20,8 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     await registerUseCase.execute({
       name,
       email,
-      password
+      password,
+      roleId
     })
   } catch (err) {
     if (err instanceof UserAlreadyExistsError) {

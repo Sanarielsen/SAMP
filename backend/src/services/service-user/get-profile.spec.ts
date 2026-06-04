@@ -20,13 +20,15 @@ describe('Get User Profile Use Case', () => {
       name: 'Samuel de Paula',
       email: 'samuel@gmail.com',
       password_hash: await hash('123456', 6),
+      roleId: 'role-1',
+      joker: 1
     })
 
-    const { user } = await sut.execute({
+    const { name } = await sut.execute({
       userId: createdUser.id
     })
     
-    expect(user.name).toEqual("Samuel de Paula")
+    expect(name).toEqual("Samuel de Paula")
   })
 
   it('should not be able to get user profile with wrong id', async () => {
