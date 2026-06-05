@@ -1,8 +1,10 @@
 import { hash } from "bcryptjs"
 
-import { User } from "@prisma/client"
 import { UsersRepository } from "@/repositories/users-repository"
 import { UserAlreadyExistsError } from "@/services/errors/user-already-exists"
+import { UserRoleRepository } from "@/repositories/user-role-repository"
+import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error"
+import { User } from "@shared/types/user"
 
 interface RegisterUseCaseRequest {
   name: string,
@@ -15,7 +17,10 @@ interface RegisterUseCaseResponse {
 }
 
 export class RegisterUseCase {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private userRoleRepository: UserRoleRepository
+  ) {}
 
   async execute({
     name,
@@ -30,10 +35,17 @@ export class RegisterUseCase {
       throw new UserAlreadyExistsError();
     }
 
+    const roleIDStarter = await this.userRoleRepository.findByName("USER")
+
+    if (!roleIDStarter) {
+      throw new ResourceNotFoundError();
+    }
+
     const user = await this.usersRepository.create({
       name,
       email,
-      password_hash
+      password_hash,
+      roleId: roleIDStarter.id,
     });
 
     return {

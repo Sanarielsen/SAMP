@@ -12,7 +12,6 @@ model UserRole {
   name        String
   description String
   level       Int       @default(1)
-  joker       Int       @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
@@ -22,14 +21,16 @@ model UserRole {
 }
 
 model User {
-  id            String   @id @default(uuid())
+  id            String    @id @default(uuid())
   name          String
-  email         String   @unique
+  email         String    @unique
   password_hash String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime
+  joker         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime?
+  deletedAt     DateTime?
 
-  roleId   String    @default("e133af4f-dfa8-4e97-9393-6d9ad237b755")
+  roleId   String
   userRole UserRole? @relation(fields: [roleId], references: [id])
 
   createdByUser Client[] @relation("CreatedBy")
