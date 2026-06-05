@@ -1,9 +1,10 @@
 import { describe, beforeEach, it, expect, vi, afterEach } from "vitest";
 
+import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
 import { InMemoryRepresentativeRepository } from "@/repositories/in-memory/in-memory-representatives-repository";
+
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { UpdateRepresentativeUseCase } from "@/services/service-representative/update";
-import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
 
 let representativeRepository: InMemoryRepresentativeRepository
 let clientRepository: InMemoryClientsRepository
@@ -43,6 +44,7 @@ describe('Update Representative Use Case', () => {
   it('should update a representative that already exists in the database', async () => {
     
     await representativeRepository.create({
+      id: "new-representative",
       clientId: 'client-1',
       name: 'Representante Teste',
       nationality: 'Brasileiro',

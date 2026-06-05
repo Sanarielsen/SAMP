@@ -14,7 +14,7 @@ describe('Post User Profile Use Case', () => {
     sut = new GetClientUseCase(clientRepository)
   })
 
-  it('should be able to get user profile', async () => {
+  it('should be able to post a new user profile', async () => {
     const createdClient = await clientRepository.create({
       id: "client-1",
       legalName: "Sanarielsen Teste",

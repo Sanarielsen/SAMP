@@ -10,10 +10,11 @@ import {
   type GridValidRowModel 
 } from "@mui/x-data-grid";
 
-import ErrorIcon from '@mui/icons-material/Error';
 import BusinessIcon from '@mui/icons-material/Business';
 
 import type { StateQuery } from "@/types/stateQuery";
+import BoxError from "./BoxError";
+import BoxLoading from "./BoxLoading";
 
 
 interface DataTableProps<T extends GridValidRowModel> {
@@ -28,23 +29,15 @@ export default function DataTable<T extends { id: number | string }>({
   columns,
 }: DataTableProps<T>) {
 
-  // 3 scenarios -> IsSucess, IsLoading, IsError, isEmpty
-
   if ( state == "LOADING" ) {
     return (
-      <Paper sx={{ height: 400, width: "100%", display: "flex", justifyContent: "center", alignItems: "center", gap: 4 }}>
-        <CircularProgress aria-label="Loading…" />
-        <Typography variant="body2"> Carregando os dados... aguarde. </Typography>
-      </Paper>
+      <BoxLoading description="Carregando os dados, aguarde..." />
     )
   }
 
   if ( state == "ERROR" ) {
     return (
-      <Paper sx={{ height: 400, width: "100%", display: "flex", justifyContent: "center", alignItems: "center", gap: 4 }}>
-        <ErrorIcon fontSize="large" />
-        <Typography variant="body2"> Houve um erro durante o carregamento dos dados. </Typography>
-      </Paper>
+      <BoxError description="Erro ao carregar os dados. Tente novamente." />
     )
   }
 
