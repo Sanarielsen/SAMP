@@ -2,6 +2,9 @@ node_modules
 build
 coverage
 
+backup
+uploads
+
 .env
 /src/generated/prisma
 

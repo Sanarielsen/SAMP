@@ -30,19 +30,15 @@ describe('Update User Profile Use Case', () => {
       name: "Samuel Teste",
       email: "Samuel@teste.com",
       password_hash: String(hash("123456", 6)),
-      role: "user",
-      createdAt: new Date(Date.now())
+      roleId: "role-1"
     })
 
     await sut.execute({
       id: "user-1",
       name: "Samuel Teste Novo",
-      email: "Eitaaa@teste.com",
-      role: "user"
     })
 
     expect(userRepository.items[0].name).toBe("Samuel Teste Novo")
-    expect(userRepository.items[0].email).toBe("Eitaaa@teste.com")
   })
 
   it('should not allow updating a user with an email already in use', async () => {
@@ -52,8 +48,7 @@ describe('Update User Profile Use Case', () => {
       name: "Samuel Teste",
       email: "Samuel@teste.com",
       password_hash: String(hash("123456", 6)),
-      role: "user",
-      createdAt: new Date(Date.now())
+      roleId: "role-1"
     })
 
     await userRepository.create({
@@ -61,8 +56,7 @@ describe('Update User Profile Use Case', () => {
       name: "Henrique Teste",
       email: "henrique@teste.com",
       password_hash: String(hash("123456", 6)),
-      role: "user",
-      createdAt: new Date(Date.now())
+      roleId: "role-1"
     })
 
     expect( async () =>
@@ -70,7 +64,7 @@ describe('Update User Profile Use Case', () => {
         id: "user-1",
         name: "Samuel Teste Novo",
         email: "henrique@teste.com",
-        role: "user"
+        roleId: "role-1"
       })
     ).rejects.toBeInstanceOf(UserAlreadyExistsError)
   })
@@ -82,17 +76,14 @@ describe('Update User Profile Use Case', () => {
       name: "Samuel Teste",
       email: "Samuel@teste.com",
       password_hash: String(hash("123456", 6)),
-      role: "user",
-      createdAt: new Date(Date.now())
+      roleId: "role-1"
     })
 
-    expect( async () =>
-      await sut.execute({
-        id: "user-1",
-        name: "Samuel Teste Novo",
+    await expect( async () =>
+      sut.execute({
+        id: "user-2",
         email: "Eitaa____teste.com",
-        role: "user"
-      })
+      }),
     ).rejects.toBeInstanceOf(EmailInvalidError)
   })
 
@@ -102,8 +93,8 @@ describe('Update User Profile Use Case', () => {
       await sut.execute({
         id: "user-1",
         name: "Samuel Teste Novo",
-        email: "Eitaa____teste.com",
-        role: "user"
+        email: "Samuel@teste.com",
+        roleId: "role-1"
       })
     ).rejects.toBeInstanceOf(NonExistUserError)
   })

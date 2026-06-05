@@ -3,8 +3,9 @@ import { createContext, useContext, useState, type ReactNode } from 'react'
 import { jwtDecode } from 'jwt-decode'
 
 type TokenPayload = {
-  sub: string
-}
+  sub: string | null
+  role: string | null
+} | null
 
 interface AuthContextProps {
   children: ReactNode;
@@ -12,6 +13,7 @@ interface AuthContextProps {
 
 type AuthContextType = {
   token: string | null
+  role: string | null
   signIn: (token: string) => void
   signOut: () => void
   getUserId: () => string | null
@@ -20,6 +22,7 @@ type AuthContextType = {
 const AuthContext = createContext({} as AuthContextType)
 
 export function AuthProvider({ children }: AuthContextProps) {
+  const [role, setRole] = useState<string | null>(null)
   const [token, setToken] = useState(
     localStorage.getItem('token')
   )
@@ -41,11 +44,13 @@ export function AuthProvider({ children }: AuthContextProps) {
 
     const decoded = jwtDecode<TokenPayload>(token)
 
-    return decoded.sub ?? null
+    setRole(decoded?.role ?? null)
+
+    return decoded?.sub ?? null
   }
 
   return (
-    <AuthContext.Provider value={{ token, signIn, signOut, getUserId }}>
+    <AuthContext.Provider value={{ token, role, signIn, signOut, getUserId }}>
       {children}
     </AuthContext.Provider>
   )

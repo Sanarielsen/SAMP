@@ -34,7 +34,7 @@ export class GetUserRoleUseCase {
       throw new InvalidCredentialsError()
     }
 
-    const userRolesAvaiables = await this.userRoleRepository.findManyByLevelGreaterThanOrEqual(userRole.level)
+    const userRolesAvaiables = await this.userRoleRepository.findManyByLevelGreaterThanOrEqual(userRole.level, userLogged.joker)
 
     return userRolesAvaiables
   }

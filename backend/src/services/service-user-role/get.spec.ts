@@ -67,6 +67,24 @@ describe('Get User Role Use Case', () => {
     expect(userRolesAvaliables).toHaveLength(2)
   })
 
+  it('should query all roles If the user is a joker', async () => {
+
+    await userRepository.create({
+      id: 'user-1',
+      name: 'Samuel de Paula',
+      email: 'samuel@gmail.com',
+      roleId: 'role-1',
+      password_hash: await hash('123456', 6),
+      joker: 1
+    })
+
+    const userRolesAvaliables = await sut.execute({
+      userId: 'user-1'
+    })
+
+    expect(userRolesAvaliables).toHaveLength(2)
+  })
+
   it('should query only permitted roles when the user is not an admin', async () => {
 
     await userRepository.create({
@@ -75,6 +93,7 @@ describe('Get User Role Use Case', () => {
       email: 'samuel@gmail.com',
       roleId: 'role-2',
       password_hash: await hash('123456', 6),
+      joker: 0
     })
 
     const userRolesAvaliables = await sut.execute({
@@ -104,6 +123,24 @@ describe('Get User Role Use Case', () => {
     await expect(() => sut.execute({
       userId: 'user-1'
     })).rejects.toBeInstanceOf(InvalidCredentialsError)
+  })
+
+  it('should return a role by id', async () => {
+    const userRole = await userRoleRepository.findById('role-1')
+
+    expect(userRole?.id).toBe('role-1')
+  })
+
+  it('should return null when role does not exist by id', async () => {
+    const userRole = await userRoleRepository.findById('role-999')
+
+    expect(userRole).toBeNull()
+  })
+
+  it('should return null when role does not exist by name', async () => {
+    const userRole = await userRoleRepository.findByName('INVALID_ROLE')
+
+    expect(userRole).toBeNull()
   })
 })
 

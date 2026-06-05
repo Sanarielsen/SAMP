@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 
 import { OrderRepository } from "@/repositories/order-repository";
 
-import { CreateOrderDTO, Order, OrderDetailTable, UpdateOrderDTO } from "@shared/types/orders";
+import { CreateOrderDTO, Order, OrderDetailTable, OrderWithTypeDetailDTO, UpdateOrderDTO } from "@shared/types/orders";
 
 
 export class PrismaOrderRepository implements OrderRepository {
@@ -13,7 +13,7 @@ export class PrismaOrderRepository implements OrderRepository {
     
     return order;
   }
-
+  
   update(data: Partial<UpdateOrderDTO>): Promise<Order> {
     return prisma.order.update({
       where: {
@@ -22,7 +22,7 @@ export class PrismaOrderRepository implements OrderRepository {
       data,
     })
   }
-
+  
   delete(id: string): Promise<Order> {
     return prisma.order.update({
       where: {
@@ -33,15 +33,44 @@ export class PrismaOrderRepository implements OrderRepository {
       }
     })
   }
-
+  
   async findById(id: string): Promise<Order | null> {
     const order = await prisma.order.findUnique({
       where: {
         id,
       },
     })
-
+    
     return order
+  }
+  
+  async findByIdWithType(id: string): Promise<OrderWithTypeDetailDTO | null> {
+    const order = await prisma.order.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        client: true,
+        orderType: true
+      }
+    })
+
+    if (!order) {
+      return null
+    }
+
+    return {
+      id,
+      description: order.description,
+      observation: order.observation ?? null,
+      eventDate: order.eventDate,
+      clientId: order.clientId,
+      clientName: order.client.legalName,
+
+      orderTypeId: order.orderType.id,
+      orderTypeTitle: order.orderType.title,
+      orderTypeObservation: order.orderType.observation ?? null
+    }
   }
 
   async findManyByClientId(clientId: string, search: string): Promise<OrderDetailTable[] | null> {
