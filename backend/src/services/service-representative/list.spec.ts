@@ -1,9 +1,22 @@
+import { 
+  afterEach, 
+  beforeEach, 
+  describe, 
+  expect, 
+  it, 
+  vi 
+} from "vitest";
+
+import { Client } from "@prisma/client";
+import { hash } from "bcryptjs";
+
+import { ListRepresentativeUseCase } from "@/services/service-representative/list";
+
 import { InMemoryRepresentativeRepository } from "@/repositories/in-memory/in-memory-representatives-repository";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { ListRepresentativeUseCase } from "./list";
 import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { hash } from "bcryptjs";
+
+import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 let representativeRepository: InMemoryRepresentativeRepository
 let clientRepository: InMemoryClientsRepository
@@ -20,9 +33,11 @@ describe('List Representative Use Case', () => {
     sut = new ListRepresentativeUseCase(representativeRepository)
 
     await userRepository.create({
+      id: 'user-1',
       name: 'Samuel de Paula',
       email: 'samuel@gmail.com',
       password_hash: await hash('123456', 6),
+      roleId: "role-1"
     })
 
     await clientRepository.create({
@@ -47,6 +62,25 @@ describe('List Representative Use Case', () => {
 
   afterEach(() => {
     vi.useRealTimers()
+  })
+
+  it('should be able to list representatives', async () => {
+    await representativeRepository.create({
+      clientId: 'client-1',
+      name: 'Samuel',
+      nationality: 'Brasileiro',
+      documentRG: '123',
+      documentCPF: '123',
+      titleJob: 'Developer',
+      roleJob: 'Backend',
+    })
+
+    const representatives = await sut.execute({
+      idUser: 'user-1',
+      search: '',
+    })
+
+    expect(representatives).toHaveLength(1)
   })
 
   it('should be able to get a list of representative using user id', async () => {
@@ -113,5 +147,48 @@ describe('List Representative Use Case', () => {
     const representedSearched = await representativeRepository.findByIdUserWithSearchRepresentativesOnlyClientsActivated('user-1', 'Brasileiro');
 
     expect(representedSearched).toHaveLength(0)
+  })
+
+  it('should list representatives by client id', async () => {
+    clientRepository.items.push({
+      id: 'client-test',
+      legalName: 'Client Test',
+    } as Client)
+
+    await representativeRepository.create({
+      clientId: 'client-test',
+      name: 'Samuel',
+      nationality: 'Brazilian',
+      documentRG: '123',
+      documentCPF: '123',
+      titleJob: 'Developer',
+      roleJob: 'Backend',
+    })
+
+    const representatives =
+      await representativeRepository
+        .findManyRepresentsOnClientsId('client-test')
+
+    expect(representatives).toHaveLength(1)
+
+    console.log("Teste: ", representatives)
+
+    expect(representatives?.[0]).toEqual({
+      value: 'client-test',
+      label: 'Client Test',
+    })
+  })
+
+  it('should throw when repository returns null', async () => {
+    representativeRepository
+      .findByIdUserWithSearchRepresentativesOnlyClientsActivated =
+        vi.fn().mockResolvedValue(null)
+
+    await expect(
+      sut.execute({
+        idUser: 'user-1',
+        search: '',
+      }),
+    ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })

@@ -1,18 +1,43 @@
 import { compare } from 'bcryptjs'
-import { expect, describe, it, beforeEach } from 'vitest'
+import { expect, describe, it, beforeEach, vi, afterEach } from 'vitest'
 
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { RegisterUseCase } from '@/services/service-user/register'
 
 import { UserAlreadyExistsError } from '@/services/errors/user-already-exists'
+import { InMemoryUserRoleRepository } from '@/repositories/in-memory/in-memory-user-role-repository'
 
 let usersRepository: InMemoryUsersRepository
+let userRoleRepository: InMemoryUserRoleRepository
 let sut: RegisterUseCase
 
 describe('Register Use Case', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository()
-    sut = new RegisterUseCase(usersRepository)
+    userRoleRepository = new InMemoryUserRoleRepository()
+    sut = new RegisterUseCase(usersRepository, userRoleRepository)
+
+    await userRoleRepository.create({
+      id: "role-1",
+      name: 'USER',
+      description: 'role registered by tests',
+      level: 3,
+      createdAt: new Date(Date.now()),
+    })
+
+    await userRoleRepository.create({
+      id: "role-2",
+      name: 'ADMIN',
+      description: 'role admin registered by tests',
+      level: 1,
+      createdAt: new Date(Date.now()),
+    })
+
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
   })
 
   it('should be able to register', async () => {
@@ -31,7 +56,7 @@ describe('Register Use Case', () => {
 
     const { user } = await sut.execute({
       name: 'Samuel Henrique',
-      email: 'samuel.henrique@emai.com',
+      email: 'samuel.henrique@email.com',
       password: '123456',
     })
 
@@ -55,5 +80,22 @@ describe('Register Use Case', () => {
       email: email,
       password: '123456',
     })).rejects.toBeInstanceOf(UserAlreadyExistsError)
+  })
+
+  it('should not allow creating a user without a USER role', async () => {
+
+    await userRoleRepository.create({
+      id: "role-4",
+      name: 'ERROR',
+      description: 'role registered by tests',
+      level: 3,
+      createdAt: new Date(Date.now()),
+    })
+
+    await sut.execute({
+      name: 'Samuel Henrique',
+      email: 'samuel.henrique@email.com',
+      password: '123456',
+    })
   })
 })

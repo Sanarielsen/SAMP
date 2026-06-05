@@ -1,4 +1,4 @@
-import { RepresentativeEntire } from "@shared/types/representative";
+import { Representative } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
@@ -16,7 +16,7 @@ export class ListRepresentativeUseCase {
   async execute({
     idUser,
     search
-  }: ListRepresentativeUseCaseRequest): Promise<RepresentativeEntire[]> {
+  }: ListRepresentativeUseCaseRequest): Promise<Representative[]> {
 
     const representatives = 
       await this.representativeRepository.findByIdUserWithSearchRepresentativesOnlyClientsActivated(

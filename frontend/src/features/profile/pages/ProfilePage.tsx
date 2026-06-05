@@ -25,17 +25,18 @@ import { ControlledInput } from "@/components/ControlledInputText";
 import HeaderPage from "@/components/HeaderPage";
 import ToastContainer from "@/components/Toast";
 
-import { type UserRoleOptionDTO } from "@shared/types/user"
+import { optionsQueryListRoleUserAuthorized } from "../api/queryListRoleUserAuthorized";
 
-
-const userRoles: UserRoleOptionDTO[] = [
-  { label: "Usuário", value: "user" },
-  { label: "Administrador", value: "admin" },
-]
 
 export default function ProfilePage() {
 
   const [openToast, setOpenToast] = useState("")
+
+  const {
+    data: listRoleUserAuthorized,
+    isSuccess: isSuccessRoleUserAuthorized,
+    isLoading: isLoadingRoleUserAuthorized
+  } = useQuery(optionsQueryListRoleUserAuthorized())
 
   const {
     data: currentUser
@@ -143,7 +144,8 @@ export default function ProfilePage() {
               name="roleId"
               label='Cargo'
               placeholder='Cargos'
-              options={userRoles}
+              loading={isLoadingRoleUserAuthorized}
+              options={isSuccessRoleUserAuthorized ? listRoleUserAuthorized : []}
             />
           </Grid>
 

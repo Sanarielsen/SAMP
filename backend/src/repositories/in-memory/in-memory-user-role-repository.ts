@@ -33,12 +33,18 @@ export class InMemoryUserRoleRepository implements UserRoleRepository {
     return userRole
   }
 
-  async findManyByLevelGreaterThanOrEqual(level: number): Promise<UserRole[] | null> {
-    const userRoles = this.items.filter(item => item.level >= level)
+  async findByName(name: string): Promise<UserRole | null> {
+    const userRole = this.items.find(item => item.name == name)
 
-    if (!userRoles) {
+    if (!userRole) {
       return null
     }
+
+    return userRole
+  }
+
+  async findManyByLevelGreaterThanOrEqual(level: number): Promise<UserRole[] | null> {
+    const userRoles = this.items.filter(item => item.level >= level)
 
     return userRoles
   }

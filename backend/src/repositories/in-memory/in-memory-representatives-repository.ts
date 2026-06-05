@@ -1,21 +1,19 @@
 import { Client, User } from "@prisma/client";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 import { InMemoryClientsRepository } from "./in-memory-client-repository";
-import { CreateRepresentativeDTO, Representative, UpdateRepresentativeDTO } from "@shared/types/representative";
+import { CreateRepresentativeDTO, Representative, RepresentativeOptionDTO, UpdateRepresentativeDTO } from "@shared/types/representative";
+import { randomUUID } from "crypto";
 
 
 export class InMemoryRepresentativeRepository implements RepresentativeRepository {
   constructor(
     private clientRepository: InMemoryClientsRepository,
   ) {}
-
-  public representatives: Representative[] = []
-  public clients: Client[] = []
-  public users: User[] = []
+  public items: Representative[] = []
 
   async create(data: CreateRepresentativeDTO): Promise<Representative> {
     const representative = {
-      id: 'new-representative',
+      id: data.id ?? randomUUID(),
 
       clientId: data.clientId,
 
@@ -33,31 +31,46 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
       deletedAt: null,
     }
 
-    this.representatives.push(representative)
+    this.items.push(representative)
 
     return representative
   }
 
   async update(data: UpdateRepresentativeDTO): Promise<Representative> {
     
-    const representative = this.representatives.findIndex(representative => {
+    const representative = this.items.findIndex(representative => {
       return representative.id === data.id
     })
 
     const updatedClient = {
-      ...this.representatives[representative],
+      ...this.items[representative],
       ...data,
       updatedAt: new Date(),
     }
 
-    this.representatives[representative] = updatedClient
+    this.items[representative] = updatedClient
 
     return updatedClient
   }
 
+  async delete(id: string): Promise<Representative> {
+    const representative = this.items.findIndex(representative => {
+      return representative.id === id
+    })
+
+    const disabledRepresentative = {
+      ...this.items[representative],
+      deletedAt: new Date(),
+    }
+
+    this.items[representative] = disabledRepresentative
+
+    return disabledRepresentative
+  }
+
   async findById(id: string): Promise<Representative | null> {
 
-    const representative = this.representatives.find(item => item.id == id)
+    const representative = this.items.find(item => item.id == id)
 
     if (!representative) {
       return null
@@ -66,17 +79,36 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
     return representative
   }
 
+  async findManyRepresentsOnClientsId(idClient: string): Promise<RepresentativeOptionDTO[] | null> {
+    const representatives = this.items.filter(
+      representative =>
+        representative.clientId === idClient &&
+        representative.deletedAt === null,
+    )
+
+    return representatives.map(representative => {
+      const client = this.clientRepository.items.find(
+        client => client.id === representative.clientId,
+      )
+
+      return {      
+        value: client!.id,
+        label: client!.legalName,
+      }
+    })
+  }
+
   async findByIdUserWithSearchRepresentativesOnlyClientsActivated(
     idUser: string,
     search: string,
-  ): Promise<Representative[] | null> {
+  ): Promise<Representative[]> {
     const clientsFromUser = this.clientRepository.items.filter(client =>
       client.responsibleById === idUser
     )
 
     const clientIds = clientsFromUser.map(client => client.id)
 
-    const representatives = this.representatives.filter(representative =>
+    const representatives = this.items.filter(representative =>
       clientIds.includes(representative.clientId) &&
       representative.deletedAt === null &&
       representative.nationality
@@ -107,21 +139,17 @@ export class InMemoryRepresentativeRepository implements RepresentativeRepositor
       responsibleById: 'user-1',
     }
 
-    this.clients.push(client)
+    this.clientRepository.items.push(client)
 
     const clientIds =
-      this.clients
+      this.clientRepository.items
         .filter(client =>
           client.createdById === userId,
         )
         .map(client => client.id)
 
-    return this.representatives.filter(representative => 
+    return this.items.filter(representative => 
       representative.name.includes(search) 
       && clientIds.includes(representative.clientId))
-  }
-
-  delete(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
   }
 }

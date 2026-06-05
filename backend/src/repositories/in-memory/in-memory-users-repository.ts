@@ -1,7 +1,8 @@
-import { User, Prisma } from "@prisma/client";
+import { User } from "@prisma/client";
 import { UsersRepository } from "@/repositories/users-repository";
 
 import { CreateUserDTO, UpdateUserDTO } from "@shared/types/user";
+import { randomUUID } from "node:crypto";
 
 
 export class InMemoryUsersRepository implements UsersRepository {
@@ -29,13 +30,15 @@ export class InMemoryUsersRepository implements UsersRepository {
   async create(data: CreateUserDTO) {
 
     const user = {
-      id: 'user-1',
+      id: data.id ?? randomUUID(),
       name: data.name,
       email: data.email,
       roleId: data.roleId,
       password_hash: data.password_hash,
+      joker: 0,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: null,
+      deletedAt: null
     }
     
     this.items.push(user)

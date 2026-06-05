@@ -1,5 +1,3 @@
-import type { UserRole } from "./userRole"
-
 export interface User {
   id:            string
 
@@ -13,21 +11,6 @@ export interface User {
   updatedAt:     Date | null,
   deletedAt:     Date | null
 }
-
-export interface UserAuthenticated {
-  id:            string
-
-  name:          string,
-  email:         string,
-  roleId:        string,
-  password_hash: string,
-  userRole:      UserRole | null
-
-  createdAt:     Date,
-  updatedAt:     Date | null,
-  //deletedAt: Date | null
-}
-
 export interface CreateUserDTO {
   id?:       string
 

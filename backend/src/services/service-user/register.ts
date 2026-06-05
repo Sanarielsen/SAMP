@@ -37,15 +37,11 @@ export class RegisterUseCase {
 
     const roleIDStarter = await this.userRoleRepository.findByName("USER")
 
-    if (!roleIDStarter) {
-      throw new ResourceNotFoundError();
-    }
-
     const user = await this.usersRepository.create({
       name,
       email,
       password_hash,
-      roleId: roleIDStarter.id,
+      roleId: roleIDStarter!.id,
     });
 
     return {
