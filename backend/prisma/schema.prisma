@@ -12,7 +12,6 @@ model UserRole {
   name        String
   description String
   level       Int       @default(1)
-  joker       Int       @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
@@ -22,14 +21,16 @@ model UserRole {
 }
 
 model User {
-  id            String   @id @default(uuid())
+  id            String    @id @default(uuid())
   name          String
-  email         String   @unique
-  password_hash String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime
+  email         String    @unique
+  password_hash String?
+  joker         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime?
+  deletedAt     DateTime?
 
-  roleId   String    @default("e133af4f-dfa8-4e97-9393-6d9ad237b755")
+  roleId   String
   userRole UserRole? @relation(fields: [roleId], references: [id])
 
   createdByUser Client[] @relation("CreatedBy")
@@ -106,6 +107,61 @@ model Order {
 
   client    Client    @relation(fields: [clientId], references: [id])
   orderType OrderType @relation(fields: [orderTypeId], references: [id])
+  payments  Payment[]
 
   @@map("orders")
+}
+
+model Payment {
+  id                 String   @id @default(uuid())
+  orderId            String
+  totalInstallments  Int
+  observation        String?
+  firstDueDate       DateTime
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  order               Order                @relation(fields: [orderId], references: [id])
+  paymentInstallments PaymentInstallment[]
+
+  @@map("payments")
+}
+
+model PaymentInstallment {
+  id                String  @id @default(uuid())
+  paymentId         String
+  installment       Int
+  methodId          String
+  amountInCents     Int
+  adjustmentInCents Int?
+  observation       String?
+
+  dueDate         DateTime
+  paidAt          DateTime?
+  receiptFilePath String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  payment       Payment       @relation(fields: [paymentId], references: [id])
+  paymentMethod PaymentMethod @relation(fields: [methodId], references: [id])
+
+  @@map("payment_installments")
+}
+
+model PaymentMethod {
+  id          String  @id @default(uuid())
+  name        String
+  observation String?
+  order       Int
+
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime?            @updatedAt
+  deletedAt          DateTime?
+  PaymentInstallment PaymentInstallment[]
+
+  @@map("payment_methods")
 }

@@ -14,6 +14,8 @@ import { InMemoryRepresentativeRepository } from "@/repositories/in-memory/in-me
 import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 
+import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
+
 let representativeRepository: InMemoryRepresentativeRepository
 let clientRepository: InMemoryClientsRepository
 let userRepository: InMemoryUsersRepository
@@ -30,6 +32,7 @@ describe('Delete Representative Use Case', () => {
       name: 'Samuel de Paula',
       email: 'samuel@gmail.com',
       password_hash: await hash('123456', 6),
+      roleId: 'role-1'
     })
 
     vi.useFakeTimers()
@@ -37,6 +40,33 @@ describe('Delete Representative Use Case', () => {
 
   afterEach(() => {
     vi.useRealTimers()
+  })
+
+  it('should be able to delete a representative', async () => {
+    await representativeRepository.create({
+      id: 'representative-1',
+      clientId: 'client-1',
+      name: 'Samuel',
+      nationality: 'Brasileiro',
+      documentRG: '123',
+      documentCPF: '123',
+      titleJob: 'Developer',
+      roleJob: 'Backend',
+    })
+
+    await sut.execute({
+      id: 'representative-1',
+    })
+
+    expect(representativeRepository.items[0].deletedAt).not.toBeNull()
+  })
+
+  it('should not be able to delete a non-existing representative', async () => {
+    await expect(
+      sut.execute({
+        id: 'representative-999',
+      }),
+    ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 
   it('should apply soft delete when representative is valid', async () => {

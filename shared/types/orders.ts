@@ -5,8 +5,8 @@ export interface Order {
   observation:  string | null
   eventDate:    Date
   createdAt:    Date
-  updatedAt:    Date | null
-  deletedAt:    Date | null
+  updatedAt:   Date | null
+  deletedAt:   Date | null
 }
 
 export interface CreateOrderDTO {
@@ -49,4 +49,18 @@ export interface OrderDetailTable {
   eventDate: Date,
   clientId: string,
   clientName: string,
+}
+
+export interface OrderWithTypeDetailDTO {
+  id: string,
+  description: string,
+  observation: string | null,
+  eventDate: Date,
+
+  clientId: string,
+  clientName: string,
+
+  orderTypeId: number,
+  orderTypeTitle: string,
+  orderTypeObservation: string | null,
 }

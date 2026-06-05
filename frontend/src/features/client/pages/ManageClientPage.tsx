@@ -25,7 +25,7 @@ import { getDocumentMask } from "@/features/client/utils/getDocumentMask";
 import { optionsQueryGetClient } from "@/features/client/api/queryGetClient";
 import { useQuery } from "@tanstack/react-query";
 import { formatDocument } from "../../../utils/formatDocument";
-import { formatAsVisualDate } from "../utils/formatAsAVisualDate";
+import { formatAsVisualDate } from "../../../utils/formatAsAVisualDate";
 import { parseAddress } from "../utils/formatAddressFromAPI";
 import { cleanValue } from "@/utils/cleanValue";
 import ToastContainer from "@/components/Toast";
@@ -287,7 +287,7 @@ export default function ManageClientPage() {
               <ControlledInputMask
                 control={control}
                 name="fundationDate"
-                mask="99/99/9999"                  
+                mask="99/99/9999"
                 variant="outlined"
                 label="Data de fundação"
                 fullWidth
