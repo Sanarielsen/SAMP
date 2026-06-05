@@ -1,9 +1,8 @@
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client"
 
 import { UsersRepository } from "@/repositories/users-repository";
 
-import { UpdateUserDTO, User } from "@shared/types/user";
+import { CreateUserDTO, UpdateUserDTO, User } from "@shared/types/user";
 
 
 export class PrismaUsersRepository implements UsersRepository {
@@ -23,12 +22,15 @@ export class PrismaUsersRepository implements UsersRepository {
       where: {
         email,
       },
+      include: {
+        userRole: true,
+      },
     })
 
     return user
   }
 
-  async create(data: Prisma.UserCreateInput) {
+  async create(data: CreateUserDTO) {
     const user = await prisma.user.create({
       data
     })
