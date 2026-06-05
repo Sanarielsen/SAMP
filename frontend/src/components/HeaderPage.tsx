@@ -1,8 +1,13 @@
-import { Box, Grid, Typography } from "@mui/material"
+import { 
+  Box, 
+  Grid, 
+  Typography 
+} from "@mui/material"
+
 
 interface HeaderPageProps {
   title: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export default function HeaderPage({

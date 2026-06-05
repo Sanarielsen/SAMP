@@ -33,7 +33,7 @@ describe('Delete Order Use Case', () => {
     await sut.execute(createdOrder.id)
 
     const orderAfterExcluided = await 
-      orderRepository.findManyByClientId('client-1')
+      orderRepository.findManyByClientId('client-1', '')
 
     expect(orderAfterExcluided).toHaveLength(0)
   })

@@ -3,15 +3,17 @@ import { z } from 'zod'
 
 import { makeRegisterUseCase } from '@/services/factories/make-register-use-case'
 import { UserAlreadyExistsError } from '@/services/errors/user-already-exists'
+import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error'
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
   const registerBodySchema = z.object({
     name: z.string(),
     email: z.string(),
-    password: z.string().min(6)
+    password: z.string().min(6),
+    roleId: z.string()
   })
 
-  const { name, email, password } = registerBodySchema.parse(request.body)
+  const { name, email, password, roleId } = registerBodySchema.parse(request.body)
 
   try {
     const registerUseCase = makeRegisterUseCase();
@@ -19,10 +21,13 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     await registerUseCase.execute({
       name,
       email,
-      password
+      password,
+      roleId,
     })
   } catch (err) {
-    if (err instanceof UserAlreadyExistsError) {
+    if (err instanceof UserAlreadyExistsError
+      || err instanceof ResourceNotFoundError
+    ) {
       return reply.status(409).send({ message: err.message })
     }
 

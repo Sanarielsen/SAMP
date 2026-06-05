@@ -14,14 +14,13 @@ describe('Update Status Client Use Case', () => {
     sut = new UpdateClientStatusUseCase(clientRepository)
   })
 
-  it('should update client status', async () => {
-
+  it('should be able to change client status', async () => {
     await clientRepository.create({
       id: 'client-1',
       legalName: 'Client Test',
-      tradeName: 'Client Test',
+      tradeName: 'Client',
       type: 1,
-      protocol: '123456789',
+      protocol: '123',
       dataFundation: new Date(),
       locationAddress: 'Address',
       correspondenceAddress: 'Address',
@@ -33,22 +32,12 @@ describe('Update Status Client Use Case', () => {
       responsibleById: 'user-1',
     })
 
-    const clientUpdated =
-      await clientRepository.updateStatus(
-        'client-1',
-        {
-          isActivated: false,
-        },
-      )
+    const updatedClient = await sut.execute({
+      id: 'client-1',
+      isActivated: false,
+    })
 
-    expect(clientUpdated.isActivated)
-      .toBe(false)
-
-    expect(clientUpdated.updatedAt)
-      .toEqual(expect.any(Date))
-
-    expect(clientUpdated.id)
-      .toBe('client-1')
+    expect(updatedClient.isActivated).toBe(false)
   })
 
   it('should not update a non-existing client', async () => {

@@ -1,4 +1,4 @@
-import { GetRepresentativeUseCase } from "./get";
+import { GetRepresentativeUseCase } from "@/services/service-representative/get";
 
 import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
 import { InMemoryRepresentativeRepository } from "@/repositories/in-memory/in-memory-representatives-repository";
@@ -9,6 +9,7 @@ import {
   expect,
   it 
 } from "vitest";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 let representativeRepository: InMemoryRepresentativeRepository
 let clientRepository: InMemoryClientsRepository
@@ -24,6 +25,7 @@ describe('Get Representative Use Case', () => {
   it('should be return a represent of valid', async () => {
 
     await representativeRepository.create({
+      id: 'new-representative',
       clientId: 'client-1',
       name: 'Representante Teste 1',
       nationality: 'brasileiro',
@@ -38,6 +40,26 @@ describe('Get Representative Use Case', () => {
     expect(representativeSearched?.id).toEqual(expect.any(String))
   })
 
+  it('should be able to get a representative by id', async () => {
+    await representativeRepository.create({
+      id: 'representative-1',
+      clientId: 'client-1',
+      name: 'Samuel',
+      nationality: 'Brasileiro',
+      documentRG: '123',
+      documentCPF: '123',
+      titleJob: 'Developer',
+      roleJob: 'Backend',
+    })
+
+    const representative = await sut.execute({
+      id: 'representative-1',
+    })
+
+    expect(representative).toBeDefined()
+    expect(representative.id).toBe('representative-1')
+  })
+
   it('should be not return a represent of invalid', async () => {
 
     const representative = await representativeRepository.findById( 
@@ -45,5 +67,13 @@ describe('Get Representative Use Case', () => {
     )
 
     expect(representative).toBeNull()
+  })
+
+  it('should not be able to get a non-existing representative', async () => {
+    await expect(
+      sut.execute({
+        id: 'representative-999',
+      }),
+    ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })

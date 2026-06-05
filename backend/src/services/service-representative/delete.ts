@@ -1,4 +1,3 @@
-import { RepresentativeEntire } from "@shared/types/representative";
 import { RepresentativeRepository } from "@/repositories/representative-repository";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 

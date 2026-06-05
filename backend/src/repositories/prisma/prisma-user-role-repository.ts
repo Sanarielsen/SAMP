@@ -7,7 +7,6 @@ import {
 } from "@shared/types/userRole";
 
 export class PrismaUserRoleRepository implements UserRoleRepository {
-
   create(data: CreateUserRoleDTO): Promise<UserRole> {
     throw new Error("Method not implemented.");
   }
@@ -26,17 +25,28 @@ export class PrismaUserRoleRepository implements UserRoleRepository {
 
     return userRole
   }
-  findManyByLevelGreaterThanOrEqual(level: number): Promise<UserRole[] | null> {
-    
-    const userRoles = prisma.userRole.findMany({
+
+  async findByName(name: string): Promise<UserRole | null> {
+    const role = await prisma.userRole.findFirst({
       where: {
-        level: {
-          gte: level,
-        },
+        name,
       },
     })
 
-    return userRoles
+    return role
+  }
+
+  async findManyByLevelGreaterThanOrEqual(level: number, hasJoker: number): Promise<UserRole[] | null> {
+      
+    return prisma.userRole.findMany({
+      where: hasJoker
+        ? {}
+        : {
+            level: {
+              gte: level,
+            },
+          },
+    })
   }
 
 }

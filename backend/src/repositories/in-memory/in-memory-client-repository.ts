@@ -1,6 +1,7 @@
 import { Client, Prisma } from "@prisma/client";
 import { ClientRepository } from "@/repositories/client-repository"
 import { CreateClientDTO } from "@/types/client";
+import { randomUUID } from "node:crypto";
 
 export class InMemoryClientsRepository implements ClientRepository {
   public items: Client[] = []
@@ -56,7 +57,7 @@ export class InMemoryClientsRepository implements ClientRepository {
   async create(data: CreateClientDTO) {
     const client: Client = {
       ...data,
-      id: "client-1",
+      id: data.id ?? randomUUID(),
       updatedAt: new Date(Date.now())
     }
 
@@ -90,7 +91,7 @@ export class InMemoryClientsRepository implements ClientRepository {
       return client.id === id
     })
 
-    this.items[clientIndex].isActivated = false
+    this.items[clientIndex].isActivated = data.isActivated!
 
     this.items[clientIndex].updatedAt = new Date()
 
