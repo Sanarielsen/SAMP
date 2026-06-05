@@ -18,6 +18,8 @@ export interface Representative {
 }
 
 export interface CreateRepresentativeDTO {
+  id?:      string
+
   clientId: string
 
   name: string
