@@ -6,6 +6,37 @@ import { CreateRepresentativeDTO, Representative, RepresentativeOptionDTO, Updat
 export class PrismaRepresentativeRepository implements RepresentativeRepository {
   public representatives: Representative[] = []
 
+  async create(data: CreateRepresentativeDTO): Promise<Representative> {
+
+    const representative = await prisma.representative.create({
+      data
+    })
+    
+    return representative
+  }
+
+  async update(data: UpdateRepresentativeDTO): Promise<Representative> {
+
+    return prisma.representative.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    })
+  }
+
+  async delete(id: string): Promise<void> {
+
+    await prisma.representative.update({
+      where: {
+        id
+      },
+      data: {
+        deletedAt: new Date(Date.now())
+      },
+    })
+  }
+
   async findById(id: string): Promise<Representative | null> {
     
     const representative = prisma.representative.findUnique({
@@ -148,37 +179,6 @@ export class PrismaRepresentativeRepository implements RepresentativeRepository 
       label: representative.client.legalName,
       value: representative.client.id,
     }))
-  }
-
-  async create(data: CreateRepresentativeDTO): Promise<Representative> {
-
-    const representative = await prisma.representative.create({
-      data
-    })
-    
-    return representative
-  }
-
-  async update(data: UpdateRepresentativeDTO): Promise<Representative> {
-
-    return prisma.representative.update({
-      where: {
-        id: data.id,
-      },
-      data,
-    })
-  }
-
-  async delete(id: string): Promise<void> {
-
-    await prisma.representative.update({
-      where: {
-        id
-      },
-      data: {
-        deletedAt: new Date(Date.now())
-      },
-    })
   }
   
 }

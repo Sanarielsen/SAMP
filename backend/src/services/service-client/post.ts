@@ -3,8 +3,10 @@ import { ClientRepository } from "@/repositories/client-repository"
 import { ResourceAlreadyExistsError } from "@/services/errors/resource-already-exists-error"
 import { UsersRepository } from "@/repositories/users-repository"
 import { NonExistUserError } from "@/services/errors/non-exist-user-error"
+import { randomUUID } from "node:crypto"
 
 interface CreateClientUseCaseRequest {
+  id: string
   idUser: string,
   legalName: string  
   tradeName: string  
@@ -29,6 +31,7 @@ export class CreateClientUseCase {
   ) {}
 
   async execute({
+    id,
     idUser,
     legalName,
     tradeName,
@@ -55,6 +58,7 @@ export class CreateClientUseCase {
     }
 
     const client = await this.clientRepository.create({
+      id: id ?? randomUUID(),
       legalName: legalName,
       tradeName: tradeName,
       type: type,

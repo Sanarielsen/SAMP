@@ -105,5 +105,17 @@ describe('Get User Role Use Case', () => {
       userId: 'user-1'
     })).rejects.toBeInstanceOf(InvalidCredentialsError)
   })
+
+  it('should return null when role does not exist by id', async () => {
+    const userRole = await userRoleRepository.findById('role-999')
+
+    expect(userRole).toBeNull()
+  })
+
+  it('should return null when role does not exist by name', async () => {
+    const userRole = await userRoleRepository.findByName('INVALID_ROLE')
+
+    expect(userRole).toBeNull()
+  })
 })
 
