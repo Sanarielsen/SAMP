@@ -13,6 +13,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { optionsQueryGetUser } from "@/features/profile/api/queryGetMe";
+import { optionsQueryListRoleUserAuthorized } from "@/features/profile/api/queryListRoleUserAuthorized";
 import { useMutationPatchUserProfile } from "@/features/profile/api/mutationUpdateMe";
 import { 
   updateProfileSchema, 
@@ -24,8 +25,6 @@ import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import HeaderPage from "@/components/HeaderPage";
 import ToastContainer from "@/components/Toast";
-
-import { optionsQueryListRoleUserAuthorized } from "../api/queryListRoleUserAuthorized";
 
 
 export default function ProfilePage() {
@@ -45,13 +44,13 @@ export default function ProfilePage() {
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { errors, dirtyFields },
   } = useForm<UpdateProfileSchemaFormData>({
     resolver: zodResolver(updateProfileSchema),
     values: currentUser ? { 
       name: currentUser.name, 
       email: currentUser.email,
-      roleId: currentUser.role 
+      roleId: currentUser.roleId 
     } : undefined
   });
 
@@ -71,8 +70,14 @@ export default function ProfilePage() {
   });
 
   const onSubmit: SubmitHandler<UpdateProfileSchemaFormData> = async (data) => {
+
+    const payload = Object.keys(dirtyFields).reduce((acc, key) => {
+      acc[key as keyof UpdateProfileSchemaFormData] = data[key as keyof UpdateProfileSchemaFormData]
+      return acc
+    }, {} as Partial<UpdateProfileSchemaFormData>)
+
     mutationPatchUserProfile.mutate({
-      ...data,
+      ...payload,
       id: "user",
     })
   }

@@ -22,13 +22,19 @@ export class UpdateUserProfileUseCase {
       throw new NonExistUserError();
     }
 
-    const userWithEmail = await this.userRepository.findByEmail(data.email!)
+    if (data.email) {
+      const userWithSameEmail =
+        await this.userRepository.findByEmail(data.email!)
 
-    if (userWithEmail && userLogged.email != userWithEmail.email) {
-      throw new UserAlreadyExistsError();
+      if (
+        userWithSameEmail &&
+        userWithSameEmail.id !== data.id
+      ) {
+        throw new UserAlreadyExistsError()
+      }
     }
 
-    if (!data.email?.includes("@")) {
+    if (data.email && !data.email.includes("@")) {
       throw new EmailInvalidError();
     }
 

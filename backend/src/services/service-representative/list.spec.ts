@@ -171,8 +171,6 @@ describe('List Representative Use Case', () => {
 
     expect(representatives).toHaveLength(1)
 
-    console.log("Teste: ", representatives)
-
     expect(representatives?.[0]).toEqual({
       value: 'client-test',
       label: 'Client Test',

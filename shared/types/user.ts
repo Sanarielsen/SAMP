@@ -18,6 +18,7 @@ export interface CreateUserDTO {
   email:   string,
   roleId:  string,
   password_hash: string,
+  joker?:       number,
 }
 
 export interface UpdateUserDTO {

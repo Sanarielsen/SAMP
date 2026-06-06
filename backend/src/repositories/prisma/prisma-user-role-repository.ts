@@ -36,17 +36,17 @@ export class PrismaUserRoleRepository implements UserRoleRepository {
     return role
   }
 
-  async findManyByLevelGreaterThanOrEqual(level: number): Promise<UserRole[] | null> {
-    
-    const userRoles = prisma.userRole.findMany({
-      where: {
-        level: {
-          gte: level,
-        },
-      },
+  async findManyByLevelGreaterThanOrEqual(level: number, hasJoker: number): Promise<UserRole[] | null> {
+      
+    return prisma.userRole.findMany({
+      where: hasJoker
+        ? {}
+        : {
+            level: {
+              gte: level,
+            },
+          },
     })
-
-    return userRoles
   }
 
 }
