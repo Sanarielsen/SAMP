@@ -5,5 +5,5 @@ export interface UserRoleRepository {
 
   findById(id: string): Promise<UserRole | null>
   findByName(name: string): Promise<UserRole | null>
-  findManyByLevelGreaterThanOrEqual(level: number): Promise<UserRole[] | null>
+  findManyByLevelGreaterThanOrEqual(level: number, hasJoker: number): Promise<UserRole[] | null>
 }

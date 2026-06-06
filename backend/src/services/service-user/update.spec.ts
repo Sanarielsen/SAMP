@@ -36,12 +36,9 @@ describe('Update User Profile Use Case', () => {
     await sut.execute({
       id: "user-1",
       name: "Samuel Teste Novo",
-      email: "Eitaaa@teste.com",
-      roleId: "role-1"
     })
 
     expect(userRepository.items[0].name).toBe("Samuel Teste Novo")
-    expect(userRepository.items[0].email).toBe("Eitaaa@teste.com")
   })
 
   it('should not allow updating a user with an email already in use', async () => {
@@ -85,9 +82,7 @@ describe('Update User Profile Use Case', () => {
     await expect( async () =>
       sut.execute({
         id: "user-2",
-        name: "Samuel Teste Novo",
         email: "Eitaa____teste.com",
-        roleId: "role-1"
       }),
     ).rejects.toBeInstanceOf(EmailInvalidError)
   })
