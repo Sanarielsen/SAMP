@@ -3,17 +3,15 @@ import { hash } from "bcryptjs"
 import { UsersRepository } from "@/repositories/users-repository"
 import { UserAlreadyExistsError } from "@/services/errors/user-already-exists"
 import { UserRoleRepository } from "@/repositories/user-role-repository"
-import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error"
-import { User } from "@shared/types/user"
+
+import { User, UserPublicDTO } from "@shared/types/user"
+import { ResourceNotFoundError } from "../errors/resource-not-found-error"
 
 interface RegisterUseCaseRequest {
   name: string,
   email: string,
-  password: string
-}
-
-interface RegisterUseCaseResponse {
-  user: User
+  password: string,
+  roleId: string,
 }
 
 export class RegisterUseCase {
@@ -25,8 +23,9 @@ export class RegisterUseCase {
   async execute({
     name,
     email,
-    password
-  }: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse> {
+    password,
+    roleId,
+  }: RegisterUseCaseRequest): Promise<User> {
     const password_hash = await hash(password, 6)
 
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
@@ -34,18 +33,20 @@ export class RegisterUseCase {
     if (userWithSameEmail) {
       throw new UserAlreadyExistsError();
     }
+    
+    const userRole = await this.userRoleRepository.findById(roleId)
 
-    const roleIDStarter = await this.userRoleRepository.findByName("USER")
+    if (!userRole) {
+      throw new ResourceNotFoundError();
+    }
 
     const user = await this.usersRepository.create({
       name,
       email,
       password_hash,
-      roleId: roleIDStarter!.id,
+      roleId
     });
 
-    return {
-      user,
-    };
+    return user
   }
 }
