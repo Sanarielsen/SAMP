@@ -31,6 +31,7 @@ import { updateOrder } from "@/http/Controllers/order/update";
 import { deleteOrder } from "@/http/Controllers/order/delete";
 import { listOrderType } from "@/http/Controllers/orderTypes/list";
 import { listUserRoleLevelAuthorized } from "./Controllers/userRole/list-level-authorized";
+import { listUsersWithSearch } from "./Controllers/list";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -42,6 +43,8 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/me', {onRequest: [verifyJWT]}, updateProfile)
 
   app.get('/user/roles', {onRequest: [verifyJWT]}, listUserRoleLevelAuthorized)
+
+  app.get('/admin/users', {onRequest: [verifyJWT]}, listUsersWithSearch)
   
   app.get('/client/:id', {onRequest: [verifyJWT]}, getClient)
   app.get('/client/user/:id', {onRequest: [verifyJWT]}, listClient)

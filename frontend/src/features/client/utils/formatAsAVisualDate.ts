@@ -3,10 +3,13 @@ export function formatAsVisualDate(
 ) {
   if (!value) return ''
 
-  const [year, month, day] =
-    value.split('T')[0].split('-')
+  const [date, time] = value.split('T')
 
-  return `${day}/${month}/${year}`
+  const [year, month, day] = date.split('-')
+
+  const [hours, minutes] = time.split(':')
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`
 }
 
 export function formatToApiDate(
