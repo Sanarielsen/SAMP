@@ -6,5 +6,5 @@ export interface UsersRepository {
 
   findById(id: string): Promise<UserPublicDTO | null>
   findByEmail(email: string): Promise<UserPublicDTO|null>
-  findBySearch(search: string): Promise<UserDetailDTO[]>
+  findBySearch(search: string): Promise<UserPublicDTO[]>
 }

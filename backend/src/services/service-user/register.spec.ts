@@ -1,11 +1,19 @@
+import { 
+  expect, 
+  describe, 
+  it, 
+  beforeEach, 
+  vi, 
+  afterEach 
+} from 'vitest'
 import { compare } from 'bcryptjs'
-import { expect, describe, it, beforeEach, vi, afterEach } from 'vitest'
 
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { RegisterUseCase } from '@/services/service-user/register'
 
-import { UserAlreadyExistsError } from '@/services/errors/user-already-exists'
 import { InMemoryUserRoleRepository } from '@/repositories/in-memory/in-memory-user-role-repository'
+import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error'
+import { UserAlreadyExistsError } from '@/services/errors/user-already-exists'
 
 let usersRepository: InMemoryUsersRepository
 let userRoleRepository: InMemoryUserRoleRepository
@@ -42,10 +50,11 @@ describe('Register Use Case', () => {
 
   it('should be able to register', async () => {
     
-    const { user } = await sut.execute({
+    const user = await sut.execute({
       name: 'Samuel Henrique',
-      email: 'samuel.henrique@emai.com',
+      email: 'teste@email.com',
       password: '123456',
+      roleId: 'role-1'
     })
     
     expect(user.id).toEqual(expect.any(String))
@@ -54,10 +63,11 @@ describe('Register Use Case', () => {
 
   it('should hash user password upon registration', async () => {
 
-    const { user } = await sut.execute({
+    const user = await sut.execute({
       name: 'Samuel Henrique',
       email: 'samuel.henrique@email.com',
       password: '123456',
+      roleId: 'role-1'
     })
 
     const isPasswordCorrectlyHashed = await compare('123456', user.password_hash)
@@ -73,12 +83,14 @@ describe('Register Use Case', () => {
       name: 'Samuel Henrique',
       email: email,
       password: '123456',
+      roleId: 'role-1'
     })
 
     await expect(() => sut.execute({
       name: 'Samuel Henrique',
       email: email,
       password: '123456',
+      roleId: 'role-1'
     })).rejects.toBeInstanceOf(UserAlreadyExistsError)
   })
 
@@ -96,6 +108,17 @@ describe('Register Use Case', () => {
       name: 'Samuel Henrique',
       email: 'samuel.henrique@email.com',
       password: '123456',
+      roleId: 'role-1'
     })
+  })
+
+  it('should not allow creating a user without a valid role', async () => {
+    
+    await expect(() => sut.execute({
+      name: 'Teste Nome',
+      email: 'teste@teste.com',
+      password: '123456',
+      roleId: 'role-20'
+    })).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })
