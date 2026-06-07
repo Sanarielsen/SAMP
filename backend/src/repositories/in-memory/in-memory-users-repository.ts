@@ -1,32 +1,13 @@
-import { User } from "@prisma/client";
+import { randomUUID } from "node:crypto";
+
 import { UsersRepository } from "@/repositories/users-repository";
 
-import { CreateUserDTO, UpdateUserDTO } from "@shared/types/user";
-import { randomUUID } from "node:crypto";
+import { CreateUserDTO, UpdateUserDTO, User, UserPublicDTO } from "@shared/types/user";
 
 
 export class InMemoryUsersRepository implements UsersRepository {
   public items: User[] = []
-  
-  async findById(id: string): Promise<User | null> {
-    const user = this.items.find(item => item.id == id)
 
-    if (!user) {
-      return null
-    }
-
-    return user
-  }
-  
-  async findByEmail(email: string) {
-    const user = this.items.find(item => item.email == email)
-
-    if (!user) {
-      return null
-    }
-
-    return user
-  }
   async create(data: CreateUserDTO) {
 
     const user = {
@@ -60,5 +41,32 @@ export class InMemoryUsersRepository implements UsersRepository {
 
     return updatedUser
   }
+  
+  async findById(id: string): Promise<UserPublicDTO | null> {
+    const user = this.items.find(item => item.id == id)
 
+    if (!user) {
+      return null
+    }
+
+    return user
+  }
+  
+  async findByEmail(email: string) {
+    const user = this.items.find(item => item.email == email)
+
+    if (!user) {
+      return null
+    }
+
+    return user
+  }
+
+  async findBySearch(search: string): Promise<UserPublicDTO[]> {
+    
+    return this.items.filter(item =>
+      item.deletedAt === null &&
+      item.name.toLowerCase().includes(search.toLowerCase())
+    )
+  }
 }

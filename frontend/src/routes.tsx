@@ -17,8 +17,8 @@ import OrderServiceManagePage from "@/features/order/pages/OrderServicesManagePa
 import AboutPage from "@/features/about/pages/AboutPage";
 
 import ProfilePage from "@/features/profile/pages/ProfilePage";
-import AdminManageClientsPage from "@/features/admin/page/AdminManageClientsPage";
 import AdminManageVariablesPage from "@/features/admin/page/AdminManageVariablesPage";
+import ManageUsers from "@/features/admin/page/ManageUsers";
 
 export default function Router() {
   return (
@@ -41,7 +41,7 @@ export default function Router() {
 
         <Route path="perfil" element={<ProfilePage />} />
         <Route path="admin/variaveis" element={<AdminManageVariablesPage />} />
-        <Route path="admin/usuarios" element={<AdminManageClientsPage  />} />
+        <Route path="admin/usuarios" element={<ManageUsers />} />
         
         <Route path="sobre" element={<AboutPage />} />
       </Route>
