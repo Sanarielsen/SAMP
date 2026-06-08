@@ -23,6 +23,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/node": "18.14.1",
+    "@types/nodemailer": "^8.0.0",
     "@types/supertest": "2.0.12",
     "@vitest/coverage-c8": "0.28.5",
     "@vitest/ui": "0.28.5",
@@ -44,6 +45,8 @@
     "dayjs": "1.11.7",
     "dotenv": "16.0.3",
     "fastify": "4.13.0",
+    "mailersend": "^3.0.0",
+    "nodemailer": "^8.0.10",
     "tsup": "^6.6.3",
     "zod": "3.20.6"
   }
