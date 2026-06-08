@@ -107,6 +107,26 @@ model Order {
 
   client    Client    @relation(fields: [clientId], references: [id])
   orderType OrderType @relation(fields: [orderTypeId], references: [id])
+  payments  Payment[]
 
   @@map("orders")
+}
+
+model Payment {
+  id          String  @id @default(uuid())
+  orderId     String
+  quantity    Decimal @db.Decimal(12, 2)
+  method      String
+  installment Int
+  adjustment  Decimal @db.Decimal(12, 2)
+  description String
+  observation String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("payments")
 }
