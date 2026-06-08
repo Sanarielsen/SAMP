@@ -70,7 +70,8 @@ export default function ManageUsers() {
               type="submit"
               variant="contained"
               size="large"
-              color="error"
+              color="primary"
+              onClick={() => navigate('/admin/usuario')}
             >
               Adicionar usuário
             </Button>

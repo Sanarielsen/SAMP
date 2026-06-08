@@ -13,7 +13,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { optionsQueryGetUser } from "@/features/profile/api/queryGetMe";
-import { optionsQueryListRoleUserAuthorized } from "@/features/profile/api/queryListRoleUserAuthorized";
+import { optionsQueryListRoleUserAuthorized } from "@/api/queryListRoleUserAuthorized";
 import { useMutationPatchUserProfile } from "@/features/profile/api/mutationUpdateMe";
 import { 
   updateProfileSchema, 
