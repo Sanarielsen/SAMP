@@ -32,6 +32,7 @@ import { deleteOrder } from "@/http/Controllers/order/delete";
 import { listOrderType } from "@/http/Controllers/orderTypes/list";
 import { listUserRoleLevelAuthorized } from "./Controllers/userRole/list-level-authorized";
 import { listUsersWithSearch } from "@/http/Controllers/list";
+import { getOrderDetails } from "@/http/Controllers/order/get-detail";
 import { postPayment } from "@/http/Controllers/payment/post";
 import { postPaymentWithPayments } from "@/http/Controllers/payment/post-with-installments";
 
@@ -67,6 +68,7 @@ export async function appRoutes(app: FastifyInstance) {
 
   app.post('/order', {onRequest: [verifyJWT]}, postOrder)
   app.get('/order/:id', {onRequest: [verifyJWT]}, getOrder)
+  app.get('/order/:id/details', {onRequest: [verifyJWT]}, getOrderDetails)
   app.get('/orders', {onRequest: [verifyJWT]}, listOrder)
   app.patch('/order/:id', {onRequest: [verifyJWT]}, updateOrder)
   app.delete('/order/:id', {onRequest: [verifyJWT]}, deleteOrder)

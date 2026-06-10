@@ -1,6 +1,6 @@
 import { OrderRepository } from "@/repositories/order-repository";
 
-import { CreateOrderDTO, Order, OrderDetailTable, UpdateOrderDTO } from "@shared/types/orders";
+import { CreateOrderDTO, Order, OrderDetailTable, OrderWithTypeDetailDTO, UpdateOrderDTO } from "@shared/types/orders";
 
 
 export class InMemoryOrderRepository implements OrderRepository {
@@ -58,6 +58,62 @@ export class InMemoryOrderRepository implements OrderRepository {
     }
 
     return order
+  }
+
+async findByIdWithType(
+  id: string,
+): Promise<OrderWithTypeDetailDTO | null> {
+
+  const order =
+    this.items.find(
+      item => item.id === id,
+    )
+
+    if (!order) {
+      return null
+    }
+
+    const client =
+      this.clients.find(
+        client => client.id === order.clientId,
+      )
+
+    const orderType =
+      this.orderTypes.find(
+        type => type.id === order.orderTypeId,
+      )
+
+    if (!client || !orderType) {
+      return null
+    }
+
+    return {
+      id: order.id,
+
+      description:
+        order.description,
+
+      observation:
+        order.observation ?? null,
+
+      eventDate:
+        order.eventDate,
+
+      clientId:
+        order.clientId,
+
+      clientName:
+        client.legalName,
+
+      orderTypeId:
+        orderType.id,
+
+      orderTypeTitle:
+        orderType.title,
+
+      orderTypeObservation:
+        orderType.observation ?? null,
+    }
   }
 
   async findManyByClientId(clientId: string, search: string): Promise<OrderDetailTable[] | null> {
