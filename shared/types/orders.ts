@@ -50,3 +50,17 @@ export interface OrderDetailTable {
   clientId: string,
   clientName: string,
 }
+
+export interface OrderWithTypeDetailDTO {
+  id: string,
+  description: string,
+  observation: string | null,
+  eventDate: Date,
+
+  clientId: string,
+  clientName: string,
+
+  orderTypeId: number,
+  orderTypeTitle: string,
+  orderTypeObservation: string | null,
+}
