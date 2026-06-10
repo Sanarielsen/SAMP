@@ -32,8 +32,6 @@ export default function OrderServicesPage() {
   const [searchBar, setSearchBar] = useState("");
   const [searchApplied, setSearchApplied] = useState("")
   const [orderClicked, setOrderClicked] = useState<OrderDetailDTO>();
-  // const [openModalOrder, setOpenModalOrder] = useState(false);
-  // const [openModalDetails, setOpenModalDetails] = useState(false);
   const [openModalConfirmation, setOpenModalConfirmation] = useState(false)
   const [openToast, setOpenToast] = useState("")
 
@@ -62,11 +60,6 @@ export default function OrderServicesPage() {
     isSuccess ? "SUCCESS" : 
     isLoading ? "LOADING" :
     isError ? "ERROR" : "IDLE";
-
-  const handleView = (order: OrderDetailDTO) => {
-    setOrderClicked(order);
-    // setOpenModalDetails(true);
-  };
 
   const handleDelete = (order: OrderDetailDTO) => {
     setOrderClicked(order)
@@ -141,7 +134,7 @@ export default function OrderServicesPage() {
             rows={listOrders}
             columns={DataTableColumnsOrder({
               onClickUpdateItem: (id) => navigate(`/os/${id}`),
-              onClickSeeItem: (current) => handleView(current), 
+              onClickSeeItem: (current) => navigate(`/os/detalhes/${current.id}`), 
               onClickDeleteItem: (current) => handleDelete(current),
             })}
           />
@@ -154,23 +147,6 @@ export default function OrderServicesPage() {
         severity="success"
         onClose={() => setOpenToast("")}
       />
-
-      {orderClicked && (
-        <>
-          {/* <ModalRepresentativeDetails 
-            open={openModalDetails}
-            representative={orderClicked}
-            fields={representativeFields}
-            handleClose={() => setOpenModalDetails(false)}
-          />
-
-          <ModalListClientsOnRepresentative 
-            open={openModalClients}
-            representative={orderClicked}
-            handleClose={() => setOpenModalClients(false)}
-          /> */}
-        </>
-      )}
 
       <ToastContainer
         open={openToast === "error"}
