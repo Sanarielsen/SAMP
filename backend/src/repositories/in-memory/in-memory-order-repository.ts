@@ -1,6 +1,6 @@
 import { OrderRepository } from "@/repositories/order-repository";
 
-import { CreateOrderDTO, Order, UpdateOrderDTO } from "@shared/types/orders";
+import { CreateOrderDTO, Order, OrderDetailTable, UpdateOrderDTO } from "@shared/types/orders";
 
 
 export class InMemoryOrderRepository implements OrderRepository {
@@ -11,8 +11,6 @@ export class InMemoryOrderRepository implements OrderRepository {
       ...data,
       id: crypto.randomUUID(),
       createdAt: new Date(Date.now()),
-      updatedAt: null,
-      deletedAt: null
     }
 
     this.items.push(order)
@@ -62,9 +60,9 @@ export class InMemoryOrderRepository implements OrderRepository {
     return order
   }
 
-  async findManyByClientId(clientId: string): Promise<Order[] | null> {
+  async findManyByClientId(clientId: string, search: string): Promise<OrderDetailTable[] | null> {
     const orders = this.items.filter(item => 
-      item.clientId == clientId && item.deletedAt == null
+      item.clientId == clientId && item.deletedAt == null && item.observation?.includes(search)
     )
 
     return orders

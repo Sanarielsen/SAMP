@@ -113,20 +113,42 @@ model Order {
 }
 
 model Payment {
-  id          String  @id @default(uuid())
-  orderId     String
-  quantity    Decimal @db.Decimal(12, 2)
-  method      String
-  installment Int
-  adjustment  Decimal @db.Decimal(12, 2)
-  description String
-  observation String?
+  id                 String   @id @default(uuid())
+  orderId            String
+  totalInstallments  Int
+  totalAmountInCents Decimal
+  description        String
+  observation        String?
+  firstDueDate       DateTime
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
-  order Order @relation(fields: [orderId], references: [id])
+  order               Order                @relation(fields: [orderId], references: [id])
+  paymentInstallments PaymentInstallment[]
 
   @@map("payments")
+}
+
+model PaymentInstallment {
+  id                String   @id @default(uuid())
+  paymentId         String
+  installment       Int
+  method            String
+  amountInCents     Decimal
+  adjustmentInCents Decimal?
+  observation       String?
+
+  dueDate         DateTime
+  paidAt          DateTime?
+  receiptFilePath String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  payment Payment @relation(fields: [paymentId], references: [id])
+
+  @@map("payment_installments")
 }

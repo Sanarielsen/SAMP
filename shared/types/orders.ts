@@ -5,8 +5,8 @@ export interface Order {
   observation:  string | null
   eventDate:    Date
   createdAt:    Date
-  updatedAt:    Date | null
-  deletedAt:    Date | null
+  updatedAt:   Date | null
+  deletedAt:   Date | null
 }
 
 export interface CreateOrderDTO {
