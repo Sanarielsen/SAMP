@@ -58,8 +58,11 @@ export default function OrderInformation() {
         <Grid
           container 
           spacing={2}
+          sx={{
+            p: 2
+          }}
         >
-          <Grid size={{ xs: 12, md: 6, lg: 3 }}>
+          <Grid size={{ xs: 6, md: 6, lg: 3 }}>
             <GroupText 
               title="Título"
               value={currentOrder.orderTypeTitle}
@@ -67,7 +70,7 @@ export default function OrderInformation() {
             />
           </Grid>
 
-          <Grid size={{ xs: 12, md: 6, lg: 3 }}>
+          <Grid size={{ xs: 6, md: 6, lg: 3 }}>
             <GroupText 
               title="Descricão"
               value={currentOrder.description}
@@ -75,14 +78,14 @@ export default function OrderInformation() {
             />
           </Grid>
 
-          <Grid size={{ xs: 12, md: 6, lg: 3 }}>
+          <Grid size={{ xs: 6, md: 6, lg: 3 }}>
             <GroupText 
               title="Solicitado para:"
               value={currentOrder.clientName}
             />
           </Grid>
 
-          <Grid size={{ xs: 12, md: 6, lg: 3}}>
+          <Grid size={{ xs: 6, md: 6, lg: 3}}>
             <GroupTextDate
               title="Prazo"
               value={currentOrder.eventDate}

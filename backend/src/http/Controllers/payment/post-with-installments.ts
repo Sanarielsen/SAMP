@@ -13,25 +13,23 @@ export async function postPaymentWithPayments(
 ) {
 
   const bodySchema = z.object({
-    orderId: z.string(),
     totalInstallments: z.number().min(1),
     totalAmountInCents: z.number().positive(),
     firstDueDate: z.coerce.date(),
     method: z.string().min(1),
-    description: z.string().min(1),
     observation: z.string().nullable().optional(),
   })
+
+  const { id } = request.params as { id: string }
 
   const body = bodySchema.parse(request.body)
 
   const useCase = makePostPaymentWithInstallmentsUseCase();
 
-  // try {
-  //   const result2 = await useCase.execute(body)
-  // } catch (error) {
-  //   console.log(error)
-  // }
-  const result = await useCase.execute(body)
+  const result = await useCase.execute({
+    idOrder: id,
+    newPayment: body
+  })
   
   return reply.status(201).send(result)
 }

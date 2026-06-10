@@ -287,7 +287,7 @@ export default function ManageClientPage() {
               <ControlledInputMask
                 control={control}
                 name="fundationDate"
-                mask="99/99/9999"                  
+                mask="99/99/9999"
                 variant="outlined"
                 label="Data de fundação"
                 fullWidth

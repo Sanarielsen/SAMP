@@ -73,8 +73,8 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/order/:id', {onRequest: [verifyJWT]}, updateOrder)
   app.delete('/order/:id', {onRequest: [verifyJWT]}, deleteOrder)
 
-  app.post('/payment', {onRequest: [verifyJWT]}, postPayment)
-  app.post('/payment/installments', {onRequest: [verifyJWT]}, postPaymentWithPayments)
+  app.post('/order/:id/payment', {onRequest: [verifyJWT]}, postPayment)
+  app.post('/order/:id/payment/installments', {onRequest: [verifyJWT]}, postPaymentWithPayments)
 
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
 }
