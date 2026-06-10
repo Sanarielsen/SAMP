@@ -20,6 +20,7 @@ import ProfilePage from "@/features/profile/pages/ProfilePage";
 import AdminManageVariablesPage from "@/features/admin/page/ManageVariables";
 import ManageUsers from "@/features/admin/page/ManageUsers";
 import ManageUser from "@/features/admin/page/ManageUser";
+import { DetailsPanel as OrderDetailsPanel } from "@/features/order/pages/DetailsPanel";
 
 export default function Router() {
   return (
@@ -39,6 +40,7 @@ export default function Router() {
         <Route path="oss" element={<OrderServicesPage />} />
         <Route path="os/" element={<OrderServiceManagePage />} />
         <Route path="os/:id" element={<OrderServiceManagePage />} />
+        <Route path="os/detalhes/:id" element={<OrderDetailsPanel />} />
 
         <Route path="perfil" element={<ProfilePage />} />
         <Route path="admin/variaveis" element={<AdminManageVariablesPage />} />
