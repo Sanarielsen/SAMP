@@ -6,6 +6,11 @@ import { InvalidResourceError } from "@/services/errors/invalid-resource-error"
 
 import { CreatePaymentWithInstallmentsDTO } from "@shared/types/payment"
 
+interface PostPaymentWithInstallmentsUseCasePayload {
+  idOrder: string,
+  newPayment: CreatePaymentWithInstallmentsDTO
+}
+
 export class PostPaymentWithInstallmentsUseCase {
 
   constructor(
@@ -14,11 +19,13 @@ export class PostPaymentWithInstallmentsUseCase {
     private orderRepository: OrderRepository,
   ) {}
 
-  async execute(data: CreatePaymentWithInstallmentsDTO) {
+  async execute({
+    idOrder, newPayment
+  }: PostPaymentWithInstallmentsUseCasePayload) {
 
     const order =
       await this.orderRepository.findById(
-        data.orderId,
+        idOrder,
       )
 
     if (!order || order.deletedAt) {
@@ -27,35 +34,32 @@ export class PostPaymentWithInstallmentsUseCase {
 
     const payment =
       await this.paymentRepository.create({
-        orderId: data.orderId,
+        orderId: idOrder,
 
         totalInstallments:
-          data.totalInstallments,
+          newPayment.totalInstallments,
 
         totalAmountInCents:
-          data.totalAmountInCents,
-
-        description:
-          data.description,
+          newPayment.totalAmountInCents,
 
         observation:
-          data.observation ?? null,
+          newPayment.observation ?? null,
 
         firstDueDate:
-          data.firstDueDate
+          newPayment.firstDueDate
       })
   
     const baseAmount = Math.floor(
-      data.totalAmountInCents /
-      data.totalInstallments,
+      newPayment.totalAmountInCents /
+      newPayment.totalInstallments,
     )
 
-    const remainder = data.totalAmountInCents % data.totalInstallments
+    const remainder = newPayment.totalAmountInCents % newPayment.totalInstallments
       
     const installments = Array.from({
-        length: data.totalInstallments,
+        length: newPayment.totalInstallments,
       }, (_, index) => {
-          const dueDate = new Date(data.firstDueDate)
+          const dueDate = new Date(newPayment.firstDueDate)
 
           dueDate.setMonth(dueDate.getMonth() + index)
 
@@ -66,9 +70,9 @@ export class PostPaymentWithInstallmentsUseCase {
             paymentId: payment.id,
             installment: index + 1,
             amountInCents,
-            method: data.method,
+            method: newPayment.method,
             dueDate,
-            observation: data.observation ?? null,
+            observation: newPayment.observation ?? null,
           }
         },
       )

@@ -113,7 +113,7 @@ export default function ManageUser() {
             >
               {isEditing ? "Atualizar" : "Cadastrar"}
             </Button>
-            </Grid>
+          </Grid>
         </Grid>
       </Box>
     </form>
