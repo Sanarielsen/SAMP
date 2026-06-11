@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
-import { OrderTypeRepository } from "../order-type-repository";
+
+import { PaymentRepository } from "@/repositories/payment-repository";
 
 import { CreatePaymentDTO, Payment } from "@shared/types/payment";
-import { PaymentRepository } from "../payment-repository";
 
 export class PrismaPaymentsRepository implements PaymentRepository {
 
@@ -27,12 +27,19 @@ export class PrismaPaymentsRepository implements PaymentRepository {
         totalAmountInCents: data.totalAmountInCents,
         totalInstallments: data.totalInstallments,
         firstDueDate: data.firstDueDate,
-        description: data.description,
         observation: data.observation ?? null,
         createdAt: new Date(Date.now()),
         updatedAt: null,
         deletedAt: null
       },
+    })
+  }
+
+  async findManyByOrderId(orderId: string): Promise<Payment[] | null> {
+    return prisma.payment.findMany({
+      where: {
+        orderId
+      }
     })
   }
 }

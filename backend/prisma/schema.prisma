@@ -116,7 +116,7 @@ model Payment {
   id                 String   @id @default(uuid())
   orderId            String
   totalInstallments  Int
-  totalAmountInCents Decimal
+  totalAmountInCents Int
   observation        String?
   firstDueDate       DateTime
 
@@ -135,8 +135,8 @@ model PaymentInstallment {
   paymentId         String
   installment       Int
   method            String
-  amountInCents     Decimal
-  adjustmentInCents Decimal?
+  amountInCents     Int
+  adjustmentInCents Int?
   observation       String?
 
   dueDate         DateTime
