@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { PaymentInstallmentRepository } from "@/repositories/payment-installments-repository";
-import { CreatePaymentInstallmentDTO } from "@shared/types/paymentInstallments";
+import { CreatePaymentInstallmentDTO, PaymentInstallment } from "@shared/types/paymentInstallments";
 
 export class PrismaPaymentInstallmentsRepository implements PaymentInstallmentRepository {
 
@@ -14,5 +14,19 @@ export class PrismaPaymentInstallmentsRepository implements PaymentInstallmentRe
         deletedAt: null,
       })),
     })
+  }
+
+  async findManyByPaymentId(paymentId: string): Promise<PaymentInstallment[] | null> {
+    const paymentInstallment = await prisma.paymentInstallment.findMany({
+      where: {
+        paymentId
+      }
+    })
+
+    if (!paymentInstallment) {
+      return null
+    }
+
+    return paymentInstallment
   }
 }

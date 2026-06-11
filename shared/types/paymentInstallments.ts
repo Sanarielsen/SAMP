@@ -20,8 +20,8 @@ export type CreatePaymentInstallmentDTO = {
   paymentId:        string
   installment:      number
   amountInCents:    number
-  method:           string
   dueDate:          Date
+  method:           string
 
   observation?:      string | null
 }
