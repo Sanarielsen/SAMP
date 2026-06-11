@@ -26,7 +26,11 @@ const listPaymentMethods = [
 export default function OrderNewPayment() {
 
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { orderId } = useParams();
+
+  if (!orderId) {
+    return null
+  }
 
   const [openToast, setOpenToast] = useState("")
 
@@ -40,7 +44,7 @@ export default function OrderNewPayment() {
     setOpenToast(result);
     if (result === "success") {
       setTimeout(() => {
-        navigate(`/os/detalhes/${id}`);
+        navigate(`/os/detalhes/${orderId}`);
       }, 5000);
     }
   }
@@ -59,6 +63,7 @@ export default function OrderNewPayment() {
     console.log("Salva esse cara: ", data)
 
     const payload: CreatePaymentWithInstallmentsDTO = {
+      orderId,
       totalInstallments: Number(data.totalInstallments),
       totalAmountInCents: convertCurrencyToCents(Number(data.totalAmountInCents)),
       firstDueDate: parseBRDate(data.firstDueDate),
@@ -67,7 +72,7 @@ export default function OrderNewPayment() {
     }
     
     mutationPostPaymentWithInstallments.mutate({
-      id: id!,
+      id: orderId,
       payload
     })
   }

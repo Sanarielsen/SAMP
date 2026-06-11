@@ -4,7 +4,8 @@ import { PaymentRepository } from "@/repositories/payment-repository";
 
 import { 
   Payment,
-  CreatePaymentDTO 
+  CreatePaymentDTO, 
+  CreatePaymentWithInstallmentsDTO
 } from "@shared/types/payment";
 
 
@@ -24,5 +25,19 @@ export class InMemoryPaymentRepository implements PaymentRepository {
     this.items.push(payment)
 
     return payment
+  }
+
+  createWithInstallments(data: CreatePaymentWithInstallmentsDTO): Promise<Payment> {
+    throw new Error("Method not implemented.");
+  }
+
+  async findManyByOrderId(orderId: string): Promise<Payment[] | null> {
+    const payments = this.items.filter(item => item.orderId = orderId)
+
+    if (!payments) {
+      return null
+    }
+
+    return payments
   }
 }
