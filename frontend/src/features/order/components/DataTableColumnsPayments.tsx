@@ -10,8 +10,10 @@ import {
   Tooltip 
 } from "@mui/material";
 
+import { formatCurrency } from "@/features/order/utils/formatCurrency";
+
 import { type PaymentDetailDTO } from "@shared/types/payment"
-import { formatCurrency } from "../utils/formatCurrency";
+
 
 type ColumnsPaymentsProps = {
   onClickUpdateItem: (id: string) => void
@@ -19,17 +21,17 @@ type ColumnsPaymentsProps = {
   onClickDeleteItem: (currentItem: PaymentDetailDTO) => void
 }
 
-
 export default function DataTableColumnsPayments({
   onClickUpdateItem, onClickSeeItem, onClickDeleteItem
 }: ColumnsPaymentsProps ): GridColDef<PaymentDetailDTO>[] {
   return [
     {
       field: "totalAmountInCents",
-      headerName: "Criação",
+      headerName: "Valor total",
       flex: 1,
       valueFormatter: (value) => {
         if (!value) return "-"
+        console.log("Centavos: ", value)
         return formatCurrency(value)
       },
     },
