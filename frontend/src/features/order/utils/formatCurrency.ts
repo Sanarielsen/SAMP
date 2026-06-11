@@ -5,3 +5,9 @@ export const formatCurrency = (cents: number) => {
     currency: "BRL",
   }).format(cents / 100)
 }
+
+export const convertCurrencyToCents = (
+  value: number,
+) => {
+  return Math.round(value * 100)
+}

@@ -1,20 +1,31 @@
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router";
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
-import { newPaymentSchema, type NewPaymentSchemaFormData } from "../schemas/newPaymentSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, Grid } from "@mui/material";
 
+import { 
+  Box, 
+  Button, 
+  Grid
+} from "@mui/material";
+
+import { 
+  useMutationPostPaymentWithInstallments 
+} from "@/features/order/api/mutationCreatePayment";
+import { 
+  newPaymentSchema, 
+  type NewPaymentSchemaFormData 
+} from "@/features/order/schemas/newPaymentSchema";
 import HeaderResourceForm from "@/components/HeaderResourceForm";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputAdornment } from "@/components/ControlledInputAdornment";
 import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
-import { useMutationPostPaymentWithInstallments } from "../api/mutationCreatePayment";
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router";
 import ToastContainer from "@/components/Toast";
-import type { CreatePaymentWithInstallmentsDTO } from "@shared/types/payment";
+import { convertCurrencyToCents } from "@/features/order/utils/convertCurrencyToCents";
 import { parseBRDate } from "@/utils/formatDate";
-import { convertCurrencyToCents } from "../utils/convertCurrencyToCents";
+
+import type { CreatePaymentWithInstallmentsDTO } from "@shared/types/payment";
 
 const listPaymentMethods = [
   { value: "Crédito", label: "Crédito" },
@@ -26,7 +37,7 @@ const listPaymentMethods = [
 export default function OrderNewPayment() {
 
   const navigate = useNavigate();
-  const { orderId } = useParams();
+  const { id: orderId } = useParams();
 
   if (!orderId) {
     return null
@@ -60,7 +71,6 @@ export default function OrderNewPayment() {
   })
 
   const onSubmit: SubmitHandler<NewPaymentSchemaFormData> = async (data) => {
-    console.log("Salva esse cara: ", data)
 
     const payload: CreatePaymentWithInstallmentsDTO = {
       orderId,
