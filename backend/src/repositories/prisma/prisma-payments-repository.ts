@@ -5,7 +5,6 @@ import { PaymentRepository } from "@/repositories/payment-repository";
 import { CreatePaymentDTO, Payment } from "@shared/types/payment";
 
 export class PrismaPaymentsRepository implements PaymentRepository {
-
   async create(data: CreatePaymentDTO): Promise<Payment> {
     return await prisma.payment.create({
       data: {
@@ -32,6 +31,14 @@ export class PrismaPaymentsRepository implements PaymentRepository {
         updatedAt: null,
         deletedAt: null
       },
+    })
+  }
+
+  findById(id: string): Promise<Payment | null> {
+    return prisma.payment.findUnique({
+      where: {
+        id
+      }
     })
   }
 

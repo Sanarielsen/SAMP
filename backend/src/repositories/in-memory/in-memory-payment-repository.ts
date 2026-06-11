@@ -31,6 +31,16 @@ export class InMemoryPaymentRepository implements PaymentRepository {
     throw new Error("Method not implemented.");
   }
 
+  async findById(id: string): Promise<Payment | null> {
+    const payment = this.items.find(payment => payment.id == id)
+
+    if (!payment) {
+      return null
+    }
+
+    return payment
+  }
+
   async findManyByOrderId(orderId: string): Promise<Payment[] | null> {
     const payments = this.items.filter(item => item.orderId = orderId)
 
