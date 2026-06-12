@@ -36,7 +36,7 @@ import { getOrderDetails } from "@/http/Controllers/order/get-detail";
 import { postPayment } from "@/http/Controllers/payment/post";
 import { postPaymentWithPayments } from "@/http/Controllers/payment/post-with-installments";
 import { getOrderPayments } from "@/http/Controllers/payment/list";
-import { getPaymentInstallments } from "@/http/Controllers/paymentInstallment/list-by-payment";
+import { listPaymentInstallments } from "@/http/Controllers/paymentInstallment/list-by-payment";
 
 import { sendEmail } from "./Controllers/test";
 
@@ -78,7 +78,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/order/:id/payment/installments', {onRequest: [verifyJWT]}, postPaymentWithPayments)
   app.get(`/order/:id/payments`, { onRequest: [verifyJWT] }, getOrderPayments)
   
-  app.get(`/payment/:id/installments`, { onRequest: [verifyJWT] }, getPaymentInstallments)
+  app.get(`/payment/:id/installments`, {onRequest: [verifyJWT]}, listPaymentInstallments)
 
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
 }

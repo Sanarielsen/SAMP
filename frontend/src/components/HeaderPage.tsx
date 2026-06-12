@@ -7,7 +7,7 @@ import {
 
 interface HeaderPageProps {
   title: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export default function HeaderPage({

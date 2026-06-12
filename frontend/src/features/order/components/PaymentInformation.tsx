@@ -63,7 +63,7 @@ export default function PaymentInformation() {
             state={stateQuery}
             rows={listOrderPayments}
             columns={DataTableColumnsPayments({
-              onClickUpdateItem: (id) => console.log("Atualiza esse item: ", id),
+              onClickUpdateItem: (id) => navigate(`/pagamento/${id}/parcelas`),
               onClickSeeItem: (current) => console.log("Visualiza esse item: ", current), 
               onClickDeleteItem: (current) => console.log("Deleta esse item: ", current),
             })}

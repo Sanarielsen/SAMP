@@ -2,13 +2,13 @@ import { FastifyRequest, FastifyReply } from 'fastify'
 
 import { makeListByPaymentInstallmentUseCase } from '@/services/factories/payment-installment/make-list-by-payment-installment';
 
-import { InvalidCredentialsError } from '@/services/errors/invalid-credentials-error';
+import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 
-export async function getPaymentInstallments(request: FastifyRequest, reply: FastifyReply) {
-  
+export async function listPaymentInstallments(request: FastifyRequest, reply: FastifyReply) {
   const { id } = request.params as { id: string }
 
   try {
+    
     const useCase = makeListByPaymentInstallmentUseCase();
 
     const paymentInstallment = await useCase.execute({
@@ -18,7 +18,7 @@ export async function getPaymentInstallments(request: FastifyRequest, reply: Fas
     return reply.status(200).send(paymentInstallment);
 
   } catch (err) {
-    if (err instanceof InvalidCredentialsError) {
+    if (err instanceof ResourceNotFoundError) {
       return reply.status(404).send({ message: err.message })
     }
 

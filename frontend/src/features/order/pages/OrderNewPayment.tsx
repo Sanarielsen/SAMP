@@ -39,10 +39,6 @@ export default function OrderNewPayment() {
   const navigate = useNavigate();
   const { id: orderId } = useParams();
 
-  if (!orderId) {
-    return null
-  }
-
   const [openToast, setOpenToast] = useState("")
 
   const form = useForm<NewPaymentSchemaFormData>({
@@ -73,7 +69,7 @@ export default function OrderNewPayment() {
   const onSubmit: SubmitHandler<NewPaymentSchemaFormData> = async (data) => {
 
     const payload: CreatePaymentWithInstallmentsDTO = {
-      orderId,
+      orderId: orderId!,
       totalInstallments: Number(data.totalInstallments),
       totalAmountInCents: convertCurrencyToCents(Number(data.totalAmountInCents)),
       firstDueDate: parseBRDate(data.firstDueDate),
@@ -82,12 +78,10 @@ export default function OrderNewPayment() {
     }
     
     mutationPostPaymentWithInstallments.mutate({
-      id: orderId,
+      id: orderId!,
       payload
     })
   }
-
-  console.log(errors)
 
   return (
     <FormProvider {...form}>
