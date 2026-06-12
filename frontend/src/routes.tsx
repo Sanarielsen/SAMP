@@ -22,6 +22,7 @@ import ManageUsers from "@/features/admin/page/ManageUsers";
 import ManageUser from "@/features/admin/page/ManageUser";
 import { DetailsPanel as OrderDetailsPanel } from "@/features/order/pages/DetailsPanel";
 import OrderNewPayment from "@/features/order/pages/OrderNewPayment";
+import PaymentDetails from "@/features/payment/pages/PaymentDetails";
 
 
 export default function Router() {
@@ -45,6 +46,8 @@ export default function Router() {
         <Route path="os/detalhes/:id" element={<OrderDetailsPanel />} />
 
         <Route path="os/detalhes/:id/pagamento" element={<OrderNewPayment />} />
+
+        <Route path="pagamento/:id/parcelas" element={<PaymentDetails />} />
 
         <Route path="perfil" element={<ProfilePage />} />
         <Route path="admin/variaveis" element={<AdminManageVariablesPage />} />

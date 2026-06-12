@@ -3,3 +3,4 @@ export type Section =
   | "REPRESENTATIVES"
   | "ORDERS"
   | "PAYMENTS"
+  | "INSTALLMENTS"

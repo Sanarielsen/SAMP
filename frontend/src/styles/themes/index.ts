@@ -35,7 +35,9 @@ export const theme = createTheme({
       black: '#000000',
     },
     grey: {
-      800: '#ABA09C' 
+      800: '#ABA09C',
+      400: '#99a1af',
+      100: '#f3f4f6'
     }
   },
 });
@@ -75,7 +77,9 @@ export const darkTheme = createTheme({
       black: '#000000',
     },
     grey: {
-      800: '#ABA09C' 
+      800: '#ABA09C',
+      400: '#99a1af',
+      100: '#f3f4f6'
     }
   },
 });

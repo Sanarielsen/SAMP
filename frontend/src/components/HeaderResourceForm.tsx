@@ -1,6 +1,8 @@
 import { Grid, Typography } from "@mui/material";
 
 import AllInboxIcon from '@mui/icons-material/AllInbox';
+import PriceChangeIcon from '@mui/icons-material/PriceChange';
+
 import type { Section } from "@/types/section";
 
 interface HeaderResourceFormProps {
@@ -38,6 +40,9 @@ export default function HeaderResourceForm({
       >
         { resource === "PAYMENTS" ? (
           <AllInboxIcon fontSize="large" />
+        ) 
+        : resource === "INSTALLMENTS" ? (
+          <PriceChangeIcon fontSize="large" />
         ) : (
           <> ICONE </>
         )}
