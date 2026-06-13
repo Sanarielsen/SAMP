@@ -25,3 +25,16 @@ export type CreatePaymentInstallmentDTO = {
 
   observation?:      string | null
 }
+
+export type UpdatePaymentInstallmentDTO = {
+  id: string
+  
+  installment?:     number
+  amountInCents?:   number
+
+  dueDate?:         Date
+  paidAt?:          Date | null
+
+  receiptFilePath?: string | null
+  observation?:     string | null
+}
