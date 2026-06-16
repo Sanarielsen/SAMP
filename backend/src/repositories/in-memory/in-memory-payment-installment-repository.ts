@@ -65,15 +65,9 @@ export class InMemoryPaymentInstallmentsRepository implements PaymentInstallment
     return paymentInstallment
   }
 
-  async findManyByPaymentId(paymentId: string): Promise<PaymentInstallment[] | null> {
+  async findManyByPaymentId(paymentId: string): Promise<PaymentInstallment[]> {
     
-    const payment = this.items.filter(payment => payment.id = paymentId)
-
-    if (!payment) {
-      return null
-    }
-
-    return payment
+    return this.items.filter(payment => payment.id = paymentId)
   }
 
 }

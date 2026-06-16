@@ -17,17 +17,13 @@ export default function PaymentInformation() {
   const navigate = useNavigate();
   const { id: orderId } = useParams();
 
-  if (!orderId) {
-    return null
-  }
-
   const { 
     data: listOrderPayments,
     isError,
     isSuccess, 
     isLoading,
   } = useQuery(
-    optionsQueryListOrderPayments(orderId)
+      optionsQueryListOrderPayments(orderId!, !!orderId) 
   )
 
   const stateQuery = isSuccess ? "SUCCESS" : 

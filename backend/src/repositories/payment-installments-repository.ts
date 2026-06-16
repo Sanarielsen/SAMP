@@ -10,5 +10,5 @@ export interface PaymentInstallmentRepository {
   update(data: UpdatePaymentInstallmentDTO): Promise<PaymentInstallment>
 
   findById(id: string): Promise<PaymentInstallment | null>
-  findManyByPaymentId(paymentId: string): Promise<PaymentInstallment[] | null>
+  findManyByPaymentId(paymentId: string): Promise<PaymentInstallment[]>
 }

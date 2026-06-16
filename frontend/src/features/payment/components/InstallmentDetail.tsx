@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 
@@ -22,7 +22,8 @@ import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import GroupText from "@/components/GroupText";
 
-import { type PaymentInstallment } from '@shared/types/paymentInstallments'
+import { type PaymentInstallment, type UpdatePaymentInstallmentDTO } from '@shared/types/paymentInstallments'
+import { parseDMYDate } from "@/utils/formatDate";
 
 type MuiColor =
   | "primary.main"
@@ -42,109 +43,132 @@ const listPaymentMethods = [
 ]
 
 interface InstallmentDetailProps {
-  data: PaymentInstallment
+  currentPayment: PaymentInstallment
   color?: MuiColor
+  onClickUpdatePayment: (data: UpdatePaymentInstallmentDTO) => void
 }
 
 export default function InstallmentDetail({
-  data, color
+  currentPayment, color, onClickUpdatePayment
 }: InstallmentDetailProps) {
 
   const form = useForm<UpdatePaymentInstallmentSchemaFormData>({
     resolver:
       zodResolver(updatePaymentInstallment),
     defaultValues: {
+      installment: String(currentPayment.installment),
+
       amountInCents: String(
-        data.amountInCents / 100
+        currentPayment.amountInCents / 100
       ),
 
-      dueDate: dayjs(data.dueDate)
+      dueDate: dayjs(currentPayment.dueDate)
         .format("DD/MM/YYYY"),
 
       //method: data.method,
 
-      obserservation: data.observation ?? "",
+      obserservation: currentPayment.observation ?? "",
     }
   })
   const { errors } = form.formState
 
+  const onSubmit: SubmitHandler<UpdatePaymentInstallmentSchemaFormData> = async () => {
+
+    const paidAtValue = form.getValues('paidAt');
+    const dueDateValue = form.getValues('dueDate');
+
+    const payload: UpdatePaymentInstallmentDTO = {
+      id: currentPayment.id,
+      installment: Number(form.getValues('installment')),
+      amountInCents: Number(form.getValues('amountInCents')) * 100,
+      dueDate: parseDMYDate(dueDateValue)!,
+      paidAt: paidAtValue ? parseDMYDate(paidAtValue) : null,
+      observation: form.getValues('obserservation') || null,
+      receiptFilePath: form.getValues('receiptFilePath') || null,
+    }
+
+    onClickUpdatePayment(payload)
+  }
+
   return (
-    <Box component="section" sx={{ backgroundColor: color }}>
-      <Grid container spacing={4} sx={{ pt: 2, pb: 3, px: 4 }}>
-        <Grid size={{ xs: 12, sm: 3 }}>
-          <GroupText
-            title={`Parcela: ${data.installment}`}
-            value={
-              data.updatedAt
-                ? `Atualizado em ${dayjs(data.createdAt).format("DD/MM/YYYY HH:mm")}`
-                : `Criado em ${dayjs(data.createdAt).format("DD/MM/YYYY HH:mm")}`
-            }
-            observation={`Observacão: ${data.observation}`}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 3, md: 2}}>
-          <ControlledInput
-            type="number"
-            control={form.control}
-            label="Valor da parcela"
-            name="amountInCents"
-            fullWidth
-            error={!!errors?.amountInCents}
-            helperText={
-              String(errors?.amountInCents?.message ?? "")
-            }
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 3, md: 2}}>
-          <ControlledComboBox
-            control={form.control}
-            name={'method'}
-            label='Método de pagamento'
-            options={listPaymentMethods}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 3, md: 2 }}>
-          <ControlledInputMask
-            control={form.control}
-            label="Vencimento"
-            name="dueDate"
-            mask="00/00/0000"
-            fullWidth
-            error={!!errors?.amountInCents}
-            helperText={
-              String(errors?.amountInCents?.message ?? "")
-            }
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 2 }}>
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      <Box component="section" sx={{ backgroundColor: color }}>
+        <Grid container spacing={4} sx={{ pt: 2, pb: 3, px: 4 }}>
+          <Grid size={{ xs: 12, sm: 3 }}>
+            <GroupText
+              title={`Parcela: ${currentPayment.installment}`}
+              value={
+                currentPayment.updatedAt
+                  ? `Atualizado em ${dayjs(currentPayment.updatedAt).format("DD/MM/YYYY HH:mm")}`
+                  : `Criado em ${dayjs(currentPayment.createdAt).format("DD/MM/YYYY HH:mm")}`
+              }
+              observation={`Observacão: ${currentPayment.observation}`}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 3, md: 2}}>
+            <ControlledInput
+              type="number"
+              control={form.control}
+              label="Valor da parcela"
+              name="amountInCents"
+              fullWidth
+              error={!!errors?.amountInCents}
+              helperText={
+                String(errors?.amountInCents?.message ?? "")
+              }
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 3, md: 2}}>
+            <ControlledComboBox
+              control={form.control}
+              name={'method'}
+              label='Método de pagamento'
+              options={listPaymentMethods}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 3, md: 2 }}>
+            <ControlledInputMask
+              control={form.control}
+              label="Vencimento"
+              name="dueDate"
+              mask="99/99/9999"
+              fullWidth
+              error={!!errors?.amountInCents}
+              helperText={
+                String(errors?.amountInCents?.message ?? "")
+              }
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 2 }}>
 
-          <IconButton
-            onClick={() => console.log("Adicionar observacao!")}
-          >          
-            <Tooltip title="Inserir observacoes">
-              <NoteAltIcon fontSize="large" />
-            </Tooltip>
-          </IconButton>
+            <IconButton
+              onClick={() => console.log("Adicionar observacao!")}
+            >          
+              <Tooltip title="Inserir observacoes">
+                <NoteAltIcon fontSize="large" />
+              </Tooltip>
+            </IconButton>
 
-          
-          <IconButton
-            onClick={() => console.log("Adicionar comprovante!")}
-          >          
-            <Tooltip title="Enviar comprovante">
-              <ReceiptIcon fontSize="large" />
-            </Tooltip>
-          </IconButton>
+            
+            <IconButton
+              onClick={() => console.log("Adicionar comprovante!")}
+            >          
+              <Tooltip title="Enviar comprovante">
+                <ReceiptIcon fontSize="large" />
+              </Tooltip>
+            </IconButton>
 
-          <IconButton
-            onClick={() => console.log("Salva a linha atual")}
-          >          
-            <Tooltip title="Salvar">
-              <SaveAsIcon fontSize="large" />
-            </Tooltip>
-          </IconButton>
+            <IconButton
+              type="submit"
+            >          
+              <Tooltip title="Salvar">
+                <SaveAsIcon fontSize="large" />
+              </Tooltip>
+            </IconButton>
+          </Grid>
         </Grid>
-      </Grid>
-      <Divider/>
-    </Box>
+        <Divider/>
+      </Box>
+    </form>
   )
 }
