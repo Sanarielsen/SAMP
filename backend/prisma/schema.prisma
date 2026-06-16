@@ -131,10 +131,10 @@ model Payment {
 }
 
 model PaymentInstallment {
-  id                String   @id @default(uuid())
+  id                String  @id @default(uuid())
   paymentId         String
   installment       Int
-  method            String
+  methodId          String
   amountInCents     Int
   adjustmentInCents Int?
   observation       String?
@@ -147,7 +147,22 @@ model PaymentInstallment {
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
-  payment Payment @relation(fields: [paymentId], references: [id])
+  payment       Payment       @relation(fields: [paymentId], references: [id])
+  paymentMethod PaymentMethod @relation(fields: [methodId], references: [id])
 
   @@map("payment_installments")
+}
+
+model PaymentMethod {
+  id          String  @id @default(uuid())
+  name        String
+  observation String?
+  order       Int
+
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime?            @updatedAt
+  deletedAt          DateTime?
+  PaymentInstallment PaymentInstallment[]
+
+  @@map("payment_methods")
 }
