@@ -11,8 +11,8 @@ export async function updatePaymentInstallment(request: FastifyRequest, reply: F
     amountInCents: z.number().optional(),
     dueDate: z.coerce.date().optional(),
     paidAt: z.coerce.date().optional(),
-    receiptFilePath: z.string().optional(),
-    observation: z.string().optional(),
+    receiptFilePath: z.string().nullable().optional(),
+    observation: z.string().nullable().optional(),
   })
 
   const resultBody = updatePaymentInstallmentBodySchema.parse(request.body)

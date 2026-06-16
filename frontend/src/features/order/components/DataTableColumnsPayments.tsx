@@ -31,7 +31,6 @@ export default function DataTableColumnsPayments({
       flex: 1,
       valueFormatter: (value) => {
         if (!value) return "-"
-        console.log("Centavos: ", value)
         return formatCurrency(value)
       },
     },

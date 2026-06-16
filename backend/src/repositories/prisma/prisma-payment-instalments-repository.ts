@@ -14,11 +14,16 @@ export class PrismaPaymentInstallmentsRepository implements PaymentInstallmentRe
   }
 
   async update(data: UpdatePaymentInstallmentDTO): Promise<PaymentInstallment> {
+    const { id, ...updateData } = data;
+    
     return prisma.paymentInstallment.update({
       where: {
-        id: data.id,
+        id,
       },
-      data,
+      data: {
+        ...updateData,
+        updatedAt: new Date(Date.now())
+      }
     })
   }
 
@@ -42,17 +47,14 @@ export class PrismaPaymentInstallmentsRepository implements PaymentInstallmentRe
     })
   }
 
-  async findManyByPaymentId(paymentId: string): Promise<PaymentInstallment[] | null> {
-    const paymentInstallment = await prisma.paymentInstallment.findMany({
+  async findManyByPaymentId(paymentId: string): Promise<PaymentInstallment[]> {
+    return await prisma.paymentInstallment.findMany({
       where: {
         paymentId
+      },
+      orderBy: {
+        installment: 'asc'  // Only sort by installment number
       }
     })
-
-    if (!paymentInstallment) {
-      return null
-    }
-
-    return paymentInstallment
   }
 }
