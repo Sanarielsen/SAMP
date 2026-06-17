@@ -21,9 +21,14 @@ import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import GroupText from "@/components/GroupText";
-
-import { type PaymentInstallment, type UpdatePaymentInstallmentDTO } from '@shared/types/paymentInstallments'
 import { parseDMYDate } from "@/utils/formatDate";
+
+import type { OptionsControlledBox } from "@shared/types/values";
+import { 
+  type PaymentInstallment, 
+  type UpdatePaymentInstallmentDTO 
+} from '@shared/types/paymentInstallments'
+
 
 type MuiColor =
   | "primary.main"
@@ -35,21 +40,15 @@ type MuiColor =
   | "grey.400"
   | "grey.100";
 
-const listPaymentMethods = [
-  { value: "Crédito", label: "Crédito" },
-  { value: "Débito", label: "Débito" },
-  { value: "Pix", label: "Pix" },
-  { value: "Boleto", label: "Boleto" },
-]
-
 interface InstallmentDetailProps {
   currentPayment: PaymentInstallment
+  listPaymentMethods: OptionsControlledBox[] | []
   color?: MuiColor
   onClickUpdatePayment: (data: UpdatePaymentInstallmentDTO) => void
 }
 
 export default function InstallmentDetail({
-  currentPayment, color, onClickUpdatePayment
+  currentPayment, listPaymentMethods, color, onClickUpdatePayment
 }: InstallmentDetailProps) {
 
   const form = useForm<UpdatePaymentInstallmentSchemaFormData>({
@@ -65,7 +64,7 @@ export default function InstallmentDetail({
       dueDate: dayjs(currentPayment.dueDate)
         .format("DD/MM/YYYY"),
 
-      //method: data.method,
+      methodId: currentPayment.methodId,
 
       obserservation: currentPayment.observation ?? "",
     }
@@ -81,6 +80,7 @@ export default function InstallmentDetail({
       id: currentPayment.id,
       installment: Number(form.getValues('installment')),
       amountInCents: Number(form.getValues('amountInCents')) * 100,
+      methodId: form.getValues('methodId'),
       dueDate: parseDMYDate(dueDateValue)!,
       paidAt: paidAtValue ? parseDMYDate(paidAtValue) : null,
       observation: form.getValues('obserservation') || null,
@@ -121,7 +121,7 @@ export default function InstallmentDetail({
           <Grid size={{ xs: 12, sm: 3, md: 2}}>
             <ControlledComboBox
               control={form.control}
-              name={'method'}
+              name={'methodId'}
               label='Método de pagamento'
               options={listPaymentMethods}
             />

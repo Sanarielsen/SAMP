@@ -16,11 +16,13 @@ export async function postPaymentWithPayments(
     totalInstallments: z.number().min(1),
     totalAmountInCents: z.number().positive(),
     firstDueDate: z.coerce.date(),
-    method: z.string().min(1),
+    methodId: z.string(),
     observation: z.string().nullable().optional(),
   })
 
   const { id } = request.params as { id: string }
+
+  console.log("AAAAAAAAAAAAAAAAA")
 
   const body = bodySchema.parse(request.body)
 

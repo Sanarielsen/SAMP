@@ -7,6 +7,7 @@ import { makeUpdatePaymentInstallmentUseCase } from '@/services/factories/paymen
 export async function updatePaymentInstallment(request: FastifyRequest, reply: FastifyReply) {
   const updatePaymentInstallmentBodySchema = z.object({
 
+    methodId: z.string().optional(),
     installment: z.number().optional(),
     amountInCents: z.number().optional(),
     dueDate: z.coerce.date().optional(),
