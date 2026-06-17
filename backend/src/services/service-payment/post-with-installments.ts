@@ -70,7 +70,7 @@ export class PostPaymentWithInstallmentsUseCase {
             paymentId: payment.id,
             installment: index + 1,
             amountInCents,
-            method: newPayment.method,
+            methodId: newPayment.methodId,
             dueDate,
             observation: newPayment.observation ?? null,
           }

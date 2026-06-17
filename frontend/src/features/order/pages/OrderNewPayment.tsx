@@ -26,13 +26,9 @@ import { convertCurrencyToCents } from "@/features/order/utils/convertCurrencyTo
 import { parseBRDate } from "@/utils/formatDate";
 
 import type { CreatePaymentWithInstallmentsDTO } from "@shared/types/payment";
+import { optionsQueryListPaymentMethods } from "@/api/queryListPaymentMethods";
+import { useQuery } from "@tanstack/react-query";
 
-const listPaymentMethods = [
-  { value: "Crédito", label: "Crédito" },
-  { value: "Débito", label: "Débito" },
-  { value: "Pix", label: "Pix" },
-  { value: "Boleto", label: "Boleto" },
-]
 
 export default function OrderNewPayment() {
 
@@ -40,6 +36,13 @@ export default function OrderNewPayment() {
   const { id: orderId } = useParams();
 
   const [openToast, setOpenToast] = useState("")
+
+  const { 
+    data: listPaymentMethods,
+    isSuccess: isSuccessMethods,
+  } = useQuery(
+    optionsQueryListPaymentMethods()
+  )
 
   const form = useForm<NewPaymentSchemaFormData>({
     resolver:
@@ -69,11 +72,10 @@ export default function OrderNewPayment() {
   const onSubmit: SubmitHandler<NewPaymentSchemaFormData> = async (data) => {
 
     const payload: CreatePaymentWithInstallmentsDTO = {
-      orderId: orderId!,
       totalInstallments: Number(data.totalInstallments),
       totalAmountInCents: convertCurrencyToCents(Number(data.totalAmountInCents)),
       firstDueDate: parseBRDate(data.firstDueDate),
-      method: data.method,
+      methodId: data.methodId,
       observation: data.observation
     }
     
@@ -127,9 +129,9 @@ export default function OrderNewPayment() {
             <Grid size={{ xs: 12, sm: 6, lg: 2 }}>
               <ControlledComboBox
                 control={form.control}
-                name={'method'}
+                name={'methodId'}
                 label='Método de pagamento'
-                options={listPaymentMethods}
+                options={isSuccessMethods ? listPaymentMethods : []}
               />
             </Grid>
 

@@ -21,11 +21,10 @@ export type CreatePaymentDTO = {
 }
 
 export type CreatePaymentWithInstallmentsDTO = {
-  orderId:            string
   totalInstallments:  number
   totalAmountInCents: number
   firstDueDate:       Date
-  method:             string
+  methodId:           string
   observation?:       string | null
 }
 

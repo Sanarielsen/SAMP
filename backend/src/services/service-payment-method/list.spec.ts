@@ -21,6 +21,8 @@ describe('List Payment Method Use Case', () => {
     sut = new ListPaymentMethodsUseCase(paymentMethodsRepository)
 
     newPaymentMethod = await makePaymentMethod(paymentMethodsRepository)
+    await makePaymentMethod(paymentMethodsRepository)
+    await makePaymentMethod(paymentMethodsRepository)
   })
 
   it('should list all active payment methods', async () => {

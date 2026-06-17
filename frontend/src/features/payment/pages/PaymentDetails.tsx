@@ -16,6 +16,8 @@ import HeaderPage from "@/components/HeaderPage";
 import { type PaymentInstallment } from '@shared/types/paymentInstallments'
 import { useMutationPatchPaymentInstallment } from "@/features/payment/api/mutationUpdatePaymentInstallment";
 import ToastContainer from "@/components/Toast";
+import { optionsQueryListPaymentMethods } from "@/api/queryListPaymentMethods";
+
 
 export default function PaymentDetails() {
 
@@ -24,6 +26,13 @@ export default function PaymentDetails() {
   const [openToast, setOpenToast] = useState("")
 
   const queryClient = useQueryClient();
+
+  const { 
+    data: listPaymentMethods,
+    isSuccess: isSuccessMethods,
+  } = useQuery(
+    optionsQueryListPaymentMethods()
+  )
 
   const { 
     data: listPaymentInstallments,
@@ -62,6 +71,7 @@ export default function PaymentDetails() {
               <Grid key={paymentInstallment.id} >
                 <InstallmentDetail 
                   currentPayment={paymentInstallment}
+                  listPaymentMethods={isSuccessMethods ? listPaymentMethods : []}
                   color={
                     paymentInstallment.installment % 2 == 0 ? "grey.100" : undefined
                   } 
