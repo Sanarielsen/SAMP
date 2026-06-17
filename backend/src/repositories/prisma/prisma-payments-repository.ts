@@ -52,12 +52,7 @@ export class PrismaPaymentsRepository implements PaymentRepository {
         orderId
       },
       include: {
-        paymentInstallments: {
-          select: {
-            amountInCents: true,
-            dueDate: true,
-          },
-        },
+        paymentInstallments: true
       },
     })
 
@@ -78,6 +73,11 @@ export class PrismaPaymentsRepository implements PaymentRepository {
                 : latest,
             payment.paymentInstallments[0].dueDate)
           : null,
+      observation: payment.observation,
+      installments: payment.paymentInstallments,
+      createdAt: payment.createdAt,
+      updatedAt: payment.deletedAt,
+      deletedAt: payment.deletedAt,
     }))
   }
 }

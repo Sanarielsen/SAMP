@@ -1,3 +1,5 @@
+import type { PaymentInstallment } from "./paymentInstallments"
+
 export type Payment = {
   id: string
   
@@ -33,4 +35,12 @@ export type PaymentDetailDTO = {
   totalInstallments:  number
   totalAmountInCents: number
   lastDueDate:        Date | null
+  
+  observation?:       string | null
+
+  installments:       PaymentInstallment[]
+
+  createdAt:  Date
+  updatedAt:  Date | null
+  deletedAt:  Date | null
 }

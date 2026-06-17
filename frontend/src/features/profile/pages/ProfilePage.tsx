@@ -19,7 +19,7 @@ import {
   updateProfileSchema, 
   type UpdateProfileSchemaFormData 
 } from "@/features/profile/schema/updateProfileSchema";
-import { formatAsVisualDate } from "@/features/client/utils/formatAsAVisualDate";
+import { formatAsVisualDate } from "@/utils/formatAsAVisualDate";
 
 import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";

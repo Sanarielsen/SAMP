@@ -29,7 +29,7 @@ import { ControlledInputMask } from "@/components/ControlledInputMask";
 import ToastContainer from "@/components/Toast";
 
 import { emptyOrder } from "@/features/order/utils/emptyOrder";
-import { formatAsVisualDate } from "@/features/client/utils/formatAsAVisualDate";
+import { formatAsVisualDate } from "@/utils/formatAsAVisualDate";
 import { parseBRDate } from "@/utils/formatDate";
 
 import type { CreateOrderDTO, UpdateOrderDTO } from "@shared/types/orders";

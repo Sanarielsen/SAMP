@@ -12,7 +12,7 @@ import {
 
 import { formatCurrency } from "@/features/order/utils/formatCurrency";
 
-import { formatAsVisualOnlyDate } from "@/features/client/utils/formatAsAVisualDate";
+import { formatAsVisualOnlyDate } from "@/utils/formatAsAVisualDate";
 
 import { type PaymentDetailDTO } from "@shared/types/payment"
 
