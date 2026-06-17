@@ -9,6 +9,7 @@ import {
 } from "@shared/types/paymentInstallments";
 
 export class PrismaPaymentInstallmentsRepository implements PaymentInstallmentRepository {
+  
   create(data: CreatePaymentInstallmentDTO): Promise<PaymentInstallment> {
     throw new Error("Method not implemented.");
   }
@@ -37,6 +38,14 @@ export class PrismaPaymentInstallmentsRepository implements PaymentInstallmentRe
         deletedAt: null,
       })),
     })
+  }
+
+  updateInstallmentPaid(id: string, paidAt: Date | null): Promise<PaymentInstallment> {
+    throw new Error("Method not implemented.");
+  }
+
+  delete(id: string): Promise<PaymentInstallment> {
+    throw new Error("Method not implemented.");
   }
 
   async findById(id: string): Promise<PaymentInstallment | null> {
