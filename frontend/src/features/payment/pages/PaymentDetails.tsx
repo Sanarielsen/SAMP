@@ -75,10 +75,7 @@ export default function PaymentDetails() {
                   color={
                     paymentInstallment.installment % 2 == 0 ? "grey.100" : undefined
                   } 
-                  onClickUpdatePayment={(data) => {
-                    console.log('Sending to API:', { ...data, id: data.id });
-                    mutationPatchInstallment.mutate({ ...data });
-                  }}/>
+                  onClickUpdatePayment={(data) => mutationPatchInstallment.mutate(data)}/>
               </Grid>
             )
           } 

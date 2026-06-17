@@ -22,8 +22,6 @@ export async function postPaymentWithPayments(
 
   const { id } = request.params as { id: string }
 
-  console.log("AAAAAAAAAAAAAAAAA")
-
   const body = bodySchema.parse(request.body)
 
   const useCase = makePostPaymentWithInstallmentsUseCase();
