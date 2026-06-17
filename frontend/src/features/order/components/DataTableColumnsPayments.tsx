@@ -12,6 +12,8 @@ import {
 
 import { formatCurrency } from "@/features/order/utils/formatCurrency";
 
+import { formatAsVisualOnlyDate } from "@/features/client/utils/formatAsAVisualDate";
+
 import { type PaymentDetailDTO } from "@shared/types/payment"
 
 
@@ -40,9 +42,13 @@ export default function DataTableColumnsPayments({
       flex: 1,
     },
     {
-      field: "lastExpirationDate",
+      field: "lastDueDate",
       headerName: "Ultima data de vencimento",
       flex: 1,
+      valueFormatter: (value) => {
+        if (!value) return "-"
+        return formatAsVisualOnlyDate(value)
+      },
     },
     {
       field: "actions",

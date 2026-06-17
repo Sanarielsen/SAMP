@@ -1,12 +1,9 @@
 import { OrderRepository } from "@/repositories/order-repository";
-import { PaymentInstallmentRepository } from "@/repositories/payment-installments-repository";
 import { PaymentRepository } from "@/repositories/payment-repository";
-import { UsersRepository } from "@/repositories/users-repository";
+import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
-import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";
+import { PaymentDetailDTO } from "@shared/types/payment";
 
-import { Payment } from "@shared/types/payment";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface ListPaymentsUseCaseRequest {
   orderId: string
@@ -20,8 +17,7 @@ export class ListPaymentsUseCase {
 
   async execute({
     orderId
-  }: ListPaymentsUseCaseRequest): Promise<Payment[] | null> {
-    
+  }: ListPaymentsUseCaseRequest): Promise<PaymentDetailDTO[] | null> {
     const orderWillBeUsed = await this.ordersRepository.findById(orderId)
 
     if (!orderWillBeUsed) {
