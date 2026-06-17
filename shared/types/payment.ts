@@ -3,7 +3,7 @@ export type Payment = {
   
   orderId:            string
   totalInstallments:  number
-  totalAmountInCents: number
+  totalAmountInCents?: number | null
   observation:        string | null
   firstDueDate:       Date
 
@@ -15,12 +15,12 @@ export type Payment = {
 export type CreatePaymentDTO = {
   orderId:            string
   totalInstallments:  number
-  totalAmountInCents: number
   observation?:       string | null
   firstDueDate:       Date
 }
 
 export type CreatePaymentWithInstallmentsDTO = {
+  orderId:            string
   totalInstallments:  number
   totalAmountInCents: number
   firstDueDate:       Date
@@ -32,4 +32,5 @@ export type PaymentDetailDTO = {
   id: string
   totalInstallments:  number
   totalAmountInCents: number
+  lastDueDate:        Date | null
 }

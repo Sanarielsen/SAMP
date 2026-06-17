@@ -12,6 +12,15 @@ export function formatAsVisualDate(
   return `${day}/${month}/${year} ${hours}:${minutes}`
 }
 
+export function formatAsVisualOnlyDate(value: string) {
+  if (!value) return ''
+
+  const [date] = value.split('T')
+  const [year, month, day] = date.split('-')
+
+  return `${day}/${month}/${year}`
+}
+
 export function formatToApiDate(
   value: string
 ) {

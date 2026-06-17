@@ -2,7 +2,12 @@ import { prisma } from "@/lib/prisma";
 
 import { PaymentRepository } from "@/repositories/payment-repository";
 
-import { CreatePaymentDTO, Payment } from "@shared/types/payment";
+import { 
+  CreatePaymentDTO, 
+  CreatePaymentWithInstallmentsDTO, 
+  Payment, 
+  PaymentDetailDTO 
+} from "@shared/types/payment";
 
 export class PrismaPaymentsRepository implements PaymentRepository {
   async create(data: CreatePaymentDTO): Promise<Payment> {
@@ -17,13 +22,12 @@ export class PrismaPaymentsRepository implements PaymentRepository {
   }
 
   async createWithInstallments(
-    data: CreatePaymentDTO,
+    data: CreatePaymentWithInstallmentsDTO,
   ): Promise<Payment> {
 
     return prisma.payment.create({
       data: {
         orderId: data.orderId,
-        totalAmountInCents: data.totalAmountInCents,
         totalInstallments: data.totalInstallments,
         firstDueDate: data.firstDueDate,
         observation: data.observation ?? null,
@@ -34,7 +38,7 @@ export class PrismaPaymentsRepository implements PaymentRepository {
     })
   }
 
-  findById(id: string): Promise<Payment | null> {
+  async findById(id: string): Promise<Payment | null> {
     return prisma.payment.findUnique({
       where: {
         id
@@ -42,11 +46,38 @@ export class PrismaPaymentsRepository implements PaymentRepository {
     })
   }
 
-  async findManyByOrderId(orderId: string): Promise<Payment[] | null> {
-    return prisma.payment.findMany({
+  async findManyByOrderId(orderId: string): Promise<PaymentDetailDTO[] | null> {
+    const payments = await prisma.payment.findMany({
       where: {
         orderId
-      }
+      },
+      include: {
+        paymentInstallments: {
+          select: {
+            amountInCents: true,
+            dueDate: true,
+          },
+        },
+      },
     })
+
+    return payments.map(payment => ({
+      id: payment.id,
+      totalInstallments: payment.totalInstallments,
+      totalAmountInCents:
+        payment.paymentInstallments.reduce(
+          (sum, installment) =>
+            sum + installment.amountInCents,
+          0,
+        ),
+      lastDueDate:
+        payment.paymentInstallments.length > 0
+          ? payment.paymentInstallments.reduce((latest, installment) =>
+              installment.dueDate > latest
+                ? installment.dueDate
+                : latest,
+            payment.paymentInstallments[0].dueDate)
+          : null,
+    }))
   }
 }

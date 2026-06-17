@@ -116,7 +116,6 @@ model Payment {
   id                 String   @id @default(uuid())
   orderId            String
   totalInstallments  Int
-  totalAmountInCents Int
   observation        String?
   firstDueDate       DateTime
 

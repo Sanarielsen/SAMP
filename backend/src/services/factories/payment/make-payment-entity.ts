@@ -1,9 +1,7 @@
 import { 
   InMemoryPaymentRepository 
 } from '@/repositories/in-memory/in-memory-payment-repository'
-import { CreatePaymentDTO, CreatePaymentWithInstallmentsDTO } from '@shared/types/payment'
-
-import { CreatePaymentInstallmentDTO } from '@shared/types/paymentInstallments'
+import { CreatePaymentDTO } from '@shared/types/payment'
 
 export async function makePayment(
   repository: InMemoryPaymentRepository,
@@ -12,7 +10,6 @@ export async function makePayment(
 
   return repository.create({
     orderId: 'order-test',
-    totalAmountInCents: 500000,
     totalInstallments: 3,
     firstDueDate: new Date(Date.now()),
     observation: 'observation-test',

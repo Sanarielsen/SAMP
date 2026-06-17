@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
+import { useQuery } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { 
@@ -12,6 +13,7 @@ import {
 import { 
   useMutationPostPaymentWithInstallments 
 } from "@/features/order/api/mutationCreatePayment";
+import { optionsQueryListPaymentMethods } from "@/api/queryListPaymentMethods";
 import { 
   newPaymentSchema, 
   type NewPaymentSchemaFormData 
@@ -26,8 +28,6 @@ import { convertCurrencyToCents } from "@/features/order/utils/convertCurrencyTo
 import { parseBRDate } from "@/utils/formatDate";
 
 import type { CreatePaymentWithInstallmentsDTO } from "@shared/types/payment";
-import { optionsQueryListPaymentMethods } from "@/api/queryListPaymentMethods";
-import { useQuery } from "@tanstack/react-query";
 
 
 export default function OrderNewPayment() {
@@ -72,6 +72,7 @@ export default function OrderNewPayment() {
   const onSubmit: SubmitHandler<NewPaymentSchemaFormData> = async (data) => {
 
     const payload: CreatePaymentWithInstallmentsDTO = {
+      orderId: orderId!,
       totalInstallments: Number(data.totalInstallments),
       totalAmountInCents: convertCurrencyToCents(Number(data.totalAmountInCents)),
       firstDueDate: parseBRDate(data.firstDueDate),

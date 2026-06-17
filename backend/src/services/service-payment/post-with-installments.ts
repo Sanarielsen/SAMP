@@ -39,9 +39,6 @@ export class PostPaymentWithInstallmentsUseCase {
         totalInstallments:
           newPayment.totalInstallments,
 
-        totalAmountInCents:
-          newPayment.totalAmountInCents,
-
         observation:
           newPayment.observation ?? null,
 

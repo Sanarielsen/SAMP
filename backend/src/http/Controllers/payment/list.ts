@@ -1,6 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { makeGetOrderUseCase } from '@/services/factories/order/make-get-use-case';
 import { InvalidCredentialsError } from '@/services/errors/invalid-credentials-error';
 import { makeListPaymentUseCase } from '@/services/factories/payment/make-list-payment-use-case';
 
