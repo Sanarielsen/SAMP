@@ -34,7 +34,6 @@ export class InMemoryPaymentMethodsRepository implements PaymentMethodRepository
     this.items[paymentMethodIndex] = disabledPaymentMethod
 
     return disabledPaymentMethod
-      
   }
   
   async findById(id: string): Promise<PaymentMethod | null> {

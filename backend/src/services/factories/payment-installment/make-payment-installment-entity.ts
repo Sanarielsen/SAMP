@@ -14,7 +14,7 @@ export async function makePaymentInstallment(
     installment: 5,
     amountInCents: 500000,
     dueDate: new Date(Date.now()),
-    method: 'PIX',
+    methodId: 'method-test',
 
     ...override,
   })
