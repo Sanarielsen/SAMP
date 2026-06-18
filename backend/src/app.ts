@@ -4,6 +4,7 @@ import { env } from "./env";
 import { ZodError } from "zod";
 import fastifyJwt from "@fastify/jwt";
 import cors from '@fastify/cors'
+import fastifyMultipart from "@fastify/multipart";
 
 export const app = fastify();
 
@@ -13,6 +14,8 @@ app.register(fastifyJwt, {
     expiresIn: '1h'
   }
 })
+
+app.register(fastifyMultipart)
 
 app.register(cors, {
   origin: true,

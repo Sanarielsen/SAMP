@@ -8,12 +8,17 @@ dayjs.extend(customParseFormat);
 export const updatePaymentInstallmentToPay = z.object({
   paidAt: z.string().refine(
     (value) =>
-      value === "" ||
+      //value === "" ||
       dayjs(value, "DD/MM/YYYY", true).isValid(),
     {
       message: "Informe uma data válida.",
     }
-  ).nullable(),
+  ),
+  file: z
+    .instanceof(File)
+    .refine((file) => file.size > 0, {
+      message: "Arquivo obrigatório",
+    }).optional(),
 });
 
 export type UpdatePaymentInstallmentToPaySchemaFormData =

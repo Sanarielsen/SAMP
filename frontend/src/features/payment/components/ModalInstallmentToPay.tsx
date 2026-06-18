@@ -11,6 +11,7 @@ import {
   type UpdatePaymentInstallmentToPaySchemaFormData 
 } from "@/features/payment/schema/updatePaymentInstallmentToPay"
 import { convertDataToServerString } from "@/utils/convertDataToServerString"
+import { ControlledFileInput } from "@/components/ControlledFIleInput"
 
 
 interface ModalInstallmentToPayProps {
@@ -28,6 +29,7 @@ export default function ModalInstallmentToPay({
     resolver:
       zodResolver(updatePaymentInstallmentToPay),
     defaultValues: {
+      file: undefined,
       paidAt: "",
     },
   })
@@ -49,11 +51,12 @@ export default function ModalInstallmentToPay({
 
   const onSubmit: SubmitHandler<UpdatePaymentInstallmentToPaySchemaFormData> = async (data) => {
 
-    const convertPaidAt = convertDataToServerString(data.paidAt) ?? null
+    const convertPaidAt = convertDataToServerString(data.paidAt)
 
     mutationUpdateInstallmentToPay.mutate({
       id,
-      paidAt: convertPaidAt
+      paidAt: convertPaidAt,
+      file: data.file
     })
   }
 
@@ -108,10 +111,17 @@ export default function ModalInstallmentToPay({
                 variant="outlined"
                 name="paidAt"
                 mask={"99/99/9999"}
-                label="Data de pagamento a ser registrada"
+                label="Data de pagamento a ser registrada:*"
                 fullWidth
                 error={!!form.formState.errors.paidAt}
                 helperText={form.formState.errors.paidAt?.message ?? ""}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12}}>
+              <ControlledFileInput
+                control={form.control}
+                name="file"
               />
             </Grid>
 
