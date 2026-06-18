@@ -36,7 +36,7 @@ interface InstallmentDetailProps {
   listPaymentMethods: OptionsControlledBox[] | []
   color?: string
   onClickUpdatePayment: (data: UpdatePaymentInstallmentDTO) => void
-  onClickSendPaidData: (id: string) => void
+  onClickSendPaidData: (current: PaymentInstallment) => void
 }
 
 export default function InstallmentDetail({
@@ -162,7 +162,7 @@ export default function InstallmentDetail({
             </IconButton>
 
             <IconButton
-              onClick={() => onClickSendPaidData(currentPayment.id)}
+              onClick={() => onClickSendPaidData(currentPayment)}
             >          
               <Tooltip title="Marcar como pago">
                 <CheckCircleIcon fontSize="large" />

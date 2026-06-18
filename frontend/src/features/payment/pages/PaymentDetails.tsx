@@ -27,7 +27,7 @@ export default function PaymentDetails() {
 
   const { id } = useParams();
 
-  const [currentPaymentId, setCurrentPaymentId] = useState("");
+  const [currentPayment, setCurrentPayment] = useState<PaymentInstallment>();
 
   const [openToast, setOpenToast] = useState("")
   const [modalPaymentToPay, setModalPaymentToPay] = useState(false);
@@ -73,8 +73,8 @@ export default function PaymentDetails() {
       },
   })
 
-  function handleClickSendPaidInstallment(id: string) {
-    setCurrentPaymentId(id)
+  function handleClickSendPaidInstallment(current: PaymentInstallment) {
+    setCurrentPayment(current)
     setModalPaymentToPay(true)
   }
   
@@ -122,12 +122,14 @@ export default function PaymentDetails() {
         onClose={() => setOpenToast("")}
       />
 
-      <ModalInstallmentToPay
-        open={modalPaymentToPay}
-        id={currentPaymentId}
-        onSubmitPaidAt={(action) => executeActionAfterRequest(action)}
-        handleClose={() => setModalPaymentToPay(false)}
-      />
+      { currentPayment && (
+        <ModalInstallmentToPay
+          open={modalPaymentToPay}
+          installment={currentPayment}
+          onSubmitPaidAt={(action) => executeActionAfterRequest(action)}
+          handleClose={() => setModalPaymentToPay(false)}
+        />
+      ) }
     </>
   )
 }

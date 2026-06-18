@@ -1,5 +1,4 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { z } from 'zod';
 
 import { makeUpdatePaymentInstallmentPaidUseCase } from '@/services/factories/payment-installment/make-update-paid-use-case';
 
@@ -12,8 +11,8 @@ export async function updatePaymentInstallmentAsPaid(request: FastifyRequest, re
 
   const parts = request.parts()
 
-  let paidAt: string = ''
-  let proofFilePath: string = ''
+  let paidAt: string | null = null
+  let proofFilePath: string | null = null
 
   for await (const part of parts) {
 
@@ -21,24 +20,33 @@ export async function updatePaymentInstallmentAsPaid(request: FastifyRequest, re
       paidAt = part.value as string
     }
 
-    if (part.type === 'file' && part.fieldname === 'proofPayment') {
+    if (
+      part.type === 'file' &&
+      part.fieldname === 'proofPayment' &&
+      part.filename &&
+      part.filename.trim() !== ''
+    ) {
       const fileName = `${Date.now()}-${part.filename}`
       const filePath = `uploads/pdf/${fileName}`
+
       await pumpStreamToFile(part.file, filePath)
+
       proofFilePath = filePath
     }
   }
 
+  console.log(proofFilePath)
+
   try {
     const useCase = makeUpdatePaymentInstallmentPaidUseCase();
 
-    const order = await useCase.execute({
+    const installment = await useCase.execute({
       id,
-      paidAt: new Date(paidAt),
+      paidAt: paidAt ? new Date(paidAt) : null,
       proofPaymentPath: proofFilePath
     })
 
-    return reply.status(200).send(order);
+    return reply.status(200).send(installment);
 
   } catch (err) {
     if (err instanceof ResourceNotFoundError) {
