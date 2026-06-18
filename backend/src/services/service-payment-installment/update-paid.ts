@@ -32,10 +32,10 @@ export class UpdatePaymentInstallmentPaidUseCase {
     }
 
     const updatedPaymentInstallment =
-      await this.paymentInstallmentsRepository.update({
+      await this.paymentInstallmentsRepository.updateInstallmentPaid(
         id, 
         paidAt
-      })
+      )
 
     return updatedPaymentInstallment
   }

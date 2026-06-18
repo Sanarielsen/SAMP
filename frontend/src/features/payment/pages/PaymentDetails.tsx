@@ -7,23 +7,30 @@ import {
   Grid 
 } from "@mui/material";
 
+
 import { 
   optionsQueryListPaymentInstallments 
 } from "@/features/payment/api/queryListPaymentInstallments";
+import { 
+  useMutationPatchPaymentInstallment 
+} from "@/features/payment/api/mutationUpdatePaymentInstallment";
+import { optionsQueryListPaymentMethods } from "@/api/queryListPaymentMethods";
 import InstallmentDetail from "@/features/payment/components/InstallmentDetail";
+import ModalInstallmentToPay from "@/features/payment/components/ModalInstallmentToPay";
 import HeaderPage from "@/components/HeaderPage";
+import ToastContainer from "@/components/Toast";
 
 import { type PaymentInstallment } from '@shared/types/paymentInstallments'
-import { useMutationPatchPaymentInstallment } from "@/features/payment/api/mutationUpdatePaymentInstallment";
-import ToastContainer from "@/components/Toast";
-import { optionsQueryListPaymentMethods } from "@/api/queryListPaymentMethods";
 
 
 export default function PaymentDetails() {
 
   const { id } = useParams();
 
+  const [currentPaymentId, setCurrentPaymentId] = useState("");
+
   const [openToast, setOpenToast] = useState("")
+  const [modalPaymentToPay, setModalPaymentToPay] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -41,6 +48,18 @@ export default function PaymentDetails() {
     optionsQueryListPaymentInstallments(id!)
   )
 
+  function executeActionAfterRequest(result: string) {
+    setOpenToast(result);
+    if (result === "success") {
+      setTimeout(() => {
+        setModalPaymentToPay(false);
+        queryClient.invalidateQueries({
+          queryKey: ['payment-installments', id]
+        })
+      }, 5000);
+    }
+  }
+
   const mutationPatchInstallment =
     useMutationPatchPaymentInstallment({
       onSuccess: () => {
@@ -53,6 +72,11 @@ export default function PaymentDetails() {
         setOpenToast("error")
       },
   })
+
+  function handleClickSendPaidInstallment(id: string) {
+    setCurrentPaymentId(id)
+    setModalPaymentToPay(true)
+  }
   
   return (
     <>
@@ -73,9 +97,11 @@ export default function PaymentDetails() {
                   currentPayment={paymentInstallment}
                   listPaymentMethods={isSuccessMethods ? listPaymentMethods : []}
                   color={
-                    paymentInstallment.installment % 2 == 0 ? "grey.100" : undefined
+                    paymentInstallment.installment % 2 == 0 ? "secondInstallment" : undefined
                   } 
-                  onClickUpdatePayment={(data) => mutationPatchInstallment.mutate(data)}/>
+                  onClickUpdatePayment={(data) => mutationPatchInstallment.mutate(data)}
+                  onClickSendPaidData={(id) => handleClickSendPaidInstallment(id)}
+                  />
               </Grid>
             )
           } 
@@ -94,6 +120,13 @@ export default function PaymentDetails() {
         message="Ocorreu um erro ao atualizar essa parcela."
         severity="error"
         onClose={() => setOpenToast("")}
+      />
+
+      <ModalInstallmentToPay
+        open={modalPaymentToPay}
+        id={currentPaymentId}
+        onSubmitPaidAt={(action) => executeActionAfterRequest(action)}
+        handleClose={() => setModalPaymentToPay(false)}
       />
     </>
   )

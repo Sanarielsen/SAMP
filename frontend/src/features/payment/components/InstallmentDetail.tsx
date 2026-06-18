@@ -9,9 +9,10 @@ import {
   IconButton, 
   Tooltip 
 } from "@mui/material";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
-import SaveAsIcon from '@mui/icons-material/SaveAs';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import SaveAsIcon from '@mui/icons-material/SaveAs';
 
 import { 
   updatePaymentInstallment, 
@@ -30,25 +31,16 @@ import {
 } from '@shared/types/paymentInstallments'
 
 
-type MuiColor =
-  | "primary.main"
-  | "secondary.main"
-  | "success.main"
-  | "warning.main"
-  | "error.main"
-  | "grey.800"
-  | "grey.400"
-  | "grey.100";
-
 interface InstallmentDetailProps {
   currentPayment: PaymentInstallment
   listPaymentMethods: OptionsControlledBox[] | []
-  color?: MuiColor
+  color?: string
   onClickUpdatePayment: (data: UpdatePaymentInstallmentDTO) => void
+  onClickSendPaidData: (id: string) => void
 }
 
 export default function InstallmentDetail({
-  currentPayment, listPaymentMethods, color, onClickUpdatePayment
+  currentPayment, listPaymentMethods, color, onClickUpdatePayment, onClickSendPaidData
 }: InstallmentDetailProps) {
 
   const form = useForm<UpdatePaymentInstallmentSchemaFormData>({
@@ -71,6 +63,18 @@ export default function InstallmentDetail({
   })
   const { errors } = form.formState
 
+  const dueDate = dayjs(currentPayment.dueDate);
+
+  const hasPaid = 
+  currentPayment.paidAt !== null 
+    ? 'success.200' : 
+  dueDate.isSame(dayjs(), "day") 
+      ? 'warning.200' :
+  dueDate.isBefore(dayjs(), "day")
+      ? 'error.200' :
+  color == 'secondInstallment'
+      ? 'grey.100' : undefined
+
   const onSubmit: SubmitHandler<UpdatePaymentInstallmentSchemaFormData> = async () => {
 
     const paidAtValue = form.getValues('paidAt');
@@ -82,7 +86,7 @@ export default function InstallmentDetail({
       amountInCents: Number(form.getValues('amountInCents')) * 100,
       methodId: form.getValues('methodId'),
       dueDate: parseDMYDate(dueDateValue)!,
-      paidAt: paidAtValue ? parseDMYDate(paidAtValue) : null,
+      paidAt: paidAtValue ? parseDMYDate(paidAtValue) : undefined,
       observation: form.getValues('obserservation') || null,
       receiptFilePath: form.getValues('receiptFilePath') || null,
     }
@@ -92,7 +96,7 @@ export default function InstallmentDetail({
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
-      <Box component="section" sx={{ backgroundColor: color }}>
+      <Box component="section" sx={{ backgroundColor: hasPaid }}>
         <Grid container spacing={4} sx={{ pt: 2, pb: 3, px: 4 }}>
           <Grid size={{ xs: 12, sm: 3 }}>
             <GroupText
@@ -149,12 +153,19 @@ export default function InstallmentDetail({
               </Tooltip>
             </IconButton>
 
-            
             <IconButton
               onClick={() => console.log("Adicionar comprovante!")}
             >          
               <Tooltip title="Enviar comprovante">
                 <ReceiptIcon fontSize="large" />
+              </Tooltip>
+            </IconButton>
+
+            <IconButton
+              onClick={() => onClickSendPaidData(currentPayment.id)}
+            >          
+              <Tooltip title="Marcar como pago">
+                <CheckCircleIcon fontSize="large" />
               </Tooltip>
             </IconButton>
 
