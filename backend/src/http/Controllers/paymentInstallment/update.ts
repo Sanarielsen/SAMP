@@ -11,7 +11,10 @@ export async function updatePaymentInstallment(request: FastifyRequest, reply: F
     installment: z.number().optional(),
     amountInCents: z.number().optional(),
     dueDate: z.coerce.date().optional(),
-    paidAt: z.coerce.date().optional(),
+    paidAt: z.preprocess(
+      (value) => value === null ? null : value,
+      z.date().nullable().optional()
+    ),
     receiptFilePath: z.string().nullable().optional(),
     observation: z.string().nullable().optional(),
   })
@@ -19,6 +22,8 @@ export async function updatePaymentInstallment(request: FastifyRequest, reply: F
   const resultBody = updatePaymentInstallmentBodySchema.parse(request.body)
   
   const { id } = request.params as { id: string }
+
+  console.log(id, resultBody)
 
   try {
     const useCase = makeUpdatePaymentInstallmentUseCase();

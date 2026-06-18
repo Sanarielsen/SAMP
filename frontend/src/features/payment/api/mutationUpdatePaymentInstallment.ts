@@ -11,7 +11,7 @@ async function patchPaymentInstallment(
   payload: PaymentInstallmentPatchPayload
 ): Promise<void> {
   const { data } = await api.patch(`/payment/installment/${payload.id}`, payload)
-
+  console.log("Payload: ", payload)
   return data
 }
 

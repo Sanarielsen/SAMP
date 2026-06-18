@@ -1,37 +1,62 @@
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import { Box, Button, Grid, Modal, Typography } from "@mui/material"
+import { 
+  Box, 
+  Button, 
+  Grid, 
+  Modal, 
+  Typography
+ } from "@mui/material"
 import { GridCloseIcon } from "@mui/x-data-grid"
 
+import { useMutationPatchPaymentInstallment } from "@/features/payment/api/mutationUpdatePaymentInstallment"
 import { useMutationUpdatePaymentInstallmentToPay } from "@/features/payment/api/mutationUpdatePaymentInstallmentToPay"
 import { ControlledInputMask } from "@/components/ControlledInputMask"
+import { ControlledFileInput } from "@/components/ControlledFIleInput"
 import { 
   updatePaymentInstallmentToPay, 
   type UpdatePaymentInstallmentToPaySchemaFormData 
 } from "@/features/payment/schema/updatePaymentInstallmentToPay"
 import { convertDataToServerString } from "@/utils/convertDataToServerString"
-import { ControlledFileInput } from "@/components/ControlledFIleInput"
+import { formatAsVisualOnlyDate } from "@/utils/formatDate2"
+
+import type { PaymentInstallment } from "@shared/types/paymentInstallments"
 
 
 interface ModalInstallmentToPayProps {
   open: boolean
-  id: string
+  installment: PaymentInstallment
   onSubmitPaidAt: (action: string) => void
   handleClose: () => void
 }
 
 export default function ModalInstallmentToPay({
-  open, id, onSubmitPaidAt, handleClose
+  open, installment, onSubmitPaidAt, handleClose
 }: ModalInstallmentToPayProps) {
 
   const form = useForm<UpdatePaymentInstallmentToPaySchemaFormData>({
     resolver:
       zodResolver(updatePaymentInstallmentToPay),
     defaultValues: {
-      file: undefined,
-      paidAt: "",
+      paidAt: installment.paidAt
+    ? formatAsVisualOnlyDate(installment.paidAt)
+    : "",
     },
+  })
+
+  const mutationPatchInstallment =
+    useMutationPatchPaymentInstallment({
+      onSuccess: () => {
+        onSubmitPaidAt("success")
+        setTimeout(() => {
+          mutationPatchInstallment.reset();
+          form.reset();
+        }, 5000);
+      },
+      onError: () => {
+        onSubmitPaidAt("error")
+      },
   })
   
   const mutationUpdateInstallmentToPay =
@@ -45,16 +70,28 @@ export default function ModalInstallmentToPay({
       },
       onError: () => {
         onSubmitPaidAt("error")
-        form.reset();
       },
   })
+
+  const isRunningSomething = mutationPatchInstallment.isPending ||
+    mutationPatchInstallment.isSuccess ||
+    mutationUpdateInstallmentToPay.isPending ||
+    mutationUpdateInstallmentToPay.isSuccess
+  
+  function handleCancelInstallmentWasPaid() {
+    mutationPatchInstallment.mutate({
+      id: installment.id,
+      paidAt: null,
+      receiptFilePath: null
+    })
+  }
 
   const onSubmit: SubmitHandler<UpdatePaymentInstallmentToPaySchemaFormData> = async (data) => {
 
     const convertPaidAt = convertDataToServerString(data.paidAt)
 
     mutationUpdateInstallmentToPay.mutate({
-      id,
+      id: installment.id,
       paidAt: convertPaidAt,
       file: data.file
     })
@@ -123,24 +160,46 @@ export default function ModalInstallmentToPay({
                 control={form.control}
                 name="file"
               />
+
+              {installment.receiptFilePath && (
+                <div>
+                  <p>Comprovante atual:</p>
+                  <a
+                    href={installment.receiptFilePath}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Carregar arquivo
+                  </a>
+                </div>
+              )}
             </Grid>
 
-            <Grid size={{ xs: 12}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
+
+              <Button
+                type="button"
+                variant="contained"
+                size="large"
+                color="error"
+                onClick={handleCancelInstallmentWasPaid}
+                loading={isRunningSomething}
+                disabled={isRunningSomething}
+                fullWidth
+              >
+                Cancelar pagamento
+              </Button>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6 }}>
 
               <Button
                 type="submit"
                 variant="contained"
                 size="large"
-                loading={
-                  mutationUpdateInstallmentToPay.isPending ||
-                  mutationUpdateInstallmentToPay.isSuccess
-                }
-                disabled={
-                  mutationUpdateInstallmentToPay.isPending ||
-                  mutationUpdateInstallmentToPay.isSuccess
-                }
+                loading={isRunningSomething}
+                disabled={isRunningSomething}
                 fullWidth
-                
               >
                 Registrar pagamento
               </Button>

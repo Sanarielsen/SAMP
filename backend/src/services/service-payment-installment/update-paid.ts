@@ -8,8 +8,8 @@ import { PaymentInstallment } from "@shared/types/paymentInstallments";
 
 interface UpdatePaymentInstallmentPaidUseCaseRequest {
   id: string,
-  paidAt: Date,
-  proofPaymentPath: string
+  paidAt: Date | null,
+  proofPaymentPath: string | null
 }
 
 export class UpdatePaymentInstallmentPaidUseCase {
@@ -32,6 +32,8 @@ export class UpdatePaymentInstallmentPaidUseCase {
     if (paymentInstallments.deletedAt !== null) {
       throw new InvalidResourceError()
     }
+
+    console.log("BATEU AQUI")
 
     const updatedPaymentInstallment =
       await this.paymentInstallmentsRepository.updateInstallmentPaid(
