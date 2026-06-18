@@ -40,8 +40,16 @@ export class PrismaPaymentInstallmentsRepository implements PaymentInstallmentRe
     })
   }
 
-  updateInstallmentPaid(id: string, paidAt: Date | null): Promise<PaymentInstallment> {
-    throw new Error("Method not implemented.");
+  async updateInstallmentPaid(id: string, paidAt: Date | null): Promise<PaymentInstallment> {
+    return await prisma.paymentInstallment.update({
+      where: {
+        id: id,
+      },
+      data: {
+        paidAt: paidAt,
+        updatedAt: new Date(),
+      },
+    })
   }
 
   delete(id: string): Promise<PaymentInstallment> {
