@@ -5,15 +5,29 @@ import { api } from '@/api/axios'
 
 export type UpdatePaymentInstallmentToPayPayload = {
   id: string,
-  paidAt: string | null
+  paidAt: string
+  file: File | undefined,
 }
 
 async function updatePaymentInstallmentToPay({
-  id, paidAt
-}: UpdatePaymentInstallmentToPayPayload): Promise<void> {
-  const { data } = await api.patch(`/payment/installment/${id}/paid`, { paidAt })
+  id,
+  paidAt,
+  file,
+}: UpdatePaymentInstallmentToPayPayload) {
+  const formData = new FormData();
 
-  return data
+  formData.append("paidAt", paidAt);
+
+  if (file) {
+    formData.append("proofPayment", file);
+  }
+
+  const { data } = await api.patch(
+    `/payment/installment/${id}/paid`,
+    formData
+  );
+
+  return data;
 }
 
 export function useMutationUpdatePaymentInstallmentToPay(

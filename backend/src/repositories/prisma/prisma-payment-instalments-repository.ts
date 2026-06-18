@@ -40,13 +40,14 @@ export class PrismaPaymentInstallmentsRepository implements PaymentInstallmentRe
     })
   }
 
-  async updateInstallmentPaid(id: string, paidAt: Date | null): Promise<PaymentInstallment> {
+  async updateInstallmentPaid(id: string, paidAt: Date | null, proofPaymentPath: string): Promise<PaymentInstallment> {
     return await prisma.paymentInstallment.update({
       where: {
         id: id,
       },
       data: {
-        paidAt: paidAt,
+        paidAt,
+        receiptFilePath: proofPaymentPath,
         updatedAt: new Date(),
       },
     })

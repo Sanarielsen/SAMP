@@ -8,7 +8,8 @@ import { PaymentInstallment } from "@shared/types/paymentInstallments";
 
 interface UpdatePaymentInstallmentPaidUseCaseRequest {
   id: string,
-  paidAt: Date | null,
+  paidAt: Date,
+  proofPaymentPath: string
 }
 
 export class UpdatePaymentInstallmentPaidUseCase {
@@ -18,7 +19,8 @@ export class UpdatePaymentInstallmentPaidUseCase {
 
   async execute({
     id,
-    paidAt
+    paidAt,
+    proofPaymentPath
   }: UpdatePaymentInstallmentPaidUseCaseRequest): Promise<PaymentInstallment> {
     
     const paymentInstallments = await this.paymentInstallmentsRepository.findById(id)
@@ -34,7 +36,8 @@ export class UpdatePaymentInstallmentPaidUseCase {
     const updatedPaymentInstallment =
       await this.paymentInstallmentsRepository.updateInstallmentPaid(
         id, 
-        paidAt
+        paidAt,
+        proofPaymentPath
       )
 
     return updatedPaymentInstallment
