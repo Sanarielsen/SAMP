@@ -4,73 +4,47 @@ import {
   expect,
   it 
 } from "vitest";
-import { hash } from "bcryptjs";
 
 import { ListUserUseCase } from "@/services/service-user/list";
-
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
+import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 import { InMemoryUserRoleRepository } from "@/repositories/in-memory/in-memory-user-role-repository";
-
+import { makeUser } from "@/services/factories/user/make-entity";
+import { makeUserRole } from "@/services/factories/user-role/make-entity";
 import { NonExistUserError } from "@/services/errors/non-exist-user-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { UnauthorizedUserError } from "@/services/errors/unauthorized-user-error";
 
-let userRepository: InMemoryUsersRepository
+import { User } from "@shared/types/user";
+import { UserRole } from "@shared/types/userRole";
+
+
+let userRepository: InMemoryUserRepository
 let userRoleRepository: InMemoryUserRoleRepository
 let sut: ListUserUseCase
+let newUser: User
+let newUserRole: UserRole
 
 describe('List User Use Case', () => {
   beforeEach( async () => {
-    userRepository = new InMemoryUsersRepository();
+    userRepository = new InMemoryUserRepository();
     userRoleRepository = new InMemoryUserRoleRepository();
     sut =  new ListUserUseCase(userRepository, userRoleRepository)
-
-    await userRoleRepository.create({
-      id: 'role-1',
-      name: 'Cargo Teste',
-      createdAt: new Date(Date.now()),
-      description: 'Descricao do cargo teste',
-      level: 1
-    })
-
-    await userRoleRepository.create({
-      id: 'role-2',
-      name: 'Cargo Teste',
-      createdAt: new Date(Date.now()),
-      description: 'Descricao do cargo teste',
-      level: 2
-    })
-
   })
 
   it('should allow an admin user to list all users', async () => {
 
-    await userRepository.create({
-      id: 'user-1',
-      name: 'Usuario Teste',
-      email: 'teste@email.com',
-      password_hash: await hash('123456', 6),
-      roleId: "role-1"
+    await makeUserRole(userRoleRepository, {
+      id: 'user-role-test'
     })
 
-    await userRepository.create({
-      id: 'user-2',
-      name: 'Usuario Teste 2',
-      email: 'teste2@email.com',
-      password_hash: await hash('123456', 6),
-      roleId: "role-1"
+    await makeUser(userRepository, {
+      id: 'new-user'
     })
-
-    await userRepository.create({
-      id: 'user-3',
-      name: 'Usuario Teste 3',
-      email: 'teste3@email.com',
-      password_hash: await hash('123456', 6),
-      roleId: "role-1"
-    })
+    await makeUser(userRepository)
+    await makeUser(userRepository)
 
     const users = await sut.execute({
-      id: 'user-1',
+      id: 'new-user',
       search: ''
     })
 
@@ -79,12 +53,14 @@ describe('List User Use Case', () => {
 
   it('should not allow an non admin user to list all users', async () => {
 
-    await userRepository.create({
+    await makeUserRole(userRoleRepository, {
+      id: 'user-role-low', 
+      level: 2
+    })
+
+    await makeUser(userRepository, {
       id: 'user-2',
-      name: 'Usuario Teste 2',
-      email: 'teste2@email.com',
-      password_hash: await hash('123456', 6),
-      roleId: "role-2"
+      roleId: "user-role-low"
     })
 
     await expect(
@@ -97,11 +73,8 @@ describe('List User Use Case', () => {
 
   it('should not allow listing with a non-existing role', async () => {
 
-    await userRepository.create({
+    await makeUser(userRepository, {
       id: 'user-2',
-      name: 'Usuario Teste 2',
-      email: 'teste2@email.com',
-      password_hash: await hash('123456', 6),
       roleId: "role-non-exist"
     })
 
@@ -117,7 +90,7 @@ describe('List User Use Case', () => {
 
     await expect(
       sut.execute({
-        id: 'user-2',
+        id: 'user-3',
         search: '',
       }),
     ).rejects.toBeInstanceOf(NonExistUserError)

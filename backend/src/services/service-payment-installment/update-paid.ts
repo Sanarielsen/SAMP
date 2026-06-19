@@ -33,8 +33,6 @@ export class UpdatePaymentInstallmentPaidUseCase {
       throw new InvalidResourceError()
     }
 
-    console.log("BATEU AQUI")
-
     const updatedPaymentInstallment =
       await this.paymentInstallmentsRepository.updateInstallmentPaid(
         id, 

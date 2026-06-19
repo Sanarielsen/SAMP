@@ -11,20 +11,20 @@ import {
 import { GetOrderUseCase } from "./get";
 
 import { OrderRepository } from "@/repositories/order-repository";
-import { UsersRepository } from "@/repositories/users-repository";
+import { UserRepository } from "@/repositories/user-repository";
 
 import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
+import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 
 import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";
 
-let userRepository: UsersRepository
+let userRepository: UserRepository
 let orderRepository: OrderRepository
 let sut: GetOrderUseCase
 
 describe('Get Order Use Case', () => {
   beforeEach( async () => {
-    userRepository = new InMemoryUsersRepository();
+    userRepository = new InMemoryUserRepository();
     orderRepository = new InMemoryOrderRepository();
     sut = new GetOrderUseCase(userRepository, orderRepository)
 

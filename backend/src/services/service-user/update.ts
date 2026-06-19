@@ -1,20 +1,20 @@
-import { UsersRepository } from "@/repositories/users-repository";
+import { UserRepository } from "@/repositories/user-repository";
 
 import { NonExistUserError } from "@/services/errors/non-exist-user-error";
 import { UserAlreadyExistsError } from "@/services/errors/user-already-exists";
 import { EmailInvalidError } from "@/services/errors/email-invalid-error";
 
-import { UpdateUserDTO, User } from "@shared/types/user";
+import { UpdateUserDTO } from "@shared/types/user";
 
 
 export class UpdateUserProfileUseCase {
   constructor(
-    private userRepository: UsersRepository
+    private userRepository: UserRepository
   ) {}
   
   async execute({
     ...data
-  }: UpdateUserDTO): Promise<User> {
+  }: UpdateUserDTO): Promise<void> {
 
     const userLogged = await this.userRepository.findById(data.id)
 
@@ -26,6 +26,10 @@ export class UpdateUserProfileUseCase {
       const userWithSameEmail =
         await this.userRepository.findByEmail(data.email!)
 
+      if (!data.email.includes("@") || !data.email.includes(".com")) {
+        throw new EmailInvalidError();
+      }
+
       if (
         userWithSameEmail &&
         userWithSameEmail.id !== data.id
@@ -34,12 +38,6 @@ export class UpdateUserProfileUseCase {
       }
     }
 
-    if (data.email && !data.email.includes("@")) {
-      throw new EmailInvalidError();
-    }
-
-    const updatedUser = await this.userRepository.update(data)
-
-    return updatedUser
+    await this.userRepository.update(data)
   }
 }

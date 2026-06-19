@@ -2,12 +2,12 @@ import { hash } from "bcryptjs"
 
 import { sendRegisterEmail } from "@/lib/mailer_send"
 
-import { UsersRepository } from "@/repositories/users-repository"
-import { UserAlreadyExistsError } from "@/services/errors/user-already-exists"
+import { UserRepository } from "@/repositories/user-repository"
 import { UserRoleRepository } from "@/repositories/user-role-repository"
+import { UserAlreadyExistsError } from "@/services/errors/user-already-exists"
+import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error"
 
-import { User, UserPublicDTO } from "@shared/types/user"
-import { ResourceNotFoundError } from "../errors/resource-not-found-error"
+import { User } from "@shared/types/user"
 
 interface RegisterUseCaseRequest {
   name: string,
@@ -18,7 +18,7 @@ interface RegisterUseCaseRequest {
 
 export class RegisterUseCase {
   constructor(
-    private usersRepository: UsersRepository,
+    private userRepository: UserRepository,
     private userRoleRepository: UserRoleRepository
   ) {}
 
@@ -30,7 +30,7 @@ export class RegisterUseCase {
   }: RegisterUseCaseRequest): Promise<User> {
     const password_hash = await hash(password, 6)
 
-    const userWithSameEmail = await this.usersRepository.findByEmail(email)
+    const userWithSameEmail = await this.userRepository.findByEmail(email)
 
     if (userWithSameEmail) {
       throw new UserAlreadyExistsError();
@@ -42,7 +42,7 @@ export class RegisterUseCase {
       throw new ResourceNotFoundError();
     }
 
-    const user = await this.usersRepository.create({
+    const user = await this.userRepository.create({
       name,
       email,
       password_hash,

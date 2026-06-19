@@ -1,4 +1,4 @@
-import { UsersRepository } from "@/repositories/users-repository";
+import { UserRepository } from "@/repositories/user-repository";
 import { UserRoleRepository } from "@/repositories/user-role-repository";
 
 import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";
@@ -15,7 +15,7 @@ type GetUserRoleUseCaseResponse = UserRole[] | null
 export class GetUserRoleUseCase {
   constructor(
     private userRoleRepository: UserRoleRepository,
-    private userRepository: UsersRepository
+    private userRepository: UserRepository
   ) {}
 
   async execute({

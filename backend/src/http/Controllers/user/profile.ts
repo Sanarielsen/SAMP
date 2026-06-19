@@ -1,8 +1,8 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod';
 
-import { makeGetUserProfileUseCase } from '@/services/factories/make-get-user-profile-use-case';
-import { makeUpdateUserProfileUseCase } from '@/services/factories/make-update-user-profile-use-case';
+import { makeGetUserProfileUseCase } from '@/services/factories/user/make-get';
+import { makeUpdateUserProfileUseCase } from '@/services/factories/user/make-update';
 
 import { EmailInvalidError } from '@/services/errors/email-invalid-error';
 import { NonExistUserError } from '@/services/errors/non-exist-user-error';
