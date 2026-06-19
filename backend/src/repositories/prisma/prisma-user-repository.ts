@@ -1,22 +1,24 @@
 import { prisma } from "@/lib/prisma";
 
-import { UsersRepository } from "@/repositories/users-repository";
+import { UserRepository } from "@/repositories/user-repository";
 
-import { CreateUserDTO, UpdateUserDTO, User, UserDetailDTO, UserPublicDTO } from "@shared/types/user";
+import { 
+  CreateUserDTO, 
+  UpdateUserDTO, 
+  UserDetailDTO,
+  User
+} from "@shared/types/user";
 
 
-export class PrismaUsersRepository implements UsersRepository {
-  
-  async create(data: CreateUserDTO) {
-    const user = await prisma.user.create({
+export class PrismaUserRepository implements UserRepository {
+  async create(data: CreateUserDTO): Promise<User> {
+    return await prisma.user.create({
       data
     })
-
-    return user;
   }
 
-  update(data: UpdateUserDTO): Promise<User> {
-    return prisma.user.update({
+  async update(data: UpdateUserDTO): Promise<void> {
+    await prisma.user.update({
       where: {
         id: data.id,
       },
@@ -25,18 +27,15 @@ export class PrismaUsersRepository implements UsersRepository {
   }
   
   async findById(id: string): Promise<User | null> {
-    const user = await prisma.user.findUnique({
+    return await prisma.user.findUnique({
       where: {
         id,
       },
     })
-
-    return user
   }
 
-  async findByEmail(email: string) {
-
-    const user = await prisma.user.findFirst({
+  async findByEmail(email: string): Promise<UserDetailDTO | null> {
+    const user = await prisma.user.findUnique({
       where: {
         email,
       },
@@ -44,6 +43,28 @@ export class PrismaUsersRepository implements UsersRepository {
         userRole: true,
       },
     })
+
+    if (!user || !user?.userRole) {
+      return null
+    }
+
+    return {
+      ...user,
+      userRole: user.userRole
+    }
+  }
+
+  async findAuthByEmail(email: string): Promise<User | null> {
+
+    const user = await prisma.user.findFirst({
+      where: {
+        email,
+      }
+    })
+
+    if (!user) {
+      return null
+    }
 
     return user
   }
@@ -95,9 +116,14 @@ export class PrismaUsersRepository implements UsersRepository {
       id: user.id,
       name: user.name,
       email: user.email,
-      roleName: user.userRole ? user.userRole?.name : null,
+      userRole: user.userRole
+        ? {
+            id: user.userRole.id,
+            name: user.userRole.name,
+          }
+        : null,
       createdAt: user.createdAt,
-      updatedAt: user.updatedAt ? user.updatedAt : null
+      updatedAt: user.updatedAt,
     }))
   }
 }

@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { makeListUserUseCase } from '@/services/factories/make-user-use-case';
+import { makeListUserUseCase } from '@/services/factories/user/make-list';
 
 export async function listUsersWithSearch(request: FastifyRequest, reply: FastifyReply) {
   const useCase = makeListUserUseCase();

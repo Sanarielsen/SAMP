@@ -12,18 +12,18 @@ import { DeleteRepresentativeUseCase } from "@/services/service-representative/d
 
 import { InMemoryRepresentativeRepository } from "@/repositories/in-memory/in-memory-representatives-repository";
 import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
+import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 let representativeRepository: InMemoryRepresentativeRepository
 let clientRepository: InMemoryClientsRepository
-let userRepository: InMemoryUsersRepository
+let userRepository: InMemoryUserRepository
 let sut: DeleteRepresentativeUseCase
 
 describe('Delete Representative Use Case', () => {
   beforeEach(async () => {
-    userRepository = new InMemoryUsersRepository()
+    userRepository = new InMemoryUserRepository()
     clientRepository = new InMemoryClientsRepository()
     representativeRepository = new InMemoryRepresentativeRepository(clientRepository)
     sut = new DeleteRepresentativeUseCase(representativeRepository)

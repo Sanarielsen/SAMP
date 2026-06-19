@@ -12,16 +12,16 @@ import { CreateOrderUseCase } from "@/services/service-orders/post";
 
 import { ClientRepository } from "@/repositories/client-repository";
 import { OrderRepository } from "@/repositories/order-repository";
-import { UsersRepository } from "@/repositories/users-repository";
+import { UserRepository } from "@/repositories/user-repository";
 
 import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
 import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
+import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 
 import { NonExistUserError } from "@/services/errors/non-exist-user-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
-let userRepository: UsersRepository
+let userRepository: UserRepository
 let clientRepository: ClientRepository
 let orderRepository: OrderRepository
 
@@ -29,7 +29,7 @@ let sut: CreateOrderUseCase
 
 describe('Post Order Use Case', () => {
   beforeEach( async () => {
-    userRepository = new InMemoryUsersRepository();
+    userRepository = new InMemoryUserRepository();
     clientRepository = new InMemoryClientsRepository();
     orderRepository = new InMemoryOrderRepository();
     sut = new CreateOrderUseCase(userRepository, clientRepository, orderRepository)

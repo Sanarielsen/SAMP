@@ -1,12 +1,12 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z, ZodError } from 'zod';
 
-import { makeChangeStatusClientUseCase } from '@/services/factories/make-change-status-client-use-case';
-import { makeCreateClientUseCase } from '@/services/factories/make-create-client-use-case';
-import { makeGetClientProfileUseCase } from '@/services/factories/make-get-client-use-case'
-import { makeListClientUseCase } from '@/services/factories/make-list-client-use-case';
-import { makeListClientWithOptionsUseCase } from '@/services/factories/make-list-client-with-options';
-import { makeUpdateClientUseCase } from '@/services/factories/make-update-client-use-case';
+import { makeChangeStatusClientUseCase } from '@/services/factories/client/make-change-status';
+import { makeCreateClientUseCase } from '@/services/factories/client/make-create';
+import { makeGetClientProfileUseCase } from '@/services/factories/client/make-get'
+import { makeListClientUseCase } from '@/services/factories/client/make-list';
+import { makeListClientWithOptionsUseCase } from '@/services/factories/client/make-list-with-options';
+import { makeUpdateClientUseCase } from '@/services/factories/client/make-update';
 import { ResourceAlreadyExistsError } from '@/services/errors/resource-already-exists-error';
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 

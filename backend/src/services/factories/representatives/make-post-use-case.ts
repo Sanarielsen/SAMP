@@ -1,6 +1,6 @@
 import { PrismaClientRepository } from '@/repositories/prisma/prisma-client-repository'
 import { PrismaRepresentativeRepository } from '@/repositories/prisma/prisma-representative-repository'
-import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
+import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository'
 import { PostRepresentativeUseCase } from '@/services/service-representative/post'
 
 export function makePostRepresentativeUseCase() {

@@ -2,30 +2,34 @@ import {
   expect, 
   describe, 
   it, 
-  beforeEach, 
-  vi, 
-  afterEach 
+  beforeEach,
 } from 'vitest'
 import { compare } from 'bcryptjs'
 
-import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
+import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-user-repository'
 import { RegisterUseCase } from '@/services/service-user/register'
 
+import { makeUser } from '@/services/factories/user/make-entity'
+import { makeUserRole } from '@/services/factories/user-role/make-entity'
 import { InMemoryUserRoleRepository } from '@/repositories/in-memory/in-memory-user-role-repository'
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error'
 import { UserAlreadyExistsError } from '@/services/errors/user-already-exists'
 
-let usersRepository: InMemoryUsersRepository
+import { User } from '@shared/types/user'
+
+
+let userRepository: InMemoryUserRepository
 let userRoleRepository: InMemoryUserRoleRepository
 let sut: RegisterUseCase
+let newUser: User
 
 describe('Register Use Case', () => {
   beforeEach(async () => {
-    usersRepository = new InMemoryUsersRepository()
+    userRepository = new InMemoryUserRepository()
     userRoleRepository = new InMemoryUserRoleRepository()
-    sut = new RegisterUseCase(usersRepository, userRoleRepository)
+    sut = new RegisterUseCase(userRepository, userRoleRepository)
 
-    await userRoleRepository.create({
+    await makeUserRole(userRoleRepository, {
       id: "role-1",
       name: 'USER',
       description: 'role registered by tests',
@@ -33,7 +37,7 @@ describe('Register Use Case', () => {
       createdAt: new Date(Date.now()),
     })
 
-    await userRoleRepository.create({
+    await makeUserRole(userRoleRepository, {
       id: "role-2",
       name: 'ADMIN',
       description: 'role admin registered by tests',
@@ -41,11 +45,7 @@ describe('Register Use Case', () => {
       createdAt: new Date(Date.now()),
     })
 
-    vi.useFakeTimers()
-  })
-
-  afterEach(() => {
-    vi.useRealTimers()
+    newUser = await makeUser(userRepository)
   })
 
   it('should be able to register', async () => {
@@ -63,14 +63,19 @@ describe('Register Use Case', () => {
 
   it('should hash user password upon registration', async () => {
 
+    const passwordShouldBeTested = '123456'
+
     const user = await sut.execute({
       name: 'Samuel Henrique',
       email: 'samuel.henrique@email.com',
-      password: '123456',
+      password: passwordShouldBeTested,
       roleId: 'role-1'
     })
 
-    const isPasswordCorrectlyHashed = await compare('123456', user.password_hash)
+    const isPasswordCorrectlyHashed = await compare(
+      passwordShouldBeTested, 
+      user.password_hash!
+    )
     
     expect(isPasswordCorrectlyHashed).toBe(true)
   })
@@ -92,24 +97,6 @@ describe('Register Use Case', () => {
       password: '123456',
       roleId: 'role-1'
     })).rejects.toBeInstanceOf(UserAlreadyExistsError)
-  })
-
-  it('should not allow creating a user without a USER role', async () => {
-
-    await userRoleRepository.create({
-      id: "role-4",
-      name: 'ERROR',
-      description: 'role registered by tests',
-      level: 3,
-      createdAt: new Date(Date.now()),
-    })
-
-    await sut.execute({
-      name: 'Samuel Henrique',
-      email: 'samuel.henrique@email.com',
-      password: '123456',
-      roleId: 'role-1'
-    })
   })
 
   it('should not allow creating a user without a valid role', async () => {

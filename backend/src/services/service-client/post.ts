@@ -1,7 +1,7 @@
 import { Client } from "@prisma/client"
 import { ClientRepository } from "@/repositories/client-repository"
 import { ResourceAlreadyExistsError } from "@/services/errors/resource-already-exists-error"
-import { UsersRepository } from "@/repositories/users-repository"
+import { UserRepository } from "@/repositories/user-repository"
 import { NonExistUserError } from "@/services/errors/non-exist-user-error"
 import { randomUUID } from "node:crypto"
 
@@ -27,7 +27,7 @@ interface CreateClientUseCaseResponse {
 export class CreateClientUseCase {
   constructor(
     private clientRepository: ClientRepository,
-    private userRepository: UsersRepository
+    private userRepository: UserRepository
   ) {}
 
   async execute({

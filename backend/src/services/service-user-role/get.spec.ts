@@ -11,20 +11,20 @@ import { hash } from "bcryptjs";
 
 import { GetUserRoleUseCase } from "@/services/service-user-role/get";
 
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
+import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 import { InMemoryUserRoleRepository } from "@/repositories/in-memory/in-memory-user-role-repository";
 
 import { NonExistUserError } from "@/services/errors/non-exist-user-error";
 import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";
 
 let userRoleRepository: InMemoryUserRoleRepository
-let userRepository: InMemoryUsersRepository
+let userRepository: InMemoryUserRepository
 let sut: GetUserRoleUseCase
 
 describe('Get User Role Use Case', () => {
   beforeEach( async () => {
     userRoleRepository = new InMemoryUserRoleRepository()
-    userRepository =  new InMemoryUsersRepository();
+    userRepository =  new InMemoryUserRepository();
     sut = new GetUserRoleUseCase(userRoleRepository, userRepository)
     
     await userRoleRepository.create({

@@ -2,12 +2,12 @@ import { FastifyInstance } from "fastify";
 
 import { verifyJWT } from "@/http/middlewares/verify-jwt";
 
-import { authenticate } from "@/http/Controllers/authenticate";
-import { register } from "@/http/Controllers/register";
+import { authenticate } from "@/http/Controllers/user/authenticate";
+import { register } from "@/http/Controllers/user/register";
 import { 
   profile, 
   updateProfile 
-} from "@/http/Controllers/profile";
+} from "@/http/Controllers/user/profile";
 import { 
   getClient,
   listClient,
@@ -30,7 +30,7 @@ import { listOrder } from "@/http/Controllers/order/list";
 import { updateOrder } from "@/http/Controllers/order/update";
 import { deleteOrder } from "@/http/Controllers/order/delete";
 import { listOrderType } from "@/http/Controllers/orderTypes/list";
-import { listUsersWithSearch } from "@/http/Controllers/list";
+import { listUsersWithSearch } from "@/http/Controllers/user/list";
 import { listUserRoleLevelAuthorized } from "@/http/Controllers/userRole/list-level-authorized";
 import { getOrderDetails } from "@/http/Controllers/order/get-detail";
 import { postPayment } from "@/http/Controllers/payment/post";

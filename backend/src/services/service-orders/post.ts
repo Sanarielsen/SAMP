@@ -1,6 +1,6 @@
 import { ClientRepository } from "@/repositories/client-repository";
 import { OrderRepository } from "@/repositories/order-repository";
-import { UsersRepository } from "@/repositories/users-repository";
+import { UserRepository } from "@/repositories/user-repository";
 
 import { NonExistUserError } from "@/services/errors/non-exist-user-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
@@ -14,7 +14,7 @@ interface CreateOrderUseCaseRequest {
 
 export class CreateOrderUseCase {
   constructor(
-    private userRepository: UsersRepository,
+    private userRepository: UserRepository,
     private clientRepository: ClientRepository,
     private orderRepository: OrderRepository
   ) {}

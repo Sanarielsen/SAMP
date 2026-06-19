@@ -1,5 +1,5 @@
 import { OrderRepository } from "@/repositories/order-repository";
-import { UsersRepository } from "@/repositories/users-repository";
+import { UserRepository } from "@/repositories/user-repository";
 
 import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";
 
@@ -13,7 +13,7 @@ interface ListOrderUseCaseRequest {
 
 export class ListOrderUseCase {
   constructor(
-    private userRepository: UsersRepository,
+    private userRepository: UserRepository,
     private orderRepository: OrderRepository
   ) {}
 

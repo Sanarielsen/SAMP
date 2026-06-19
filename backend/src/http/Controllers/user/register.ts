@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 
-import { makeRegisterUseCase } from '@/services/factories/make-register-use-case'
+import { makeRegisterUseCase } from '@/services/factories/user/make-register'
 import { UserAlreadyExistsError } from '@/services/errors/user-already-exists'
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error'
 
