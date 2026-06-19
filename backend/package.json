@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "tsx watch src/server.ts",
-    "build": "npm install && tsup src --format esm,cjs --dts --external vitest",
+    "build": "tsup src --out-dir build",
+    "start": "npx prisma migrate deploy && node build/server.js",
     "test:create-prisma-environment": "npm link ./prisma/vitest-environment-prisma",
     "test:install-prisma-environment": "npm link vitest-environment-prisma",
     "test": "vitest run --dir src/services",
