@@ -31,6 +31,21 @@ export class InMemoryPaymentRepository implements PaymentRepository {
     throw new Error("Method not implemented.");
   }
 
+  async delete(id: string): Promise<Payment> {
+    const paymentIndex = this.items.findIndex(payment => {
+      return payment.id === id
+    })
+
+    const disabledPayment = {
+      ...this.items[paymentIndex],
+      deletedAt: new Date(),
+    }
+
+    this.items[paymentIndex] = disabledPayment
+
+    return disabledPayment
+  }
+
   async findById(id: string): Promise<Payment | null> {
     const payment = this.items.find(payment => payment.id == id)
 

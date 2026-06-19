@@ -77,6 +77,8 @@ export default function ModalInstallmentToPay({
     mutationPatchInstallment.isSuccess ||
     mutationUpdateInstallmentToPay.isPending ||
     mutationUpdateInstallmentToPay.isSuccess
+
+  const hasPaidBefore = installment.paidAt === null ? 12 : 6
   
   function handleCancelInstallmentWasPaid() {
     mutationPatchInstallment.mutate({
@@ -174,24 +176,27 @@ export default function ModalInstallmentToPay({
                 </div>
               )}
             </Grid>
+            
+            { hasPaidBefore === 6 && (
 
-            <Grid size={{ xs: 12, sm: 6 }}>
+              <Grid size={{ xs: 12, sm: hasPaidBefore }}>
 
-              <Button
-                type="button"
-                variant="contained"
-                size="large"
-                color="error"
-                onClick={handleCancelInstallmentWasPaid}
-                loading={isRunningSomething}
-                disabled={isRunningSomething}
-                fullWidth
-              >
-                Cancelar pagamento
-              </Button>
-            </Grid>
+                <Button
+                  type="button"
+                  variant="contained"
+                  size="large"
+                  color="error"
+                  onClick={handleCancelInstallmentWasPaid}
+                  loading={isRunningSomething}
+                  disabled={isRunningSomething}
+                  fullWidth
+                >
+                  Cancelar pagamento
+                </Button>
+              </Grid>
+            ) }
 
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: hasPaidBefore }}>
 
               <Button
                 type="submit"

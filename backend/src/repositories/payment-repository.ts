@@ -8,6 +8,7 @@ import {
 export interface PaymentRepository {
   create(data: CreatePaymentDTO): Promise<Payment>
   createWithInstallments(data: CreatePaymentWithInstallmentsDTO): Promise<Payment>
+  delete(id: string): Promise<Payment>
   findById(id: string): Promise<Payment | null>
   findManyByOrderId(orderId: string): Promise<PaymentDetailDTO[] | null>
 }

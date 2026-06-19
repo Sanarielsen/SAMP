@@ -10,6 +10,7 @@ import {
 } from "@shared/types/payment";
 
 export class PrismaPaymentsRepository implements PaymentRepository {
+
   async create(data: CreatePaymentDTO): Promise<Payment> {
     return await prisma.payment.create({
       data: {
@@ -38,6 +39,17 @@ export class PrismaPaymentsRepository implements PaymentRepository {
     })
   }
 
+  async delete(id: string): Promise<Payment> {
+    return await prisma.payment.update({
+      where: {
+        id
+      },
+      data: {
+        deletedAt: new Date(Date.now())
+      },
+    })
+  }
+
   async findById(id: string): Promise<Payment | null> {
     return prisma.payment.findUnique({
       where: {
@@ -49,7 +61,8 @@ export class PrismaPaymentsRepository implements PaymentRepository {
   async findManyByOrderId(orderId: string): Promise<PaymentDetailDTO[] | null> {
     const payments = await prisma.payment.findMany({
       where: {
-        orderId
+        orderId,
+        deletedAt: null
       },
       include: {
         paymentInstallments: true

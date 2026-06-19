@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { 
   Button, 
@@ -8,10 +8,13 @@ import {
 } from "@mui/material";
 
 import { optionsQueryListOrderPayments } from "@/features/order/api/queryListPayments";
+import { useMutationDeletePayment } from "@/features/order/api/mutationDeletePayment";
 import DataTableColumnsPayments from "@/features/order/components/DataTableColumnsPayments";
 import ModalPaymentDetails from "@/features/order/components/ModalPaymentDetails";
 import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
+import ModalConfirmation from "@/components/ModalConfirmation";
+import ToastContainer from "@/components/Toast";
 import { paymentFields } from "@/features/order/utils/getRowDetailPayment";
 
 import type { PaymentDetailDTO } from "@shared/types/payment";
@@ -21,7 +24,10 @@ export default function PaymentInformation() {
 
   const navigate = useNavigate();
   const { id: orderId } = useParams();
+  const queryClient = useQueryClient();
 
+  const [openToast, setOpenToast] = useState("")
+  const [openModalConfirmation, setOpenModalConfirmation] = useState(false)
   const [openModalDetails, setOpenModalDetails] = useState(false);
   const [paymentClicked, setPaymentClicked] = useState<PaymentDetailDTO>();
 
@@ -34,6 +40,17 @@ export default function PaymentInformation() {
       optionsQueryListOrderPayments(orderId!, !!orderId) 
   )
 
+  const mutationDeletePayment =
+    useMutationDeletePayment({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['order-payments'] })
+      setOpenToast("success"); 
+    },
+    onError: () => {
+      setOpenToast("error"); 
+    },
+  })
+
   const stateQuery = isSuccess ? "SUCCESS" : 
     isLoading ? "LOADING" :
     isError ? "ERROR" : "IDLE";
@@ -42,6 +59,21 @@ export default function PaymentInformation() {
     setPaymentClicked(payment);
     setOpenModalDetails(true);
   };
+
+  function handleDelete(payment: PaymentDetailDTO)  {
+    setPaymentClicked(payment)
+    setOpenModalConfirmation(true)
+  }
+
+  function handleDeactivatePayment(action: boolean){
+
+    setOpenModalConfirmation(false)
+    if (!action || !paymentClicked) return
+    
+    mutationDeletePayment.mutate(paymentClicked.id)
+
+    queryClient.invalidateQueries({ queryKey: ['order-payments'] })
+  }
 
   return (
     <>
@@ -74,7 +106,7 @@ export default function PaymentInformation() {
             columns={DataTableColumnsPayments({
               onClickUpdateItem: (id) => navigate(`/pagamento/${id}/parcelas`),
               onClickSeeItem: (current) => handleView(current), 
-              onClickDeleteItem: (current) => console.log("Deleta esse item: ", current),
+              onClickDeleteItem: (current) => handleDelete(current),
             })}
           />
         </Grid>
@@ -88,6 +120,28 @@ export default function PaymentInformation() {
           handleClose={() => setOpenModalDetails(false)}
         />
       )}
+
+      <ModalConfirmation
+        open={openModalConfirmation}
+        title={"Desativar o pagamento atual"}
+        description={`Tem certeza que gostaria de desativar o pagamento atual? Essa operacão não é inversivel.`}
+        handleClose={() => setOpenModalConfirmation(false)}
+        handleAnswer={handleDeactivatePayment}
+      />
+
+      <ToastContainer
+        open={openToast === "success"}
+        message="Pagamento desativado com sucesso."
+        severity="success"
+        onClose={() => setOpenToast("")}
+      />
+
+      <ToastContainer
+        open={openToast === "error"}
+        message="Ocorreu um erro ao desativar esse pagamento."
+        severity="error"
+        onClose={() => setOpenToast("")}
+      />
     </>
   )
 }

@@ -30,12 +30,13 @@ import { listOrder } from "@/http/Controllers/order/list";
 import { updateOrder } from "@/http/Controllers/order/update";
 import { deleteOrder } from "@/http/Controllers/order/delete";
 import { listOrderType } from "@/http/Controllers/orderTypes/list";
-import { listUserRoleLevelAuthorized } from "./Controllers/userRole/list-level-authorized";
 import { listUsersWithSearch } from "@/http/Controllers/list";
+import { listUserRoleLevelAuthorized } from "@/http/Controllers/userRole/list-level-authorized";
 import { getOrderDetails } from "@/http/Controllers/order/get-detail";
 import { postPayment } from "@/http/Controllers/payment/post";
-import { postPaymentWithPayments } from "@/http/Controllers/payment/post-with-installments";
+import { postPaymentWithInstallments } from "@/http/Controllers/payment/post-with-installments";
 import { getOrderPayments } from "@/http/Controllers/payment/list";
+import { deletePayment } from "@/http/Controllers/payment/delete";
 import { listPaymentInstallments } from "@/http/Controllers/paymentInstallment/list-by-payment";
 import { updatePaymentInstallment } from "@/http/Controllers/paymentInstallment/update";
 import { listPaymentMethods } from "@/http/Controllers/paymentMethod/list";
@@ -78,14 +79,14 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/order/:id', {onRequest: [verifyJWT]}, updateOrder)
   app.delete('/order/:id', {onRequest: [verifyJWT]}, deleteOrder)
   app.post('/order/:id/payment', {onRequest: [verifyJWT]}, postPayment)
-  app.post('/order/:id/payment/installments', {onRequest: [verifyJWT]}, postPaymentWithPayments)
+  app.post('/order/:id/payment/installments', {onRequest: [verifyJWT]}, postPaymentWithInstallments)
   app.get(`/order/:id/payments`, { onRequest: [verifyJWT] }, getOrderPayments)
   
   app.get(`/payment/:id/installments`, {onRequest: [verifyJWT]}, listPaymentInstallments)
-
   app.patch('/payment/installment/:id', {onRequest: [verifyJWT]}, updatePaymentInstallment)
   app.patch('/payment/installment/:id/paid', {onRequest: [verifyJWT]}, updatePaymentInstallmentAsPaid)
+  app.delete('/payment/:id', {onRequest: [verifyJWT]}, deletePayment)
 
-  app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
+  app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)
 }
