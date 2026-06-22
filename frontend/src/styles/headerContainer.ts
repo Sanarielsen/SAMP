@@ -5,8 +5,6 @@ export const ContainerHeader = styled.header`
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 8px;
-
   height: 64px;
 
   background-color: ${(props) => props.theme.palette.primary.light};
