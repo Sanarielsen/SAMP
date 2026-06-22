@@ -157,7 +157,11 @@ Todas as ordens de serviço terão um ou mais pagamentos atrelados a ele. A idei
 
 Essa é a sessão principal da aplicação. Onde basicamente serão atrelados os clientes de acordo com cada processo registrado por revista no INPI que gera a cada semana.
 
+### Appointments (3 days)
+
+Essa é a sessão correspondente a todos as agendas que um cliente possui com a equipe
+
 ### Fixes
-- [ ] Visualizacao do dashboard;
+- [x] Visualizacao do dashboard;
 - [x] Visualizacao do modal de endereco no mobile;
-- [ ] Aumento do tempo da sessão ativa;
+- [x] Aumento do tempo da sessão ativa;

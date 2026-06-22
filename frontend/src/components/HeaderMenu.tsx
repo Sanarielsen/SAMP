@@ -1,15 +1,29 @@
 import { useState } from 'react';
+import { Navigate } from 'react-router';
 
+import {
+  Popover, 
+  Tooltip 
+} from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Popover, Tooltip } from '@mui/material';
 
-import { ButtonIcon, ContainerHeader } from '@/styles/headerContainer';
-import SideMenu from '@/components/SideMenu';
-import MenuProfile from './MenuProfile';
+import { useAuth } from '@/auth/AuthProvider';
+import MenuProfile from '@/components/MenuProfile';
+import { 
+  ButtonIcon, 
+  ContainerHeader 
+} from '@/styles/headerContainer';
+import Menu from './Menu';
+
+interface HeaderMenuProp {
+  isMobile: boolean
+}
 
 
-export default function HeaderMenu() {
+export default function HeaderMenu({ isMobile }: HeaderMenuProp) {
+
+  const { token } = useAuth()
 
   const [active, setActive] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -22,15 +36,21 @@ export default function HeaderMenu() {
     setAnchorEl(null);
   };
 
+  if (!token) {
+    return <Navigate to="/" replace />
+  }
+
   return (
     <>
-      <SideMenu open={active} handleChangeStatus={() => setActive(false)} />
+      <Menu open={active} isMobile={true} handleChangeStatus={() => setActive(false)} />
       <ContainerHeader>
+        { isMobile && (
         <Tooltip title="Menu">
           <ButtonIcon onClick={ () => setActive(true) }>
             <MenuIcon color='inherit' />
           </ButtonIcon>
         </Tooltip>
+        ) }
         <Tooltip title="Inicio SAMP">
           <ButtonIcon>
             <img src="/samp_logo_white.svg" width="48" height="48" />

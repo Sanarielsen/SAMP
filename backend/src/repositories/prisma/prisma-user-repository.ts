@@ -8,6 +8,7 @@ import {
   UserDetailDTO,
   User
 } from "@shared/types/user";
+import { OptionsControlledBox } from "@shared/types/values";
 
 
 export class PrismaUserRepository implements UserRepository {
@@ -124,6 +125,15 @@ export class PrismaUserRepository implements UserRepository {
         : null,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
+    }))
+  }
+
+  async findManyOptions(): Promise<OptionsControlledBox[] | null> {
+    const users = await prisma.user.findMany()
+
+    return users.map( (user) => ({
+      label: user.name + ' - ' + user.email,
+      value: user.id
     }))
   }
 }
