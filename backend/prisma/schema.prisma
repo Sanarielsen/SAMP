@@ -33,19 +33,20 @@ model User {
   roleId   String
   userRole UserRole? @relation(fields: [roleId], references: [id])
 
-  createdByUser Client[] @relation("CreatedBy")
-  linkedByUser  Client[] @relation("ResponsibleBy")
+  createdByUser     Client[]            @relation("CreatedBy")
+  linkedByUser      Client[]            @relation("ResponsibleBy")
+  ClientAppointment ClientAppointment[]
 
   @@map("users")
 }
 
 model Client {
-  id                    String           @id @default(uuid())
-  protocol              String           @unique
+  id                    String              @id @default(uuid())
+  protocol              String              @unique
   tradeName             String
   dataFundation         DateTime
-  createdAt             DateTime         @default(now())
-  updatedAt             DateTime?        @updatedAt
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime?           @updatedAt
   correspondenceAddress String
   createdById           String
   isActivated           Boolean
@@ -56,11 +57,30 @@ model Client {
   responsibleById       String
   type                  Int
   representatives       Representative[]
-  createdBy             User             @relation("CreatedBy", fields: [createdById], references: [id])
-  responsibleBy         User             @relation("ResponsibleBy", fields: [responsibleById], references: [id])
+  createdBy             User                @relation("CreatedBy", fields: [createdById], references: [id])
+  responsibleBy         User                @relation("ResponsibleBy", fields: [responsibleById], references: [id])
   orders                Order[]
+  clientAppointments    ClientAppointment[]
 
   @@map("clients")
+}
+
+model ClientAppointment {
+  id       String  @id @default(uuid())
+  userId   String
+  clientId String
+  orderId  String?
+
+  description String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  user   User   @relation(fields: [userId], references: [id])
+  client Client @relation(fields: [clientId], references: [id])
+  Order  Order? @relation(fields: [orderId], references: [id])
+
+  @@map("client_appointments")
 }
 
 model Representative {
@@ -105,19 +125,20 @@ model Order {
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
 
-  client    Client    @relation(fields: [clientId], references: [id])
-  orderType OrderType @relation(fields: [orderTypeId], references: [id])
-  payments  Payment[]
+  client             Client              @relation(fields: [clientId], references: [id])
+  orderType          OrderType           @relation(fields: [orderTypeId], references: [id])
+  payments           Payment[]
+  clientAppointments ClientAppointment[]
 
   @@map("orders")
 }
 
 model Payment {
-  id                 String   @id @default(uuid())
-  orderId            String
-  totalInstallments  Int
-  observation        String?
-  firstDueDate       DateTime
+  id                String   @id @default(uuid())
+  orderId           String
+  totalInstallments Int
+  observation       String?
+  firstDueDate      DateTime
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
