@@ -16,6 +16,12 @@ import {
   updateClient,
   updateClientStatus 
 } from "@/http/Controllers/client"
+import { getClientAppointment } from "@/http/Controllers/appointment/get";
+import { getAppoimentWithDetails } from "@/http/Controllers/appointment/get-with-details";
+import { postClientAppointment } from "@/http/Controllers/appointment/post";
+import { listClientAppointments } from "@/http/Controllers/appointment/list";
+import { updateClientAppointment } from "@/http/Controllers/appointment/update";
+import { deleteAppointment } from "@/http/Controllers/appointment/delete";
 import { 
   deleteRepresentative,
   getRepresentative,
@@ -24,6 +30,8 @@ import {
   postRepresentative,
   updateRepresentative
 } from "@/http/Controllers/representative";
+import { listUsersWithOptions } from "@/http/Controllers/user/list-options";
+import { listOrdersWithOptions } from "@/http/Controllers/order/list-options";
 import { postOrder } from "@/http/Controllers/order/post";
 import { getOrder } from "@/http/Controllers/order/get";
 import { listOrder } from "@/http/Controllers/order/list";
@@ -42,6 +50,7 @@ import { updatePaymentInstallment } from "@/http/Controllers/paymentInstallment/
 import { listPaymentMethods } from "@/http/Controllers/paymentMethod/list";
 import { updatePaymentInstallmentAsPaid } from "@/http/Controllers/paymentInstallment/update-paid";
 
+
 import { sendEmail } from "./Controllers/test";
 
 export async function appRoutes(app: FastifyInstance) {
@@ -53,6 +62,8 @@ export async function appRoutes(app: FastifyInstance) {
   
   app.post('/user', register)
   app.get('/user/roles', {onRequest: [verifyJWT]}, listUserRoleLevelAuthorized)
+  app.get('/option/users', {onRequest: [verifyJWT]}, listUsersWithOptions)
+  app.get('/option/client/:id/orders', {onRequest: [verifyJWT]}, listOrdersWithOptions)
 
   app.get('/admin/users', {onRequest: [verifyJWT]}, listUsersWithSearch)
 
@@ -64,6 +75,12 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/client', {onRequest: [verifyJWT]}, postClient)
   app.patch('/client/:id', {onRequest: [verifyJWT]}, updateClient)
   app.patch('/client/:id/status', {onRequest: [verifyJWT]}, updateClientStatus)
+  app.post('/client/:id/appointment', {onRequest: [verifyJWT]}, postClientAppointment)
+  app.get('/client/:id/appointments', {onRequest: [verifyJWT]}, listClientAppointments)
+  app.get('/appointment/:id', {onRequest: [verifyJWT]}, getClientAppointment)
+  app.get('/appointment/:id/details', {onRequest: [verifyJWT]}, getAppoimentWithDetails)
+  app.patch(`/appointment/:id`, { onRequest: [verifyJWT] }, updateClientAppointment)
+  app.delete(`/appointment/:id`, { onRequest: [verifyJWT] }, deleteAppointment)
 
   app.get('/representatives', {onRequest: [verifyJWT]}, listRepresentative)
   app.get('/representative/:id', {onRequest: [verifyJWT]}, getRepresentative)

@@ -1,4 +1,12 @@
-import { CreateOrderDTO, Order, OrderDetailTable, OrderWithTypeDetailDTO, UpdateOrderDTO } from "@shared/types/orders"
+import { 
+  Order,
+  CreateOrderDTO, 
+  OrderDetailTable, 
+  OrderWithTypeDetailDTO, 
+  UpdateOrderDTO 
+} from "@shared/types/orders"
+
+import { OptionsControlledBox } from "@shared/types/values"
 
 
 export interface OrderRepository {
@@ -9,4 +17,5 @@ export interface OrderRepository {
   findById(id: string): Promise<Order | null>
   findByIdWithType(id: string): Promise<OrderWithTypeDetailDTO | null>
   findManyByClientId(clientId: string, search: string): Promise<OrderDetailTable[] | null>
+  findManyOptionsByClientId(clientId: string): Promise<OptionsControlledBox[] | null>
 }

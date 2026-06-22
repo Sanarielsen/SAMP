@@ -1,4 +1,7 @@
 import { 
+  OptionsControlledBox
+} from "@shared/types/values"
+import { 
   CreateUserDTO, 
   UpdateUserDTO, 
   User, 
@@ -14,4 +17,6 @@ export interface UserRepository {
   findByEmail(email: string): Promise<UserDetailDTO|null>
   findAuthByEmail(email: string): Promise<User|null>
   findBySearch(search: string): Promise<UserDetailDTO[]>
+
+  findManyOptions(): Promise<OptionsControlledBox[] | null>
 }

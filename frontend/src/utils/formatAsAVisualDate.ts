@@ -12,6 +12,14 @@ export function formatAsVisualDate(
   return `${day}/${month}/${year} ${hours}:${minutes}`
 }
 
+export function formatAsVisualDateTime(value: string | Date) {
+  return new Intl.DateTimeFormat("pt-BR", {
+    timeZone: "America/Sao_Paulo",
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(new Date(value));
+}
+
 export function formatAsVisualOnlyDate(value: string) {
   if (!value) return ''
 

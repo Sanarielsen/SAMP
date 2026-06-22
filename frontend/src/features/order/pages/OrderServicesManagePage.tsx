@@ -21,7 +21,7 @@ import { optionsQueryGetOrder } from "@/features/order/api/queryGetOrder";
 import { optionsQueryListOrderTypesWithOptions } from "@/features/order/api/queryListOrderTypes";
 import { useMutationPatchOrder } from "@/features/order/api/mutationPatchOrder";
 import { useMutationPostOrder } from "@/features/order/api/mutationPostOrder";
-import { optionsQueryListClientWithOptions } from "@/api/listClientsWithOptions";
+import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions";
 
 import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
@@ -47,7 +47,7 @@ export default function OrderServiceManagePage() {
     data: listClientsWithOptions,
     isSuccess: isSuccesslistClientsWithOptions
   } = useQuery(
-    optionsQueryListClientWithOptions()
+    optionsQueryListClientsWithOptions()
   )
 
   const { 
