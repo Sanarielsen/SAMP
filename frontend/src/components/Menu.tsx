@@ -1,11 +1,11 @@
 import { useNavigate, useLocation } from "react-router";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AllInboxIcon from '@mui/icons-material/AllInbox';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import CloseIcon from '@mui/icons-material/Close';
 import HotelClassIcon from '@mui/icons-material/HotelClass';
 import InfoIcon from '@mui/icons-material/Info';
-import AllInboxIcon from '@mui/icons-material/AllInbox';
 
 import { 
   ContainerMenu,
@@ -15,26 +15,30 @@ import {
   NavHeader 
 } from "@/styles/menuContainer";
 
-interface SideMenuProps {
-  open: boolean;
-  handleChangeStatus: () => void;
+interface MenuProps {
+  open: boolean
+  isMobile: boolean
+  handleChangeStatus: () => void
 }
 
-export default function SideMenu({ open, handleChangeStatus }: SideMenuProps) {
+export default function Menu({
+  open, isMobile, handleChangeStatus
+}: MenuProps) {
 
   const location = useLocation();
   const navigate = useNavigate();
 
   function handleChangePage(targetPage: string) {
     navigate(targetPage);
-    handleChangeStatus();
   }
 
   return (
     <ContainerMenu $active={open}>
-      <NavClose onClick={ () => handleChangeStatus() }>
-        <CloseIcon />
-      </NavClose>
+      { isMobile && (
+        <NavClose onClick={ () => handleChangeStatus() }>
+          <CloseIcon />
+        </NavClose>
+      )}
       <NavHeader>
         <AccountCircleIcon color='inherit' fontSize='large' />
         <p> Seja bem-vindo, Samuel Henrique </p>

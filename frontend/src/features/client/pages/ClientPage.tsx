@@ -1,34 +1,28 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { 
+  useQuery, 
+  useQueryClient
+} from "@tanstack/react-query";
 
 import { 
   Box, 
   Button, 
   Grid, 
-  IconButton, 
-  Stack, 
   TextField, 
-  Tooltip, 
-  Typography } from "@mui/material";
-import { 
-  GridDeleteIcon, 
-  GridLoadIcon, 
-  GridSearchIcon,
-  type GridColDef 
-} from "@mui/x-data-grid";
+  Typography 
+} from "@mui/material";
 
 import { useAuth } from "@/auth/AuthProvider";
 import { useMutationChangeStatusClient } from "@/features/client/api/mutationPatchChangeStatusClient";
 import { optionsQueryClient } from "@/api/queryClients";
+import DataTableColumnsClient from "@/features/client/components/DataTableColumnsClient";
 import ModalClientDetails from "@/features/client/components/ModalClientDetails";
 import DataTable from "@/components/DataTable";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast"
 import type { ClientDetails } from "@/features/client/types/clients";
 import { clientFields } from "@/features/client/utils/getRowDetailClient";
-import { formatCPF } from "@/utils/formatCPF";
-import { formatCNPJ } from "@/utils/formatCNPJ";
 
 
 export default function ClientPage() {
@@ -67,11 +61,6 @@ export default function ClientPage() {
       setOpenToast("error"); 
     },
   })
-  
-  const handleView = (client: ClientDetails) => {
-    setClientClicked(client);
-    setOpenModalDetails(true);
-  };
 
   const handleDelete = (client: ClientDetails) => {
     setClientClicked(client)
@@ -91,82 +80,10 @@ export default function ClientPage() {
     refetch()
   }
 
-  const columns: GridColDef<ClientDetails>[] = [
-    {
-      field: "legalName",
-      headerName: "Razão social",
-      flex: 1,
-    },
-    {
-      field: "protocol",
-      headerName: "Protocolo",
-      flex: 1,
-      valueFormatter: (value: string) => {
-        if (value.length === 11) {
-          return formatCPF(value)
-        }
-
-        if (value.length === 14) {
-          return formatCNPJ(value)
-        }
-      },
-    },
-    {
-      field: "tradeName",
-      headerName: "Nome Fantasia",
-      flex: 1,
-    },
-    {
-      field: "dataFundation",
-      headerName: "Data de fundação",
-      flex: 1,
-      valueFormatter: (value) => {
-        if (!value) return "-"
-        return new Date(value).toLocaleDateString("pt-BR")
-      },
-    },
-    {
-      field: "actions",
-      headerName: "Ações",
-      sortable: false,
-      width: 160,
-      renderCell: (params) => (
-        <Stack 
-          direction="row" 
-          spacing={1} 
-          sx={{
-            height: "100%",
-            alignItems: "center",
-          }}
-        >
-          <IconButton
-            onClick={() => handleView(params.row)}
-          >
-            <Tooltip title="Detalhes">
-              <GridSearchIcon />
-            </Tooltip>
-          </IconButton>
-
-          <IconButton
-            onClick={() => navigate(`/cliente/${params.id}`)}
-          >          
-            <Tooltip title="Atualizar">
-              <GridLoadIcon />
-            </Tooltip>
-          </IconButton>
-
-          <IconButton
-            disabled={mutationChangeStatusClient.isPending || mutationChangeStatusClient.isSuccess}
-            onClick={() => handleDelete(params.row)}
-          >
-            <Tooltip title="Excluir">
-              <GridDeleteIcon />
-            </Tooltip>
-          </IconButton>
-        </Stack>
-      ),
-    }
-  ];
+  const stateQuery =
+    isSuccess ? "SUCCESS" : 
+    isLoading ? "LOADING" :
+    isError ? "ERROR" : "IDLE";
 
   return (
     <>
@@ -220,14 +137,14 @@ export default function ClientPage() {
 
         <Box component="section" sx={{ p: 2}}>
           <DataTable
-            state={
-              isSuccess ? "SUCCESS" : 
-              isLoading ? "LOADING" :
-              isError ? "ERROR" : "IDLE"
-            }
+            state={stateQuery}
             rows={listClients ?? []}
-            columns={columns}
-          />
+            columns={DataTableColumnsClient({
+              onClickUpdateItem: (id) => navigate(`/cliente/${id}`),
+              onClickSeeItem: (current) => navigate(`/cliente/${current.id}/detalhes`), 
+              onClickDeleteItem: (current) => handleDelete(current),
+            })}
+            />
         </Box>
       </Box>
 

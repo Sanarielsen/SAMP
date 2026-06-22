@@ -1,6 +1,7 @@
 import { OrderRepository } from "@/repositories/order-repository";
 
 import { CreateOrderDTO, Order, OrderDetailTable, OrderWithTypeDetailDTO, UpdateOrderDTO } from "@shared/types/orders";
+import { OptionsControlledBox } from "@shared/types/values";
 
 
 export class InMemoryOrderRepository implements OrderRepository {
@@ -122,5 +123,9 @@ async findByIdWithType(
     )
 
     return orders
+  }
+
+  async findManyOptionsByClientId(): Promise<OptionsControlledBox[] | null> {
+    throw new Error('Method not implemented')
   }
 }

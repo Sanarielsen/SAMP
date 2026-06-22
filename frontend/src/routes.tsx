@@ -7,6 +7,9 @@ import ForgotPasswordPage from "@/features/auth/pages/ForgotPassword";
 
 import ClientPage from "@/features/client/pages/ClientPage";
 import ManageClientPage from "@/features/client/pages/ManageClientPage";
+import { PanelInformations as ClientPanelInformations } from "@/features/client/components/PanelInformations";
+import ManageUpdateAppointment from "@/features/client/pages/ManageUpdateAppointment";
+import ManageNewAppointment from "@/features/client/pages/ManageNewAppointment";
 
 import RepresentativePage from "@/features/representative/pages/RepresentativePage";
 import RepresentativeManagePage from "@/features/representative/pages/RepresentativeManagePage";
@@ -35,6 +38,9 @@ export default function Router() {
         <Route path="clientes" element={<ClientPage />} />
         <Route path="cliente" element={<ManageClientPage />} />
         <Route path="cliente/:id" element={<ManageClientPage />} />
+        <Route path="cliente/:id/detalhes" element={<ClientPanelInformations />} />
+        <Route path="cliente/:id/agenda" element={<ManageNewAppointment />} />
+        <Route path="cliente/:clienteId/agenda/:agendaId" element={<ManageUpdateAppointment />} />
 
         <Route path="representantes" element={<RepresentativePage />} />
         <Route path="representante" element={<RepresentativeManagePage />} />
