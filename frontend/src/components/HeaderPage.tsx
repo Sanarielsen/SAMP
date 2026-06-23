@@ -23,7 +23,7 @@ export default function HeaderPage({
         }}
       >
         <Grid 
-          size={{ xs: 12, md: 6 }}
+          size={{ xs: 12, md: 8 }}
           sx={{ pl: 2 }}
         >
           <Typography variant="h4" component="h1">
@@ -31,7 +31,7 @@ export default function HeaderPage({
           </Typography>
         </Grid>
         <Grid 
-          size={{ xs: 12, md: 6 }}
+          size={{ xs: 12, md: 4 }}
           sx={{
             pr: 2, textAlign: { xs: "center", md: "right" }
           }}
