@@ -66,15 +66,15 @@ model Client {
 }
 
 model ClientAppointment {
-  id       String  @id @default(uuid())
-  userId   String
-  clientId String
-  orderId  String?
-
-  description String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
-  deletedAt   DateTime?
+  id            String    @id @default(uuid())
+  userId        String
+  clientId      String
+  orderId       String?
+  description   String
+  appointmentAt DateTime
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
 
   user   User   @relation(fields: [userId], references: [id])
   client Client @relation(fields: [clientId], references: [id])
