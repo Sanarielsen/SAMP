@@ -1,6 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 
 import AllInboxIcon from '@mui/icons-material/AllInbox';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PriceChangeIcon from '@mui/icons-material/PriceChange';
 
 import type { Section } from "@/types/section";
@@ -43,10 +44,23 @@ export default function HeaderResourceForm({
         ) 
         : resource === "INSTALLMENTS" ? (
           <PriceChangeIcon fontSize="large" />
-        ) : (
+        ) : resource === "APPOINTMENTS" ? (
+          <CalendarMonthIcon fontSize="large" />
+        ) : ( 
           <> ICONE </>
         )}
         
+      </Grid>
+
+      <Grid 
+        size={{ xs: 12}}
+        sx={{
+          textAlign:"center"
+        }}
+      >
+        <Typography variant="caption" color="text.secondary">
+        Todos os campos com * são obrigatórios
+      </Typography>
       </Grid>
     </Grid>
   )

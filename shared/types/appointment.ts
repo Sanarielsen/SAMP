@@ -1,6 +1,5 @@
 export type Appointment = {
   id:             string,
-  userId:         string,
   clientId:       string,
   orderId?:       string | null,
   appointmentAt:  Date,
@@ -12,7 +11,6 @@ export type Appointment = {
 
 export type CreateAppointmentDTO = {
   id?:            string,
-  userId:         string,
   clientId:       string,
   orderId?:       string | null,
   description:    string,

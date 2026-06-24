@@ -35,7 +35,6 @@ model User {
 
   createdByUser     Client[]            @relation("CreatedBy")
   linkedByUser      Client[]            @relation("ResponsibleBy")
-  ClientAppointment ClientAppointment[]
 
   @@map("users")
 }
@@ -67,7 +66,6 @@ model Client {
 
 model ClientAppointment {
   id            String    @id @default(uuid())
-  userId        String
   clientId      String
   orderId       String?
   description   String
@@ -76,9 +74,8 @@ model ClientAppointment {
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?
 
-  user   User   @relation(fields: [userId], references: [id])
-  client Client @relation(fields: [clientId], references: [id])
-  Order  Order? @relation(fields: [orderId], references: [id])
+  client Client  @relation(fields: [clientId], references: [id])
+  Order  Order?  @relation(fields: [orderId], references: [id])
 
   @@map("client_appointments")
 }

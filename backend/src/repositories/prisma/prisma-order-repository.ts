@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { OrderRepository } from "@/repositories/order-repository";
 
 import { CreateOrderDTO, Order, OrderDetailTable, OrderWithTypeDetailDTO, UpdateOrderDTO } from "@shared/types/orders";
+import { OptionsControlledBox } from "@shared/types/values";
+import dayjs from "dayjs";
 
 
 export class PrismaOrderRepository implements OrderRepository {
@@ -142,4 +144,20 @@ export class PrismaOrderRepository implements OrderRepository {
     return formattedOrders
   }
   
+  async findManyOptionsByClientId(clientId: string): Promise<OptionsControlledBox[] | null> {
+    const orders = await prisma.order.findMany({
+      where: {
+        clientId
+      },
+      include: {
+        client: true,
+        orderType: true,
+      },
+    })
+
+    return orders.map( (order) => ({
+      label: order.orderType.title + ' - ' + dayjs(order.eventDate).format("DD/MM/YYYY HH:mm"),
+      value: order.id
+    }))
+  }
 }

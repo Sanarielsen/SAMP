@@ -9,6 +9,7 @@ import {
   UserDetailDTO,
 } from "@shared/types/user";
 import { UserRole } from "@shared/types/userRole";
+import { OptionsControlledBox } from "@shared/types/values";
 
 
 export class InMemoryUserRepository implements UserRepository {
@@ -90,5 +91,12 @@ export class InMemoryUserRepository implements UserRepository {
         ...user,
         roleName: this.roles.find(r => r.id === user.roleId)?.name ?? '',
       }))
+  }
+
+  async findManyOptions(): Promise<OptionsControlledBox[] | null> {
+    return this.items.map((item) => ({
+      label: item.name + " - " + item.email,
+      value: item.id
+    }))
   }
 }
