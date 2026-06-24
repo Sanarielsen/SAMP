@@ -45,6 +45,8 @@ import { updatePaymentInstallment } from "@/http/Controllers/paymentInstallment/
 import { listPaymentMethods } from "@/http/Controllers/paymentMethod/list";
 import { updatePaymentInstallmentAsPaid } from "@/http/Controllers/paymentInstallment/update-paid";
 
+import { getClientAppointment } from "@/http/Controllers/appointment/get";
+
 import { sendEmail } from "./Controllers/test";
 
 export async function appRoutes(app: FastifyInstance) {
@@ -70,6 +72,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/client/:id', {onRequest: [verifyJWT]}, updateClient)
   app.patch('/client/:id/status', {onRequest: [verifyJWT]}, updateClientStatus)
   app.post('/client/:id/appointment', {onRequest: [verifyJWT]}, postClientAppointment)
+  app.get('/appointment/:id', {onRequest: [verifyJWT]}, getClientAppointment)
 
   app.get('/representatives', {onRequest: [verifyJWT]}, listRepresentative)
   app.get('/representative/:id', {onRequest: [verifyJWT]}, getRepresentative)
