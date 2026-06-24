@@ -22,7 +22,7 @@ export default function AppointmentInformation() {
           },
         }}
         color="secondary"
-        onClick={() => navigate(`/cliente/${id}`)}
+        onClick={() => navigate(`/cliente/${id}/agenda`)}
       >
         Cadastrar
       </Button>

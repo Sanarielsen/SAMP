@@ -11,7 +11,6 @@ export async function makeAppointment(
 ) {
 
   return repository.create({
-    userId: 'user-test',
     clientId: 'client-test',
     description: 'Appointment test',
     appointmentAt: new Date(new Date().getDate() + 5),

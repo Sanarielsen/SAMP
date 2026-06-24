@@ -16,6 +16,7 @@ import {
   updateClient,
   updateClientStatus 
 } from "@/http/Controllers/client"
+import { postClientAppointment } from "@/http/Controllers/appointment/post";
 import { 
   deleteRepresentative,
   getRepresentative,
@@ -24,6 +25,8 @@ import {
   postRepresentative,
   updateRepresentative
 } from "@/http/Controllers/representative";
+import { listUsersWithOptions } from "@/http/Controllers/user/list-options";
+import { listOrdersWithOptions } from "@/http/Controllers/order/list-options";
 import { postOrder } from "@/http/Controllers/order/post";
 import { getOrder } from "@/http/Controllers/order/get";
 import { listOrder } from "@/http/Controllers/order/list";
@@ -41,7 +44,6 @@ import { listPaymentInstallments } from "@/http/Controllers/paymentInstallment/l
 import { updatePaymentInstallment } from "@/http/Controllers/paymentInstallment/update";
 import { listPaymentMethods } from "@/http/Controllers/paymentMethod/list";
 import { updatePaymentInstallmentAsPaid } from "@/http/Controllers/paymentInstallment/update-paid";
-import { postAppointment } from "@/http/Controllers/appointment/post";
 
 import { sendEmail } from "./Controllers/test";
 
@@ -54,6 +56,8 @@ export async function appRoutes(app: FastifyInstance) {
   
   app.post('/user', register)
   app.get('/user/roles', {onRequest: [verifyJWT]}, listUserRoleLevelAuthorized)
+  app.get('/option/users', {onRequest: [verifyJWT]}, listUsersWithOptions)
+  app.get('/option/client/:id/orders', {onRequest: [verifyJWT]}, listOrdersWithOptions)
 
   app.get('/admin/users', {onRequest: [verifyJWT]}, listUsersWithSearch)
 
@@ -65,6 +69,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/client', {onRequest: [verifyJWT]}, postClient)
   app.patch('/client/:id', {onRequest: [verifyJWT]}, updateClient)
   app.patch('/client/:id/status', {onRequest: [verifyJWT]}, updateClientStatus)
+  app.post('/client/:id/appointment', {onRequest: [verifyJWT]}, postClientAppointment)
 
   app.get('/representatives', {onRequest: [verifyJWT]}, listRepresentative)
   app.get('/representative/:id', {onRequest: [verifyJWT]}, getRepresentative)
@@ -83,7 +88,6 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/order/:id/payment/installments', {onRequest: [verifyJWT]}, postPaymentWithInstallments)
   app.get(`/order/:id/payments`, { onRequest: [verifyJWT] }, getOrderPayments)
 
-  app.post('/appointment', {onRequest: [verifyJWT]}, postAppointment)
   
   app.get(`/payment/:id/installments`, {onRequest: [verifyJWT]}, listPaymentInstallments)
   app.patch('/payment/installment/:id', {onRequest: [verifyJWT]}, updatePaymentInstallment)
