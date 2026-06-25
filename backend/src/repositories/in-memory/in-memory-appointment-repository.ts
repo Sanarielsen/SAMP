@@ -2,7 +2,11 @@ import { randomUUID } from "node:crypto";
 
 import { AppointmentRepository } from "@/repositories/appointment-repository";
 
-import { Appointment, CreateAppointmentDTO } from "@shared/types/appointment";
+import { 
+  Appointment, 
+  CreateAppointmentDTO, 
+  UpdateAppointmentDTO 
+} from "@shared/types/appointment";
 
 
 export class InMemoryAppointmentRepository implements AppointmentRepository {
@@ -14,10 +18,26 @@ export class InMemoryAppointmentRepository implements AppointmentRepository {
       id: data.id ?? randomUUID(),
       createdAt: new Date(Date.now())
     }
-
+    
     this.items.push(appointment)
-
+    
     return appointment
+  }
+
+  async update(data: Partial<UpdateAppointmentDTO>): Promise<Appointment> {
+    const appointmentIndex = this.items.findIndex(appointment => {
+      return appointment.id === data.id
+    })
+
+    const updatedAppointment = {
+      ...this.items[appointmentIndex],
+      ...data,
+      updatedAt: new Date(),
+    }
+
+    this.items[appointmentIndex] = updatedAppointment
+
+    return updatedAppointment
   }
 
   async delete(id: string): Promise<void> {

@@ -15,5 +15,13 @@ export type CreateAppointmentDTO = {
   orderId?:       string | null,
   description:    string,
   appointmentAt:  Date,
+}
 
+export type UpdateAppointmentDTO = {
+  id:               string,
+  
+  clientId?:        string,
+  orderId?:         string | null,
+  description?:     string,
+  appointmentAt?:   Date,
 }
