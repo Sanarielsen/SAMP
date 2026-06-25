@@ -11,6 +11,17 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       data
     })
   }
+
+  async delete(id: string): Promise<void> {
+    prisma.order.update({
+      where: {
+        id
+      },
+      data: {
+        deletedAt: new Date(Date.now())
+      }
+    })
+  }
   
   async findById(id: string): Promise<Appointment | null> {
     return await prisma.clientAppointment.findUnique({
@@ -20,4 +31,12 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
     })
   }
 
+  async findManyByClientId(clientId: string): Promise<Appointment[] | null> {
+    return await prisma.clientAppointment.findMany({
+      where: {
+        clientId,
+        deletedAt: null,
+      },
+    })
+  }
 }

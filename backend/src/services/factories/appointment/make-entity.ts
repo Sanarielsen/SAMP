@@ -2,18 +2,19 @@ import {
   InMemoryAppointmentRepository 
 } from '@/repositories/in-memory/in-memory-appointment-repository'
 
-import { CreateAppointmentDTO } from '@shared/types/appointment'
+import { Appointment } from '@shared/types/appointment'
+import dayjs from 'dayjs'
 
 
 export async function makeAppointment(
   repository: InMemoryAppointmentRepository,
-  override: Partial<CreateAppointmentDTO> = {},
+  override: Partial<Appointment> = {},
 ) {
 
   return repository.create({
     clientId: 'client-test',
     description: 'Appointment test',
-    appointmentAt: new Date(new Date().getDate() + 5),
+    appointmentAt: dayjs().add(5, "day").toDate(),
 
     ...override,
   })
