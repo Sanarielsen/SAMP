@@ -25,7 +25,7 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
   }
 
   async delete(id: string): Promise<void> {
-    prisma.order.update({
+    await prisma.clientAppointment.update({
       where: {
         id
       },
