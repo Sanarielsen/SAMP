@@ -20,6 +20,19 @@ export class InMemoryAppointmentRepository implements AppointmentRepository {
     return appointment
   }
 
+  async delete(id: string): Promise<void> {
+    const appointmentIndex = this.items.findIndex(appointment => {
+      return appointment.id === id
+    })
+
+    const disabledAppointment = {
+      ...this.items[appointmentIndex],
+      deletedAt: new Date(),
+    }
+
+    this.items[appointmentIndex] = disabledAppointment
+  }
+
   async findById(id: string): Promise<Appointment | null> {
     const appointment = this.items.find(item => item.id == id)
 
@@ -28,5 +41,12 @@ export class InMemoryAppointmentRepository implements AppointmentRepository {
     }
 
     return appointment
+  }
+
+  async findManyByClientId(clientId: string): Promise<Appointment[] | null> {
+    return this.items.filter( (appointment) => 
+      appointment.clientId == clientId && 
+      appointment.deletedAt === null
+    )
   }
 }

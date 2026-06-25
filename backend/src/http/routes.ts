@@ -17,6 +17,7 @@ import {
   updateClientStatus 
 } from "@/http/Controllers/client"
 import { postClientAppointment } from "@/http/Controllers/appointment/post";
+import { listClientAppointments } from "@/http/Controllers/appointment/list";
 import { 
   deleteRepresentative,
   getRepresentative,
@@ -72,6 +73,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/client/:id', {onRequest: [verifyJWT]}, updateClient)
   app.patch('/client/:id/status', {onRequest: [verifyJWT]}, updateClientStatus)
   app.post('/client/:id/appointment', {onRequest: [verifyJWT]}, postClientAppointment)
+  app.get('/client/:id/appointments', {onRequest: [verifyJWT]}, listClientAppointments)
   app.get('/appointment/:id', {onRequest: [verifyJWT]}, getClientAppointment)
 
   app.get('/representatives', {onRequest: [verifyJWT]}, listRepresentative)
