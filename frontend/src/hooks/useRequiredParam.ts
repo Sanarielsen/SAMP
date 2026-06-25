@@ -10,3 +10,17 @@ export function useRequiredParam(key: string): string {
 
   return value;
 }
+
+export function useParamOptional(
+  key: string,
+  required = false
+): string | undefined {
+  const params = useParams();
+  const value = params[key];
+
+  if (required && !value) {
+    throw new Error(`Missing param: ${key}`);
+  }
+
+  return value;
+}

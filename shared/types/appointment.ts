@@ -25,3 +25,13 @@ export type UpdateAppointmentDTO = {
   description?:     string,
   appointmentAt?:   Date,
 }
+
+export type DetailAppointmentDTO = {
+  clientId:       string,
+  orderId?:       string | null,
+  appointmentAt:  string,
+  description:    string,
+  createdAt:      string,
+  updatedAt?:     string | null,
+  deletedAt?:     string | null,
+}

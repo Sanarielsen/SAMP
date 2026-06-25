@@ -6,13 +6,13 @@ import type { CreateAppointmentDTO } from '@shared/types/appointment'
 
 
 export type AppointmentPostPayload = CreateAppointmentDTO & {
-  idUser: string
+  clientId: string
 }
 
 async function postAppointment(
   payload: AppointmentPostPayload
 ): Promise<void> {
-  const { data } = await api.post(`/client/${payload.idUser}/appointment`, payload)
+  const { data } = await api.post(`/client/${payload.clientId}/appointment`, payload)
 
   return data
 }

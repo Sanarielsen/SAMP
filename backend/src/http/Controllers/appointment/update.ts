@@ -7,7 +7,7 @@ import { makeUpdateAppointmentUseCase } from '@/services/factories/appointment/m
 export async function updateClientAppointment(request: FastifyRequest, reply: FastifyReply) {
   const updateAppointmentBodySchema = z.object({
     clientId: z.string().optional(),
-    orderId: z.string().optional(),
+    orderId: z.string().optional().nullable(),
     description: z.string().optional(),
     appointmentAt: z.coerce.date().optional(),
   })
