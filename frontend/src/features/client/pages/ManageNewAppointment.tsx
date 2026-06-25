@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 import { 
   FormProvider, 
   useForm, 
@@ -5,53 +8,46 @@ import {
   type SubmitHandler 
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import dayjs from "dayjs";
 import { 
   Box, 
   Button, 
   Grid 
 } from "@mui/material";
 
-import { 
-  manageAppointmentSchema, 
-  type ManageAppointmentSchemaFormData
-} from "@/features/client/schema/manageAppointment";
+import { optionsQueryListOrdersWithOptions } from "@/api/listOrdersWithOptions";
+import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions";
+import { useMutationPostAppointment } from "@/features/client/api/mutationPostAppointment";
 import HeaderResourceForm from "@/components/HeaderResourceForm";
 import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
-import { useQuery } from "@tanstack/react-query";
-import { optionsQueryListOrdersWithOptions } from "@/api/listOrdersWithOptions";
-import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions";
-import { useMutationPostAppointment } from "../api/mutationPostAppointment";
-import dayjs from "dayjs";
-import { useRequiredParam } from "@/hooks/useRequiredParam";
 import ToastContainer from "@/components/Toast";
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useRequiredParam } from "@/hooks/useRequiredParam";
+import { 
+  manageAppointmentSchema, 
+  type ManageAppointmentSchemaFormData
+} from "@/features/client/schema/manageAppointment";
 
-export default function ManageAppointment() {
+
+export default function ManageNewAppointment() {
 
   const navigate = useNavigate();
-  const idUser = useRequiredParam('id')
-  //const isEditing = !!id;
+  const clientId = useRequiredParam('id')
 
   const [openToast, setOpenToast] = useState("")
 
   const form = useForm<ManageAppointmentSchemaFormData>({
     resolver:
       zodResolver(manageAppointmentSchema),
-
-    // defaultValues:
-    //   isEditing
-    //     ? currentClient
-    //     : emptyClient,
   });
   const { errors } = form.formState
 
   const clientSelected = useWatch({
-      control: form.control,
-      name: 'clientId',
-    })
+    control: form.control,
+    name: 'clientId',
+  })
 
   const { 
     data: clientsWithOptions,
@@ -71,7 +67,7 @@ export default function ManageAppointment() {
     setOpenToast(result);
     if (result === "success") {
       setTimeout(() => {
-        navigate(`/cliente/${idUser}/detalhes`);
+        navigate(`/cliente/${clientId}/detalhes`);
       }, 5000);
     }
   }
@@ -86,13 +82,14 @@ export default function ManageAppointment() {
       },
     })
 
+
   const onSubmit: SubmitHandler<ManageAppointmentSchemaFormData> = async (data) => {
 
     const appointmentAtOnServer = dayjs(data.appointmentAt, 'DD/MM/YYYY HH:mm').toDate()
 
     mutationPostAppointment.mutate({
       ...data,
-      idUser,
+      clientId: clientId!,
       appointmentAt: appointmentAtOnServer,
     })
   }
@@ -163,11 +160,11 @@ export default function ManageAppointment() {
               size="large"
               loading={
                 mutationPostAppointment.isPending || 
-                mutationPostAppointment.isSuccess
+                mutationPostAppointment.isSuccess 
               }
               disabled={
                 mutationPostAppointment.isPending || 
-                mutationPostAppointment.isSuccess
+                mutationPostAppointment.isSuccess 
               }
               fullWidth
             >

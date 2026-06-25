@@ -1,3 +1,4 @@
+import type { ManageAppointmentSchemaFormData } from "@/features/client/schema/manageAppointment";
 import type { UpdateSchemaFormData } from "@/features/client/schema/updateClientSchema";
 
 export const emptyClient:
@@ -40,3 +41,10 @@ export const emptyClient:
     correspondenceAddress: undefined,
   },
 };
+
+export const emptyAppointment: ManageAppointmentSchemaFormData = {
+  clientId: "",
+  orderId: "",
+  description: "",
+  appointmentAt: ""
+}
