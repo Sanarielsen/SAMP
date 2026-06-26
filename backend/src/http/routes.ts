@@ -16,6 +16,8 @@ import {
   updateClient,
   updateClientStatus 
 } from "@/http/Controllers/client"
+import { getClientAppointment } from "@/http/Controllers/appointment/get";
+import { getAppoimentWithDetails } from "@/http/Controllers/appointment/get-with-details";
 import { postClientAppointment } from "@/http/Controllers/appointment/post";
 import { listClientAppointments } from "@/http/Controllers/appointment/list";
 import { updateClientAppointment } from "@/http/Controllers/appointment/update";
@@ -48,7 +50,6 @@ import { updatePaymentInstallment } from "@/http/Controllers/paymentInstallment/
 import { listPaymentMethods } from "@/http/Controllers/paymentMethod/list";
 import { updatePaymentInstallmentAsPaid } from "@/http/Controllers/paymentInstallment/update-paid";
 
-import { getClientAppointment } from "@/http/Controllers/appointment/get";
 
 import { sendEmail } from "./Controllers/test";
 
@@ -77,6 +78,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/client/:id/appointment', {onRequest: [verifyJWT]}, postClientAppointment)
   app.get('/client/:id/appointments', {onRequest: [verifyJWT]}, listClientAppointments)
   app.get('/appointment/:id', {onRequest: [verifyJWT]}, getClientAppointment)
+  app.get('/appointment/:id/details', {onRequest: [verifyJWT]}, getAppoimentWithDetails)
   app.patch(`/appointment/:id`, { onRequest: [verifyJWT] }, updateClientAppointment)
   app.delete(`/appointment/:id`, { onRequest: [verifyJWT] }, deleteAppointment)
 
@@ -96,7 +98,6 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/order/:id/payment', {onRequest: [verifyJWT]}, postPayment)
   app.post('/order/:id/payment/installments', {onRequest: [verifyJWT]}, postPaymentWithInstallments)
   app.get(`/order/:id/payments`, { onRequest: [verifyJWT] }, getOrderPayments)
-
   
   app.get(`/payment/:id/installments`, {onRequest: [verifyJWT]}, listPaymentInstallments)
   app.patch('/payment/installment/:id', {onRequest: [verifyJWT]}, updatePaymentInstallment)

@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 
 import { AppointmentRepository } from "@/repositories/appointment-repository";
 
-import { Appointment, CreateAppointmentDTO, UpdateAppointmentDTO } from "@shared/types/appointment";
+import { Appointment, CreateAppointmentDTO, DetailAppointmentDTO, UpdateAppointmentDTO } from "@shared/types/appointment";
 
 
 export class PrismaAppointmentRepository implements AppointmentRepository {
@@ -23,7 +23,7 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       }
     })
   }
-
+  
   async delete(id: string): Promise<void> {
     await prisma.clientAppointment.update({
       where: {
@@ -41,6 +41,35 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
         id,
       },
     })
+  }
+  
+  async findByIdWithDetails(id: string): Promise<DetailAppointmentDTO | null> {
+    const appointmentWithDetails = await prisma.clientAppointment.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        Order: {
+          include: {
+            orderType: true
+          }
+        },
+        client: true,
+      }
+    })
+
+    if (!appointmentWithDetails) {
+      return null
+    }
+
+    return {
+      description: appointmentWithDetails.description,
+      appointmentAt: String(appointmentWithDetails.appointmentAt),
+      nameClient: appointmentWithDetails.client.legalName + ' - ' + appointmentWithDetails.client.tradeName,
+      titleOrder: appointmentWithDetails.Order?.orderType.title,
+      createdAt: appointmentWithDetails.createdAt,
+      updatedAt: appointmentWithDetails.updatedAt
+    }
   }
 
   async findManyByClientId(clientId: string): Promise<Appointment[] | null> {

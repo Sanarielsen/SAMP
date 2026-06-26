@@ -27,11 +27,10 @@ export type UpdateAppointmentDTO = {
 }
 
 export type DetailAppointmentDTO = {
-  clientId:       string,
-  orderId?:       string | null,
-  appointmentAt:  string,
-  description:    string,
-  createdAt:      string,
-  updatedAt?:     string | null,
-  deletedAt?:     string | null,
+  description: string,
+  appointmentAt: string,
+  nameClient: string,
+  titleOrder: string | undefined,
+  createdAt: Date,
+  updatedAt: Date,
 }

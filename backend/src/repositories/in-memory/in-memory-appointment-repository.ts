@@ -5,6 +5,7 @@ import { AppointmentRepository } from "@/repositories/appointment-repository";
 import { 
   Appointment, 
   CreateAppointmentDTO, 
+  DetailAppointmentDTO, 
   UpdateAppointmentDTO 
 } from "@shared/types/appointment";
 
@@ -61,6 +62,10 @@ export class InMemoryAppointmentRepository implements AppointmentRepository {
     }
 
     return appointment
+  }
+
+  findByIdWithDetails(id: string): Promise<DetailAppointmentDTO | null> {
+    throw new Error("Method not implemented.");
   }
 
   async findManyByClientId(clientId: string): Promise<Appointment[] | null> {

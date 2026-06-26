@@ -1,5 +1,6 @@
 import type { ManageAppointmentSchemaFormData } from "@/features/client/schema/manageAppointment";
 import type { UpdateSchemaFormData } from "@/features/client/schema/updateClientSchema";
+import type { DetailAppointmentDTO } from "@shared/types/appointment";
 
 export const emptyClient:
   UpdateSchemaFormData = {
@@ -47,4 +48,13 @@ export const emptyAppointment: ManageAppointmentSchemaFormData = {
   orderId: "",
   description: "",
   appointmentAt: ""
+}
+
+export const emptyAppointmentWithDetails: DetailAppointmentDTO = {
+  description: "",
+  appointmentAt: "",
+  nameClient: "",
+  titleOrder: "",
+  createdAt: new Date(Date.now()),
+  updatedAt: new Date(Date.now()),
 }

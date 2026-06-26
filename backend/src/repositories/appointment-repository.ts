@@ -1,7 +1,8 @@
 import { 
   CreateAppointmentDTO, 
   Appointment, 
-  UpdateAppointmentDTO
+  UpdateAppointmentDTO,
+  DetailAppointmentDTO
 } from "@shared/types/appointment"
 
 export interface AppointmentRepository {
@@ -9,5 +10,6 @@ export interface AppointmentRepository {
   update(data: Partial<UpdateAppointmentDTO>): Promise<Appointment>
   delete(id: string): Promise<void>
   findById(id: string): Promise<Appointment | null>
+  findByIdWithDetails(id: string): Promise<DetailAppointmentDTO | null>
   findManyByClientId(clientId: string): Promise<Appointment[] | null>
 }

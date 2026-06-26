@@ -6,12 +6,14 @@ import { Button, Grid } from "@mui/material"
 
 import { optionsQueryListAppointments } from "@/features/client/api/queryListAppointments";
 import { useMutationDeleteAppointment } from "@/features/client/api/mutationDeleteApppointment";
+import ModalAppointmentDetails from "@/features/client/components/ModalAppointmentDetails";
 import DataTable from "@/components/DataTable";
 import DataTableAppointmentColumns from "@/components/DataTableAppointmentColumns";
 import HeaderPage from "@/components/HeaderPage"
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast";
 import { useRequiredParam } from "@/hooks/useRequiredParam";
+import { appointmentFields } from "@/features/client/utils/getRowDetailAppointmentDetails";
 
 import type { Appointment } from "@shared/types/appointment";
 
@@ -137,7 +139,12 @@ export default function AppointmentInformation() {
       />
 
       {appointmentClicked && (
-        <>{openModalDetails}</>
+        <ModalAppointmentDetails
+          open={openModalDetails}
+          appointment={appointmentClicked}
+          fields={appointmentFields}
+          handleClose={() => setOpenModalDetails(false)}
+        />
       )}
     </>
   )
