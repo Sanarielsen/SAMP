@@ -37,7 +37,7 @@ export default function CardLoginFields() {
       const response = await mutation.mutateAsync(data)
       
       signIn(response.token)
-      navigate('/clientes')
+      navigate('/inicio')
     } catch {
       setError('password', {
         type: 'manual',
