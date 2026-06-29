@@ -12,4 +12,5 @@ export interface AppointmentRepository {
   findById(id: string): Promise<Appointment | null>
   findByIdWithDetails(id: string): Promise<DetailAppointmentDTO | null>
   findManyByClientId(clientId: string): Promise<Appointment[] | null>
+  findManyByOrderId(orderId: string): Promise<Appointment[] | null>
 }
