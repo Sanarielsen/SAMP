@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { Button, Grid } from "@mui/material"
+import { Grid } from "@mui/material"
 
-import { optionsQueryListAppointments } from "@/features/client/api/queryListAppointments";
 import { useMutationDeleteAppointment } from "@/api/mutationDeleteApppointment";
+import { optionsQueryListAppointmentsByOrder } from "@/features/order/api/queryListAppointmentsByOrder";
 import ModalAppointmentDetails from "@/features/client/components/ModalAppointmentDetails";
 import DataTable from "@/components/DataTable";
 import DataTableAppointmentColumns from "@/components/DataTableAppointmentColumns";
@@ -21,7 +21,7 @@ import type { Appointment } from "@shared/types/appointment";
 export default function AppointmentInformation() {
 
   const navigate = useNavigate();
-  const clientId = useRequiredParam('id')
+  const orderId = useRequiredParam('id')
   const queryClient = useQueryClient()
 
   const [appointmentClicked, setAppointmentClicked] = useState<Appointment>()
@@ -36,13 +36,13 @@ export default function AppointmentInformation() {
     isError,
     refetch
   } = useQuery(
-    optionsQueryListAppointments(clientId)
+    optionsQueryListAppointmentsByOrder(orderId)
   )
 
   const mutationChangeDeleteAppointment =
     useMutationDeleteAppointment({
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['appointments', clientId] })
+      queryClient.invalidateQueries({ queryKey: ['appointments-by-order', orderId] })
       setOpenToast("success"); 
     },
     onError: () => {
@@ -79,22 +79,7 @@ export default function AppointmentInformation() {
 
   return (
     <>
-      <HeaderPage title="Agenda">
-        <Button
-          type="button"
-          variant="contained"
-          sx={{ 
-            width: { xs: "100%", md: "auto" },
-            "&:hover": {
-              backgroundColor: "#7A3000",
-            },
-          }}
-          color="secondary"
-          onClick={() => navigate(`/cliente/${clientId}/agenda`)}
-        >
-          Cadastrar
-        </Button>
-      </HeaderPage>
+      <HeaderPage title="Agenda atrelada a essa O.S" />
 
       <Grid
         container 
@@ -107,7 +92,7 @@ export default function AppointmentInformation() {
             state={stateQuery}
             rows={listAppointments}
             columns={DataTableAppointmentColumns({
-              onClickUpdateItem: (id) => navigate(`/cliente/${clientId}/agenda/${id}`),
+              onClickUpdateItem: (id) => navigate(`/cliente/${orderId}/agenda/${id}`),
               onClickSeeItem: (current) => handleView(current), 
               onClickDeleteItem: (current) => handleDelete(current),
               onClickCheckOrder: (currentOrderId) => navigate(`/os/${currentOrderId}`)
