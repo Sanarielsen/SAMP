@@ -57,11 +57,11 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
         client: true,
       }
     })
-
+    
     if (!appointmentWithDetails) {
       return null
     }
-
+    
     return {
       description: appointmentWithDetails.description,
       appointmentAt: String(appointmentWithDetails.appointmentAt),
@@ -71,11 +71,20 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       updatedAt: appointmentWithDetails.updatedAt
     }
   }
-
+  
   async findManyByClientId(clientId: string): Promise<Appointment[] | null> {
     return await prisma.clientAppointment.findMany({
       where: {
         clientId,
+        deletedAt: null,
+      },
+    })
+  }
+
+  async findManyByOrderId(orderId: string): Promise<Appointment[] | null> {
+    return await prisma.clientAppointment.findMany({
+      where: {
+        orderId,
         deletedAt: null,
       },
     })
