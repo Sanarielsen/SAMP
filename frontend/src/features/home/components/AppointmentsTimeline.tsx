@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { Button, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 
 import { useAuth } from "@/auth/AuthProvider";
 import { optionsQueryListRecentAppointments } from "@/features/home/api/queryListRecentAppointments";
@@ -9,11 +9,16 @@ import { mockDaysCanBeConsidered } from "@/features/home/utils/mockDaysCanBeCons
 import { useMutationDeleteAppointment } from "@/api/mutationDeleteApppointment";
 import AppoinentmentListItem from "@/features/home/components/AppoinentmentListItem";
 import BoxLoading from "@/components/BoxLoading";
+import ButtonMenu from "@/components/ButtonMenu";
 import ComboBox from "@/components/ComboBox";
 import HeaderPage from "@/components/HeaderPage";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast";
+import { exportToExcel, exportToPdf } from "@/features/home/utils/exportData";
+import { getFileTimestamp } from "@/utils/getFIleTimestamp";
+
 import type { AppoitmentItem } from "@shared/types/appointment";
+import type { OptionsMenuActions } from "@shared/types/values";
 
 
 export default function AppointmentsTimeline() {
@@ -24,7 +29,6 @@ export default function AppointmentsTimeline() {
   const queryClient = useQueryClient();
 
   const [daysCanBeConsidered, setDaysCanBeConsidered] = useState<number>(1)
-
   const [openModalConfirmation, setOpenModalConfirmation] = useState(false)
   const [appointmentIdClicked, setAppointmentIdClicked] = useState('')
   const [openToast, setOpenToast] = useState("")
@@ -63,28 +67,31 @@ export default function AppointmentsTimeline() {
     )
   }
 
+  const optionsExportFunction: OptionsMenuActions[] = [
+    {
+      label: 'Excel (.xlsx)',
+      value: '.xlsx',
+      onClickOption: () => exportToExcel(recentAppoitments, `agenda-recente-${getFileTimestamp()}-${daysCanBeConsidered}.xlsx`)
+    },
+    {
+      label: 'PDF (.pdf)',
+      value: '.xlsx',
+      onClickOption: () => exportToPdf(recentAppoitments, `agenda-recente-${getFileTimestamp()}-${daysCanBeConsidered}.pdf`, daysCanBeConsidered)
+    }
+  ]
+
   return (
     <>
       <Grid container spacing={4} sx={{ pt: 2, pb: 3, px: 4 }}>
         <Grid size={{ xs: 12, lg: 12, xl: 6 }}>
           <HeaderPage title="Agendas próximas">
-            <Button
-              type="button"
-              variant="contained"
-              sx={{ 
-                width: { xs: "100%", md: "auto" },
-                "&:hover": {
-                  backgroundColor: "green",
-                },
-              }}
-              color="success"
-              onClick={() => console.log("extrauiu")}
-            >
-              Extrair
-            </Button>
+            <ButtonMenu
+              label="Extrair"
+              options={optionsExportFunction}
+            />
           </HeaderPage>
 
-          <ComboBox 
+          <ComboBox
             label="Dias considerados"
             value={String(daysCanBeConsidered)}
             options={mockDaysCanBeConsidered}
