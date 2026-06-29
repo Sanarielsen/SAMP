@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router";
+
 import { 
   Avatar, 
   Box, 
@@ -6,25 +8,23 @@ import {
   ListItemAvatar, 
   ListItemText 
 } from "@mui/material";
-import { 
-  GridCheckCircleIcon,
-   GridDeleteIcon } from "@mui/x-data-grid";
+import { GridDeleteIcon, GridLoadIcon } from "@mui/x-data-grid";
 import FolderIcon from '@mui/icons-material/Folder';
 
 import { formatDateTimeBrazil } from "@/utils/formatDateTimeBrazil";
-
 import type { AppoitmentItem } from "@shared/types/appointment";
 
 
 interface AppoinentmentListItemProps {
   appointment: AppoitmentItem
-  onCompleteItem: (id: string) => void
   onDeleteItem: (id: string) => void
 }
 
 export default function AppoinentmentListItem({
-  appointment, onCompleteItem, onDeleteItem
+  appointment, onDeleteItem
 }: AppoinentmentListItemProps) {
+
+  const navigate = useNavigate();
 
   const orderTitle = appointment.orderTitle || '-'
 
@@ -38,18 +38,19 @@ export default function AppoinentmentListItem({
             gap: 2,
           }}
         >
-          <IconButton edge="end" aria-label="delete">
-            <GridCheckCircleIcon 
-              color="primary" 
-              fontSize="large" 
-              onClick={() => onCompleteItem(appointment.id)}
-            />
+          <IconButton
+            edge="end"
+            aria-label="delete"
+            onClick={() => navigate(`/cliente/${appointment.clientId}/agenda/${appointment.id}`)}
+          >
+            <GridLoadIcon fontSize="large" />
           </IconButton>
-          <IconButton edge="end" aria-label="delete">
-            <GridDeleteIcon 
-              fontSize="large" 
-              onClick={() => onDeleteItem(appointment.id)}
-            />
+          <IconButton
+            edge="end"
+            aria-label="delete"
+            onClick={() => onDeleteItem(appointment.id)}
+          >
+            <GridDeleteIcon fontSize="large" />
           </IconButton>
         </Box>
       }

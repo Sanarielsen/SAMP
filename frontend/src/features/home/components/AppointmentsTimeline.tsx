@@ -1,53 +1,46 @@
 import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Button, Grid } from "@mui/material";
 
+import { useAuth } from "@/auth/AuthProvider";
+import { optionsQueryListRecentAppointments } from "@/features/home/api/queryListRecentAppointments";
+import { mockDaysCanBeConsidered } from "@/features/home/utils/mockDaysCanBeConsidered";
 import { useMutationDeleteAppointment } from "@/api/mutationDeleteApppointment";
 import AppoinentmentListItem from "@/features/home/components/AppoinentmentListItem";
+import BoxLoading from "@/components/BoxLoading";
+import ComboBox from "@/components/ComboBox";
 import HeaderPage from "@/components/HeaderPage";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast";
-
 import type { AppoitmentItem } from "@shared/types/appointment";
 
 
-const appointmentsMock: AppoitmentItem[] = [
-  {
-    id: 'test-1',
-    description: 'Cadastro de novo registro',
-    status: 'COMPLETE',
-    appointmentAt: new Date(Date.now()),
-    clientName: 'Sanarielsen',
-    orderTitle: null
-  },
-  {
-    id: 'test-2',
-    description: 'Cadastro de novo documento',
-    status: 'COMPLETE',
-    appointmentAt: new Date(Date.now()),
-    clientName: 'Sanarielsen',
-    orderTitle: null,
-  },
-  {
-    id: 'test-3',
-    description: 'Conversa com o cliente',
-    status: 'PENDING',
-    appointmentAt: new Date(Date.now()),
-    clientName: 'Sanarielsen',
-    orderTitle: 'Adicionar novo registro do processo',
-  }
-]
-
 export default function AppointmentsTimeline() {
+
+  const { getUserId } = useAuth()
+  const userId = getUserId() ?? ""
+
+  const queryClient = useQueryClient();
+
+  const [daysCanBeConsidered, setDaysCanBeConsidered] = useState<number>(1)
 
   const [openModalConfirmation, setOpenModalConfirmation] = useState(false)
   const [appointmentIdClicked, setAppointmentIdClicked] = useState('')
   const [openToast, setOpenToast] = useState("")
 
+  const { 
+    data: recentAppoitments,
+    isSuccess: isSuccessRecentAppoitments,
+    isPending: isPendingRecentAppoitments,
+  } = useQuery(
+    optionsQueryListRecentAppointments(userId, daysCanBeConsidered)
+  )
+
   const mutationChangeDeleteAppointment =
     useMutationDeleteAppointment({
     onSuccess: () => {
-      //queryClient.invalidateQueries({ queryKey: ['appointments-by-order', orderId] })
+      void queryClient.invalidateQueries({ queryKey: ['recent-appointments', userId, daysCanBeConsidered] })
       setOpenToast("success"); 
     },
     onError: () => {
@@ -68,8 +61,6 @@ export default function AppointmentsTimeline() {
     mutationChangeDeleteAppointment.mutate(
       appointmentIdClicked
     )
-
-    //refetch()
   }
 
   return (
@@ -92,11 +83,26 @@ export default function AppointmentsTimeline() {
               Extrair
             </Button>
           </HeaderPage>
-          {appointmentsMock.map((appointment) => (
+
+          <ComboBox 
+            label="Dias considerados"
+            value={String(daysCanBeConsidered)}
+            options={mockDaysCanBeConsidered}
+            onChangeOption={(event) => setDaysCanBeConsidered(Number(event.target.value))}
+          />
+
+          {isPendingRecentAppoitments && (
+            <BoxLoading description="Carregando agendas..." />
+          )}
+
+          {isSuccessRecentAppoitments && (recentAppoitments ?? []).length === 0 && (
+            <BoxLoading description="Nenhuma agenda encontrada para o período selecionado." />
+          )}
+
+          {isSuccessRecentAppoitments && (recentAppoitments ?? []).map((appointment: AppoitmentItem) => (
             <AppoinentmentListItem
               key={appointment.id}
               appointment={appointment}
-              onCompleteItem={(id) => console.log("Completa a agenda: ", id)}
               onDeleteItem={(id) => handleDelete(id)}
             />
           ))}
