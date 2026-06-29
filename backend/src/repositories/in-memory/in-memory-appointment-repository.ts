@@ -4,6 +4,7 @@ import { AppointmentRepository } from "@/repositories/appointment-repository";
 
 import { 
   Appointment, 
+  AppoitmentItem, 
   CreateAppointmentDTO, 
   DetailAppointmentDTO, 
   UpdateAppointmentDTO 
@@ -80,5 +81,9 @@ export class InMemoryAppointmentRepository implements AppointmentRepository {
       appointment.orderId == orderId && 
       appointment.deletedAt === null
     )
+  }
+
+  async findManyByUserIdAndRange(userId: string, howManyDays: number): Promise<AppoitmentItem[] | null> {
+    throw new Error("Method not implemented.");
   }
 }
