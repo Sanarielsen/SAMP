@@ -3,6 +3,7 @@ import {
   Grid
 } from "@mui/material";
 
+import AppointmentInformation from "@/features/order/components/AppointmentInformation";
 import OrderInformation from "@/features/order/components/OrderInformation";
 import PaymentInformation from "@/features/order/components/PaymentInformation";
 
@@ -15,6 +16,7 @@ export function DetailsPanel() {
       >
         <Grid size={{ xs: 12, md: 6 }}>
           <OrderInformation />
+          <AppointmentInformation />
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
