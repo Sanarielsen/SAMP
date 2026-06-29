@@ -34,3 +34,14 @@ export type DetailAppointmentDTO = {
   createdAt: Date,
   updatedAt: Date,
 }
+
+export type AppointmentStatus = 'COMPLETE' | 'PENDING';
+
+export type AppoitmentItem = {
+  id: string,
+  description: string,
+  status: AppointmentStatus,
+  appointmentAt: Date,
+  clientName: string,
+  orderTitle: string | null,
+}

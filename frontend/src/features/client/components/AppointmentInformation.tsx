@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Grid } from "@mui/material"
 
 import { optionsQueryListAppointments } from "@/features/client/api/queryListAppointments";
-import { useMutationDeleteAppointment } from "@/features/client/api/mutationDeleteApppointment";
+import { useMutationDeleteAppointment } from "@/api/mutationDeleteApppointment";
 import ModalAppointmentDetails from "@/features/client/components/ModalAppointmentDetails";
 import DataTable from "@/components/DataTable";
 import DataTableAppointmentColumns from "@/components/DataTableAppointmentColumns";
