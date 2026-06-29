@@ -4,6 +4,7 @@ import { AppointmentRepository } from "@/repositories/appointment-repository";
 
 import { 
   Appointment, 
+  AppoitmentItem, 
   CreateAppointmentDTO, 
   DetailAppointmentDTO, 
   UpdateAppointmentDTO 
@@ -24,28 +25,28 @@ export class InMemoryAppointmentRepository implements AppointmentRepository {
     
     return appointment
   }
-
+  
   async update(data: Partial<UpdateAppointmentDTO>): Promise<Appointment> {
     const appointmentIndex = this.items.findIndex(appointment => {
       return appointment.id === data.id
     })
-
+    
     const updatedAppointment = {
       ...this.items[appointmentIndex],
       ...data,
       updatedAt: new Date(),
     }
-
+    
     this.items[appointmentIndex] = updatedAppointment
-
+    
     return updatedAppointment
   }
-
+  
   async delete(id: string): Promise<void> {
     const appointmentIndex = this.items.findIndex(appointment => {
       return appointment.id === id
     })
-
+    
     const disabledAppointment = {
       ...this.items[appointmentIndex],
       deletedAt: new Date(),
@@ -53,25 +54,36 @@ export class InMemoryAppointmentRepository implements AppointmentRepository {
 
     this.items[appointmentIndex] = disabledAppointment
   }
-
+  
   async findById(id: string): Promise<Appointment | null> {
     const appointment = this.items.find(item => item.id == id)
-
+    
     if (!appointment) {
       return null
     }
-
+    
     return appointment
   }
-
+  
   findByIdWithDetails(id: string): Promise<DetailAppointmentDTO | null> {
     throw new Error("Method not implemented.");
   }
-
+  
   async findManyByClientId(clientId: string): Promise<Appointment[] | null> {
     return this.items.filter( (appointment) => 
       appointment.clientId == clientId && 
       appointment.deletedAt === null
     )
+  }
+
+  async findManyByOrderId(orderId: string): Promise<Appointment[] | null> {
+    return this.items.filter( (appointment) => 
+      appointment.orderId == orderId && 
+      appointment.deletedAt === null
+    )
+  }
+
+  async findManyByUserIdAndRange(userId: string, howManyDays: number): Promise<AppoitmentItem[] | null> {
+    throw new Error("Method not implemented.");
   }
 }
