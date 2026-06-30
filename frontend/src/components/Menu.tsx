@@ -6,6 +6,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import CloseIcon from '@mui/icons-material/Close';
 import HotelClassIcon from '@mui/icons-material/HotelClass';
 import InfoIcon from '@mui/icons-material/Info';
+import HomeIcon from '@mui/icons-material/Home';
 
 import { 
   ContainerMenu,
@@ -30,6 +31,7 @@ export default function Menu({
 
   function handleChangePage(targetPage: string) {
     navigate(targetPage);
+    handleChangeStatus();
   }
 
   return (
@@ -45,28 +47,35 @@ export default function Menu({
       </NavHeader>
       <NavBody>
         <MenuItem
-          $active={location.pathname === "/clientes"}
+          $active={location.pathname.startsWith("/inicio")}
+          onClick={() => handleChangePage("/inicio")}
+        >
+          <HomeIcon />
+          <span> Inicio </span>
+        </MenuItem>
+        <MenuItem
+          $active={location.pathname.startsWith("/cliente")}
           onClick={() => handleChangePage("/clientes")}
         >
           <ApartmentIcon />
           <span> Clientes </span>
         </MenuItem>
         <MenuItem
-          $active={location.pathname === "/representantes"}
+          $active={location.pathname.startsWith("/representante")}
           onClick={() => handleChangePage("/representantes")}
         >
           <HotelClassIcon />
           <span> Representantes </span>
         </MenuItem>
         <MenuItem
-          $active={location.pathname === "/oss"}
+          $active={location.pathname.startsWith("/os")}
           onClick={() => handleChangePage("/oss")}
         >
           <AllInboxIcon />
           <span> O.S </span>
         </MenuItem>
         <MenuItem
-          $active={location.pathname === "/sobre"}
+          $active={location.pathname.startsWith("/sobre")}
           onClick={() => handleChangePage("/sobre")}
         >
           <InfoIcon />
