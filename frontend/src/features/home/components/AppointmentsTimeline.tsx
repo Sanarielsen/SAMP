@@ -19,6 +19,8 @@ import { getFileTimestamp } from "@/utils/getFIleTimestamp";
 
 import type { AppoitmentItem } from "@shared/types/appointment";
 import type { OptionsMenuActions } from "@shared/types/values";
+import BoxSuccessWithoutData from "@/components/BoxSuccessWithoutData";
+import BoxError from "@/components/BoxError";
 
 
 export default function AppointmentsTimeline() {
@@ -37,6 +39,7 @@ export default function AppointmentsTimeline() {
     data: recentAppoitments,
     isSuccess: isSuccessRecentAppoitments,
     isPending: isPendingRecentAppoitments,
+    isError: isErrorRecentAppoitments
   } = useQuery(
     optionsQueryListRecentAppointments(userId, daysCanBeConsidered)
   )
@@ -102,8 +105,12 @@ export default function AppointmentsTimeline() {
             <BoxLoading description="Carregando agendas..." />
           )}
 
+          {isErrorRecentAppoitments && (
+            <BoxError description="Erro ao carregar os dados da agenda. Tente novamente." />
+          )}
+
           {isSuccessRecentAppoitments && (recentAppoitments ?? []).length === 0 && (
-            <BoxLoading description="Nenhuma agenda encontrada para o período selecionado." />
+            <BoxSuccessWithoutData description="Nenhuma agenda encontrada para o período selecionado." />
           )}
 
           {isSuccessRecentAppoitments && (recentAppoitments ?? []).map((appointment: AppoitmentItem) => (
