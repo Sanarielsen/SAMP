@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 
 import {
   Popover, 
@@ -24,6 +24,7 @@ interface HeaderMenuProp {
 export default function HeaderMenu({ isMobile }: HeaderMenuProp) {
 
   const { token } = useAuth()
+  const navigate = useNavigate()
 
   const [active, setActive] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -52,7 +53,7 @@ export default function HeaderMenu({ isMobile }: HeaderMenuProp) {
         </Tooltip>
         ) }
         <Tooltip title="Inicio SAMP">
-          <ButtonIcon>
+          <ButtonIcon onClick={ () => navigate(`/inicio`) }>
             <img src="/samp_logo_white.svg" width="48" height="48" />
           </ButtonIcon>
         </Tooltip>
