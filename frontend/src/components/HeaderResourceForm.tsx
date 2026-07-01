@@ -3,6 +3,7 @@ import { Grid, Typography } from "@mui/material";
 import AllInboxIcon from '@mui/icons-material/AllInbox';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PriceChangeIcon from '@mui/icons-material/PriceChange';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 import type { Section } from "@/types/section";
 
@@ -46,6 +47,8 @@ export default function HeaderResourceForm({
           <PriceChangeIcon fontSize="large" />
         ) : resource === "APPOINTMENTS" ? (
           <CalendarMonthIcon fontSize="large" />
+        ) : resource === "PROCESSES" ? (
+          <InsertDriveFileIcon fontSize="large" />
         ) : ( 
           <> ICONE </>
         )}

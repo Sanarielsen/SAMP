@@ -33,19 +33,20 @@ model User {
   roleId   String
   userRole UserRole? @relation(fields: [roleId], references: [id])
 
-  createdByUser     Client[]            @relation("CreatedBy")
-  linkedByUser      Client[]            @relation("ResponsibleBy")
+  createdByUser   Client[]          @relation("CreatedBy")
+  linkedByUser    Client[]          @relation("ResponsibleBy")
+  importedProcess ImportedProcess[]
 
   @@map("users")
 }
 
 model Client {
-  id                    String              @id @default(uuid())
-  protocol              String              @unique
+  id                    String    @id @default(uuid())
+  protocol              String    @unique
   tradeName             String
   dataFundation         DateTime
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime?           @updatedAt
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime? @updatedAt
   correspondenceAddress String
   createdById           String
   isActivated           Boolean
@@ -55,13 +56,159 @@ model Client {
   numberContact         String
   responsibleById       String
   type                  Int
-  representatives       Representative[]
-  createdBy             User                @relation("CreatedBy", fields: [createdById], references: [id])
-  responsibleBy         User                @relation("ResponsibleBy", fields: [responsibleById], references: [id])
-  orders                Order[]
-  clientAppointments    ClientAppointment[]
+
+  representatives    Representative[]
+  createdBy          User                @relation("CreatedBy", fields: [createdById], references: [id])
+  responsibleBy      User                @relation("ResponsibleBy", fields: [responsibleById], references: [id])
+  orders             Order[]
+  clientAppointments ClientAppointment[]
+  ClientProcess      ClientProcess[]
+  publications       Publication[]
 
   @@map("clients")
+}
+
+model ProcessCategory {
+  id String @id @default(uuid())
+
+  name        String
+  description String
+  slug        String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  processHistories  ProcessHistoric[]
+  importedProcess   ImportedProcess[]
+
+  @@map("process_categories")
+}
+
+model ProcessHistoric {
+  id String @id @default(uuid())
+
+  numberMagazine String   @unique
+  categoryId     String
+  fileName       String
+  filePath       String
+  createdAt      DateTime @default(now())
+
+  category ProcessCategory @relation(fields:[categoryId], references: [id])
+
+  importedProcess ImportedProcess[]
+  publications    Publication[]
+
+  @@map("process_historics")
+}
+
+model ProcessType {
+  id          String    @id @default(uuid())
+  slug        String    @unique
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  importedProcess ImportedProcess[]
+  publications       Publication[]
+
+  @@map("process_types")
+}
+
+model ImportedProcess {
+  id                String    @id @default(uuid())
+  processHistoricId String
+  processCategoryId String
+  processTypeId     String
+
+  processNumber                   String
+  holder                          String
+  dispatchDetails                 String? @db.Text
+  attorney                        String?
+  presentation                    String?
+  nature                          String?
+  markName                        String? 
+  ncl                             String?
+  specification                   String?
+  translatedSpecification         String?
+  internationalRegistrationNumber String?
+  cfe                             String?
+
+  status          String
+  sourceText      String @db.Text
+  sourcePage      Int  
+  importedByUser  String
+  depositDate     DateTime?
+  receivedDate    DateTime?
+  grantDate       DateTime?
+  createdAt       DateTime  @default(now())
+
+  processHistoric ProcessHistoric @relation(fields: [processHistoricId], references: [id])
+  processCategory ProcessCategory @relation(fields: [processCategoryId], references: [id])
+  processType     ProcessType?    @relation(fields: [processTypeId], references: [id])
+  user            User            @relation(fields: [importedByUser], references: [id])
+
+  @@map("imported_processes")
+}
+
+model Publication {
+  id                String @id @default(cuid())
+  processHistoryId  String
+  processTypeId     String
+  clientId          String
+
+  processNumber String
+  holder        String
+  brand         String
+  nature        String
+  specification String @db.Text
+ 
+  publicationDate DateTime?
+  depositDate     DateTime?
+  grantDate       DateTime?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  processHistoric ProcessHistoric @relation(fields: [processHistoryId], references: [id])
+  processType     ProcessType?    @relation(fields: [processTypeId], references: [id])
+  client          Client @relation(fields: [clientId], references: [id])
+
+  @@map("publications")
+}
+
+model PublicationHistory {
+  id                          String @id @default(cuid())
+  processHistoryId            String
+  processBrandPublicationId   String
+  processNumber               String
+  dispatch                    String
+  complement                  String
+  publicationDate             DateTime
+  providence                  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  @@map("PublicationHistories")
+}
+
+model ClientProcess {
+  id            String    @id @default(uuid())
+  clientId      String
+  processNumber String
+  assignedAt    DateTime  @default(now())
+  notes         String?   @db.Text
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+  deletedAt     DateTime?
+
+  client Client @relation(fields: [clientId], references: [id])
+
+  @@map("client_processes")
 }
 
 model ClientAppointment {
@@ -74,8 +221,8 @@ model ClientAppointment {
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?
 
-  client Client  @relation(fields: [clientId], references: [id])
-  Order  Order?  @relation(fields: [orderId], references: [id])
+  client Client @relation(fields: [clientId], references: [id])
+  Order  Order? @relation(fields: [orderId], references: [id])
 
   @@map("client_appointments")
 }

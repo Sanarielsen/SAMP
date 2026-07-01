@@ -8,7 +8,9 @@ import { optionsQueryListRecentAppointments } from "@/features/home/api/queryLis
 import { mockDaysCanBeConsidered } from "@/features/home/utils/mockDaysCanBeConsidered";
 import { useMutationDeleteAppointment } from "@/api/mutationDeleteApppointment";
 import AppoinentmentListItem from "@/features/home/components/AppoinentmentListItem";
+import BoxError from "@/components/BoxError";
 import BoxLoading from "@/components/BoxLoading";
+import BoxSuccessWithoutData from "@/components/BoxSuccessWithoutData";
 import ButtonMenu from "@/components/ButtonMenu";
 import ComboBox from "@/components/ComboBox";
 import HeaderPage from "@/components/HeaderPage";
@@ -19,8 +21,6 @@ import { getFileTimestamp } from "@/utils/getFIleTimestamp";
 
 import type { AppoitmentItem } from "@shared/types/appointment";
 import type { OptionsMenuActions } from "@shared/types/values";
-import BoxSuccessWithoutData from "@/components/BoxSuccessWithoutData";
-import BoxError from "@/components/BoxError";
 
 
 export default function AppointmentsTimeline() {
