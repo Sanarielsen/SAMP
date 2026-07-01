@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import HotelClassIcon from '@mui/icons-material/HotelClass';
 import InfoIcon from '@mui/icons-material/Info';
 import HomeIcon from '@mui/icons-material/Home';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 import { 
   ContainerMenu,
@@ -73,6 +74,13 @@ export default function Menu({
         >
           <AllInboxIcon />
           <span> O.S </span>
+        </MenuItem>
+        <MenuItem
+          $active={location.pathname.startsWith("/processo")}
+          onClick={() => handleChangePage("/processos")}
+        >
+          <InsertDriveFileIcon />
+          <span> Processos </span>
         </MenuItem>
         <MenuItem
           $active={location.pathname.startsWith("/sobre")}

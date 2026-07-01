@@ -28,6 +28,9 @@ import ManageUser from "@/features/admin/page/ManageUser";
 import { DetailsPanel as OrderDetailsPanel } from "@/features/order/pages/DetailsPanel";
 import OrderNewPayment from "@/features/order/pages/OrderNewPayment";
 import PaymentDetails from "@/features/payment/pages/PaymentDetails";
+import HomeProcess from "./features/process/page/HomeProcess";
+import ManageImportedMagazine from "./features/process/page/ManageImportedMagazine";
+import NewProcess from "./features/process/page/NewProcess";
 
 
 export default function Router() {
@@ -58,6 +61,10 @@ export default function Router() {
         <Route path="os/detalhes/:id/pagamento" element={<OrderNewPayment />} />
 
         <Route path="pagamento/:id/parcelas" element={<PaymentDetails />} />
+
+        <Route path="processos" element={<HomeProcess />} />
+        <Route path="processos/importacao" element={<ManageImportedMagazine />} />
+        <Route path="processo" element={<NewProcess />} />
 
         <Route path="perfil" element={<ProfilePage />} />
         <Route path="admin/variaveis" element={<AdminManageVariablesPage />} />
