@@ -55,13 +55,76 @@ model Client {
   numberContact         String
   responsibleById       String
   type                  Int
+
   representatives       Representative[]
   createdBy             User                @relation("CreatedBy", fields: [createdById], references: [id])
   responsibleBy         User                @relation("ResponsibleBy", fields: [responsibleById], references: [id])
   orders                Order[]
   clientAppointments    ClientAppointment[]
+  processes             ClientProcess[]
 
   @@map("clients")
+}
+
+model ProcessType {
+  id          String    @id @default(uuid())
+  slug        String    @unique
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  processes Process[]
+
+  @@map("process_types")
+}
+
+model Process {
+  id                        String    @id @default(uuid())
+  processTypeId             String?
+  processNumber             String?
+  title                     String
+  titular                   String?
+  dispatchDescription       String?   @db.Text
+  depositDate               DateTime?
+  receiptDate               DateTime?
+  internationalRegistration String?
+  presentation              String?
+  nature                    String?
+  nominativeElement         String?
+  ncl                       String?
+  specification             String?   @db.Text
+  sourceText                String?   @db.Text
+  sourceFile                String?
+  sourcePage                Int?
+  status                    String?
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime? @updatedAt
+  deletedAt                 DateTime?
+
+  processType ProcessType? @relation(fields: [processTypeId], references: [id])
+  clients     ClientProcess[]
+
+  @@map("processes")
+}
+
+model ClientProcess {
+  id         String    @id @default(uuid())
+  clientId   String
+  processId  String
+  assignedAt DateTime  @default(now())
+  notes      String?   @db.Text
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
+  deletedAt  DateTime?
+
+  client  Client  @relation(fields: [clientId], references: [id])
+  process Process @relation(fields: [processId], references: [id])
+
+  @@unique([clientId, processId])
+  @@map("client_processes")
 }
 
 model ClientAppointment {

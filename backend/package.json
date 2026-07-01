@@ -36,7 +36,6 @@
     "vite-tsconfig-paths": "4.0.5"
   },
   "dependencies": {
-    "vitest": "0.28.5",
     "@fastify/cookie": "8.3.0",
     "@fastify/cors": "^8.0.0",
     "@fastify/jwt": "6.7.0",
@@ -48,7 +47,9 @@
     "fastify": "4.13.0",
     "mailersend": "^3.0.0",
     "nodemailer": "^8.0.10",
+    "pdf-parse": "^2.4.5",
     "tsup": "^6.6.3",
+    "vitest": "0.28.5",
     "zod": "3.20.6"
   }
 }

@@ -5,6 +5,7 @@ uploads
 GF
 backup
 uploads
+storage
 
 .env
 /src/generated/prisma
