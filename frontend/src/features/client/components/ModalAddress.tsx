@@ -17,7 +17,7 @@ import { GridCloseIcon } from "@mui/x-data-grid";
 import { useCep } from "@/api/getAddressByCEP";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
-import { ModalContainer } from "@/features/client/styles/modalAddressContainer";
+import { ModalContainer } from "@/styles/modalContainer";
 import { mappingAddressToVisualComponent } from "@/features/client/utils/mappingAddressToVisualComponent";
 import type { AddressSchemaFormData } from "@/schemas/addressSchema";
 import type { UpdateSchemaFormData } from "@/features/client/schema/updateClientSchema";

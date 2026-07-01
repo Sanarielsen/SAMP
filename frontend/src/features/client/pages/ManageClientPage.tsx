@@ -22,7 +22,7 @@ import { useMutationPostClient, type ClientPostPayload } from "@/features/client
 import { useMutationPatchClient, type ClientPatchPayload } from "@/features/client/api/mutationPatchClient";
 import { useAuth } from "@/auth/AuthProvider";
 import { getDocumentMask } from "@/features/client/utils/getDocumentMask";
-import { optionsQueryGetClient } from "@/features/client/api/queryGetClient";
+import { optionsQueryGetClient } from "@/api/queryGetClient";
 import { useQuery } from "@tanstack/react-query";
 import { formatDocument } from "../../../utils/formatDocument";
 import { formatAsVisualDate } from "../../../utils/formatAsAVisualDate";

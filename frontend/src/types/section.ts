@@ -5,3 +5,4 @@ export type Section =
   | "PAYMENTS"
   | "INSTALLMENTS"
   | "APPOINTMENTS"
+  | "PROCESSES"

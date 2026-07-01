@@ -1,5 +1,5 @@
-import { Client } from "@prisma/client"
 import { CreateClientDTO } from "@/types/client"
+import { Client } from "@shared/types/client"
 
 export interface ClientRepository {
   create(data: CreateClientDTO): Promise<Client>

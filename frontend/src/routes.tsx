@@ -28,6 +28,12 @@ import ManageUser from "@/features/admin/page/ManageUser";
 import { DetailsPanel as OrderDetailsPanel } from "@/features/order/pages/DetailsPanel";
 import OrderNewPayment from "@/features/order/pages/OrderNewPayment";
 import PaymentDetails from "@/features/payment/pages/PaymentDetails";
+import HomeProcess from "./features/process/page/ViewImportedProcess";
+import ViewImportedProcess from "@/features/process/page/ViewImportedProcess";
+import ViewSalvedProcess from "./features/process/page/ViewSalvedProcess";
+import ViewImportedMagazine from "./features/process/page/ViewImportedMagazine";
+import NewProcessManual from "./features/process/page/NewProcessManual";
+import NewProcessAutomatic from "./features/process/page/NewProcessAutomatic";
 
 
 export default function Router() {
@@ -58,6 +64,13 @@ export default function Router() {
         <Route path="os/detalhes/:id/pagamento" element={<OrderNewPayment />} />
 
         <Route path="pagamento/:id/parcelas" element={<PaymentDetails />} />
+
+        <Route path="processos" element={<HomeProcess />} />
+        <Route path="processos/publicacoes" element={<ViewSalvedProcess />} />
+        <Route path="processos/importados" element={<ViewImportedProcess />} />
+        <Route path="processos/revistas" element={<ViewImportedMagazine />} />
+        <Route path="processo/manual" element={<NewProcessManual />} />
+        <Route path="processo/automatico" element={<NewProcessAutomatic />} />
 
         <Route path="perfil" element={<ProfilePage />} />
         <Route path="admin/variaveis" element={<AdminManageVariablesPage />} />
