@@ -22,7 +22,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
-    "@types/node": "18.14.1",
+    "@types/node": "^26.1.0",
     "@types/nodemailer": "^8.0.0",
     "@types/supertest": "2.0.12",
     "@vitest/coverage-c8": "0.28.5",
@@ -36,11 +36,11 @@
     "vite-tsconfig-paths": "4.0.5"
   },
   "dependencies": {
-    "vitest": "0.28.5",
     "@fastify/cookie": "8.3.0",
     "@fastify/cors": "^8.0.0",
     "@fastify/jwt": "6.7.0",
     "@fastify/multipart": "^7.7.0",
+    "@paralleldrive/cuid2": "^3.3.0",
     "@prisma/client": "4.10.1",
     "bcryptjs": "^2.4.3",
     "dayjs": "1.11.7",
@@ -48,7 +48,11 @@
     "fastify": "4.13.0",
     "mailersend": "^3.0.0",
     "nodemailer": "^8.0.10",
+    "oci-common": "^2.136.0",
+    "oci-objectstorage": "^2.136.0",
+    "pdf-parse": "^2.4.5",
     "tsup": "^6.6.3",
+    "vitest": "0.28.5",
     "zod": "3.20.6"
   }
 }

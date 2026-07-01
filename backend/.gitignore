@@ -5,6 +5,9 @@ uploads
 GF
 backup
 uploads
+storage/INPI
+storage/output
+storage/process/brands
 
 .env
 /src/generated/prisma

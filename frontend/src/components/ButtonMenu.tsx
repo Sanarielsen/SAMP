@@ -100,7 +100,7 @@ export default function ButtonMenu({
         onClose={handleClose}
       >
         {options.map((option) => (
-          <MenuItem onClick={() => {
+          <MenuItem key={option.value} onClick={() => {
             handleClose()
             option.onClickOption(option.value)
           }} disableRipple>

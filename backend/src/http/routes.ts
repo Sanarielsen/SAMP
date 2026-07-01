@@ -49,11 +49,17 @@ import { listPaymentInstallments } from "@/http/Controllers/paymentInstallment/l
 import { updatePaymentInstallment } from "@/http/Controllers/paymentInstallment/update";
 import { listPaymentMethods } from "@/http/Controllers/paymentMethod/list";
 import { updatePaymentInstallmentAsPaid } from "@/http/Controllers/paymentInstallment/update-paid";
-
-
 import { sendEmail } from "./Controllers/test";
 import { listAppointmentsByOrder } from "./Controllers/appointment/list-by-order";
 import { listRecentAppointments } from "./Controllers/appointment/list-recents";
+import { postProcessAsAImporter } from "./Controllers/processImported/post-many";
+import { listProcessCategoryAsAOptions } from "./Controllers/processCategory/list-options";
+import { listProcessHistoricAsAOptions } from "./Controllers/processHistoric/list-as-a-option";
+import { listImportedProcessesAsAOption } from "./Controllers/processImported/list-imported-processes-as-a-option";
+import { getProcessHistoryDetails } from "./Controllers/processCategory/get-details";
+import { getProcessImportedDetails } from "./Controllers/processImported/get-with-details";
+import { postPublicationTransferImportedProcess } from "./Controllers/publication/post-transfer-imported-process";
+import { listPublicationDetails } from "./Controllers/publication/list";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -99,7 +105,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/orders', {onRequest: [verifyJWT]}, listOrder)
   app.patch('/order/:id', {onRequest: [verifyJWT]}, updateOrder)
   app.delete('/order/:id', {onRequest: [verifyJWT]}, deleteOrder)
-  app.post('/order/:id/payment', {onRequest: [verifyJWT]}, postPayment)
+  app.post('/order/:id/payment', {onRequest: [verifyJWT]}, postPayment) 
   app.post('/order/:id/payment/installments', {onRequest: [verifyJWT]}, postPaymentWithInstallments)
   app.get(`/order/:id/payments`, { onRequest: [verifyJWT] }, getOrderPayments)
   
@@ -108,6 +114,17 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/payment/installment/:id/paid', {onRequest: [verifyJWT]}, updatePaymentInstallmentAsPaid)
   app.delete('/payment/:id', {onRequest: [verifyJWT]}, deletePayment)
 
+  app.post('/process/import', {onRequest: [verifyJWT]}, postProcessAsAImporter)
+  app.get('/process/imported/:id', {onRequest: [verifyJWT]}, getProcessImportedDetails)
+  app.get('/process/history/:id', {onRequest: [verifyJWT]}, getProcessHistoryDetails)
+
+  app.post('/publication/process/imported', {onRequest: [verifyJWT]}, postPublicationTransferImportedProcess)
+  app.get('/publications', {onRequest: [verifyJWT]}, listPublicationDetails)
+
+  app.get('/process/historic/options', {onRequest: [verifyJWT]}, listProcessHistoricAsAOptions)
+  app.get('/process/imported/:id/options', {onRequest: [verifyJWT]}, listImportedProcessesAsAOption)
+
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
   app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)
+  app.get(`/process/category/options`, {onRequest: [verifyJWT]}, listProcessCategoryAsAOptions)
 }
