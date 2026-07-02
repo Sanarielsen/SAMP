@@ -33,19 +33,19 @@ model User {
   roleId   String
   userRole UserRole? @relation(fields: [roleId], references: [id])
 
-  createdByUser     Client[]            @relation("CreatedBy")
-  linkedByUser      Client[]            @relation("ResponsibleBy")
+  createdByUser Client[] @relation("CreatedBy")
+  linkedByUser  Client[] @relation("ResponsibleBy")
 
   @@map("users")
 }
 
 model Client {
-  id                    String              @id @default(uuid())
-  protocol              String              @unique
+  id                    String    @id @default(uuid())
+  protocol              String    @unique
   tradeName             String
   dataFundation         DateTime
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime?           @updatedAt
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime? @updatedAt
   correspondenceAddress String
   createdById           String
   isActivated           Boolean
@@ -56,14 +56,39 @@ model Client {
   responsibleById       String
   type                  Int
 
-  representatives       Representative[]
-  createdBy             User                @relation("CreatedBy", fields: [createdById], references: [id])
-  responsibleBy         User                @relation("ResponsibleBy", fields: [responsibleById], references: [id])
-  orders                Order[]
-  clientAppointments    ClientAppointment[]
-  processes             ClientProcess[]
+  representatives    Representative[]
+  createdBy          User                @relation("CreatedBy", fields: [createdById], references: [id])
+  responsibleBy      User                @relation("ResponsibleBy", fields: [responsibleById], references: [id])
+  orders             Order[]
+  clientAppointments ClientAppointment[]
+  processes          ClientProcess[]
 
   @@map("clients")
+}
+
+model ProcessCategory {
+  id String @id @default(uuid())
+
+  name        String
+  description String
+  slug        String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  @@map("process_categories")
+}
+
+model ProcessHistoric {
+  id String @id @default(uuid())
+
+  numberMagazine String   @unique
+  categoryId     String
+  fileName       String
+  filePath       String
+  createdAt      DateTime @default(now())
+
+  @@map("process_historics")
 }
 
 model ProcessType {
@@ -103,7 +128,7 @@ model Process {
   updatedAt                 DateTime? @updatedAt
   deletedAt                 DateTime?
 
-  processType ProcessType? @relation(fields: [processTypeId], references: [id])
+  processType ProcessType?    @relation(fields: [processTypeId], references: [id])
   clients     ClientProcess[]
 
   @@map("processes")
@@ -137,8 +162,8 @@ model ClientAppointment {
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?
 
-  client Client  @relation(fields: [clientId], references: [id])
-  Order  Order?  @relation(fields: [orderId], references: [id])
+  client Client @relation(fields: [clientId], references: [id])
+  Order  Order? @relation(fields: [orderId], references: [id])
 
   @@map("client_appointments")
 }
