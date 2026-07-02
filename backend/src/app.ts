@@ -15,7 +15,11 @@ app.register(fastifyJwt, {
   }
 })
 
-app.register(fastifyMultipart)
+app.register(fastifyMultipart, {
+  limits: {
+    fileSize: 300 * 1024 * 1024,
+  },
+})
 
 app.register(cors, {
   origin: true,
