@@ -1,12 +1,12 @@
 export type Process = {
-
+  
 }
 
 export type CreateProcessImportedDTO = {
   userId:         string
   categoryId:     string,
   numberMagazine: string,
-  fileMagazine:   any
+  fileMagazine?:   Buffer | null
 }
 
 export type ProcessImported = {
@@ -16,8 +16,10 @@ export type ProcessImported = {
   title:                      string
   titular?:                   string
   dispatchDescription?:       string   
+  publishDate?:               Date
+  grantingDate?:              Date
+  dueDate?:                   Date
   depositDate?:               Date
-  receiptDate?:               Date
   internationalRegistration?: string
   presentation?:              string
   nature?:                    string

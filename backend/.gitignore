@@ -5,9 +5,9 @@ uploads
 GF
 backup
 uploads
-src/storage/INPI
-src/storage/output
-src/storage/process
+storage/INPI
+storage/output
+storage/process
 
 .env
 /src/generated/prisma

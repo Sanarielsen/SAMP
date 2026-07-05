@@ -13,7 +13,8 @@ export function makeImportProcessUseCase() {
     processRepository, 
     processHistoricRepository,
     processCategoryRepository,
-    storageProvider,)
+    storageProvider,
+  )
 
   return useCase
 }

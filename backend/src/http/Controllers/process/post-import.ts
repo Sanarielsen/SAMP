@@ -1,38 +1,54 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
+import { z } from 'zod'
 
-import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error'
 import { makeImportProcessUseCase } from '@/services/factories/process/make-post-as-a-importer'
+import { ImportDataError } from '@/services/errors/import-data-error';
 
-export async function postProcessAsAImporter(request: FastifyRequest, reply: FastifyReply) {
+export async function postProcessAsAImporter(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const bodySchema = z.object({
+    categoryId: z.string().min(1),
+    numberMagazine: z.string().min(1),
+  });
 
-  const multipartFile = await request.file();
+  let fileBuffer: Buffer | undefined;
 
-  if (!multipartFile) {
-    throw new ResourceNotFoundError();
+  const fields: Record<string, string> = {};
+
+  for await (const part of request.parts()) {
+    if (part.type === "file") {
+      if (part.filename) {
+        fileBuffer = await part.toBuffer();
+      }
+    } else {
+      fields[part.fieldname] = String(part.value);
+    }
   }
 
-  const id = request.user.sub;
+  const { categoryId, numberMagazine } = bodySchema.parse(fields);
+
+  const userId = request.user.sub;
 
   try {
     const useCase = makeImportProcessUseCase();
 
     await useCase.execute({
-      userId: id,
-      categoryId: 'ec34c8cf-8e3f-4220-bb63-f547a7b7f184',
-      numberMagazine: '2895',
-      fileMagazine: multipartFile,
-    })
+      userId,
+      categoryId,
+      numberMagazine,
+      fileMagazine: fileBuffer,
+    });
 
+    return reply.status(201).send();
   } catch (err) {
-    // if (err instanceof UserNotResponsibleForClientError) {
-    //   return reply.status(403).send({ message: err.message })
-    // }
-    // if (err instanceof ResourceNotFoundError) {
-    //   return reply.status(404).send({ message: err.message })
-    // }
+    if (err instanceof ImportDataError) {
+      return reply.status(400).send({
+        message: err.message,
+      });
+    }
 
-    throw err
+    throw err;
   }
-  
-  return reply.status(201).send();
 }

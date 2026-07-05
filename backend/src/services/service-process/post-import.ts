@@ -1,8 +1,8 @@
 import { PDFParse } from "pdf-parse";
 import path from "node:path";
 
-import { importProcessesWithAPI } from "@/scripts/import-processes-with-api";
 import { ProcessRepository } from "@/repositories/process-repository";
+import { importProcessesWithAPI } from "@/scripts/import-processes-with-api";
 
 import { StorageProvider } from "@/storage/storage-provider";
 import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
@@ -13,6 +13,7 @@ import { ResourceNotFoundError } from "@/services/errors/resource-not-found-erro
 
 import { CreateProcessImportedDTO } from "@shared/types/process";
 import { ProcessHistoric } from "@shared/types/processHistoric";
+import { checkMagazineWillBeUploaded } from "@/utils/checkMagazineWillBeUploaded";
 
 export class CreateProcessAsImportUseCase {
   constructor(
@@ -23,11 +24,10 @@ export class CreateProcessAsImportUseCase {
   ) {}
 
   async execute({ userId, categoryId, numberMagazine, fileMagazine }: CreateProcessImportedDTO): Promise<ProcessHistoric | null> {
-
     let fileName = numberMagazine + '.txt'
     let pathStorage = path.resolve(
       process.cwd(),
-      "src/storage/process/brands",
+      "storage/process/brands",
       fileName
     );
 
@@ -37,17 +37,16 @@ export class CreateProcessAsImportUseCase {
 
     const magazineHistoric = await this.processHistoricRepository.findByNumberMagazine(numberMagazine);
 
-    //Se ele nao encontrar, ai parsea e importa
-    if (!magazineHistoric) {
-      try {
-        console.log("CRIA O REGISTRO")
-        const buffer = await fileMagazine.toBuffer();
+    if (!magazineHistoric && fileMagazine) {
 
+      try {
         const parser = new PDFParse({
-          data: new Uint8Array(buffer),
+          data: new Uint8Array(fileMagazine),
         });
 
         const result = await parser.getText();
+
+        checkMagazineWillBeUploaded(result.text, numberMagazine)
 
         const nameWithoutExtension = path.parse(fileName).name;
 
@@ -73,8 +72,12 @@ export class CreateProcessAsImportUseCase {
       }
     }
 
-    await importProcessesWithAPI(pathStorage);
-
+    try {
+      await importProcessesWithAPI(pathStorage, numberMagazine);  
+    } catch (err) {
+      throw err;
+    }
+    
     return null 
   }
 }
