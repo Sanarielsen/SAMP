@@ -112,8 +112,12 @@ model Process {
   title                     String
   titular                   String?
   dispatchDescription       String?   @db.Text
+  brand                     String?
   depositDate               DateTime?
   receiptDate               DateTime?
+  dueDate                   DateTime?
+  publishDate               DateTime? //Data (Data de publicacao)
+  grantingDate              DateTime? //Data de concessao
   internationalRegistration String?
   presentation              String?
   nature                    String?

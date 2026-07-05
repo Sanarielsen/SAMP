@@ -11,14 +11,16 @@ import { StorageProvider } from "@/storage/storage-provider";
 
 export class LocalStorageProvider implements StorageProvider {
 
-  async upload(file: Buffer, fileName: string): Promise<string> {
+  async upload(file: Buffer, fileName: string, folder: string): Promise<string> {
 
-    const folder = path.resolve(
+    const folderComplete = path.resolve(
       process.cwd(),
-      "src/storage/process",
+      folder,
     );
 
-    await mkdir(folder, { recursive: true });
+    console.log("Caminho: ", folderComplete)
+
+    await mkdir(folderComplete, { recursive: true });
 
     const filePath = path.join(folder, fileName);
 
