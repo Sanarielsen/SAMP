@@ -1,19 +1,17 @@
 import { PDFParse } from "pdf-parse";
 import path from "node:path";
 
-import { ProcessRepository } from "@/repositories/process-repository";
-import { importProcessesWithAPI } from "@/scripts/import-processes-with-api";
-
 import { StorageProvider } from "@/storage/storage-provider";
+import { ProcessRepository } from "@/repositories/process-repository";
 import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
 import { ProcessCategoryRepository } from "@/repositories/process-category-repository";
-
 import { ImportDataError } from "@/services/errors/import-data-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
-
-import { CreateProcessImportedDTO } from "@shared/types/process";
-import { ProcessHistoric } from "@shared/types/processHistoric";
+import { importProcessesWithAPI } from "@/scripts/import-processes-with-api";
 import { checkMagazineWillBeUploaded } from "@/utils/checkMagazineWillBeUploaded";
+
+import { CreatedProcessImportedDTO, CreateProcessImportedDTO } from "@shared/types/process";
+import { ProcessHistoric } from "@shared/types/processHistoric";
 
 export class CreateProcessAsImportUseCase {
   constructor(
@@ -23,21 +21,22 @@ export class CreateProcessAsImportUseCase {
     private storageProvider: StorageProvider,
   ) {}
 
-  async execute({ userId, categoryId, numberMagazine, fileMagazine }: CreateProcessImportedDTO): Promise<ProcessHistoric | null> {
+  async execute({ userId, categoryId, numberMagazine, fileMagazine }: CreateProcessImportedDTO): Promise<number | null> {
+    let importedProcesses: CreatedProcessImportedDTO[]
+    let magazineHistoric: ProcessHistoric | null;
+    let importedRowsQuantity: number = 0;
+
     let fileName = numberMagazine + '.txt'
-    let pathStorage = path.resolve(
-      process.cwd(),
-      "storage/process/brands",
-      fileName
-    );
+    let defaultStorage = 'processes/brands'
+    let pathStorage = defaultStorage + '/' + fileName
 
     const category = await this.processCategoryRepository.findById(categoryId);
 
     if (!category) throw new ResourceNotFoundError();
 
-    const magazineHistoric = await this.processHistoricRepository.findByNumberMagazine(numberMagazine);
+    magazineHistoric = await this.processHistoricRepository.findByNumberMagazine(numberMagazine);
 
-    if (!magazineHistoric && fileMagazine) {
+    if (!magazineHistoric) {
 
       try {
         const parser = new PDFParse({
@@ -48,36 +47,35 @@ export class CreateProcessAsImportUseCase {
 
         checkMagazineWillBeUploaded(result.text, numberMagazine)
 
-        const nameWithoutExtension = path.parse(fileName).name;
-
         pathStorage = await this.storageProvider.upload(
           Buffer.from(result.text),
-          `${nameWithoutExtension}.txt`,
-          "storage/process/brands"
+          fileName,
+          defaultStorage
         );
 
-        await this.processHistoricRepository.create({
+        magazineHistoric = await this.processHistoricRepository.create({
           categoryId,
           numberMagazine,
           fileName,
           filePath: pathStorage
         })
-        
+
+        importedProcesses = await importProcessesWithAPI(
+          Buffer.from(result.text), 
+          userId, 
+          magazineHistoric!.id, 
+          categoryId
+        );
+
+        importedRowsQuantity = await this.processRepository.createManyAsImport(importedProcesses)
       } catch (err) {
         if (err instanceof ImportDataError) {
           throw new ImportDataError();
         }
-        
         throw err;
       }
     }
 
-    try {
-      await importProcessesWithAPI(pathStorage, numberMagazine);  
-    } catch (err) {
-      throw err;
-    }
-    
-    return null 
+    return importedRowsQuantity
   }
 }

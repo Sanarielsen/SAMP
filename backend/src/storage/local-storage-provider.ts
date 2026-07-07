@@ -7,30 +7,42 @@ import {
 import path from "node:path";
 
 import { StorageProvider } from "@/storage/storage-provider";
+import { oci_client } from "@/lib/oci";
+import { getRequiredEnv } from "@/utils/getRequiredEnv";
 
 
 export class LocalStorageProvider implements StorageProvider {
 
   async upload(file: Buffer, fileName: string, folder: string): Promise<string> {
 
-    const folderComplete = path.resolve(
-      process.cwd(),
-      folder,
-    );
+    const objectName = `${folder}/${fileName}`;
 
-    console.log("Caminho: ", folderComplete)
+    const buffer = Buffer.from(file);
 
-    await mkdir(folderComplete, { recursive: true });
+    await oci_client.putObject({
+      namespaceName: getRequiredEnv('OCI_BUCKET_NAMESPACE'),
+      bucketName: getRequiredEnv('OCI_BUCKET'),
+      objectName,
+      putObjectBody: buffer,
+    });
 
-    const filePath = path.join(folder, fileName);
-
-    await writeFile(filePath, file);
-
-    return filePath;
+    return objectName;
   }
 
   async download(filePath: string): Promise<Buffer> {
-    return readFile(filePath);
+    const response = await oci_client.getObject({
+      namespaceName: getRequiredEnv('OCI_BUCKET_NAMESPACE'),
+      bucketName: getRequiredEnv('OCI_BUCKET'),
+      objectName: filePath,
+    });
+
+    const chunks: Buffer[] = [];
+
+    for await (const chunk of response.value) {
+      chunks.push(Buffer.from(chunk));
+    }
+
+    return Buffer.concat(chunks);
   }
 
   async delete(filePath: string): Promise<void> {

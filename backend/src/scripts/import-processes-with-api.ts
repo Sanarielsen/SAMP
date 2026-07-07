@@ -1,62 +1,52 @@
-import { readFileSync } from "node:fs";
 import { PrismaClient } from "@prisma/client";
 import { addYears } from "@/utils/addYears";
 import { PROCESS_BRAND_TYPES } from "@/utils/mockProcessTypeBrands";
-import { ImportDataError } from "@/services/errors/import-data-error";
+import { CreatedProcessImportedDTO } from "@shared/types/process";
 
 const prisma = new PrismaClient();
 
-async function main() {
-  const filePath = process.argv[2];
+export async function importProcessesWithAPI(fileConverted: Buffer, userId: string, historicId: string, processCategoryId: string) {
 
-  await importProcessesWithAPI(filePath, process.argv[3]);
-}
-
-if (require.main === module) {
-  main()
-    .catch(console.error)
-    .finally(async () => {
-      await prisma.$disconnect();
-  });
-}
-
-export async function importProcessesWithAPI(filePath: string, numberMagazine: string) {
-  const text = readFileSync(filePath, "utf-8");
+  const text = fileConverted.toString("utf-8");
   const processes = splitProcesses(text);
+
+  const data: CreatedProcessImportedDTO[] = [];
 
   for (const raw of processes) {
     const parsed = parseProcessEntry(raw);
-    console.log("Cadastra esse processo: ", parsed.processNumber)
+    
     if (!parsed.processNumber) {
       continue;
     }
 
     const processType = await ensureProcessType(parsed.processTypeName);
 
-    //Add the extrated process on the entity
-    await prisma.process.create({
-      data: {
-        processTypeId: processType.id,
-        processNumber: parsed.processNumber,
-        title: parsed.title,
-        titular: parsed.titular ?? undefined,
-        dispatchDescription: parsed.dispatchDescription ?? undefined,
-        publishDate: parsed.publishDate ?? undefined,
-        dueDate: parsed.dueDate ?? undefined,
-        grantingDate: parsed.grantingDate ?? undefined,
-        depositDate: parsed.depositDate ?? undefined,
-        receiptDate: parsed.receiptDate ?? undefined,
-        internationalRegistration: parsed.internationalRegistration ?? undefined,
-        presentation: parsed.presentation ?? undefined,
-        nature: parsed.nature ?? undefined,
-        nominativeElement: parsed.nominativeElement ?? undefined,
-        ncl: parsed.ncl ?? undefined,
-        specification: parsed.specification ?? undefined,
-        sourceText: parsed.sourceText,
-        status: "imported",
-      },
+    data.push({
+      processHistoricId: historicId,
+      processCategoryId: processCategoryId,
+      processTypeId: processType.id ?? undefined,
+      processNumber: parsed.processNumber,
+      title: parsed.title,
+      titular: parsed.titular ?? undefined,
+      dispatchDescription: parsed.dispatchDescription ?? undefined,
+      publishDate: parsed.publishDate ?? undefined,
+      dueDate: parsed.dueDate ?? undefined,
+      grantingDate: parsed.grantingDate ?? undefined,
+      depositDate: parsed.depositDate ?? undefined,
+      receiptDate: parsed.receiptDate ?? undefined,
+      internationalRegistration: parsed.internationalRegistration ?? undefined,
+      presentation: parsed.presentation ?? undefined,
+      nature: parsed.nature ?? undefined,
+      nominativeElement: parsed.nominativeElement ?? undefined,
+      ncl: parsed.ncl ?? undefined,
+      specification: parsed.specification ?? undefined,
+      sourceText: parsed.sourceText,
+      importedByUser: userId,
+      status: "imported",
     });
   }
+
+  return data;
 }
 
 function normalizeSlug(value: string) {

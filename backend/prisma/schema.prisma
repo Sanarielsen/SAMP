@@ -33,8 +33,9 @@ model User {
   roleId   String
   userRole UserRole? @relation(fields: [roleId], references: [id])
 
-  createdByUser Client[] @relation("CreatedBy")
-  linkedByUser  Client[] @relation("ResponsibleBy")
+  createdByUser   Client[]          @relation("CreatedBy")
+  linkedByUser    Client[]          @relation("ResponsibleBy")
+  ImportedProcess ImportedProcess[]
 
   @@map("users")
 }
@@ -61,7 +62,7 @@ model Client {
   responsibleBy      User                @relation("ResponsibleBy", fields: [responsibleById], references: [id])
   orders             Order[]
   clientAppointments ClientAppointment[]
-  processes          ClientProcess[]
+  ClientProcess      ClientProcess[]
 
   @@map("clients")
 }
@@ -76,6 +77,8 @@ model ProcessCategory {
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
 
+  importedProcess ImportedProcess[]
+
   @@map("process_categories")
 }
 
@@ -87,6 +90,8 @@ model ProcessHistoric {
   fileName       String
   filePath       String
   createdAt      DateTime @default(now())
+
+  importedProcess ImportedProcess[]
 
   @@map("process_historics")
 }
@@ -100,15 +105,17 @@ model ProcessType {
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
 
-  processes Process[]
+  importedProcess ImportedProcess[]
 
   @@map("process_types")
 }
 
-model Process {
+model ImportedProcess {
   id                        String    @id @default(uuid())
+  processHistoricId         String
+  processCategoryId         String
   processTypeId             String?
-  processNumber             String?
+  processNumber             String
   title                     String
   titular                   String?
   dispatchDescription       String?   @db.Text
@@ -116,8 +123,8 @@ model Process {
   depositDate               DateTime?
   receiptDate               DateTime?
   dueDate                   DateTime?
-  publishDate               DateTime? //Data (Data de publicacao)
-  grantingDate              DateTime? //Data de concessao
+  publishDate               DateTime?
+  grantingDate              DateTime?
   internationalRegistration String?
   presentation              String?
   nature                    String?
@@ -128,31 +135,32 @@ model Process {
   sourceFile                String?
   sourcePage                Int?
   status                    String?
+  importedByUser            String
   createdAt                 DateTime  @default(now())
   updatedAt                 DateTime? @updatedAt
   deletedAt                 DateTime?
 
-  processType ProcessType?    @relation(fields: [processTypeId], references: [id])
-  clients     ClientProcess[]
+  processHistoric ProcessHistoric @relation(fields: [processHistoricId], references: [id])
+  processCategory ProcessCategory @relation(fields: [processCategoryId], references: [id])
+  processType     ProcessType?    @relation(fields: [processTypeId], references: [id])
+  user            User            @relation(fields: [importedByUser], references: [id])
 
-  @@map("processes")
+  @@map("imported_processes")
 }
 
 model ClientProcess {
-  id         String    @id @default(uuid())
-  clientId   String
-  processId  String
-  assignedAt DateTime  @default(now())
-  notes      String?   @db.Text
-  isActive   Boolean   @default(true)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt
-  deletedAt  DateTime?
+  id            String    @id @default(uuid())
+  clientId      String
+  processNumber String
+  assignedAt    DateTime  @default(now())
+  notes         String?   @db.Text
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+  deletedAt     DateTime?
 
-  client  Client  @relation(fields: [clientId], references: [id])
-  process Process @relation(fields: [processId], references: [id])
+  client Client @relation(fields: [clientId], references: [id])
 
-  @@unique([clientId, processId])
   @@map("client_processes")
 }
 

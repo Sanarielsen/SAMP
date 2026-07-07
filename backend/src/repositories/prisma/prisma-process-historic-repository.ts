@@ -15,7 +15,7 @@ export class PrismaProcessHistoricRepository implements ProcessHistoricRepositor
   }
 
   async findByNumberMagazine(numberMagazine: string): Promise<ProcessHistoric | null> {
-    return prisma.processHistoric.findUnique({
+    return await prisma.processHistoric.findUnique({
       where: {
         numberMagazine
       }
