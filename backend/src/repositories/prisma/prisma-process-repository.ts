@@ -1,23 +1,22 @@
-import path from "node:path";
-import { readFile } from "node:fs/promises";
-import { PDFParse } from "pdf-parse";
+import { prisma } from "@/lib/prisma";
 
 import { ProcessRepository } from "@/repositories/process-repository";
 
-import { CreateProcessImportedDTO } from "@shared/types/process";
-import { ProcessHistoric } from "@prisma/client";
+import { CreatedProcessImportedDTO } from "@shared/types/process";
 
 
 export class PrismaProcessRepository implements ProcessRepository {
-  async createAsImport(importProps: CreateProcessImportedDTO): Promise<ProcessHistoric | null> {
-    const filePath = path.resolve(process.cwd(), "src/storage/INPI/Marcas2895.pdf");
-    const file = await readFile(filePath);
+  async createManyAsImport(importedProcesses: CreatedProcessImportedDTO[]): Promise<number> {
+    const { count } = await prisma.importedProcess.createMany({
+      data: importedProcesses.map(process => ({
+        ...process,
+        createdAt: new Date(),
+        updatedAt: null,
+        deletedAt: null,
+      })),
+      skipDuplicates: true,
+    })
 
-    const parser = new PDFParse({ data: new Uint8Array(file) });
-
-    const result = await parser.getText();
-    await parser.destroy();
-
-    throw new Error("Method not implemented.");
+    return count;
   }
 }

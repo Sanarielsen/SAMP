@@ -13,7 +13,7 @@ export async function postProcessAsAImporter(
     numberMagazine: z.string().min(1),
   });
 
-  let fileBuffer: Buffer | undefined;
+  let fileBuffer: Buffer | null = null;
 
   const fields: Record<string, string> = {};
 
@@ -27,21 +27,29 @@ export async function postProcessAsAImporter(
     }
   }
 
+  if (!fileBuffer) {
+    return reply.status(400).send();
+  }
+
   const { categoryId, numberMagazine } = bodySchema.parse(fields);
 
   const userId = request.user.sub;
 
   try {
     const useCase = makeImportProcessUseCase();
-
-    await useCase.execute({
+    
+    const rowsInserted = await useCase.execute({
       userId,
       categoryId,
       numberMagazine,
       fileMagazine: fileBuffer,
     });
 
-    return reply.status(201).send();
+    if (rowsInserted && rowsInserted > 0) {
+      return reply.status(201).send({ importProcesses: rowsInserted });
+    }
+    
+    return reply.status(204).send();
   } catch (err) {
     if (err instanceof ImportDataError) {
       return reply.status(400).send({

@@ -1,8 +1,7 @@
 import {
-  CreateProcessImportedDTO
+  CreatedProcessImportedDTO,
 } from "@shared/types/process"
-import { ProcessHistoric } from "@shared/types/processHistoric"
 
 export interface ProcessRepository {
-  createAsImport(importProps: CreateProcessImportedDTO): Promise<ProcessHistoric | null>
+  createManyAsImport(importedProcesses: CreatedProcessImportedDTO[]): Promise<number>
 }

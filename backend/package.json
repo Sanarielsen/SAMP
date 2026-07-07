@@ -47,6 +47,8 @@
     "fastify": "4.13.0",
     "mailersend": "^3.0.0",
     "nodemailer": "^8.0.10",
+    "oci-common": "^2.136.0",
+    "oci-objectstorage": "^2.136.0",
     "pdf-parse": "^2.4.5",
     "tsup": "^6.6.3",
     "vitest": "0.28.5",
