@@ -1,8 +1,9 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 
-import { makeImportProcessUseCase } from '@/services/factories/process/make-post-as-a-importer'
+import { makeImportProcessUseCase } from '@/services/factories/process-Imported/make-post-as-a-importer'
 import { ImportDataError } from '@/services/errors/import-data-error';
+
 
 export async function postProcessAsAImporter(
   request: FastifyRequest,

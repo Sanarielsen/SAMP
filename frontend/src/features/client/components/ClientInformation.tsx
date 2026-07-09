@@ -6,7 +6,7 @@ import {
   Grid
 } from "@mui/material";
 
-import { optionsQueryGetClient } from "@/features/client/api/queryGetClient";
+import { optionsQueryGetClient } from "@/api/queryGetClient";
 import BoxError from "@/components/BoxError";
 import BoxLoading from "@/components/BoxLoading";
 import HeaderPage from "@/components/HeaderPage";

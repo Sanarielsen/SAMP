@@ -22,7 +22,7 @@ import DataTable from "@/components/DataTable";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast"
 import type { ClientDetails } from "@/features/client/types/clients";
-import { clientFields } from "@/features/client/utils/getRowDetailClient";
+import { clientFields } from "@/utils/getRowDetailClient";
 
 
 export default function ClientPage() {
