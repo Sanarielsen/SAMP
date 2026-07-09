@@ -49,7 +49,7 @@ export async function postProcessAsAImporter(
       return reply.status(201).send({ importProcesses: rowsInserted });
     }
     
-    return reply.status(204).send();
+    return reply.status(200).send();
   } catch (err) {
     if (err instanceof ImportDataError) {
       return reply.status(400).send({
