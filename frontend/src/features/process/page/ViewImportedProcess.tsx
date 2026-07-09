@@ -1,31 +1,31 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
-
 import { 
-  Box, 
-  Button, 
-  Typography 
+  Box,
+  Button
 } from "@mui/material";
 
 import ModalNewMagazine from "@/features/process/components/ModalNewMagazine";
+import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
 import ToastContainer from "@/components/Toast";
 
 
-export default function HomeProcess() {
-
-  const navigate = useNavigate()
+export default function ViewImportedProcess() {
 
   const [openToast, setOpenToast] = useState("")
   const [modalNewMagazine, setModalNewMagazine] = useState(false);
 
+  const stateQuery = "SUCCESS"
+  // isSuccess ? "SUCCESS" : 
+  // isLoading ? "LOADING" :
+  // isError ? "ERROR" : "IDLE";
+  
   return (
     <>
       <Box component="section" sx={{ marginTop: 2 }}>
-        <HeaderPage title="Listagem de usuários"> 
-          <Typography
-            variant="h4"
-            component="h1"
+        <HeaderPage title="Listagem de processos importados">
+          <Box
+            component="div"
             sx={{
               display: 'flex',
               alignItems: 'center',
@@ -44,34 +44,16 @@ export default function HomeProcess() {
             >
               Importar revista
             </Button>
-
-            <Button
-              sx={{
-                m: 2
-              }}
-              type="submit"
-              variant="contained"
-              size="large"
-              color="info"
-              onClick={() => navigate('/processos/importacao')}
-            >
-              Interligar processo
-            </Button>
-
-            <Button
-              sx={{
-                m: 2
-              }}
-              type="submit"
-              variant="contained"
-              size="large"
-              color="primary"
-              onClick={() => navigate('/processo')}
-            >
-              Cadastrar processo
-            </Button>
-          </Typography>
+          </Box>
         </HeaderPage>
+
+        <Box component="section" sx={{ p: 2}}>
+          <DataTable
+            state={stateQuery}
+            rows={[]}
+            columns={[]}
+          />
+        </Box>
       </Box>
 
       <ModalNewMagazine
