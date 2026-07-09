@@ -15,12 +15,12 @@ export default function ViewSalvedProcess() {
     {
       label: 'Automatica',
       value: 'automatica',
-      onClickOption: () => navigate('/processo/manual')
+      onClickOption: () => navigate('/processo/automatico')
     },
     {
       label: 'Manual',
       value: 'manual',
-      onClickOption: () => navigate('/processo/automatico')
+      onClickOption: () => navigate('/processo/manual')
     },
   ]
 

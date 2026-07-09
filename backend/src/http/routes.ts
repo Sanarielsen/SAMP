@@ -49,14 +49,15 @@ import { listPaymentInstallments } from "@/http/Controllers/paymentInstallment/l
 import { updatePaymentInstallment } from "@/http/Controllers/paymentInstallment/update";
 import { listPaymentMethods } from "@/http/Controllers/paymentMethod/list";
 import { updatePaymentInstallmentAsPaid } from "@/http/Controllers/paymentInstallment/update-paid";
-
-
 import { sendEmail } from "./Controllers/test";
 import { listAppointmentsByOrder } from "./Controllers/appointment/list-by-order";
 import { listRecentAppointments } from "./Controllers/appointment/list-recents";
-import { postProcessAsAImporter } from "./Controllers/process/post-import";
-import { ListProcessCategoryAsAOptionsUseCase } from "@/services/service-process-category/list-options";
+import { postProcessAsAImporter } from "./Controllers/processImported/post-many";
 import { listProcessCategoryAsAOptions } from "./Controllers/processCategory/list-options";
+import { listProcessHistoricAsAOptions } from "./Controllers/processHistoric/list-as-a-option";
+import { listImportedProcessesAsAOption } from "./Controllers/processImported/list-imported-processes-as-a-option";
+import { getProcessHistoryDetails } from "./Controllers/processCategory/get-details";
+import { getProcessImportedDetails } from "./Controllers/processImported/get-with-details";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -112,6 +113,12 @@ export async function appRoutes(app: FastifyInstance) {
   app.delete('/payment/:id', {onRequest: [verifyJWT]}, deletePayment)
 
   app.post('/process/import', {onRequest: [verifyJWT]}, postProcessAsAImporter)
+  app.get('/process/imported/:id', {onRequest: [verifyJWT]}, getProcessImportedDetails)
+  app.get('/process/history/:id', {onRequest: [verifyJWT]}, getProcessHistoryDetails)
+
+  app.get('/process/historic/options', {onRequest: [verifyJWT]}, listProcessHistoricAsAOptions)
+  app.get('/process/imported/:id/options', {onRequest: [verifyJWT]}, listImportedProcessesAsAOption)
+  //app.post('/process', {onRequest: [verifyJWT]}, )
 
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
   app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)

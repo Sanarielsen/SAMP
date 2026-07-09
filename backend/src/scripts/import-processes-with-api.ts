@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { addYears } from "@/utils/addYears";
 import { PROCESS_BRAND_TYPES } from "@/utils/mockProcessTypeBrands";
-import { CreatedProcessImportedDTO } from "@shared/types/process";
+import { CreatedProcessImportedDTO } from "@shared/types/processImported";
+
 
 const prisma = new PrismaClient();
 

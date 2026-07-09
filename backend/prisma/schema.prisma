@@ -77,6 +77,7 @@ model ProcessCategory {
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
 
+  processHistories ProcessHistoric[]
   importedProcess ImportedProcess[]
 
   @@map("process_categories")
@@ -90,6 +91,8 @@ model ProcessHistoric {
   fileName       String
   filePath       String
   createdAt      DateTime @default(now())
+
+  category ProcessCategory @relation(fields:[categoryId], references: [id])
 
   importedProcess ImportedProcess[]
 

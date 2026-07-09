@@ -2,7 +2,7 @@ import { PDFParse } from "pdf-parse";
 import path from "node:path";
 
 import { StorageProvider } from "@/storage/storage-provider";
-import { ProcessRepository } from "@/repositories/process-repository";
+import { ProcessImportedRepository } from "@/repositories/process-imported-repository";
 import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
 import { ProcessCategoryRepository } from "@/repositories/process-category-repository";
 import { ImportDataError } from "@/services/errors/import-data-error";
@@ -10,12 +10,12 @@ import { ResourceNotFoundError } from "@/services/errors/resource-not-found-erro
 import { importProcessesWithAPI } from "@/scripts/import-processes-with-api";
 import { checkMagazineWillBeUploaded } from "@/utils/checkMagazineWillBeUploaded";
 
-import { CreatedProcessImportedDTO, CreateProcessImportedDTO } from "@shared/types/process";
+import { CreatedProcessImportedDTO, CreateProcessImportedDTO } from "@shared/types/processImported";
 import { ProcessHistoric } from "@shared/types/processHistoric";
 
 export class CreateProcessAsImportUseCase {
   constructor(
-    private processRepository: ProcessRepository,
+    private importedProcessRepository: ProcessImportedRepository,
     private processHistoricRepository: ProcessHistoricRepository,
     private processCategoryRepository: ProcessCategoryRepository,
     private storageProvider: StorageProvider,
@@ -67,7 +67,7 @@ export class CreateProcessAsImportUseCase {
           categoryId
         );
 
-        importedRowsQuantity = await this.processRepository.createManyAsImport(importedProcesses)
+        importedRowsQuantity = await this.importedProcessRepository.createManyAsImport(importedProcesses)
       } catch (err) {
         if (err instanceof ImportDataError) {
           throw new ImportDataError();
