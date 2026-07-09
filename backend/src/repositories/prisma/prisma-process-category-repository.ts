@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { ProcessCategoryRepository } from "../process-category-repository";
 
 import { ProcessCategory } from "@shared/types/processCategory";
+import { OptionsControlledBox } from "@shared/types/values";
 
 
 export class PrismaProcessCategoryRepository implements ProcessCategoryRepository {
@@ -12,5 +13,18 @@ export class PrismaProcessCategoryRepository implements ProcessCategoryRepositor
         id
       }
     })
+  }
+
+  async findManyOptionCategories(): Promise<OptionsControlledBox[]> {
+    const categories = await prisma.processCategory.findMany({
+      where: {
+        deletedAt: null
+      }
+    })
+
+    return categories.map((category) => ({
+      label: category.name,
+      value: category.id
+    }))
   }
 }

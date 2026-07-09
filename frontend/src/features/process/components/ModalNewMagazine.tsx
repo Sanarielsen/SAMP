@@ -1,4 +1,5 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
+import { useQuery } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { 
@@ -10,7 +11,15 @@ import {
 } from "@mui/material";
 import { GridCloseIcon } from "@mui/x-data-grid";
 
+import { 
+  optionsQueryListProcessCategoryAsAOptions
+} from "@/features/process/api/queryListProcessCategoryAsAOptions";
+import { 
+  useMutationPostProcessImportMagazine 
+} from "@/features/process/api/mutatePostProcessImportMagazine";
 import { ControlledFileInput } from "@/components/ControlledFIleInput";
+import { ControlledInput } from "@/components/ControlledInputText";
+import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { 
   newMagazineSchema, 
   type NewMagazineFormData
@@ -27,18 +36,46 @@ export default function ModalNewMagazine({
   open, onSubmitImport, handleClose
 }: ModalNewMagazineProps) {
 
+  const { 
+    data: listProcessCategoryAsAOptions,
+    isSuccess: isSuccessCategoryOptions,
+  } = useQuery(
+    optionsQueryListProcessCategoryAsAOptions()
+  )
+
+  const mutationPostProcessImportMagazine =
+    useMutationPostProcessImportMagazine({
+      onSuccess: (response) => {
+        mutationPostProcessImportMagazine.reset()
+        if (response.status === 201) onSubmitImport("success")
+        if (response.status === 200) onSubmitImport("warning")
+      },
+      onError: () => {
+        mutationPostProcessImportMagazine.reset()
+        onSubmitImport("error")
+      },
+  })
+
   const form = useForm<NewMagazineFormData>({
     resolver: zodResolver(newMagazineSchema),
   });
+  const { errors } = form.formState
 
   const onSubmit: SubmitHandler<NewMagazineFormData> = async (data) => {
 
-    console.log("Formulário enviado: ", data)
+    const formData = new FormData();
+
+    formData.append("categoryId", data.categoryId);
+    formData.append("numberMagazine", data.numberMagazine);
+    formData.append("fileMagazine", data.fileMagazine);
 
     form.reset();
-
-    onSubmitImport("sucess")
+    mutationPostProcessImportMagazine.mutate(formData)
   }
+
+  const isRunningSomething = 
+    mutationPostProcessImportMagazine.isPending
+     || mutationPostProcessImportMagazine.isSuccess
 
   return (
     <Modal
@@ -84,11 +121,35 @@ export default function ModalNewMagazine({
             container
             spacing={4}
             sx={{ pt: 3, pb: 2 }}
-          >
-            <Grid size={{ xs: 12}}>
+          > 
+            <Grid size={{ md: 12, lg: 6 }}>
+              <ControlledInput
+                control={form.control}
+                type="number"
+                name={`numberMagazine`}
+                label="Número da revista"
+                placeholder='Categoria a ser importada'
+                fullWidth
+                error={!!errors.numberMagazine}
+                helperText={
+                  String(errors.numberMagazine?.message ?? "")
+                }
+              />
+            </Grid>
+            <Grid size={{ md: 12, lg: 6 }}>
+              <ControlledComboBox
+                control={form.control}
+                name={'categoryId'}
+                label='Categoria'
+                placeholder='Categoria a ser importada'
+                options={ isSuccessCategoryOptions ? listProcessCategoryAsAOptions : []}
+              />
+            </Grid>
+            <Grid size={{ xs: 12 }}>
               <ControlledFileInput
                 control={form.control}
-                name="file"
+                placeholder="Revista em formato PDF"
+                name="fileMagazine"
                 accept=".pdf,application/pdf"
               />
             </Grid>
@@ -99,8 +160,8 @@ export default function ModalNewMagazine({
                 type="submit"
                 variant="contained"
                 size="large"
-                // loading={isRunningSomething}
-                // disabled={isRunningSomething}
+                loading={isRunningSomething}
+                disabled={isRunningSomething}
                 fullWidth
               >
                 Iniciar importacão

@@ -9,12 +9,14 @@ import {
 
 import ModalNewMagazine from "@/features/process/components/ModalNewMagazine";
 import HeaderPage from "@/components/HeaderPage";
+import ToastContainer from "@/components/Toast";
 
 
 export default function HomeProcess() {
 
   const navigate = useNavigate()
 
+  const [openToast, setOpenToast] = useState("")
   const [modalNewMagazine, setModalNewMagazine] = useState(false);
 
   return (
@@ -75,10 +77,31 @@ export default function HomeProcess() {
       <ModalNewMagazine
         open={modalNewMagazine}
         onSubmitImport={(action) => {
-          console.log("Importado: ", action)
+          setOpenToast(action);
           setModalNewMagazine(false)
         }}
         handleClose={() => setModalNewMagazine(false)}
+      />
+
+      <ToastContainer
+        open={openToast === "success"}
+        message="Revista importada com sucesso. Verifique essa revista na listagem de processos."
+        severity="success"
+        onClose={() => setOpenToast("")}
+      />
+
+      <ToastContainer
+        open={openToast === "warning"}
+        message="Essa importação já foi executada, verifique seus dados na listagem dos processos."
+        severity="warning"
+        onClose={() => setOpenToast("")}
+      />
+
+      <ToastContainer
+        open={openToast === "error"}
+        message="Ocorreu um erro ao importar essa revista."
+        severity="error"
+        onClose={() => setOpenToast("")}
       />
     </>
   )

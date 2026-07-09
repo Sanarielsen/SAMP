@@ -55,6 +55,8 @@ import { sendEmail } from "./Controllers/test";
 import { listAppointmentsByOrder } from "./Controllers/appointment/list-by-order";
 import { listRecentAppointments } from "./Controllers/appointment/list-recents";
 import { postProcessAsAImporter } from "./Controllers/process/post-import";
+import { ListProcessCategoryAsAOptionsUseCase } from "@/services/service-process-category/list-options";
+import { listProcessCategoryAsAOptions } from "./Controllers/processCategory/list-options";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -100,7 +102,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/orders', {onRequest: [verifyJWT]}, listOrder)
   app.patch('/order/:id', {onRequest: [verifyJWT]}, updateOrder)
   app.delete('/order/:id', {onRequest: [verifyJWT]}, deleteOrder)
-  app.post('/order/:id/payment', {onRequest: [verifyJWT]}, postPayment)
+  app.post('/order/:id/payment', {onRequest: [verifyJWT]}, postPayment) 
   app.post('/order/:id/payment/installments', {onRequest: [verifyJWT]}, postPaymentWithInstallments)
   app.get(`/order/:id/payments`, { onRequest: [verifyJWT] }, getOrderPayments)
   
@@ -113,4 +115,5 @@ export async function appRoutes(app: FastifyInstance) {
 
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
   app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)
+  app.get(`/process/category/options`, {onRequest: [verifyJWT]}, listProcessCategoryAsAOptions)
 }
