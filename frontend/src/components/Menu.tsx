@@ -1,12 +1,15 @@
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import CloseIcon from '@mui/icons-material/Close';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import HomeIcon from '@mui/icons-material/Home';
 import HotelClassIcon from '@mui/icons-material/HotelClass';
 import InfoIcon from '@mui/icons-material/Info';
-import HomeIcon from '@mui/icons-material/Home';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 import { 
@@ -16,6 +19,7 @@ import {
   NavClose,
   NavHeader 
 } from "@/styles/menuContainer";
+
 
 interface MenuProps {
   open: boolean
@@ -29,6 +33,7 @@ export default function Menu({
 
   const location = useLocation();
   const navigate = useNavigate();
+  const [openProcessos, setOpenProcessos] = useState(false);
 
   function handleChangePage(targetPage: string) {
     navigate(targetPage);
@@ -75,13 +80,50 @@ export default function Menu({
           <AllInboxIcon />
           <span> O.S </span>
         </MenuItem>
+
         <MenuItem
-          $active={location.pathname.startsWith("/processo")}
-          onClick={() => handleChangePage("/processos")}
+          $active={
+            location.pathname.startsWith("/processo") ||
+            location.pathname.startsWith("/processos")
+          }
+          onClick={() => setOpenProcessos(v => !v)}
+          style={{ justifyContent: 'center' }}
         >
-          <InsertDriveFileIcon />
-          <span> Processos </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <InsertDriveFileIcon />
+            <span> Processos </span>
+          </div>
+          {openProcessos ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </MenuItem>
+
+        {openProcessos && (
+          <>
+            <MenuItem
+              $active={location.pathname == "/processos/salvos"}
+              onClick={() => handleChangePage("/processos/salvos")}
+              style={{ paddingLeft: 32 }}
+            >
+              <span>Processos salvos</span>
+            </MenuItem>
+
+            <MenuItem
+              $active={location.pathname == "/processos/importacao"}
+              onClick={() => handleChangePage("/processos/importacao")}
+              style={{ paddingLeft: 32 }}
+            >
+              <span>Processos importados</span>
+            </MenuItem>
+
+            <MenuItem
+              $active={location.pathname == "/processos/revistas"}
+              onClick={() => handleChangePage("/processos/revistas")}
+              style={{ paddingLeft: 32 }}
+            >
+              <span>Revistas importadas</span>
+            </MenuItem>
+          </>
+        )}
+
         <MenuItem
           $active={location.pathname.startsWith("/sobre")}
           onClick={() => handleChangePage("/sobre")}
@@ -93,3 +135,4 @@ export default function Menu({
     </ContainerMenu>
   )
 }
+// ...existing code...
