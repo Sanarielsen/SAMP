@@ -35,7 +35,7 @@ model User {
 
   createdByUser   Client[]          @relation("CreatedBy")
   linkedByUser    Client[]          @relation("ResponsibleBy")
-  ImportedProcess ImportedProcess[]
+  importedProcess ImportedProcess[]
 
   @@map("users")
 }
@@ -114,34 +114,32 @@ model ProcessType {
 }
 
 model ImportedProcess {
-  id                        String    @id @default(uuid())
-  processHistoricId         String
-  processCategoryId         String
-  processTypeId             String?
-  processNumber             String
-  title                     String
-  titular                   String?
-  dispatchDescription       String?   @db.Text
-  brand                     String?
-  depositDate               DateTime?
-  receiptDate               DateTime?
-  dueDate                   DateTime?
-  publishDate               DateTime?
-  grantingDate              DateTime?
-  internationalRegistration String?
-  presentation              String?
-  nature                    String?
-  nominativeElement         String?
-  ncl                       String?
-  specification             String?   @db.Text
-  sourceText                String?   @db.Text
-  sourceFile                String?
-  sourcePage                Int?
-  status                    String?
-  importedByUser            String
-  createdAt                 DateTime  @default(now())
-  updatedAt                 DateTime? @updatedAt
-  deletedAt                 DateTime?
+  id                String    @id @default(uuid())
+  processHistoricId String
+  processCategoryId String
+  processTypeId     String
+
+  processNumber                   String
+  holder                          String
+  dispatchDetails                 String? @db.Text
+  attorney                        String?
+  presentation                    String?
+  nature                          String?
+  markName                        String? 
+  ncl                             String?
+  specification                   String?
+  translatedSpecification         String?
+  internationalRegistrationNumber String?
+  cfe                             String?
+
+  status          String
+  sourceText      String @db.Text
+  sourcePage      Int  
+  importedByUser  String
+  depositDate     DateTime?
+  receivedDate    DateTime?
+  grantDate       DateTime?
+  createdAt       DateTime  @default(now())
 
   processHistoric ProcessHistoric @relation(fields: [processHistoricId], references: [id])
   processCategory ProcessCategory @relation(fields: [processCategoryId], references: [id])

@@ -6,16 +6,12 @@ import type { DetailsProcessImportedDTO } from "@shared/types/processImported";
 
 export const processImportedFields: Field<DetailsProcessImportedDTO>[] = [
   {
-    title: 'Título',
-    get: (field: DetailsProcessImportedDTO) => field.title,
-  },
-    {
-    title: 'Títular',
-    get: (field: DetailsProcessImportedDTO) => field.titular,
-  },
-  {
     title: 'Número do processo',
     get: (field: DetailsProcessImportedDTO) => field.processNumber,
+  },
+  {
+    title: 'Títular',
+    get: (field: DetailsProcessImportedDTO) => field.holder,
   },
   {
     title: 'Tipo do processo',
