@@ -12,6 +12,8 @@ import { checkMagazineWillBeUploaded } from "@/utils/checkMagazineWillBeUploaded
 
 import { CreatedProcessImportedDTO, CreateProcessImportedDTO } from "@shared/types/processImported";
 import { ProcessHistoric } from "@shared/types/processHistoric";
+import { getRequiredEnv } from "@/utils/getRequiredEnv";
+
 
 export class CreateProcessAsImportUseCase {
   constructor(
@@ -27,7 +29,7 @@ export class CreateProcessAsImportUseCase {
     let importedRowsQuantity: number = 0;
 
     let fileName = numberMagazine + '.txt'
-    let defaultStorage = 'processes/brands'
+    let defaultStorage = getRequiredEnv('NODE_ENV') + '/processes/brands'
     let pathStorage = defaultStorage + '/' + fileName
 
     const category = await this.processCategoryRepository.findById(categoryId);
@@ -69,6 +71,7 @@ export class CreateProcessAsImportUseCase {
 
         importedRowsQuantity = await this.importedProcessRepository.createManyAsImport(importedProcesses)
       } catch (err) {
+        console.log(err)
         if (err instanceof ImportDataError) {
           throw new ImportDataError();
         }

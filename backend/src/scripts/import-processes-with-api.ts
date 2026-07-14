@@ -25,25 +25,28 @@ export async function importProcessesWithAPI(fileConverted: Buffer, userId: stri
     data.push({
       processHistoricId: historicId,
       processCategoryId: processCategoryId,
-      processTypeId: processType.id ?? undefined,
+      processTypeId: processType.id,
       processNumber: parsed.processNumber,
-      title: parsed.title,
-      titular: parsed.titular ?? undefined,
-      dispatchDescription: parsed.dispatchDescription ?? undefined,
-      publishDate: parsed.publishDate ?? undefined,
-      dueDate: parsed.dueDate ?? undefined,
-      grantingDate: parsed.grantingDate ?? undefined,
-      depositDate: parsed.depositDate ?? undefined,
-      receiptDate: parsed.receiptDate ?? undefined,
-      internationalRegistration: parsed.internationalRegistration ?? undefined,
-      presentation: parsed.presentation ?? undefined,
-      nature: parsed.nature ?? undefined,
-      nominativeElement: parsed.nominativeElement ?? undefined,
-      ncl: parsed.ncl ?? undefined,
-      specification: parsed.specification ?? undefined,
+      holder: parsed.titular ?? "Não informado",
+      dispatchDetails: parsed.dispatchDescription,
+      attorney: parsed.attorney || null,
+      presentation: parsed.presentation || null,
+      nature: parsed.nature || null,
+      markName: parsed.nominativeElement || null,
+      ncl: parsed.ncl ?? null,
+      specification: parsed.specification || null,
+      translatedSpecification: parsed.translatedSpecification || null,
+      internationalRegistrationNumber: parsed.internationalRegistration ?? null,
+      cfe: parsed.cfe,
+
+      depositDate: parsed.depositDate ?? null,
+      receivedDate: parsed.receiptDate,
+      grantDate: parsed.dueDate,
+      
+      status: 'Imported',
       sourceText: parsed.sourceText,
+      sourcePage: 0,
       importedByUser: userId,
-      status: "imported",
     });
   }
 
@@ -148,6 +151,7 @@ function readTitularValue(lines: string[]) {
   return (
     readLabelValue(lines, "Titular") ??
     readLabelValue(lines, "Titular(es)") ??
+    readLabelValue(lines, "Indeferimento de designaçãoTitular(es)") ??
     readLabelValue(lines, "Despachante") ??
     readLabelValue(lines, "Requerente")
   );
@@ -182,7 +186,7 @@ function readBlockValue(lines: string[], label: string) {
     parts.push(current);
   }
 
-  return parts.join(" ").replace(/\s+/g, " ").trim() || null;
+  return parts.join(" ").replace(/\s+/g, " ").trim() || "";
 }
 
 function splitProcesses(text: string) {
@@ -244,6 +248,7 @@ function parseProcessEntry(raw: string) {
     title,
     titular: readTitularValue(lines),
     dispatchDescription: readBlockValue(lines, "Detalhes do despacho"),
+    attorney: readBlockValue(lines, "Procurador"),
     publishDate: parseBrazilianDate(readLabelValue(lines, "Data de depósito")),
     grantingDate: parseBrazilianDate(readLabelValue(lines, "Data de concessão")),
     dueDate: addYears(parseBrazilianDate(readLabelValue(lines, "Data de concessão")), 10),
@@ -255,7 +260,9 @@ function parseProcessEntry(raw: string) {
     brand: readLabelValue(lines, "Marca"),
     nominativeElement: readLabelValue(lines, "Elemento nominativo"),
     ncl: readLabelValue(lines, "NCL(11)"),
+    cfe: readLabelValue(lines, "CFE"),
     specification: readBlockValue(lines, "Especificação"),
+    translatedSpecification: readBlockValue(lines, "Especificação traduzida"),
     sourceText: raw.trim(),
     processTypeName: inferProcessTypeName(title),
   };

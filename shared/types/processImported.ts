@@ -1,28 +1,30 @@
 export type ProcessImported = {
-  id:                         string
-  processTypeId?:             string
-  processNumber?:             string
-  title:                      string
-  titular?:                   string
-  dispatchDescription?:       string   
-  publishDate?:               Date
-  grantingDate?:              Date
-  dueDate?:                   Date
-  depositDate?:               Date
-  receiptDate?:               Date
-  internationalRegistration?: string
-  presentation?:              string
-  nature?:                    string
-  nominativeElement?:         string
-  ncl?:                       string
-  specification?:             string   
-  sourceText?:                string   
-  sourceFile?:                string
-  sourcePage?:                number
-  status?:                    string
-  createdAt:                  Date
-  updatedAt?:                 Date
-  deletedAt?:                 Date
+  id:                string
+  processHistoricId: string
+  processCategoryId: string
+  processTypeId:     string
+
+  processNumber:                    string
+  holder:                           string        
+  dispatchDetails?:                 string | null
+  attorney?:                        string| null
+  presentation?:                    string| null
+  nature?:                          string| null
+  markName?:                        string | null
+  ncl?:                             string| null
+  specification?:                   string| null
+  translatedSpecification?:         string| null
+  internationalRegistrationNumber?: string| null
+  cfe?:                             string | null 
+
+  status:         string
+  sourceText:     string
+  sourcePage:     number
+  importedByUser: string
+  depositDate?:    Date
+  receivedDate?:  Date | null
+  grantDate?:     Date | null
+  createdAt:      Date | null
 }
 
 export type CreateProcessImportedDTO = {
@@ -34,36 +36,36 @@ export type CreateProcessImportedDTO = {
 
 export type DetailsProcessImportedDTO = {
   id:               string, 
-  processTypeId?:   string | null
-  processTypeName?: string | null
-  processNumber?:   string | null
-  title:            string | null
-  titular:          string | null
+  processTypeId:    string
+  processTypeName:  string
+  processNumber:    string
+  holder:           string
   createdAt:        Date
 }
 
 export type CreatedProcessImportedDTO = {
-  processHistoricId:          string         
-  processCategoryId:          string
-  processTypeId?:             string
-  processNumber:              string
-  title:                      string
-  titular?:                   string
-  dispatchDescription?:       string   
-  publishDate?:               Date
-  grantingDate?:              Date
-  dueDate?:                   Date
-  depositDate?:               Date
-  receiptDate?:               Date
-  internationalRegistration?: string
-  presentation?:              string
-  nature?:                    string
-  nominativeElement?:         string
-  ncl?:                       string
-  specification?:             string   
-  sourceText?:                string   
-  sourceFile?:                string
-  sourcePage?:                number
-  importedByUser:             string
-  status?:                    string
+  processHistoricId: string
+  processCategoryId: string
+  processTypeId:     string
+
+  processNumber:                    string
+  holder:                           string        
+  dispatchDetails?:                 string | null
+  attorney?:                        string | null
+  presentation?:                    string | null
+  nature?:                          string | null
+  markName?:                        string | null 
+  ncl?:                             string | null
+  specification?:                   string | null
+  translatedSpecification?:         string | null
+  internationalRegistrationNumber?: string | null
+  cfe?:                             string | null  
+
+  status:         string
+  sourceText:     string
+  sourcePage:     number
+  importedByUser: string
+  depositDate?:   Date | null
+  receivedDate?:  Date | null
+  grantDate?:     Date | null
 }

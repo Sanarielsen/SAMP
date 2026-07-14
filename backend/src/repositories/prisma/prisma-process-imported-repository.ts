@@ -11,17 +11,24 @@ import { OptionsControlledBox } from "@shared/types/values";
 
 export class PrismaProcessImportedRepository implements ProcessImportedRepository {
   async createManyAsImport(importedProcesses: CreatedProcessImportedDTO[]): Promise<number> {
-    const { count } = await prisma.importedProcess.createMany({
-      data: importedProcesses.map(process => ({
-        ...process,
-        createdAt: new Date(),
-        updatedAt: null,
-        deletedAt: null,
-      })),
-      skipDuplicates: true,
-    })
+    const chunkSize = 500
+    let totalCount = 0
+
+    for (let i = 0; i < importedProcesses.length; i += chunkSize) {
+      const chunk = importedProcesses.slice(i, i + chunkSize)
+      console.log("Registro: ", i)
+      const { count } = await prisma.importedProcess.createMany({
+        data: chunk.map(process => ({
+          ...process,
+          createdAt: new Date()
+        })),
+        skipDuplicates: true,
+      })
+
+      totalCount += count
+    }
     
-    return count;
+    return totalCount;
   }
 
   async findByIdDetails(id: string): Promise<DetailsProcessImportedDTO | null> {
@@ -40,12 +47,11 @@ export class PrismaProcessImportedRepository implements ProcessImportedRepositor
 
     return {
       id: importedProcess.id,
-      title: importedProcess.title,
-      titular: importedProcess.titular,
+      holder: importedProcess.holder,
       createdAt: importedProcess.createdAt,
       processNumber: importedProcess.processNumber,
       processTypeId: importedProcess.processTypeId,
-      processTypeName: importedProcess.processType?.name
+      processTypeName: importedProcess.processType!.name
     }
   }
 
@@ -54,11 +60,14 @@ export class PrismaProcessImportedRepository implements ProcessImportedRepositor
       where: {
         processHistoricId
       },
+      include: {
+        processType: true
+      },
       take: 10,
     })
 
     return importedProcesses.map(currentProcess => ({
-      label: `${currentProcess.processNumber} - ${currentProcess.title} - ${currentProcess.titular}`,
+      label: `${currentProcess.processNumber} - ${currentProcess.holder} - ${currentProcess.processType?.name}`,
       value: currentProcess.id,
     }));
   }
