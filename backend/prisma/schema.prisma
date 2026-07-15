@@ -149,6 +149,45 @@ model ImportedProcess {
   @@map("imported_processes")
 }
 
+model Publication {
+  id                String @id @default(cuid())
+  processHistoryId  String
+  processTypeId     String
+  clientId          String
+
+  processNumber String
+  holder        String
+  brand         String
+  nature        String
+  specification String @db.Text
+ 
+  publicationDate DateTime?
+  depositDate     DateTime?
+  grantDate       DateTime?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  @@map("publications")
+}
+
+model PublicationHistory {
+  id                          String @id @default(cuid())
+  processHistoryId            String
+  processBrandPublicationId   String
+  processNumber               String
+  dispatch                    String
+  complement                  String
+  publicationDate             DateTime
+  providence                  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  @@map("PublicationHistories")
+}
+
 model ClientProcess {
   id            String    @id @default(uuid())
   clientId      String

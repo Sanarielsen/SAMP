@@ -6,11 +6,12 @@ import { ResourceNotFoundError } from '@/services/errors/resource-not-found-erro
 
 export async function listImportedProcessesAsAOption(request: FastifyRequest, reply: FastifyReply) {
   const { id: processHistoricId } = request.params as { id: string }
+  const { q: search } = request.query as { q?: string }
 
   try {
     const useCase = makeListImportProcessesAsAOption();
 
-    const importedProcesses = await useCase.execute(processHistoricId)
+    const importedProcesses = await useCase.execute(processHistoricId, search)
 
     return reply.status(200).send(importedProcesses);
 

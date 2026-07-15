@@ -4,7 +4,8 @@ import { ProcessImportedRepository } from "@/repositories/process-imported-repos
 
 import { 
   CreatedProcessImportedDTO, 
-  DetailsProcessImportedDTO
+  DetailsProcessImportedDTO,
+  ProcessImported
 } from "@shared/types/processImported";
 import { OptionsControlledBox } from "@shared/types/values";
 
@@ -31,6 +32,14 @@ export class PrismaProcessImportedRepository implements ProcessImportedRepositor
     return totalCount;
   }
 
+  async findById(id: string): Promise<ProcessImported | null> {
+    return await prisma.importedProcess.findUnique({
+      where: {
+        id
+      }
+    })
+  }
+
   async findByIdDetails(id: string): Promise<DetailsProcessImportedDTO | null> {
     const importedProcess = await prisma.importedProcess.findUnique({
       where: {
@@ -55,11 +64,26 @@ export class PrismaProcessImportedRepository implements ProcessImportedRepositor
     }
   }
 
-  async findManyByProcessHistoricIdAsAOption(processHistoricId: string): Promise<OptionsControlledBox[]> {
+  async findManyByProcessHistoricIdAsAOption(processHistoricId: string, search?: string): Promise<OptionsControlledBox[]> {
+    const whereClause: any = {
+      processHistoricId
+    }
+
+    if (search && search.trim().length > 0) {
+      const q = search.trim()
+      whereClause.AND = [
+        {
+          OR: [
+            { processNumber: { contains: q, mode: 'insensitive' } },
+            { holder: { contains: q, mode: 'insensitive' } },
+            { processType: { name: { contains: q, mode: 'insensitive' } } },
+          ],
+        },
+      ]
+    }
+
     const importedProcesses = await prisma.importedProcess.findMany({
-      where: {
-        processHistoricId
-      },
+      where: whereClause,
       include: {
         processType: true
       },

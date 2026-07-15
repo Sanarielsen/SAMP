@@ -1,4 +1,7 @@
-import type { ReactNode } from "react";
+import { 
+  useState, 
+  type ReactNode 
+} from "react";
 import {
   type Control,
   Controller,
@@ -34,6 +37,7 @@ type RHFComboBoxProps<
   detailIcon?: ReactNode;
   tooltipTitle?: string;
   onDetailClick?: () => void;
+  onInputChange?: (inputValue: string) => void;
 };
 
 export function ControlledComboBox<
@@ -50,7 +54,10 @@ export function ControlledComboBox<
   detailIcon,
   tooltipTitle,
   onDetailClick,
+  onInputChange,
 }: RHFComboBoxProps<T, TValue>) {
+  const [inputValue, setInputValue] = useState("");
+
   return (
     <Controller
       name={name}
@@ -68,7 +75,15 @@ export function ControlledComboBox<
               disabled={disabled}
               loading={loading}
               value={selectedOption}
+              inputValue={inputValue}
+              onInputChange={(_, newInputValue, reason) => {
+                if (reason === "input" || reason === "clear") {
+                  setInputValue(newInputValue);
+                  onInputChange?.(newInputValue);
+                }
+              }}
               onChange={(_, option) => {
+                setInputValue(option?.label ?? "");
                 field.onChange(option?.value ?? null);
               }}
               isOptionEqualToValue={(option, value) =>
@@ -91,14 +106,16 @@ export function ControlledComboBox<
 
             {detailIcon && (
               <Tooltip title={tooltipTitle}>
-                <IconButton
-                  size="small"
-                  onClick={onDetailClick}
-                  aria-label="details"
-                  disabled={disabled || !selectedOption}
-                >
-                  {detailIcon}
-                </IconButton>
+                <span>
+                  <IconButton
+                    size="small"
+                    onClick={onDetailClick}
+                    aria-label="details"
+                    disabled={disabled || !selectedOption}
+                  >
+                    {detailIcon}
+                  </IconButton>
+                </span>
               </Tooltip>
             )}
           </Box>

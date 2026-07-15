@@ -11,7 +11,7 @@ export class InMemoryProcessImportedRepository implements ProcessImportedReposit
   findByIdDetails(id: string): Promise<DetailsProcessImportedDTO | null> {
     throw new Error("Method not implemented.");
   }
-  findManyByProcessHistoricIdAsAOption(processHistoricId: string): Promise<OptionsControlledBox[]> {
+  findManyByProcessHistoricIdAsAOption(processHistoricId: string, search?: string): Promise<OptionsControlledBox[]> {
     throw new Error("Method not implemented.");
   }
   

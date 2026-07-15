@@ -110,7 +110,7 @@ export default function ManageUpdateAppointment() {
       },
     })
 
-  const hasSomethingHappen = 
+  const hasTransferStarted = 
     mutationPatchAppointment.isPending ||
     mutationPatchAppointment.isSuccess 
 
@@ -191,8 +191,8 @@ export default function ManageUpdateAppointment() {
               type="submit"
               variant="contained"
               size="large"
-              loading={hasSomethingHappen}
-              disabled={hasSomethingHappen}
+              loading={hasTransferStarted}
+              disabled={hasTransferStarted}
               fullWidth
             >
               Atualizar
