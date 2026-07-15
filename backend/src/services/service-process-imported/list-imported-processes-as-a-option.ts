@@ -12,7 +12,7 @@ export class ListImportedProcessesAsAOptionUseCase {
     private processHistoricRepository: ProcessHistoricRepository,
   ) {}
 
-  async execute(processHistoricId: string): Promise<OptionsControlledBox[]> {
+  async execute(processHistoricId: string, search?: string): Promise<OptionsControlledBox[]> {
 
     const processHistoric = await this.processHistoricRepository.findById(processHistoricId)
 
@@ -20,6 +20,6 @@ export class ListImportedProcessesAsAOptionUseCase {
       throw new ResourceNotFoundError() 
     }
 
-    return await this.importedProcessRepository.findManyByProcessHistoricIdAsAOption(processHistoricId)
+    return await this.importedProcessRepository.findManyByProcessHistoricIdAsAOption(processHistoricId, search)
   }
 }

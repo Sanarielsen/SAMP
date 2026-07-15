@@ -1,4 +1,6 @@
+import { useState, useEffect } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 
@@ -15,11 +17,13 @@ import { optionsQueryGetProcessHistory } from "@/features/process/api/queryGetPr
 import { optionsQueryGetProcessImportedDetails } from "@/features/process/api/queryGetProcessImportedDetails";
 import { optionsQueryListImportedProcessPerMagazine } from "@/features/process/api/listImportedProcesses";
 import { optionsQueryListProcessHistoricsAsAOptions } from "@/features/process/api/listProcessHistoricsAsAOptions";
+import { useMutationPostPublicationTransferImportedProcess } from "@/features/process/api/mutatePostPublicationTransferImportedProcess";
 import { optionsQueryGetClient } from "@/api/queryGetClient";
 import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions";
 import { ControlledComboBox } from "@/components/ControlledComboBox";
 import HeaderResourceForm from "@/components/HeaderResourceForm";
 import ModalViewEntityDetails from "@/components/ModalViewEntityDetails";
+import ToastContainer from "@/components/Toast";
 import { useDetailsModal } from "@/hooks/useDetailsModal";
 import { 
   newProcessAutomaticSchema, 
@@ -31,6 +35,12 @@ import { clientFields } from "@/utils/getRowDetailClient";
   
 
 export default function NewProcessAutomatic() {
+
+  const navigate = useNavigate();
+
+  const [openToast, setOpenToast] = useState("")
+  const [importedProcessInput, setImportedProcessInput] = useState("");
+  const [debouncedImportedProcessInput, setDebouncedImportedProcessInput] = useState(importedProcessInput);
 
   const { 
     data: clientsWithOptions,
@@ -49,23 +59,21 @@ export default function NewProcessAutomatic() {
   const form = useForm<NewProcessAutomaticFormData>({
     resolver:
       zodResolver(newProcessAutomaticSchema),
-
-    // defaultValues:
-    //   isEditing
-    //     ? currentClient
-    //     : emptyClient,
   })
 
   const clientId = form.watch("clientId");
   const processHistoricId = form.watch("processHistoricId");
   const importedProcessId = form.watch("importedProcessId");
 
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedImportedProcessInput(importedProcessInput), 300);
+    return () => clearTimeout(t);
+  }, [importedProcessInput]);
+
   const { 
     data: importedProcessesWithOptions,
     isSuccess: isSuccessImportedProcessesWithOptions
-  } = useQuery(
-    optionsQueryListImportedProcessPerMagazine(processHistoricId)
-  )
+  } = useQuery(optionsQueryListImportedProcessPerMagazine(processHistoricId || "", debouncedImportedProcessInput))
 
   const {
     data: currentClient
@@ -79,9 +87,33 @@ export default function NewProcessAutomatic() {
     data: currentProcessImported
   } = useQuery(optionsQueryGetProcessImportedDetails(importedProcessId!))
 
-  const onSubmit: SubmitHandler<NewProcessAutomaticFormData> = async (data) => {
-    console.log("Enviou os dados: ", data)
+
+  function executeActionAfterRequest(result: string) {
+    setOpenToast(result);
+    if (result === "success") {
+      setTimeout(() => {
+        navigate("/processos/salvos");
+      }, 5000);
+    }
   }
+
+  const mutationPostPublicationTransfer =
+    useMutationPostPublicationTransferImportedProcess({
+      onSuccess: () => {
+        executeActionAfterRequest("success");
+      },
+      onError: () => {
+        executeActionAfterRequest("error");
+      },
+    })
+
+  const onSubmit: SubmitHandler<NewProcessAutomaticFormData> = async (data) => {
+    mutationPostPublicationTransfer.mutate(data)
+  }
+
+  const hasTransferStarted = 
+    mutationPostPublicationTransfer.isPending ||
+    mutationPostPublicationTransfer.isSuccess 
 
   const { openDetails, closeDetails, payload } = useDetailsModal();
 
@@ -123,6 +155,7 @@ export default function NewProcessAutomatic() {
                   name={'processHistoricId'}
                   label='Revista:*'
                   placeholder='Revista exportada a ser considerada'
+                  disabled={!clientId}
                   options={ isSuccessHistoricWithOptions ?
                     processHistoricWithOptions :
                     []
@@ -145,12 +178,14 @@ export default function NewProcessAutomatic() {
                   name={'importedProcessId'}
                   label='Processo:*'
                   placeholder='Processo exportado a ser considerado'
+                  disabled={!processHistoricId}
                   options={ isSuccessImportedProcessesWithOptions ?
                     importedProcessesWithOptions : 
                     []
                   }
                   tooltipTitle="Visualizar processo selecionado"
                   detailIcon={<InsertDriveFileIcon fontSize="large"/>}
+                  onInputChange={(value) => setImportedProcessInput(value)}
                   onDetailClick={() =>
                     openDetails({
                       title: "Detalhes do processo importado",
@@ -167,14 +202,8 @@ export default function NewProcessAutomatic() {
                   type="submit"
                   variant="contained"
                   size="large"
-                  // loading={
-                  //   mutationPostAppointment.isPending || 
-                  //   mutationPostAppointment.isSuccess 
-                  // }
-                  // disabled={
-                  //   mutationPostAppointment.isPending || 
-                  //   mutationPostAppointment.isSuccess 
-                  // }
+                  loading={hasTransferStarted}
+                  disabled={hasTransferStarted}
                   fullWidth
                 >
                   Cadastrar
@@ -192,6 +221,20 @@ export default function NewProcessAutomatic() {
           handleClose={closeDetails}
         />
       </form>
+
+      <ToastContainer
+        open={openToast === "success"}
+        message="Publicacao criada com sucesso."
+        severity="success"
+        onClose={() => setOpenToast("")}
+      />
+      
+      <ToastContainer
+        open={openToast === "error"}
+        message="Ocorreu um erro ao criar essa publicacao."
+        severity="error"
+        onClose={() => setOpenToast("")}
+      />
     </>
   )
 }

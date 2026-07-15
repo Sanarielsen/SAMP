@@ -21,7 +21,7 @@ export type ProcessImported = {
   sourceText:     string
   sourcePage:     number
   importedByUser: string
-  depositDate?:    Date
+  depositDate?:   Date | null
   receivedDate?:  Date | null
   grantDate?:     Date | null
   createdAt:      Date | null
