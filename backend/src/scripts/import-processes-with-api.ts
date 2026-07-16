@@ -15,7 +15,7 @@ export async function importProcessesWithAPI(fileConverted: Buffer, userId: stri
 
   for (const raw of processes) {
     const parsed = parseProcessEntry(raw);
-    
+
     if (!parsed.processNumber) {
       continue;
     }
@@ -43,7 +43,7 @@ export async function importProcessesWithAPI(fileConverted: Buffer, userId: stri
       receivedDate: parsed.receiptDate,
       grantDate: parsed.dueDate,
       
-      status: 'Imported',
+      status: 'imported',
       sourceText: parsed.sourceText,
       sourcePage: 0,
       importedByUser: userId,
@@ -129,6 +129,7 @@ function getTitleFromLine(line: string, nextLines: string[] = []) {
 }
 
 function readLabelValue(lines: string[], label: string) {
+
   const normalizedLabel = label.trim().replace(/:$/, "");
 
   const pattern = new RegExp(
@@ -149,16 +150,17 @@ function readLabelValue(lines: string[], label: string) {
 
 function readTitularValue(lines: string[]) {
   return (
-    readLabelValue(lines, "Titular") ??
-    readLabelValue(lines, "Titular(es)") ??
-    readLabelValue(lines, "Indeferimento de designaçãoTitular(es)") ??
-    readLabelValue(lines, "Despachante") ??
-    readLabelValue(lines, "Requerente")
+    readLabelValue(lines, "Titular:") ??
+    readLabelValue(lines, "Titular(es:)") ??
+    readLabelValue(lines, "Indeferimento de designaçãoTitular(es):") ??
+    readLabelValue(lines, "Despachante:") ??
+    readLabelValue(lines, "Requerente:")
   );
 }
 
 function readBlockValue(lines: string[], label: string) {
-  const pattern = new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}:\\s*`, "i");
+  const normalizedLabel = label.trim().replace(/:$/, "");
+  const pattern = new RegExp(`^${normalizedLabel.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")}:\\s*`, "i");
   const startIndex = lines.findIndex((item) => pattern.test(item.trim()));
 
   if (startIndex < 0) return null;
@@ -171,15 +173,16 @@ function readBlockValue(lines: string[], label: string) {
     parts.push(firstContent);
   }
 
+  const kvRegex = /^[^:]+:\s*/;
+
   for (let i = startIndex + 1; i < lines.length; i++) {
-    const current = lines[i].trim();
+    const raw = lines[i];
+    if (!raw) continue;
+    const current = raw.trim();
 
     if (!current) continue;
 
-    if (
-      isProcessStart(current) ||
-      /^(Titular|Data de depósito|Data de recebimento pelo INPI|Número da Inscrição Internacional|Apresentação|Natureza|Elemento nominativo|NCL\(11\)|Especificação):/i.test(current)
-    ) {
+    if (isProcessStart(current) || kvRegex.test(current)) {
       break;
     }
 
@@ -247,22 +250,22 @@ function parseProcessEntry(raw: string) {
     processNumber,
     title,
     titular: readTitularValue(lines),
-    dispatchDescription: readBlockValue(lines, "Detalhes do despacho"),
-    attorney: readBlockValue(lines, "Procurador"),
-    publishDate: parseBrazilianDate(readLabelValue(lines, "Data de depósito")),
-    grantingDate: parseBrazilianDate(readLabelValue(lines, "Data de concessão")),
-    dueDate: addYears(parseBrazilianDate(readLabelValue(lines, "Data de concessão")), 10),
-    depositDate: parseBrazilianDate(readLabelValue(lines, "Data de depósito")),
-    receiptDate: parseBrazilianDate(readLabelValue(lines, "Data de recebimento pelo INPI")),
-    internationalRegistration: readLabelValue(lines, "Número da Inscrição Internacional"),
-    presentation: readLabelValue(lines, "Apresentação"),
-    nature: readLabelValue(lines, "Natureza"),
-    brand: readLabelValue(lines, "Marca"),
-    nominativeElement: readLabelValue(lines, "Elemento nominativo"),
-    ncl: readLabelValue(lines, "NCL(11)"),
-    cfe: readLabelValue(lines, "CFE"),
-    specification: readBlockValue(lines, "Especificação"),
-    translatedSpecification: readBlockValue(lines, "Especificação traduzida"),
+    dispatchDescription: readBlockValue(lines, "Detalhes do despacho:"),
+    attorney: readBlockValue(lines, "Procurador:"),
+    publishDate: parseBrazilianDate(readLabelValue(lines, "Data de depósito:")),
+    grantingDate: parseBrazilianDate(readLabelValue(lines, "Data de concessão:")),
+    dueDate: addYears(parseBrazilianDate(readLabelValue(lines, "Data de concessão:")), 10),
+    depositDate: parseBrazilianDate(readLabelValue(lines, "Data de depósito:")),
+    receiptDate: parseBrazilianDate(readLabelValue(lines, "Data de recebimento pelo INPI:")),
+    internationalRegistration: readLabelValue(lines, "Número da Inscrição Internacional:"),
+    presentation: readLabelValue(lines, "Apresentação:"),
+    nature: readLabelValue(lines, "Natureza:"),
+    brand: readLabelValue(lines, "Marca:"),
+    nominativeElement: readLabelValue(lines, "Elemento nominativo:"),
+    ncl: readLabelValue(lines, "NCL(11):"),
+    cfe: readLabelValue(lines, "CFE:"),
+    specification: readBlockValue(lines, "Especificação:"),
+    translatedSpecification: readBlockValue(lines, "Especificação traduzida:"),
     sourceText: raw.trim(),
     processTypeName: inferProcessTypeName(title),
   };

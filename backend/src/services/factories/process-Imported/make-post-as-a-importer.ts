@@ -1,8 +1,8 @@
-import { PrismaProcessCategoryRepository } from '@/repositories/prisma/prisma-process-category-repository'
-import { PrismaProcessHistoricRepository } from '@/repositories/prisma/prisma-process-historic-repository'
 import { PrismaProcessImportedRepository } from '@/repositories/prisma/prisma-process-imported-repository'
-import { CreateProcessAsImportUseCase } from '@/services/service-process-imported/post-import'
+import { PrismaProcessHistoricRepository } from '@/repositories/prisma/prisma-process-historic-repository'
+import { PrismaProcessCategoryRepository } from '@/repositories/prisma/prisma-process-category-repository'
 import { LocalStorageProvider } from '@/storage/local-storage-provider'
+import { CreateProcessAsImportUseCase } from '@/services/service-process-imported/post-import'
 
 
 export function makeImportProcessUseCase() {
