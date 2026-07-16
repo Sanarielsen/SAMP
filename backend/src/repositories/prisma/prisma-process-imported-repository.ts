@@ -17,7 +17,6 @@ export class PrismaProcessImportedRepository implements ProcessImportedRepositor
 
     for (let i = 0; i < importedProcesses.length; i += chunkSize) {
       const chunk = importedProcesses.slice(i, i + chunkSize)
-      console.log("Registro: ", i)
       const { count } = await prisma.importedProcess.createMany({
         data: chunk.map(process => ({
           ...process,
