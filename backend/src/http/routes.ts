@@ -59,6 +59,7 @@ import { listImportedProcessesAsAOption } from "./Controllers/processImported/li
 import { getProcessHistoryDetails } from "./Controllers/processCategory/get-details";
 import { getProcessImportedDetails } from "./Controllers/processImported/get-with-details";
 import { postPublicationTransferImportedProcess } from "./Controllers/publication/post-transfer-imported-process";
+import { listPublicationDetails } from "./Controllers/publication/list";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -118,6 +119,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/process/history/:id', {onRequest: [verifyJWT]}, getProcessHistoryDetails)
 
   app.post('/publication/process/imported', {onRequest: [verifyJWT]}, postPublicationTransferImportedProcess)
+  app.get('/publications', {onRequest: [verifyJWT]}, listPublicationDetails)
 
   app.get('/process/historic/options', {onRequest: [verifyJWT]}, listProcessHistoricAsAOptions)
   app.get('/process/imported/:id/options', {onRequest: [verifyJWT]}, listImportedProcessesAsAOption)
