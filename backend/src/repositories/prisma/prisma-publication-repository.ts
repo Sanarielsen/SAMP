@@ -27,10 +27,74 @@ export class PrismaPublicationRepository implements PublicationRepository {
         },
 
         ...(search && {
-          processNumber: {
-            contains: search,
-            mode: "insensitive",
-          },
+          AND: [
+            {
+              OR: [
+                {
+                  processNumber: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  holder: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  brand: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  nature: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  specification: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  client: {
+                    tradeName: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                },
+                {
+                  client: {
+                    protocol: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                },
+                {
+                  processType: {
+                    name: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                },
+                {
+                  processType: {
+                    slug: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                },
+              ],
+            },
+          ],
         }),
       },
 

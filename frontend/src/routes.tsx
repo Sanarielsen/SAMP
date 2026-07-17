@@ -66,8 +66,8 @@ export default function Router() {
         <Route path="pagamento/:id/parcelas" element={<PaymentDetails />} />
 
         <Route path="processos" element={<HomeProcess />} />
-        <Route path="processos/importacao" element={<ViewImportedProcess />} />
-        <Route path="processos/salvos" element={<ViewSalvedProcess />} />
+        <Route path="processos/publicacoes" element={<ViewSalvedProcess />} />
+        <Route path="processos/importados" element={<ViewImportedProcess />} />
         <Route path="processos/revistas" element={<ViewImportedMagazine />} />
         <Route path="processo/manual" element={<NewProcessManual />} />
         <Route path="processo/automatico" element={<NewProcessAutomatic />} />

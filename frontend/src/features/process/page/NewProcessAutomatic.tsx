@@ -92,7 +92,7 @@ export default function NewProcessAutomatic() {
     setOpenToast(result);
     if (result === "success") {
       setTimeout(() => {
-        navigate("/processos/salvos");
+        navigate("/processos/publicacoes");
       }, 5000);
     }
   }

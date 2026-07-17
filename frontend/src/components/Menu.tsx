@@ -99,16 +99,16 @@ export default function Menu({
         {openProcessos && (
           <>
             <MenuItem
-              $active={location.pathname == "/processos/salvos"}
-              onClick={() => handleChangePage("/processos/salvos")}
+              $active={location.pathname == "/processos/publicacoes"}
+              onClick={() => handleChangePage("/processos/publicacoes")}
               style={{ paddingLeft: 32 }}
             >
-              <span>Processos salvos</span>
+              <span>Lista de publicações</span>
             </MenuItem>
 
             <MenuItem
-              $active={location.pathname == "/processos/importacao"}
-              onClick={() => handleChangePage("/processos/importacao")}
+              $active={location.pathname == "/processos/importados"}
+              onClick={() => handleChangePage("/processos/importados")}
               style={{ paddingLeft: 32 }}
             >
               <span>Processos importados</span>
