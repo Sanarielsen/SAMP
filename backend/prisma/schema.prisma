@@ -63,6 +63,7 @@ model Client {
   orders             Order[]
   clientAppointments ClientAppointment[]
   ClientProcess      ClientProcess[]
+  publications       Publication[]
 
   @@map("clients")
 }
@@ -77,8 +78,8 @@ model ProcessCategory {
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
 
-  processHistories ProcessHistoric[]
-  importedProcess ImportedProcess[]
+  processHistories  ProcessHistoric[]
+  importedProcess   ImportedProcess[]
 
   @@map("process_categories")
 }
@@ -95,6 +96,7 @@ model ProcessHistoric {
   category ProcessCategory @relation(fields:[categoryId], references: [id])
 
   importedProcess ImportedProcess[]
+  publications    Publication[]
 
   @@map("process_historics")
 }
@@ -109,6 +111,7 @@ model ProcessType {
   deletedAt   DateTime?
 
   importedProcess ImportedProcess[]
+  publications       Publication[]
 
   @@map("process_types")
 }
@@ -168,6 +171,10 @@ model Publication {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
+
+  processHistoric ProcessHistoric @relation(fields: [processHistoryId], references: [id])
+  processType     ProcessType?    @relation(fields: [processTypeId], references: [id])
+  client          Client @relation(fields: [clientId], references: [id])
 
   @@map("publications")
 }

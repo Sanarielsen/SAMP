@@ -6,7 +6,7 @@ import {
 import { OptionsControlledBox } from "@shared/types/values"
 
 export interface ProcessHistoricRepository {
-  create(data: CreateProcessHistoricDTO): Promise<ProcessHistoric | null>
+  create(data: CreateProcessHistoricDTO): Promise<ProcessHistoric>
   delete(id: string): Promise<void>
   findById(id: string): Promise<ProcessHistoric | null>
   findAsADetailsById(id: string): Promise<DetailsProcessHistoryDTO | null>
