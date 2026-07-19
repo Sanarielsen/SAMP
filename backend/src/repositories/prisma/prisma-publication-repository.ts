@@ -5,17 +5,54 @@ import { PublicationRepository } from "@/repositories/publication-repository";
 import { 
   Publication,
   CreatePublicationDTO,
-  PublicationDetails, 
+  PublicationDetails,
+  UpdatePublicationDTO, 
 } from "@shared/types/publication";
 
 
 export class PrismaPublicationRepository implements PublicationRepository {
-  create(data: CreatePublicationDTO): Promise<Publication> {
-    throw new Error("Method not implemented.");
+  async create(data: CreatePublicationDTO): Promise<Publication> {
+    return await prisma.publication.create({
+      data
+    })
   }
+
   async createTransferImportedProcess(data: CreatePublicationDTO): Promise<Publication> {
     return await prisma.publication.create({
       data
+    })
+  }
+
+  async update(data: UpdatePublicationDTO): Promise<Publication> {
+    return await prisma.publication.update({
+      where: {
+        id: data.id
+      },
+      data
+    })
+  }
+
+  async delete(id: string): Promise<void> {
+    await prisma.publication.delete({
+      where: {
+        id
+      },
+    })
+  }
+
+  async findById(id: string): Promise<Publication | null> {
+    return await prisma.publication.findUnique({
+      where: {
+        id
+      }
+    })
+  }
+
+  async findByProcessNumber(processNumber: string): Promise<Publication | null> {
+    return await prisma.publication.findUnique({
+      where: {
+        processNumber
+      }
     })
   }
 
@@ -100,15 +137,12 @@ export class PrismaPublicationRepository implements PublicationRepository {
 
       include: {
         client: true,
-        processType: true,
-        processHistoric: true,
+        processType: true
       },
     })
 
     return publications.map((publication) => ({
       id: publication.id,
-      processHistoryId: publication.processHistoryId,
-      processHistoryMagazine: publication.processHistoric.numberMagazine,
       processTypeId: publication.processTypeId,
       processTypeName: publication.processType!.name,
       processTypeSlug: publication.processType!.slug,
@@ -119,6 +153,7 @@ export class PrismaPublicationRepository implements PublicationRepository {
       holder: publication.holder,
       brand: publication.brand,
       nature: publication.nature,
+      presentation: publication.presentation,
       specification: publication.specification,
       publicationDate: publication.publicationDate, 
       depositDate: publication.depositDate, 

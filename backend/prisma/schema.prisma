@@ -78,13 +78,13 @@ model ProcessCategory {
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
 
-  processHistories  ProcessHistoric[]
+  processHistories  ProcessHistory[]
   importedProcess   ImportedProcess[]
 
   @@map("process_categories")
 }
 
-model ProcessHistoric {
+model ProcessHistory {
   id String @id @default(uuid())
 
   numberMagazine String   @unique
@@ -96,9 +96,8 @@ model ProcessHistoric {
   category ProcessCategory @relation(fields:[categoryId], references: [id])
 
   importedProcess ImportedProcess[]
-  publications    Publication[]
 
-  @@map("process_historics")
+  @@map("process_histories")
 }
 
 model ProcessType {
@@ -144,7 +143,7 @@ model ImportedProcess {
   grantDate       DateTime?
   createdAt       DateTime  @default(now())
 
-  processHistoric ProcessHistoric @relation(fields: [processHistoricId], references: [id])
+  processHistoric ProcessHistory @relation(fields: [processHistoricId], references: [id])
   processCategory ProcessCategory @relation(fields: [processCategoryId], references: [id])
   processType     ProcessType?    @relation(fields: [processTypeId], references: [id])
   user            User            @relation(fields: [importedByUser], references: [id])
@@ -154,14 +153,14 @@ model ImportedProcess {
 
 model Publication {
   id                String @id @default(cuid())
-  processHistoryId  String
   processTypeId     String
   clientId          String
 
-  processNumber String
+  processNumber String @unique
   holder        String
   brand         String
   nature        String
+  presentation  String
   specification String @db.Text
  
   publicationDate DateTime?
@@ -172,7 +171,6 @@ model Publication {
   updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
 
-  processHistoric ProcessHistoric @relation(fields: [processHistoryId], references: [id])
   processType     ProcessType?    @relation(fields: [processTypeId], references: [id])
   client          Client @relation(fields: [clientId], references: [id])
 

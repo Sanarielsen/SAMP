@@ -1,6 +1,5 @@
 import { PublicationRepository } from "@/repositories/publication-repository";
-import { ProcessImportedRepository } from "@/repositories/process-imported-repository";
-import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
+import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
 import { ClientRepository } from "@/repositories/client-repository";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
@@ -15,8 +14,7 @@ import {
 export class PostPublicationTransferImportedProcessUseCase {
   constructor(
     private publicationRepository: PublicationRepository,
-    private processImportedRepository: ProcessImportedRepository,
-    private processHistoryRepository: ProcessHistoricRepository,
+    private processImportedRepository: ImportedProcessRepository,
     private clientRepository: ClientRepository
   ) {}
 
@@ -27,24 +25,19 @@ export class PostPublicationTransferImportedProcessUseCase {
       throw new ResourceNotFoundError()
     }
 
-    const processHistory = await this.processHistoryRepository.findById(data.processHistoricId)
-    if (!processHistory) {
-      throw new ResourceNotFoundError()
-    }
-
     const processImported = await this.processImportedRepository.findById(data.importedProcessId)
     if (!processImported) {
       throw new ResourceNotFoundError()
     }
 
     const newPublication: CreatePublicationDTO = {
-      processHistoryId: processHistory.id,
       processTypeId: processImported.processTypeId,
       clientId: client.id!,
       processNumber: processImported.processNumber,
       holder: processImported.holder,
       brand: processImported.markName ?? "",
       nature: processImported.nature ?? "",
+      presentation: "",
       specification: processImported.specification ?? "",
       publicationDate: processImported.receivedDate ?? null,
       depositDate: processImported.depositDate ?? null,

@@ -159,7 +159,7 @@ export default function NewProcessAutomatic() {
                   options={ isSuccessHistoricWithOptions ?
                     processHistoricWithOptions :
                     []
-                   }
+                  }
                   tooltipTitle="Visualizar revista selecionada"
                   detailIcon={<ImportContactsIcon fontSize="large"/>}
                   onDetailClick={() =>

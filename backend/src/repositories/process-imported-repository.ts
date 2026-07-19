@@ -1,14 +1,18 @@
 import { 
   CreatedProcessImportedDTO,
   DetailsProcessImportedDTO,
-  ProcessImported,  
+  ImportedProcess,
+  ImportedProcessFilter,  
 } from "@shared/types/processImported"
 import { OptionsControlledBox } from "@shared/types/values"
 
 
-export interface ProcessImportedRepository {
+export interface ImportedProcessRepository {
+  create(data: CreatedProcessImportedDTO): Promise<ImportedProcess>
   createManyAsImport(importedProcesses: CreatedProcessImportedDTO[]): Promise<number>
-  findById(id: string): Promise<ProcessImported | null> 
+  findManyByFilterWithSearch(search: string, filter: ImportedProcessFilter): Promise<ImportedProcess[]>
+  findById(id: string): Promise<ImportedProcess | null> 
   findByIdDetails(id: string): Promise<DetailsProcessImportedDTO | null> 
   findManyByProcessHistoricIdAsAOption(processHistoricId: string, search?: string): Promise<OptionsControlledBox[]> 
+  deleteManyByProcessHistoricId(processHistoricId: string): Promise<void>
 }

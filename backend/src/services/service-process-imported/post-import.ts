@@ -2,8 +2,8 @@ import { PDFParse } from "pdf-parse";
 import path from "node:path";
 
 import { StorageProvider } from "@/storage/storage-provider";
-import { ProcessImportedRepository } from "@/repositories/process-imported-repository";
-import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
+import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
+import { ProcessHistoryRepository } from "@/repositories/process-historic-repository";
 import { ProcessCategoryRepository } from "@/repositories/process-category-repository";
 import { ImportDataError } from "@/services/errors/import-data-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
@@ -11,21 +11,21 @@ import { importProcessesWithAPI } from "@/scripts/import-processes-with-api";
 import { checkMagazineWillBeUploaded } from "@/utils/checkMagazineWillBeUploaded";
 
 import { CreatedProcessImportedDTO, CreateProcessImportedDTO } from "@shared/types/processImported";
-import { ProcessHistoric } from "@shared/types/processHistoric";
+import { ProcessHistory } from "@shared/types/processHistory";
 import { getRequiredEnv } from "@/utils/getRequiredEnv";
 
 
 export class CreateProcessAsImportUseCase {
   constructor(
-    private importedProcessRepository: ProcessImportedRepository,
-    private processHistoricRepository: ProcessHistoricRepository,
+    private importedProcessRepository: ImportedProcessRepository,
+    private processHistoricRepository: ProcessHistoryRepository,
     private processCategoryRepository: ProcessCategoryRepository,
     private storageProvider: StorageProvider,
   ) {}
 
   async execute({ userId, categoryId, numberMagazine, fileMagazine }: CreateProcessImportedDTO): Promise<number | null> {
     let importedProcesses: CreatedProcessImportedDTO[]
-    let magazineHistoric: ProcessHistoric | null;
+    let magazineHistoric: ProcessHistory | null;
     let importedRowsQuantity: number = 0;
 
     let fileName = numberMagazine + '.txt'
