@@ -2,14 +2,14 @@ export type ProcessType = {
   id: string          
   name: string
   slug: string
-  description: string
+  description: string | null
   createdAt: Date
-  updatedAt: Date
+  updatedAt: Date | null
   deletedAt: Date | null
 }
 
 export type ProcessTypeCreateDTO = {
   name: string
   slug: string        
-  description: string 
+  description?: string | null
 }

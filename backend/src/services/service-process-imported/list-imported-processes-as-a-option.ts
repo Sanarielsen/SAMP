@@ -1,5 +1,5 @@
-import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
-import { ProcessImportedRepository } from "@/repositories/process-imported-repository";
+import { ProcessHistoryRepository } from "@/repositories/process-historic-repository";
+import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
@@ -8,8 +8,8 @@ import { OptionsControlledBox } from "@shared/types/values";
 
 export class ListImportedProcessesAsAOptionUseCase {
   constructor(
-    private importedProcessRepository: ProcessImportedRepository,
-    private processHistoricRepository: ProcessHistoricRepository,
+    private importedProcessRepository: ImportedProcessRepository,
+    private processHistoricRepository: ProcessHistoryRepository,
   ) {}
 
   async execute(processHistoricId: string, search?: string): Promise<OptionsControlledBox[]> {

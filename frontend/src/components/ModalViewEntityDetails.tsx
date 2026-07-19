@@ -79,16 +79,21 @@ export default function ModalViewEntityDetails<T>({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {fields.map((field) => (
-                  <TableRow key={field.title}>
-                    <TableCell>
-                      {field.title}
-                    </TableCell>
-                    <TableCell>
-                      {field.get(data)}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {fields
+                  .filter((field) => {
+                    const value = field.get(data)
+                    return value !== undefined && value !== null && value !== ""
+                  })
+                  .map((field) => (
+                    <TableRow key={field.title}>
+                      <TableCell>
+                        {field.title}
+                      </TableCell>
+                      <TableCell>
+                        {field.get(data)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>

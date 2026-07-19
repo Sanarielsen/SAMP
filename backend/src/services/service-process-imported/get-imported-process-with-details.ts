@@ -1,4 +1,4 @@
-import { ProcessImportedRepository } from "@/repositories/process-imported-repository";
+import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
@@ -7,7 +7,7 @@ import { DetailsProcessImportedDTO } from "@shared/types/processImported";
 
 export class GetProcessImportedWithDetailsUseCase {
   constructor(
-    private importedProcessRepository: ProcessImportedRepository
+    private importedProcessRepository: ImportedProcessRepository
   ) {}
 
   async execute(id: string): Promise<DetailsProcessImportedDTO> {

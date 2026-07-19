@@ -10,7 +10,7 @@ import {
 
 
 async function postPublicationTransferImportedProcess(payload: CreatePublicationTransferImportedProcessDTO): Promise<AxiosResponse<Publication>> {
-  return await api.post(`/publication/process/imported`, payload)
+  return await api.post(`/publication/imported`, payload)
 }
 
 export function useMutationPostPublicationTransferImportedProcess(

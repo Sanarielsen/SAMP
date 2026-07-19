@@ -38,8 +38,8 @@ export default function DataTablePublicationColumns({
         `${row.clientName} - ${formatDocument(row.clientProtocol)}`,
     },
     {
-      field: "processHistoryMagazine",
-      headerName: "Revista",
+      field: "holder",
+      headerName: "Titular",
       flex: 1,
     },
     {

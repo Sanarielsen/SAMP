@@ -1,20 +1,25 @@
 import { randomUUID } from "node:crypto";
 
-import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
+import { InMemoryProcessCategoryRepository } from "@/repositories/in-memory/in-memory-process-category";
+import { ProcessHistoryRepository } from "@/repositories/process-historic-repository";
 
 import { 
   CreateProcessHistoricDTO, 
-  ProcessHistoric, 
-  DetailsProcessHistoryDTO 
-} from "@shared/types/processHistoric";
+  ProcessHistory, 
+  ProcessHistoryDetailDTO 
+} from "@shared/types/processHistory";
 import { OptionsControlledBox } from "@shared/types/values";
 
 
-export class InMemoryProcessHistoryRepository implements ProcessHistoricRepository {
-  public items: ProcessHistoric[] = []
+export class InMemoryProcessHistoryRepository implements ProcessHistoryRepository {
+  constructor(
+    private processCategoryRepository: InMemoryProcessCategoryRepository,
+  ) {}
+
+  public items: ProcessHistory[] = []
   
-  async create(data: CreateProcessHistoricDTO): Promise<ProcessHistoric> {
-    const newData: ProcessHistoric = {
+  async create(data: CreateProcessHistoricDTO): Promise<ProcessHistory> {
+    const newData: ProcessHistory = {
       ...data,
       id: randomUUID(),
       createdAt: new Date(Date.now()),
@@ -24,19 +29,42 @@ export class InMemoryProcessHistoryRepository implements ProcessHistoricReposito
         
     return newData
   }
-  delete(id: string): Promise<void> {
+  async delete(id: string): Promise<void> {
+    this.items = this.items.filter((item) => item.id !== id);
+  }
+  
+  async findById(id: string): Promise<ProcessHistory | null> {
+    const history = this.items.find(item => item.id == id)
+
+    if (!history) {
+      return null
+    }
+
+    return history
+  }
+
+  findAsADetailsById(id: string): Promise<ProcessHistoryDetailDTO | null> {
     throw new Error("Method not implemented.");
   }
-  findById(id: string): Promise<ProcessHistoric | null> {
-    throw new Error("Method not implemented.");
+
+  async findManyWithDetails(): Promise<ProcessHistoryDetailDTO[]> {
+    return this.items.map((history) => {
+      const category = this.processCategoryRepository.items.find(
+        (category) => category.id === history.categoryId,
+      );
+
+      return {
+        ...history,
+        categoryName: category?.name ?? "",
+      };
+    });
   }
-  findAsADetailsById(id: string): Promise<DetailsProcessHistoryDTO | null> {
-    throw new Error("Method not implemented.");
-  }
+
   findManyAsAOption(): Promise<OptionsControlledBox[]> {
     throw new Error("Method not implemented.");
   }
-  findByNumberMagazine(numberMagazine: string): Promise<ProcessHistoric | null> {
+
+  findByNumberMagazine(numberMagazine: string): Promise<ProcessHistory | null> {
     throw new Error("Method not implemented.");
   }
 }

@@ -12,9 +12,10 @@ import {
 
 import BusinessIcon from '@mui/icons-material/Business';
 
+import BoxError from "@/components/BoxError";
+import BoxIdle from "@/components/BoxIdle";
+import BoxLoading from "@/components/BoxLoading";
 import type { StateQuery } from "@/types/stateQuery";
-import BoxError from "./BoxError";
-import BoxLoading from "./BoxLoading";
 
 
 interface DataTableProps<T extends GridValidRowModel> {
@@ -38,6 +39,12 @@ export default function DataTable<T extends { id: number | string }>({
   if ( state == "ERROR" ) {
     return (
       <BoxError description="Erro ao carregar os dados. Tente novamente." />
+    )
+  }
+
+  if ( state == "IDLE" ) {
+    return (
+      <BoxIdle description="Preencha os filtros para exibir os dados dos processos importados." />
     )
   }
 
