@@ -1,15 +1,16 @@
 import {
   CreateProcessHistoricDTO,
-  DetailsProcessHistoryDTO,
-  ProcessHistoric
-} from "@shared/types/processHistoric"
+  ProcessHistoryDetailDTO,
+  ProcessHistory
+} from "@shared/types/processHistory"
 import { OptionsControlledBox } from "@shared/types/values"
 
-export interface ProcessHistoricRepository {
-  create(data: CreateProcessHistoricDTO): Promise<ProcessHistoric>
+export interface ProcessHistoryRepository {
+  create(data: CreateProcessHistoricDTO): Promise<ProcessHistory>
   delete(id: string): Promise<void>
-  findById(id: string): Promise<ProcessHistoric | null>
-  findAsADetailsById(id: string): Promise<DetailsProcessHistoryDTO | null>
+  findById(id: string): Promise<ProcessHistory | null>
+  findAsADetailsById(id: string): Promise<ProcessHistoryDetailDTO | null>
+  findManyWithDetails(): Promise<ProcessHistoryDetailDTO[]>
   findManyAsAOption(): Promise<OptionsControlledBox[]>
-  findByNumberMagazine(numberMagazine: string): Promise<ProcessHistoric | null>
+  findByNumberMagazine(numberMagazine: string): Promise<ProcessHistory | null>
 }

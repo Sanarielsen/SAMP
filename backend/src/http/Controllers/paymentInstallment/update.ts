@@ -23,8 +23,6 @@ export async function updatePaymentInstallment(request: FastifyRequest, reply: F
   
   const { id } = request.params as { id: string }
 
-  console.log(id, resultBody)
-
   try {
     const useCase = makeUpdatePaymentInstallmentUseCase();
 

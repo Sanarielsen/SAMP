@@ -1,31 +1,37 @@
-export type ProcessImported = {
-  id:                string
-  processHistoricId: string
-  processCategoryId: string
-  processTypeId:     string
+  export type ImportedProcess = {
+    id:                string
+    processHistoricId: string
+    processCategoryId: string
+    processTypeId:     string
 
-  processNumber:                    string
-  holder:                           string        
-  dispatchDetails?:                 string | null
-  attorney?:                        string| null
-  presentation?:                    string| null
-  nature?:                          string| null
-  markName?:                        string | null
-  ncl?:                             string| null
-  specification?:                   string| null
-  translatedSpecification?:         string| null
-  internationalRegistrationNumber?: string| null
-  cfe?:                             string | null 
+    processNumber:                    string
+    holder:                           string        
+    dispatchDetails?:                 string | null
+    attorney?:                        string | null
+    presentation?:                    string | null
+    nature?:                          string | null
+    markName?:                        string | null
+    ncl?:                             string | null
+    specification?:                   string | null
+    translatedSpecification?:         string | null
+    internationalRegistrationNumber?: string | null
+    cfe?:                             string | null 
 
-  status:         string
-  sourceText:     string
-  sourcePage:     number
-  importedByUser: string
-  depositDate?:   Date | null
-  receivedDate?:  Date | null
-  grantDate?:     Date | null
-  createdAt:      Date | null
-}
+    status:         string
+    sourceText:     string
+    sourcePage:     number
+    importedByUser: string
+    depositDate?:   Date | null
+    receivedDate?:  Date | null
+    grantDate?:     Date | null
+    createdAt:      Date | null
+  }
+
+  export type ImportedProcessListWithDetails = ImportedProcess & {
+    categoryName: string
+    typeName: string
+    magazineNumber: string
+  };
 
 export type CreateProcessImportedDTO = {
   userId:         string
@@ -68,4 +74,10 @@ export type CreatedProcessImportedDTO = {
   depositDate?:   Date | null
   receivedDate?:  Date | null
   grantDate?:     Date | null
+}
+
+export type ImportedProcessFilter = {
+  categoryId: string,
+  typeId?: string,
+  historyId?: string
 }
