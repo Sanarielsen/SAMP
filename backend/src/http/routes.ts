@@ -60,6 +60,7 @@ import { getProcessHistoryDetails } from "./Controllers/processCategory/get-deta
 import { getProcessImportedDetails } from "./Controllers/processImported/get-with-details";
 import { postPublicationTransferImportedProcess } from "./Controllers/publication/post-transfer-imported-process";
 import { listPublicationDetails } from "./Controllers/publication/list";
+import { postQueryImportedProcessWithDetails } from "./Controllers/processImported/post-query-with-details";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -115,6 +116,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.delete('/payment/:id', {onRequest: [verifyJWT]}, deletePayment)
 
   app.post('/process/import', {onRequest: [verifyJWT]}, postProcessAsAImporter)
+  app.post('/process/import/query', {onRequest: [verifyJWT]}, postQueryImportedProcessWithDetails)
   app.get('/process/imported/:id', {onRequest: [verifyJWT]}, getProcessImportedDetails)
   app.get('/process/history/:id', {onRequest: [verifyJWT]}, getProcessHistoryDetails)
 

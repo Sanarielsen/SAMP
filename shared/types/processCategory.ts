@@ -7,3 +7,9 @@ export type ProcessCategory = {
   updatedAt: Date | null
   deletedAt: Date | null
 }
+
+export type ProcessCategoryCreateDTO = {
+  name: string,
+  description: string,
+  slug: string,
+}

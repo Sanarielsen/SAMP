@@ -1,4 +1,4 @@
-import { PrismaProcessImportedRepository } from '@/repositories/prisma/prisma-process-imported-repository'
+import { PrismaProcessImportedRepository } from '@/repositories/prisma/prisma-imported-process-repository'
 import { GetProcessImportedWithDetailsUseCase } from '@/services/service-process-imported/get-imported-process-with-details'
 
 
