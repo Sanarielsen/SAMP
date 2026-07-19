@@ -27,9 +27,17 @@ export class InMemoryProcessHistoryRepository implements ProcessHistoricReposito
   delete(id: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  findById(id: string): Promise<ProcessHistoric | null> {
-    throw new Error("Method not implemented.");
+  
+  async findById(id: string): Promise<ProcessHistoric | null> {
+    const history = this.items.find(item => item.id == id)
+
+    if (!history) {
+      return null
+    }
+
+    return history
   }
+
   findAsADetailsById(id: string): Promise<DetailsProcessHistoryDTO | null> {
     throw new Error("Method not implemented.");
   }

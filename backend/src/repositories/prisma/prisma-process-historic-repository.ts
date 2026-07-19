@@ -12,7 +12,7 @@ import { OptionsControlledBox } from "@shared/types/values";
 
 
 export class PrismaProcessHistoricRepository implements ProcessHistoricRepository {
-  async create(data: CreateProcessHistoricDTO): Promise<ProcessHistoric | null> {
+  async create(data: CreateProcessHistoricDTO): Promise<ProcessHistoric> {
     return await prisma.processHistoric.create({
       data
     })

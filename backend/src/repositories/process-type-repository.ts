@@ -6,5 +6,5 @@ import {
 
 export interface ProcessTypeRepository {
   create(data: ProcessTypeCreateDTO): Promise<ProcessType>
-  findById(id: string): Promise<ProcessType>
+  findById(id: string): Promise<ProcessType | null>
 }

@@ -2,7 +2,7 @@ import { PDFParse } from "pdf-parse";
 import path from "node:path";
 
 import { StorageProvider } from "@/storage/storage-provider";
-import { ProcessImportedRepository } from "@/repositories/process-imported-repository";
+import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
 import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
 import { ProcessCategoryRepository } from "@/repositories/process-category-repository";
 import { ImportDataError } from "@/services/errors/import-data-error";
@@ -17,7 +17,7 @@ import { getRequiredEnv } from "@/utils/getRequiredEnv";
 
 export class CreateProcessAsImportUseCase {
   constructor(
-    private importedProcessRepository: ProcessImportedRepository,
+    private importedProcessRepository: ImportedProcessRepository,
     private processHistoricRepository: ProcessHistoricRepository,
     private processCategoryRepository: ProcessCategoryRepository,
     private storageProvider: StorageProvider,

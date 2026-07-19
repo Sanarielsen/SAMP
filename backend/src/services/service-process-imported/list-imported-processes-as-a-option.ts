@@ -1,5 +1,5 @@
 import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
-import { ProcessImportedRepository } from "@/repositories/process-imported-repository";
+import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
@@ -8,7 +8,7 @@ import { OptionsControlledBox } from "@shared/types/values";
 
 export class ListImportedProcessesAsAOptionUseCase {
   constructor(
-    private importedProcessRepository: ProcessImportedRepository,
+    private importedProcessRepository: ImportedProcessRepository,
     private processHistoricRepository: ProcessHistoricRepository,
   ) {}
 

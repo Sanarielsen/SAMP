@@ -1,4 +1,4 @@
-import { PrismaProcessImportedRepository } from '@/repositories/prisma/prisma-process-imported-repository'
+import { PrismaProcessImportedRepository } from '@/repositories/prisma/prisma-imported-process-repository'
 import { PrismaProcessHistoricRepository } from '@/repositories/prisma/prisma-process-historic-repository'
 import { PrismaProcessCategoryRepository } from '@/repositories/prisma/prisma-process-category-repository'
 import { LocalStorageProvider } from '@/storage/local-storage-provider'

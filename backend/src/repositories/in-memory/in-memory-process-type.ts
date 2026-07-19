@@ -22,7 +22,13 @@ export class InMemoryProcessTypeRepository implements ProcessTypeRepository {
     return newData
   }
   
-  findById(id: string): Promise<ProcessType> {
-    throw new Error("Method not implemented.");
+  async findById(id: string): Promise<ProcessType | null> {
+    const type = this.items.find(item => item.id == id)
+
+    if (!type) {
+      return null
+    }
+
+    return type
   }
 }

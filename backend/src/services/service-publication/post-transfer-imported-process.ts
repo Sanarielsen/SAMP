@@ -1,5 +1,5 @@
 import { PublicationRepository } from "@/repositories/publication-repository";
-import { ProcessImportedRepository } from "@/repositories/process-imported-repository";
+import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
 import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
 import { ClientRepository } from "@/repositories/client-repository";
 
@@ -15,7 +15,7 @@ import {
 export class PostPublicationTransferImportedProcessUseCase {
   constructor(
     private publicationRepository: PublicationRepository,
-    private processImportedRepository: ProcessImportedRepository,
+    private processImportedRepository: ImportedProcessRepository,
     private processHistoryRepository: ProcessHistoricRepository,
     private clientRepository: ClientRepository
   ) {}
