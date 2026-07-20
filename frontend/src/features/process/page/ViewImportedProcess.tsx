@@ -28,6 +28,9 @@ import {
 } from "@/features/process/schema/filterImportedProcesses";
 
 import type { ImportedProcessFilter } from "@shared/types/processImported";
+import ModalViewEntityDetails from "@/components/ModalViewEntityDetails";
+import { processImportedFields } from "@/features/process/utils/getRowDetailProcessImported";
+import { useDetailsModal } from "@/hooks/useDetailsModal";
 
 
 export default function ViewImportedProcess() {
@@ -100,6 +103,8 @@ export default function ViewImportedProcess() {
     isError ? "ERROR" : 
     !isSubmitted ? "IDLE"
     : 'IDLE'
+
+  const { openDetails, closeDetails, payload } = useDetailsModal();
 
   return (
     <>
@@ -183,11 +188,24 @@ export default function ViewImportedProcess() {
               importedProcessWithDetails : []
             }
             columns={DataTableImportedProcessColumns({
-              onClickSeeItem: (current) => console.log("Ver os dados dessa importacao: ", current),
+              onClickSeeItem: (currentData) =>
+                openDetails({
+                  title: 'Visualizando o processo importado',
+                  fields: processImportedFields,
+                  data: currentData,
+                }),
             })}
           />
         </Box>
       </Box>
+
+      <ModalViewEntityDetails
+        open={Boolean(payload)}
+        title={payload?.title ?? ""}
+        data={payload?.data}
+        fields={payload?.fields ?? []}
+        handleClose={closeDetails}
+      />
 
       <ModalNewMagazine
         open={modalNewMagazine}
