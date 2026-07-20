@@ -61,6 +61,7 @@ import { getProcessImportedDetails } from "./Controllers/processImported/get-wit
 import { postPublicationTransferImportedProcess } from "./Controllers/publication/post-transfer-imported-process";
 import { listPublicationDetails } from "./Controllers/publication/list";
 import { postQueryImportedProcessWithDetails } from "./Controllers/processImported/post-query-with-details";
+import { listProcessTypeAsAnOption } from "./Controllers/processType/list-as-an-option";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -123,10 +124,11 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/publication/process/imported', {onRequest: [verifyJWT]}, postPublicationTransferImportedProcess)
   app.get('/publications', {onRequest: [verifyJWT]}, listPublicationDetails)
 
+  app.get(`/process/category/options`, {onRequest: [verifyJWT]}, listProcessCategoryAsAOptions)
+  app.get(`/process/type/options`, {onRequest: [verifyJWT]}, listProcessTypeAsAnOption)
   app.get('/process/historic/options', {onRequest: [verifyJWT]}, listProcessHistoricAsAOptions)
   app.get('/process/imported/:id/options', {onRequest: [verifyJWT]}, listImportedProcessesAsAOption)
 
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
   app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)
-  app.get(`/process/category/options`, {onRequest: [verifyJWT]}, listProcessCategoryAsAOptions)
 }
