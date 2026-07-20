@@ -66,7 +66,7 @@ export class PrismaProcessImportedRepository implements ImportedProcessRepositor
         processCategory: true,
         processType: true
       },
-      take: 10,
+      take: 100,
     })
     
     return importedProcesses.map((process) => ({
