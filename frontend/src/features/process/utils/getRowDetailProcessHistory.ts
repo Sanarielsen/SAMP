@@ -1,24 +1,24 @@
 import type { Field } from "@/utils/field";
 import { formatDateTimeBrazil } from "@/utils/formatDateTimeBrazil";
 
-import type { DetailsProcessHistoryDTO } from "@shared/types/processHistoric";
+import type { ProcessHistoryDetailDTO } from "@shared/types/processHistoric";
 
 
-export const processHistoryFields: Field<DetailsProcessHistoryDTO>[] = [
+export const processHistoryFields: Field<ProcessHistoryDetailDTO>[] = [
   {
     title: 'Descricão',
-    get: (field: DetailsProcessHistoryDTO) => field.categoryName,
+    get: (field: ProcessHistoryDetailDTO) => field.categoryName,
   },
     {
     title: 'Número da revista',
-    get: (field: DetailsProcessHistoryDTO) => field.numberMagazine,
+    get: (field: ProcessHistoryDetailDTO) => field.numberMagazine,
   },
   {
     title: 'Nome do arquivo',
-    get: (field: DetailsProcessHistoryDTO) => field.fileName,
+    get: (field: ProcessHistoryDetailDTO) => field.fileName,
   },
   {
     title: 'Criado em',
-    get: (field: DetailsProcessHistoryDTO) => formatDateTimeBrazil(field.createdAt)
+    get: (field: ProcessHistoryDetailDTO) => formatDateTimeBrazil(field.createdAt)
   },
 ]

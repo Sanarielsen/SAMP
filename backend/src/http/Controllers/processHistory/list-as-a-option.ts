@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { makeListProcessHistoricAsAOptionsUseCase } from '@/services/factories/process-historic/make-list-as-a-option';
+import { makeListProcessHistoricAsAOptionsUseCase } from '@/services/factories/process-history/make-list-as-a-option';
 
 
 export async function listProcessHistoricAsAOptions(_: FastifyRequest, reply: FastifyReply) {

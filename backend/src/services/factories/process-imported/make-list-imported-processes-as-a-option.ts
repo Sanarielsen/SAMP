@@ -1,5 +1,5 @@
 import { PrismaProcessImportedRepository } from '@/repositories/prisma/prisma-imported-process-repository'
-import { PrismaProcessHistoricRepository } from '@/repositories/prisma/prisma-process-historic-repository'
+import { PrismaProcessHistoricRepository } from '@/repositories/prisma/prisma-process-history-repository'
 import { ListImportedProcessesAsAOptionUseCase } from '@/services/service-process-imported/list-imported-processes-as-a-option'
 
 

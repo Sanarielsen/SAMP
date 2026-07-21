@@ -10,10 +10,10 @@ import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/in-m
 import { InMemoryProcessCategoryRepository } from "@/repositories/in-memory/in-memory-process-category";
 import { InMemoryProcessHistoryRepository } from "@/repositories/in-memory/in-memory-process-history";
 import { InMemoryProcessTypeRepository } from "@/repositories/in-memory/in-memory-process-type";
-import { makeImportedProcess } from "@/services/factories/process-Imported/make-entity";
+import { makeImportedProcess } from "@/services/factories/process-imported/make-entity";
 import { makeProcessCategory } from "@/services/factories/process-category/make-entity";
 import { makeProcessType } from "@/services/factories/process-type/make-entity";
-import { makeProcessHistory } from "@/services/factories/process-historic/make-entity";
+import { makeProcessHistory } from "@/services/factories/process-history/make-entity";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 

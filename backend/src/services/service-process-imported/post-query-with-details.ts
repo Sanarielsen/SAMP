@@ -1,7 +1,7 @@
 import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
 import { ProcessCategoryRepository } from "@/repositories/process-category-repository";
 import { ProcessTypeRepository } from "@/repositories/process-type-repository";
-import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
+import { ProcessHistoryRepository } from "@/repositories/process-historic-repository";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
@@ -16,7 +16,7 @@ export class PostQueryImportedProcessDetailsUseCase {
     private importedProcessRepository: ImportedProcessRepository,
     private processCategoryRepository: ProcessCategoryRepository,
     private processTypeRepository: ProcessTypeRepository,
-    private processHistoryRepository: ProcessHistoricRepository,
+    private processHistoryRepository: ProcessHistoryRepository,
   ) {}
 
   async execute(

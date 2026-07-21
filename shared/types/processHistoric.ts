@@ -17,9 +17,9 @@ export type CreateProcessHistoricDTO = {
   fileName:       string
 }
 
-export type DetailsProcessHistoryDTO = {
-  categoryName:   string
+export type ProcessHistoryDetailDTO = {
   numberMagazine: string
+  categoryName:   string
   fileName:       string
   createdAt:      Date
 }

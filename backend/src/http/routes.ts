@@ -54,7 +54,7 @@ import { listAppointmentsByOrder } from "./Controllers/appointment/list-by-order
 import { listRecentAppointments } from "./Controllers/appointment/list-recents";
 import { postProcessAsAImporter } from "./Controllers/processImported/post-many";
 import { listProcessCategoryAsAOptions } from "./Controllers/processCategory/list-options";
-import { listProcessHistoricAsAOptions } from "./Controllers/processHistoric/list-as-a-option";
+import { listProcessHistoricAsAOptions } from "./Controllers/processHistory/list-as-a-option";
 import { listImportedProcessesAsAOption } from "./Controllers/processImported/list-imported-processes-as-a-option";
 import { getProcessHistoryDetails } from "./Controllers/processCategory/get-details";
 import { getProcessImportedDetails } from "./Controllers/processImported/get-with-details";
@@ -62,6 +62,7 @@ import { postPublicationTransferImportedProcess } from "./Controllers/publicatio
 import { listPublicationDetails } from "./Controllers/publication/list";
 import { postQueryImportedProcessWithDetails } from "./Controllers/processImported/post-query-with-details";
 import { listProcessTypeAsAnOption } from "./Controllers/processType/list-as-an-option";
+import { listProcessHistoryWithDetails } from "./Controllers/processHistory/list-with-details";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -120,6 +121,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/process/import/query', {onRequest: [verifyJWT]}, postQueryImportedProcessWithDetails)
   app.get('/process/imported/:id', {onRequest: [verifyJWT]}, getProcessImportedDetails)
   app.get('/process/history/:id', {onRequest: [verifyJWT]}, getProcessHistoryDetails)
+  app.get('/process/histories', {onRequest: [verifyJWT]}, listProcessHistoryWithDetails)
 
   app.post('/publication/process/imported', {onRequest: [verifyJWT]}, postPublicationTransferImportedProcess)
   app.get('/publications', {onRequest: [verifyJWT]}, listPublicationDetails)

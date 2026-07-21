@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { StorageProvider } from "@/storage/storage-provider";
 import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
-import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
+import { ProcessHistoryRepository } from "@/repositories/process-historic-repository";
 import { ProcessCategoryRepository } from "@/repositories/process-category-repository";
 import { ImportDataError } from "@/services/errors/import-data-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
@@ -18,7 +18,7 @@ import { getRequiredEnv } from "@/utils/getRequiredEnv";
 export class CreateProcessAsImportUseCase {
   constructor(
     private importedProcessRepository: ImportedProcessRepository,
-    private processHistoricRepository: ProcessHistoricRepository,
+    private processHistoricRepository: ProcessHistoryRepository,
     private processCategoryRepository: ProcessCategoryRepository,
     private storageProvider: StorageProvider,
   ) {}

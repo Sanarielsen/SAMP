@@ -15,7 +15,7 @@ import { InMemoryClientsRepository } from '@/repositories/in-memory/in-memory-cl
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-user-repository';
 import { InMemoryUserRoleRepository } from '@/repositories/in-memory/in-memory-user-role-repository';
 import { makeClient } from '@/services/factories/client/make-entity';
-import { makeProcessHistory } from '@/services/factories/process-historic/make-entity';
+import { makeProcessHistory } from '@/services/factories/process-history/make-entity';
 import { makeProcessType } from '@/services/factories/process-type/make-entity';
 import { makePublication } from '@/services/factories/publication/make-entity';
 import { makeUser } from '@/services/factories/user/make-entity';
