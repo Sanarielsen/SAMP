@@ -18,6 +18,7 @@ export type CreateProcessHistoricDTO = {
 }
 
 export type ProcessHistoryDetailDTO = {
+  id:             string
   numberMagazine: string
   categoryName:   string
   fileName:       string
