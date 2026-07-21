@@ -43,6 +43,7 @@ export class PrismaProcessHistoricRepository implements ProcessHistoryRepository
     if (!processHistoric) return null;
 
     return {
+      id: processHistoric.id,
       fileName: processHistoric.fileName,
       numberMagazine: processHistoric.numberMagazine,
       createdAt: processHistoric.createdAt,
@@ -58,6 +59,7 @@ export class PrismaProcessHistoricRepository implements ProcessHistoryRepository
     })
 
     return processHistories.map( (history) => ({
+      id: history.id,
       numberMagazine: history.numberMagazine,
       categoryName: history.category.name,
       fileName: history.fileName,

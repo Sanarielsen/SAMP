@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { Box, Button } from "@mui/material";
 
+import { optionsQueryListProcessHistoryWithDetails } from "@/features/process/api/queryListProcessHistoryWithDetails";
+import DataTableProcessHistoryColumns from "@/features/process/components/DataTableProcessHistoryColumns";
 import ModalNewMagazine from "@/features/process/components/ModalNewMagazine";
 import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
@@ -13,10 +16,19 @@ export default function ViewImportedMagazine() {
   const [openToast, setOpenToast] = useState("")
   const [modalNewMagazine, setModalNewMagazine] = useState(false);
 
+  const {
+    data: processHistoricWithDetails,
+    isSuccess,
+    isError,
+    isLoading
+  } = useQuery(
+    optionsQueryListProcessHistoryWithDetails()
+  )
+
   const stateQuery = "SUCCESS"
-    // isSuccess ? "SUCCESS" : 
-    // isLoading ? "LOADING" :
-    // isError ? "ERROR" : "IDLE";
+    isSuccess ? "SUCCESS" : 
+    isLoading ? "LOADING" :
+    isError ? "ERROR" : "IDLE";
 
   return (
     <>
@@ -48,8 +60,13 @@ export default function ViewImportedMagazine() {
         <Box component="section" sx={{ p: 2}}>
           <DataTable
             state={stateQuery}
-            rows={[]}
-            columns={[]}
+            rows={isSuccess ? 
+              processHistoricWithDetails :
+              []
+            }
+            columns={DataTableProcessHistoryColumns({
+              onClickDeleteItem: (currentData) => console.log("Item a ser deletado: ", currentData)
+            })}
           />
         </Box>
       </Box>
