@@ -1,17 +1,17 @@
 import { prisma } from "@/lib/prisma";
 
-import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
+import { ProcessHistoryRepository } from "@/repositories/process-historic-repository";
 import { formatDateTimeBrazil } from "@/utils/formatSwitchDate";
 
 import { 
   CreateProcessHistoricDTO, 
-  DetailsProcessHistoryDTO, 
+  ProcessHistoryDetailDTO, 
   ProcessHistoric
 } from "@shared/types/processHistoric";
 import { OptionsControlledBox } from "@shared/types/values";
 
 
-export class PrismaProcessHistoricRepository implements ProcessHistoricRepository {
+export class PrismaProcessHistoricRepository implements ProcessHistoryRepository {
   async create(data: CreateProcessHistoricDTO): Promise<ProcessHistoric> {
     return await prisma.processHistoric.create({
       data
@@ -30,7 +30,7 @@ export class PrismaProcessHistoricRepository implements ProcessHistoricRepositor
     })
   }
 
-  async findAsADetailsById(id: string): Promise<DetailsProcessHistoryDTO | null> {
+  async findAsADetailsById(id: string): Promise<ProcessHistoryDetailDTO | null> {
     const processHistoric = await prisma.processHistoric.findUnique({
       where: {
         id
@@ -48,6 +48,21 @@ export class PrismaProcessHistoricRepository implements ProcessHistoricRepositor
       createdAt: processHistoric.createdAt,
       categoryName: processHistoric.category.name,
     }
+  }
+
+  async findManyWithDetails(): Promise<ProcessHistoryDetailDTO[]> {
+    const processHistories = await prisma.processHistoric.findMany({
+      include: {
+        category: true
+      }
+    })
+
+    return processHistories.map( (history) => ({
+      numberMagazine: history.numberMagazine,
+      categoryName: history.category.name,
+      fileName: history.fileName,
+      createdAt: history.createdAt,
+    }))
   }
 
   async findManyAsAOption(): Promise<OptionsControlledBox[]> {

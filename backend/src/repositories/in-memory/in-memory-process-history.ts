@@ -1,16 +1,21 @@
 import { randomUUID } from "node:crypto";
 
-import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
+import { InMemoryProcessCategoryRepository } from "@/repositories/in-memory/in-memory-process-category";
+import { ProcessHistoryRepository } from "@/repositories/process-historic-repository";
 
 import { 
   CreateProcessHistoricDTO, 
   ProcessHistoric, 
-  DetailsProcessHistoryDTO 
+  ProcessHistoryDetailDTO 
 } from "@shared/types/processHistoric";
 import { OptionsControlledBox } from "@shared/types/values";
 
 
-export class InMemoryProcessHistoryRepository implements ProcessHistoricRepository {
+export class InMemoryProcessHistoryRepository implements ProcessHistoryRepository {
+  constructor(
+    private processCategoryRepository: InMemoryProcessCategoryRepository,
+  ) {}
+
   public items: ProcessHistoric[] = []
   
   async create(data: CreateProcessHistoricDTO): Promise<ProcessHistoric> {
@@ -38,12 +43,27 @@ export class InMemoryProcessHistoryRepository implements ProcessHistoricReposito
     return history
   }
 
-  findAsADetailsById(id: string): Promise<DetailsProcessHistoryDTO | null> {
+  findAsADetailsById(id: string): Promise<ProcessHistoryDetailDTO | null> {
     throw new Error("Method not implemented.");
   }
+
+  async findManyWithDetails(): Promise<ProcessHistoryDetailDTO[]> {
+    return this.items.map((history) => {
+      const category = this.processCategoryRepository.items.find(
+        (category) => category.id === history.categoryId,
+      );
+
+      return {
+        ...history,
+        categoryName: category?.name ?? "",
+      };
+    });
+  }
+
   findManyAsAOption(): Promise<OptionsControlledBox[]> {
     throw new Error("Method not implemented.");
   }
+
   findByNumberMagazine(numberMagazine: string): Promise<ProcessHistoric | null> {
     throw new Error("Method not implemented.");
   }

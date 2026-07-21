@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { makeGetProcessImportedWithDetails } from '@/services/factories/process-Imported/make-get-imported-process-details';
+import { makeGetProcessImportedWithDetails } from '@/services/factories/process-imported/make-get-imported-process-details';
 
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 

@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { makeListImportProcessesAsAOption } from '@/services/factories/process-Imported/make-list-imported-processes-as-a-option';
+import { makeListImportProcessesAsAOption } from '@/services/factories/process-imported/make-list-imported-processes-as-a-option';
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 
 

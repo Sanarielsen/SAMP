@@ -1,15 +1,15 @@
-import { ProcessHistoricRepository } from "@/repositories/process-historic-repository";
+import { ProcessHistoryRepository } from "@/repositories/process-historic-repository";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
-import { DetailsProcessHistoryDTO } from "@shared/types/processHistoric";
+import { ProcessHistoryDetailDTO } from "@shared/types/processHistoric";
 
 
 export class GetProcessHistoryDetailsUseCase {
   constructor(
-    private processHistoricRepository: ProcessHistoricRepository,
+    private processHistoricRepository: ProcessHistoryRepository,
   ) {}
 
-  async execute(id: string): Promise<DetailsProcessHistoryDTO | null> {
+  async execute(id: string): Promise<ProcessHistoryDetailDTO | null> {
 
     const processHistory = await this.processHistoricRepository.findAsADetailsById(id)
 

@@ -1,5 +1,5 @@
-import { PrismaProcessHistoricRepository } from "@/repositories/prisma/prisma-process-historic-repository";
-import { GetProcessHistoryDetailsUseCase } from "@/services/service-process-historic/get-details";
+import { PrismaProcessHistoricRepository } from "@/repositories/prisma/prisma-process-history-repository";
+import { GetProcessHistoryDetailsUseCase } from "@/services/service-process-history/get-details";
 
 
 export function makeGetProcessHistoryDetailUseCase() {
