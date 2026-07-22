@@ -7,6 +7,7 @@ export type Publication = {
   holder:        string
   brand:         string
   nature:        string
+  presentation:  string
   specification: string
  
   publicationDate: Date | null
@@ -26,6 +27,7 @@ export type CreatePublicationDTO = {
   holder:        string
   brand:         string
   nature:        string
+  presentation:  string
   specification: string
  
   publicationDate: Date | null
@@ -53,6 +55,7 @@ export type PublicationDetails = {
   holder:        string
   brand:         string
   nature:        string
+  presentation:  string
   specification: string
  
   publicationDate: Date | null

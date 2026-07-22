@@ -39,6 +39,7 @@ export class PostPublicationTransferImportedProcessUseCase {
       holder: processImported.holder,
       brand: processImported.markName ?? "",
       nature: processImported.nature ?? "",
+      presentation: "",
       specification: processImported.specification ?? "",
       publicationDate: processImported.receivedDate ?? null,
       depositDate: processImported.depositDate ?? null,

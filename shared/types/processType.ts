@@ -2,7 +2,7 @@ export type ProcessType = {
   id: string          
   name: string
   slug: string
-  description?: string | null
+  description: string | null
   createdAt: Date
   updatedAt: Date | null
   deletedAt: Date | null
