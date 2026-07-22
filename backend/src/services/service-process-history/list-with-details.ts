@@ -1,5 +1,5 @@
 import { ProcessHistoryRepository } from "@/repositories/process-historic-repository";
-import { ProcessHistoryDetailDTO } from "@shared/types/processHistoric";
+import { ProcessHistoryDetailDTO } from "@shared/types/processHistory";
 
 
 export class ListProcessHistoryWithDetailsUseCase {

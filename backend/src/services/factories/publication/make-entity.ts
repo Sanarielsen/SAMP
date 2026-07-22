@@ -11,7 +11,6 @@ export async function makePublication(
 ) {
 
   return repository.create({
-    processHistoryId: 'process-history-test',
     processTypeId: 'process-type-id',
     clientId: 'client-id',
     processNumber: '123456789',

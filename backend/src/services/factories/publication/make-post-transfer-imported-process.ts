@@ -1,6 +1,6 @@
 import { PrismaPublicationRepository } from '@/repositories/prisma/prisma-publication-repository'
 import { PrismaProcessImportedRepository } from '@/repositories/prisma/prisma-imported-process-repository'
-import { PrismaProcessHistoricRepository } from '@/repositories/prisma/prisma-process-history-repository'
+import { PrismaProcessHistoryRepository } from '@/repositories/prisma/prisma-process-history-repository'
 import { PrismaClientRepository } from '@/repositories/prisma/prisma-client-repository'
 import { PostPublicationTransferImportedProcessUseCase } from '@/services/service-publication/post-transfer-imported-process'
 
@@ -8,7 +8,7 @@ import { PostPublicationTransferImportedProcessUseCase } from '@/services/servic
 export function makePostPublicationTransferImportedProcess() {
   const publicationRepository = new PrismaPublicationRepository()
   const importedProcessRepository = new PrismaProcessImportedRepository()
-  const processHistoricRepository = new PrismaProcessHistoricRepository();
+  const processHistoricRepository = new PrismaProcessHistoryRepository();
   const clientRepository = new PrismaClientRepository();
 
   const useCase = new PostPublicationTransferImportedProcessUseCase(

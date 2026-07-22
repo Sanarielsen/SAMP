@@ -1,29 +1,65 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Box, Button } from "@mui/material";
 
 import { optionsQueryListProcessHistoryWithDetails } from "@/features/process/api/queryListProcessHistoryWithDetails";
+import { useMutationDeleteProcessHistoryWithFile } from "@/features/process/api/mutationDeleteProcessHistoryWithFile";
 import DataTableProcessHistoryColumns from "@/features/process/components/DataTableProcessHistoryColumns";
-import ModalNewMagazine from "@/features/process/components/ModalNewMagazine";
 import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
+import ModalConfirmation from "@/components/ModalConfirmation";
+import ModalNewMagazine from "@/features/process/components/ModalNewMagazine";
+import LoadingOverlay from "@/components/LoadingOverlay";
 import ToastContainer from "@/components/Toast";
 
 
 export default function ViewImportedMagazine() {
 
+  const queryClient = useQueryClient();
+
+  const [openModalConfirmation, setOpenModalConfirmation] = useState(false)
   const [openToast, setOpenToast] = useState("")
   const [modalNewMagazine, setModalNewMagazine] = useState(false);
-
+  const [historyIdClicked, setHistoryIdClicked] = useState("");
+  
   const {
     data: processHistoricWithDetails,
     isSuccess,
     isError,
-    isLoading
+    isLoading,
+    refetch,
   } = useQuery(
     optionsQueryListProcessHistoryWithDetails()
   )
+
+  const mutationDeleteProcessHistory =
+    useMutationDeleteProcessHistoryWithFile({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['clients'] })
+      setOpenToast("success_imported_process"); 
+    },
+    onError: () => {
+      setOpenToast("error_imported_process"); 
+    },
+  })
+
+  const handleDelete = (historyId: string) => {
+    setHistoryIdClicked(historyId)
+    setOpenModalConfirmation(true)
+  };
+
+  function handleDeleteProcessHistory(action: boolean) {
+    setOpenModalConfirmation(false)
+
+    if (!action || !historyIdClicked) return
+    
+    mutationDeleteProcessHistory.mutate(
+      historyIdClicked
+    )
+
+    refetch()
+  }
 
   const stateQuery = "SUCCESS"
     isSuccess ? "SUCCESS" : 
@@ -65,7 +101,7 @@ export default function ViewImportedMagazine() {
               []
             }
             columns={DataTableProcessHistoryColumns({
-              onClickDeleteItem: (currentData) => console.log("Item a ser deletado: ", currentData)
+              onClickDeleteItem: (currentData) => handleDelete(currentData.id)
             })}
           />
         </Box>
@@ -76,8 +112,36 @@ export default function ViewImportedMagazine() {
         onSubmitImport={(action) => {
           setOpenToast(action);
           setModalNewMagazine(false)
+          refetch();
         }}
         handleClose={() => setModalNewMagazine(false)}
+      />
+
+      <ModalConfirmation
+        open={openModalConfirmation}
+        title={"Excluir esse registro de importação"}
+        description={`Tem certeza que gostaria de EXCLUIR registro de importação atual? Essa operacão irá excluir os processos importados dessa revista e não é REVERSÍVEL.`}
+        handleClose={() => setOpenModalConfirmation(false)}
+        handleAnswer={(action) => handleDeleteProcessHistory(action)}
+      />
+
+      <LoadingOverlay
+        open={mutationDeleteProcessHistory.isPending}
+        message="Deletando a revista e seus respectivos processos importados, aguarde..."
+      />
+
+      <ToastContainer
+        open={openToast === "success_imported_process"}
+        message="Revista deletada com sucesso."
+        severity="success"
+        onClose={() => setOpenToast("")}
+      />
+
+      <ToastContainer
+        open={openToast === "error_imported_process"}
+        message="Ocorreu um erro ao deletar essa revista."
+        severity="error"
+        onClose={() => setOpenToast("")}
       />
 
       <ToastContainer

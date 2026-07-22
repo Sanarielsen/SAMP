@@ -11,7 +11,7 @@ import { importProcessesWithAPI } from "@/scripts/import-processes-with-api";
 import { checkMagazineWillBeUploaded } from "@/utils/checkMagazineWillBeUploaded";
 
 import { CreatedProcessImportedDTO, CreateProcessImportedDTO } from "@shared/types/processImported";
-import { ProcessHistoric } from "@shared/types/processHistoric";
+import { ProcessHistory } from "@shared/types/processHistory";
 import { getRequiredEnv } from "@/utils/getRequiredEnv";
 
 
@@ -25,7 +25,7 @@ export class CreateProcessAsImportUseCase {
 
   async execute({ userId, categoryId, numberMagazine, fileMagazine }: CreateProcessImportedDTO): Promise<number | null> {
     let importedProcesses: CreatedProcessImportedDTO[]
-    let magazineHistoric: ProcessHistoric | null;
+    let magazineHistoric: ProcessHistory | null;
     let importedRowsQuantity: number = 0;
 
     let fileName = numberMagazine + '.txt'

@@ -14,4 +14,5 @@ export interface ImportedProcessRepository {
   findById(id: string): Promise<ImportedProcess | null> 
   findByIdDetails(id: string): Promise<DetailsProcessImportedDTO | null> 
   findManyByProcessHistoricIdAsAOption(processHistoricId: string, search?: string): Promise<OptionsControlledBox[]> 
+  deleteManyByProcessHistoricId(processHistoricId: string): Promise<void>
 }

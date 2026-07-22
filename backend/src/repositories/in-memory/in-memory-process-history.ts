@@ -5,9 +5,9 @@ import { ProcessHistoryRepository } from "@/repositories/process-historic-reposi
 
 import { 
   CreateProcessHistoricDTO, 
-  ProcessHistoric, 
+  ProcessHistory, 
   ProcessHistoryDetailDTO 
-} from "@shared/types/processHistoric";
+} from "@shared/types/processHistory";
 import { OptionsControlledBox } from "@shared/types/values";
 
 
@@ -16,10 +16,10 @@ export class InMemoryProcessHistoryRepository implements ProcessHistoryRepositor
     private processCategoryRepository: InMemoryProcessCategoryRepository,
   ) {}
 
-  public items: ProcessHistoric[] = []
+  public items: ProcessHistory[] = []
   
-  async create(data: CreateProcessHistoricDTO): Promise<ProcessHistoric> {
-    const newData: ProcessHistoric = {
+  async create(data: CreateProcessHistoricDTO): Promise<ProcessHistory> {
+    const newData: ProcessHistory = {
       ...data,
       id: randomUUID(),
       createdAt: new Date(Date.now()),
@@ -29,11 +29,11 @@ export class InMemoryProcessHistoryRepository implements ProcessHistoryRepositor
         
     return newData
   }
-  delete(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async delete(id: string): Promise<void> {
+    this.items = this.items.filter((item) => item.id !== id);
   }
   
-  async findById(id: string): Promise<ProcessHistoric | null> {
+  async findById(id: string): Promise<ProcessHistory | null> {
     const history = this.items.find(item => item.id == id)
 
     if (!history) {
@@ -64,7 +64,7 @@ export class InMemoryProcessHistoryRepository implements ProcessHistoryRepositor
     throw new Error("Method not implemented.");
   }
 
-  findByNumberMagazine(numberMagazine: string): Promise<ProcessHistoric | null> {
+  findByNumberMagazine(numberMagazine: string): Promise<ProcessHistory | null> {
     throw new Error("Method not implemented.");
   }
 }

@@ -100,15 +100,12 @@ export class PrismaPublicationRepository implements PublicationRepository {
 
       include: {
         client: true,
-        processType: true,
-        processHistoric: true,
+        processType: true
       },
     })
 
     return publications.map((publication) => ({
       id: publication.id,
-      processHistoryId: publication.processHistoryId,
-      processHistoryMagazine: publication.processHistoric.numberMagazine,
       processTypeId: publication.processTypeId,
       processTypeName: publication.processType!.name,
       processTypeSlug: publication.processType!.slug,

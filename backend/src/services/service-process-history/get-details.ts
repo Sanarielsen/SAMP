@@ -1,7 +1,7 @@
 import { ProcessHistoryRepository } from "@/repositories/process-historic-repository";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
-import { ProcessHistoryDetailDTO } from "@shared/types/processHistoric";
+import { ProcessHistoryDetailDTO } from "@shared/types/processHistory";
 
 
 export class GetProcessHistoryDetailsUseCase {

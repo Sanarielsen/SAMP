@@ -166,4 +166,12 @@ export class PrismaProcessImportedRepository implements ImportedProcessRepositor
       value: currentProcess.id,
     }));
   }
+
+  async deleteManyByProcessHistoricId(processHistoricId: string): Promise<void> {
+    await prisma.importedProcess.deleteMany({
+      where: {
+        processHistoricId
+      }
+    })
+  }
 }
