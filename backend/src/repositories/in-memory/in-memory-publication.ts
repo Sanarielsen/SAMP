@@ -20,9 +20,9 @@ export class InMemoryPublicationRepository implements PublicationRepository {
     private userRoleRepository: InMemoryUserRoleRepository,
     private userRepository: InMemoryUserRepository,
     private clientRepository: InMemoryClientsRepository,
-    private processHistoryRepository: InMemoryProcessHistoryRepository,
     private processTypeRepository: InMemoryProcessTypeRepository
   ) {}
+
   public items: Publication[] = []
 
   async create(data: CreatePublicationDTO): Promise<Publication> {
@@ -41,6 +41,16 @@ export class InMemoryPublicationRepository implements PublicationRepository {
   
   async createTransferImportedProcess(data: CreatePublicationDTO): Promise<Publication> {
     throw new Error("Method not implemented.");
+  }
+
+  async findByProcessNumber(processNumber: string): Promise<Publication | null> {
+    const publication = this.items.find(item => item.processNumber == processNumber)
+    
+    if (!publication) {
+      return null
+    }
+    
+    return publication
   }
   
   async findManySearchByUserId(userId: string, search?: string): Promise<PublicationDetails[] | null> {
@@ -95,15 +105,11 @@ export class InMemoryPublicationRepository implements PublicationRepository {
           (client) => client.id === publication.clientId,
         )
 
-        const processHistory = this.processHistoryRepository.items.find(
-          (history) => history.id === publication.processHistoryId,
-        )
-
         const processType = this.processTypeRepository.items.find(
           (type) => type.id === publication.processTypeId,
         )
 
-        if (!client || !processHistory || !processType) {
+        if (!client || !processType) {
           throw new ResourceNotFoundError();
         }
 
@@ -115,8 +121,6 @@ export class InMemoryPublicationRepository implements PublicationRepository {
 
           processTypeName: processType.name,
           processTypeSlug: processType.slug,
-
-          processHistoryMagazine: processHistory.numberMagazine,
         }
       })
     }

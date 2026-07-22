@@ -156,10 +156,11 @@ model Publication {
   processTypeId     String
   clientId          String
 
-  processNumber String
+  processNumber String @unique
   holder        String
   brand         String
   nature        String
+  presentation  String
   specification String @db.Text
  
   publicationDate DateTime?

@@ -10,12 +10,23 @@ import {
 
 
 export class PrismaPublicationRepository implements PublicationRepository {
-  create(data: CreatePublicationDTO): Promise<Publication> {
-    throw new Error("Method not implemented.");
+  async create(data: CreatePublicationDTO): Promise<Publication> {
+    return await prisma.publication.create({
+      data
+    })
   }
+
   async createTransferImportedProcess(data: CreatePublicationDTO): Promise<Publication> {
     return await prisma.publication.create({
       data
+    })
+  }
+
+  async findByProcessNumber(processNumber: string): Promise<Publication | null> {
+    return await prisma.publication.findUnique({
+      where: {
+        processNumber
+      }
     })
   }
 

@@ -8,5 +8,6 @@ import {
 export interface PublicationRepository {
   create(data: CreatePublicationDTO): Promise<Publication>
   createTransferImportedProcess(data: CreatePublicationDTO): Promise<Publication>
+  findByProcessNumber(processNumber: string): Promise<Publication | null>
   findManySearchByUserId(userId: string, search?: string): Promise<PublicationDetails[] | null>
 }
