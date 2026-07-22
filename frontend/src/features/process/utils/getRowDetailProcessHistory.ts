@@ -1,7 +1,7 @@
 import type { Field } from "@/utils/field";
 import { formatDateTimeBrazil } from "@/utils/formatDateTimeBrazil";
 
-import type { ProcessHistoryDetailDTO } from "@shared/types/processHistoric";
+import type { ProcessHistoryDetailDTO } from "@shared/types/processHistory";
 
 
 export const processHistoryFields: Field<ProcessHistoryDetailDTO>[] = [

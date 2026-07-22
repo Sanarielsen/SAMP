@@ -18,7 +18,7 @@ import { makeProcessHistory } from "@/services/factories/process-history/make-en
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 import { ProcessCategory } from "@shared/types/processCategory";
-import { ProcessHistoric } from "@shared/types/processHistoric";
+import { ProcessHistory } from "@shared/types/processHistory";
 import { ProcessType } from "@shared/types/processType";
 
 
@@ -30,7 +30,7 @@ let sut: PostQueryImportedProcessDetailsUseCase
 
 let newCategory: ProcessCategory
 let newType: ProcessType
-let newHistory: ProcessHistoric
+let newHistory: ProcessHistory
 
 describe('List Imported Process Use Case', () => {
   beforeEach( async () => {

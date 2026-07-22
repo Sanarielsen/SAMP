@@ -10,7 +10,7 @@ import {
 
 import { formatDateTimeBrazil } from "@/utils/formatDateTimeBrazil";
 
-import type { ProcessHistoryDetailDTO } from "@shared/types/processHistoric";
+import type { ProcessHistoryDetailDTO } from "@shared/types/processHistory";
 
 
 type ColumnsProcessHistoryProps = {

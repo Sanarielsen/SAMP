@@ -27,18 +27,12 @@ export class PostPublicationTransferImportedProcessUseCase {
       throw new ResourceNotFoundError()
     }
 
-    const processHistory = await this.processHistoryRepository.findById(data.processHistoricId)
-    if (!processHistory) {
-      throw new ResourceNotFoundError()
-    }
-
     const processImported = await this.processImportedRepository.findById(data.importedProcessId)
     if (!processImported) {
       throw new ResourceNotFoundError()
     }
 
     const newPublication: CreatePublicationDTO = {
-      processHistoryId: processHistory.id,
       processTypeId: processImported.processTypeId,
       clientId: client.id!,
       processNumber: processImported.processNumber,

@@ -11,8 +11,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import { optionsQueryListProcessCategoryAsAOptions } from "@/features/process/api/queryListProcessCategoryAsAOptions";
 import { optionsQueryListProcessTypeAsAOptions } from "@/features/process/api/queryListProcessTypeAsAnOption";
-import { optionsQueryListProcessHistoricsAsAOptions } from "@/features/process/api/listProcessHistoricsAsAOptions";
-import { optionsQueryPostQueryImportedProcessWithDetails } from "@/features/process/api/mutatePostQueryImportedProcessWithDetails";
+import { optionsQueryPostQueryImportedProcessWithDetails } from "@/features/process/api/queryPostQueryImportedProcessWithDetails";
 import DataTableImportedProcessColumns from "@/features/process/components/DataTableImportedProcessColumns";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledComboBox } from "@/components/ControlledComboBox";
@@ -65,13 +64,6 @@ export default function ViewImportedProcess() {
   } = useQuery(
     optionsQueryListProcessTypeAsAOptions()
   );
-
-  const {
-    data: processHistoricWithOptions,
-    isSuccess: isSuccessHistoricWithOptions
-  } = useQuery(
-    optionsQueryListProcessHistoricsAsAOptions()
-  )
 
   const {
     data: importedProcessWithDetails,
@@ -149,19 +141,6 @@ export default function ViewImportedProcess() {
                   placeholder='Tipo do processo'
                   options={ isSuccessTypeOptions ?
                     listProcessTypeAsAOptions :
-                    []
-                  }
-                />
-              </PanelFilterItem>
-
-              <PanelFilterItem>
-                <ControlledComboBox
-                  control={form.control}
-                  name={'historyId'}
-                  label='Revista'
-                  placeholder='Revista do processo'
-                  options={isSuccessHistoricWithOptions ?
-                    processHistoricWithOptions :
                     []
                   }
                 />

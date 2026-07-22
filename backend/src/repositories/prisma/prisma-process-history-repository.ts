@@ -6,24 +6,26 @@ import { formatDateTimeBrazil } from "@/utils/formatSwitchDate";
 import { 
   CreateProcessHistoricDTO, 
   ProcessHistoryDetailDTO, 
-  ProcessHistoric
-} from "@shared/types/processHistoric";
+  ProcessHistory
+} from "@shared/types/processHistory";
 import { OptionsControlledBox } from "@shared/types/values";
 
 
-export class PrismaProcessHistoricRepository implements ProcessHistoryRepository {
-  async create(data: CreateProcessHistoricDTO): Promise<ProcessHistoric> {
-    return await prisma.processHistoric.create({
+export class PrismaProcessHistoryRepository implements ProcessHistoryRepository {
+  async create(data: CreateProcessHistoricDTO): Promise<ProcessHistory> {
+    return await prisma.processHistory.create({
       data
     })
   }
   
-  delete(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async delete(id: string): Promise<void> {
+    await prisma.processHistory.delete({
+      where: { id }
+    })
   }
 
-  async findById(id: string): Promise<ProcessHistoric | null> {
-    return await prisma.processHistoric.findUnique({
+  async findById(id: string): Promise<ProcessHistory | null> {
+    return await prisma.processHistory.findUnique({
       where: {
         id
       }
@@ -31,7 +33,7 @@ export class PrismaProcessHistoricRepository implements ProcessHistoryRepository
   }
 
   async findAsADetailsById(id: string): Promise<ProcessHistoryDetailDTO | null> {
-    const processHistoric = await prisma.processHistoric.findUnique({
+    const processHistoric = await prisma.processHistory.findUnique({
       where: {
         id
       },
@@ -52,7 +54,7 @@ export class PrismaProcessHistoricRepository implements ProcessHistoryRepository
   }
 
   async findManyWithDetails(): Promise<ProcessHistoryDetailDTO[]> {
-    const processHistories = await prisma.processHistoric.findMany({
+    const processHistories = await prisma.processHistory.findMany({
       include: {
         category: true
       }
@@ -63,12 +65,13 @@ export class PrismaProcessHistoricRepository implements ProcessHistoryRepository
       numberMagazine: history.numberMagazine,
       categoryName: history.category.name,
       fileName: history.fileName,
+      filePath: history.filePath,
       createdAt: history.createdAt,
     }))
   }
 
   async findManyAsAOption(): Promise<OptionsControlledBox[]> {
-    const processHistorics = await prisma.processHistoric.findMany()
+    const processHistorics = await prisma.processHistory.findMany()
 
     return processHistorics.map( (historic) => ({
       label: historic.fileName + ' - ' + formatDateTimeBrazil(historic.createdAt),
@@ -76,8 +79,8 @@ export class PrismaProcessHistoricRepository implements ProcessHistoryRepository
     }))
   }
 
-  async findByNumberMagazine(numberMagazine: string): Promise<ProcessHistoric | null> {
-    return await prisma.processHistoric.findUnique({
+  async findByNumberMagazine(numberMagazine: string): Promise<ProcessHistory | null> {
+    return await prisma.processHistory.findUnique({
       where: {
         numberMagazine
       }

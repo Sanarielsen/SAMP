@@ -71,4 +71,8 @@ export class InMemoryImportedProcessRepository implements ImportedProcessReposit
       );
     });
   }
+
+  async deleteManyByProcessHistoricId(processHistoricId: string): Promise<void> {
+    this.items = this.items.filter((item) => item.processHistoricId !== processHistoricId);
+  }
 }

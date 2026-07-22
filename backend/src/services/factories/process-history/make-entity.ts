@@ -2,12 +2,12 @@ import {
   InMemoryProcessHistoryRepository 
 } from '@/repositories/in-memory/in-memory-process-history'
 
-import { ProcessHistoric } from '@shared/types/processHistoric'
+import { ProcessHistory } from '@shared/types/processHistory'
 
 
 export async function makeProcessHistory(
   repository: InMemoryProcessHistoryRepository,
-  override: Partial<ProcessHistoric> = {},
+  override: Partial<ProcessHistory> = {},
 ) {
 
   return repository.create({

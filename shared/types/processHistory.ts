@@ -1,4 +1,4 @@
-export type ProcessHistoric = {
+export type ProcessHistory = {
   id:         string
   categoryId: string
 

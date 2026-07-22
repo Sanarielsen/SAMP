@@ -2,7 +2,7 @@ import { queryOptions } from "@tanstack/react-query"
 
 import { api } from "@/api/axios"
 
-import type { ProcessHistoryDetailDTO } from "@shared/types/processHistoric"
+import type { ProcessHistoryDetailDTO } from "@shared/types/processHistory"
 
 
 export function optionsQueryListProcessHistoryWithDetails() { 
