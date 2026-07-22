@@ -14,7 +14,7 @@ import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
 
 
-export default function ViewSalvedProcess() {
+export default function ViewPublication() {
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -33,12 +33,12 @@ export default function ViewSalvedProcess() {
 
   const optionsNewProcess = [
     {
-      label: 'Processos da importacao',
+      label: 'Adicionar publicacão integrada aos processos da importacao',
       value: 'automatica',
       onClickOption: () => navigate('/processo/automatico')
     },
     {
-      label: 'Processo externo',
+      label: 'Adicionar publicação manualmente',
       value: 'manual',
       onClickOption: () => navigate('/processo/manual')
     },
