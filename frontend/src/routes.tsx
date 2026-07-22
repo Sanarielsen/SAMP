@@ -30,7 +30,7 @@ import OrderNewPayment from "@/features/order/pages/OrderNewPayment";
 import PaymentDetails from "@/features/payment/pages/PaymentDetails";
 import HomeProcess from "./features/process/page/ViewImportedProcess";
 import ViewImportedProcess from "@/features/process/page/ViewImportedProcess";
-import ViewSalvedProcess from "./features/process/page/ViewSalvedProcess";
+import ViewPublication from "./features/process/page/ViewPublications";
 import ViewImportedMagazine from "./features/process/page/ViewImportedMagazine";
 import NewProcessManual from "./features/process/page/NewProcessManual";
 import NewProcessAutomatic from "./features/process/page/NewProcessAutomatic";
@@ -66,7 +66,7 @@ export default function Router() {
         <Route path="pagamento/:id/parcelas" element={<PaymentDetails />} />
 
         <Route path="processos" element={<HomeProcess />} />
-        <Route path="processos/publicacoes" element={<ViewSalvedProcess />} />
+        <Route path="processos/publicacoes" element={<ViewPublication />} />
         <Route path="processos/importados" element={<ViewImportedProcess />} />
         <Route path="processos/revistas" element={<ViewImportedMagazine />} />
         <Route path="processo/manual" element={<NewProcessManual />} />

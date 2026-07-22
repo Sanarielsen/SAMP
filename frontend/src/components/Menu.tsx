@@ -103,7 +103,7 @@ export default function Menu({
               onClick={() => handleChangePage("/processos/publicacoes")}
               style={{ paddingLeft: 32 }}
             >
-              <span>Lista de publicações</span>
+              <span>Publicações</span>
             </MenuItem>
 
             <MenuItem
