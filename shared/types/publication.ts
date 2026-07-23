@@ -40,6 +40,23 @@ export type CreatePublicationTransferImportedProcessDTO = {
   importedProcessId: string
 }
 
+export type UpdatePublicationDTO = {
+  id:                string
+  processTypeId:     string
+  clientId:          string
+
+  processNumber?: string
+  holder?:        string
+  brand?:         string
+  nature?:        string
+  presentation?:  string
+  specification?: string
+ 
+  publicationDate?: Date | null
+  depositDate?:     Date | null
+  grantDate?:       Date | null
+}
+
 export type PublicationDetails = {
   id: string
   

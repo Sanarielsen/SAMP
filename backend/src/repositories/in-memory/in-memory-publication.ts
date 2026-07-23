@@ -12,6 +12,7 @@ import {
   Publication, 
   CreatePublicationDTO,
   PublicationDetails,
+  UpdatePublicationDTO,
 } from "@shared/types/publication";
 
 
@@ -38,9 +39,35 @@ export class InMemoryPublicationRepository implements PublicationRepository {
         
     return newPublication
   }
+
+  async update(data: UpdatePublicationDTO): Promise<Publication> {
+    const pubs = this.items.findIndex(publication => {
+      return publication.id === data.id
+    })
+
+    const updatedPub = {
+      ...this.items[pubs],
+      ...data,
+      updatedAt: new Date(),
+    }
+
+    this.items[pubs] = updatedPub
+
+    return updatedPub
+  }
   
   async createTransferImportedProcess(data: CreatePublicationDTO): Promise<Publication> {
     throw new Error("Method not implemented.");
+  }
+
+  async findById(id: string): Promise<Publication | null> {
+    const publication = this.items.find(item => item.id == id)
+
+    if (!publication) {
+      return null
+    }
+
+    return publication
   }
 
   async findByProcessNumber(processNumber: string): Promise<Publication | null> {
