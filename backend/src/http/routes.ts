@@ -65,6 +65,7 @@ import { listProcessTypeAsAnOption } from "./Controllers/processType/list-as-an-
 import { listProcessHistoryWithDetails } from "./Controllers/processHistory/list-with-details";
 import { deleteProcessHistoryWithFile } from "./Controllers/processHistory/delete-with-file";
 import { postPublication } from "./Controllers/publication/post";
+import { updatePublication } from "./Controllers/publication/update";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -128,6 +129,8 @@ export async function appRoutes(app: FastifyInstance) {
 
   app.post('/publication/process', {onRequest: [verifyJWT]}, postPublication)
   app.post('/publication/process/imported', {onRequest: [verifyJWT]}, postPublicationTransferImportedProcess)
+  //app.GET('/publication/:id', {onRequest: [verifyJWT]}, GET)
+  app.patch('/publication/:id', {onRequest: [verifyJWT]}, updatePublication)
   app.get('/publications', {onRequest: [verifyJWT]}, listPublicationDetails)
 
   app.get(`/process/category/options`, {onRequest: [verifyJWT]}, listProcessCategoryAsAOptions)

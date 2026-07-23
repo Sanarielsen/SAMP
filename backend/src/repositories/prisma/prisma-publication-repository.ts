@@ -5,7 +5,8 @@ import { PublicationRepository } from "@/repositories/publication-repository";
 import { 
   Publication,
   CreatePublicationDTO,
-  PublicationDetails, 
+  PublicationDetails,
+  UpdatePublicationDTO, 
 } from "@shared/types/publication";
 
 
@@ -19,6 +20,23 @@ export class PrismaPublicationRepository implements PublicationRepository {
   async createTransferImportedProcess(data: CreatePublicationDTO): Promise<Publication> {
     return await prisma.publication.create({
       data
+    })
+  }
+
+  async update(data: UpdatePublicationDTO): Promise<Publication> {
+    return await prisma.publication.update({
+      where: {
+        id: data.id
+      },
+      data
+    })
+  }
+
+  async findById(id: string): Promise<Publication | null> {
+    return await prisma.publication.findUnique({
+      where: {
+        id
+      }
     })
   }
 
@@ -127,6 +145,7 @@ export class PrismaPublicationRepository implements PublicationRepository {
       holder: publication.holder,
       brand: publication.brand,
       nature: publication.nature,
+      presentation: publication.presentation,
       specification: publication.specification,
       publicationDate: publication.publicationDate, 
       depositDate: publication.depositDate, 
