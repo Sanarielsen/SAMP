@@ -32,6 +32,14 @@ export class PrismaPublicationRepository implements PublicationRepository {
     })
   }
 
+  async delete(id: string): Promise<void> {
+    await prisma.publication.delete({
+      where: {
+        id
+      },
+    })
+  }
+
   async findById(id: string): Promise<Publication | null> {
     return await prisma.publication.findUnique({
       where: {

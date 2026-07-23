@@ -5,7 +5,7 @@ import {
   it 
 } from "vitest";
 
-import { PatchPublicationUseCase } from "@/services/service-publication/update";
+import { UpdatePublicationUseCase } from "@/services/service-publication/update";
 
 import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
 import { InMemoryProcessTypeRepository } from "@/repositories/in-memory/in-memory-process-type";
@@ -29,7 +29,7 @@ let userRepository: InMemoryUserRepository
 let clientRepository: InMemoryClientsRepository
 let processTypeRepository: InMemoryProcessTypeRepository
 let publicationRepository: InMemoryPublicationRepository
-let sut: PatchPublicationUseCase
+let sut: UpdatePublicationUseCase
 
 let newClient: Client
 let newProcessType: ProcessType
@@ -48,7 +48,7 @@ describe('Update Publication Use Case', () => {
           processTypeRepository
         );
     
-        sut = new PatchPublicationUseCase(
+        sut = new UpdatePublicationUseCase(
           clientRepository,
           processTypeRepository, 
           publicationRepository
@@ -63,8 +63,6 @@ describe('Update Publication Use Case', () => {
   })
 
   it('should update a new publication', async () => {
-
-    console.log(publicationRepository.items)
 
     const updatedPub = await sut.execute({
       ...newPublication,

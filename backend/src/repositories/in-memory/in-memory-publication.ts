@@ -1,11 +1,11 @@
 import { createId } from "@paralleldrive/cuid2";
 
 import { PublicationRepository } from "@/repositories/publication-repository";
-import { InMemoryProcessHistoryRepository } from "@/repositories/in-memory/in-memory-process-history";
 import { InMemoryProcessTypeRepository } from "@/repositories/in-memory/in-memory-process-type";
 import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
 import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 import { InMemoryUserRoleRepository } from "@/repositories/in-memory/in-memory-user-role-repository";
+
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 import { 
@@ -40,6 +40,10 @@ export class InMemoryPublicationRepository implements PublicationRepository {
     return newPublication
   }
 
+  async createTransferImportedProcess(data: CreatePublicationDTO): Promise<Publication> {
+    throw new Error("Method not implemented.");
+  }
+
   async update(data: UpdatePublicationDTO): Promise<Publication> {
     const pubs = this.items.findIndex(publication => {
       return publication.id === data.id
@@ -55,9 +59,15 @@ export class InMemoryPublicationRepository implements PublicationRepository {
 
     return updatedPub
   }
-  
-  async createTransferImportedProcess(data: CreatePublicationDTO): Promise<Publication> {
-    throw new Error("Method not implemented.");
+
+  async delete(id: string): Promise<void> {
+    const index = this.items.findIndex((item) => item.id === id);
+
+    if (index === -1) {
+      throw new ResourceNotFoundError();
+    }
+
+    this.items.splice(index, 1);
   }
 
   async findById(id: string): Promise<Publication | null> {

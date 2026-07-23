@@ -7,7 +7,7 @@ import type { CreatePublicationDTO, Publication } from '@shared/types/publicatio
 
 
 async function postPublication(payload: CreatePublicationDTO): Promise<AxiosResponse<Publication>> {
-  return await api.post(`/publication/process`, payload)
+  return await api.post(`/publication`, payload)
 }
 
 export function useMutationPostPublication(
