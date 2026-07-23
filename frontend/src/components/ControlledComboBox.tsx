@@ -1,6 +1,7 @@
-import { 
-  useState, 
-  type ReactNode 
+import {
+  useEffect,
+  useState,
+  type ReactNode,
 } from "react";
 import {
   type Control,
@@ -16,7 +17,6 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
-
 
 type Option<TValue> = {
   label: string;
@@ -65,32 +65,46 @@ export function ControlledComboBox<
       render={({ field, fieldState }) => {
         const selectedOption =
           options.find(
-            option => option.value === field.value
+            (option) => option.value === field.value
           ) ?? null;
 
+        useEffect(() => {
+          setInputValue(selectedOption?.label ?? "");
+        }, [selectedOption]);
+
         return (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, width: "100%" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              width: "100%",
+            }}
+          >
             <Autocomplete
+              sx={{ flex: 1 }}
               options={options}
-              disabled={disabled}
               loading={loading}
+              disabled={disabled}
               value={selectedOption}
               inputValue={inputValue}
+              isOptionEqualToValue={(option, value) =>
+                option.value === value.value
+              }
+              getOptionLabel={(option) => option.label}
               onInputChange={(_, newInputValue, reason) => {
-                if (reason === "input" || reason === "clear") {
+                if (
+                  reason === "input" ||
+                  reason === "clear"
+                ) {
                   setInputValue(newInputValue);
                   onInputChange?.(newInputValue);
                 }
               }}
               onChange={(_, option) => {
-                setInputValue(option?.label ?? "");
                 field.onChange(option?.value ?? null);
+                setInputValue(option?.label ?? "");
               }}
-              isOptionEqualToValue={(option, value) =>
-                option.value === (value as Option<TValue>)?.value
-              }
-              getOptionLabel={(option) => option.label}
-              sx={{ flex: 1 }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -109,9 +123,11 @@ export function ControlledComboBox<
                 <span>
                   <IconButton
                     size="small"
-                    onClick={onDetailClick}
                     aria-label="details"
-                    disabled={disabled || !selectedOption}
+                    onClick={onDetailClick}
+                    disabled={
+                      disabled || !selectedOption
+                    }
                   >
                     {detailIcon}
                   </IconButton>
