@@ -35,8 +35,6 @@ export async function updatePaymentInstallmentAsPaid(request: FastifyRequest, re
     }
   }
 
-  console.log(proofFilePath)
-
   try {
     const useCase = makeUpdatePaymentInstallmentPaidUseCase();
 

@@ -15,7 +15,6 @@ import { InMemoryClientsRepository } from '@/repositories/in-memory/in-memory-cl
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-user-repository';
 import { InMemoryUserRoleRepository } from '@/repositories/in-memory/in-memory-user-role-repository';
 import { makeClient } from '@/services/factories/client/make-entity';
-import { makeProcessHistory } from '@/services/factories/process-history/make-entity';
 import { makeProcessType } from '@/services/factories/process-type/make-entity';
 import { makePublication } from '@/services/factories/publication/make-entity';
 import { makeUser } from '@/services/factories/user/make-entity';
@@ -44,13 +43,14 @@ describe('List Publication Use Case', () => {
     clientRepository = new InMemoryClientsRepository()
     processCategoryRepository = new InMemoryProcessCategoryRepository()
     processTypeRepository = new InMemoryProcessTypeRepository()
-    processHistoryRepository = new InMemoryProcessHistoryRepository()
+    processHistoryRepository = new InMemoryProcessHistoryRepository(
+      processCategoryRepository
+    )
 
     publicationRepository = new InMemoryPublicationRepository(
       userRoleRepository,
       userRepository,
       clientRepository,
-      processHistoryRepository,
       processTypeRepository
     );
 
@@ -82,37 +82,30 @@ describe('List Publication Use Case', () => {
       responsibleById: newUserAdmin.id
     })
 
-    const processHistory = await makeProcessHistory(processHistoryRepository)
-
     const processType = await makeProcessType(processTypeRepository)
 
     await makePublication(publicationRepository, {
       clientId: client1.id,
-      processHistoryId: processHistory.id,
       processTypeId: processType.id
     })
 
     await makePublication(publicationRepository, {
       clientId: client1.id,
-      processHistoryId: processHistory.id,
       processTypeId: processType.id
     })
 
     await makePublication(publicationRepository, {
       clientId: client2.id,
-      processHistoryId: processHistory.id,
       processTypeId: processType.id
     })
 
     await makePublication(publicationRepository, {
       clientId: client2.id,
-      processHistoryId: processHistory.id,
       processTypeId: processType.id
     })
 
     await makePublication(publicationRepository, {
       clientId: client2.id,
-      processHistoryId: processHistory.id,
       processTypeId: processType.id
     })
   })

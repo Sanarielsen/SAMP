@@ -22,7 +22,6 @@ export class DeleteProcessHistoryWithFileUseCase {
     await this.importedProcessRepository.deleteManyByProcessHistoricId(history.id)
 
     if (history.filePath) {
-      console.log(history.filePath)
       try {
         await this.storageProvider.delete(history.filePath)
       } catch (err) {
