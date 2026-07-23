@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 import { 
   useForm, 
   type SubmitHandler
@@ -16,8 +16,9 @@ import PersonIcon from '@mui/icons-material/Person';
 
 import { optionsQueryListProcessTypeAsAOptions } from "@/features/process/api/queryListProcessTypeAsAnOption";
 import { useMutationPostPublication } from "@/features/process/api/mutatePostPublication";
+import { optionsQueryGetPublication } from "@/features/process/api/queryGetPublication";
 import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions";
-import { optionsQueryGetClient } from "@/api/queryGetClient";
+import { optionsQueryGetClient } from "@/api/queryGetClient";;
 import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
@@ -37,22 +38,20 @@ import { convertDataToServerString } from "@/utils/convertDataToServerString";
 import { clientFields } from "@/utils/getRowDetailClient";
 
 import type { CreatePublicationDTO } from "@shared/types/publication";
+import { formatAsVisualOnlyDate } from "@/utils/formatDate2";
+import { useMutationPatchPublication } from "../api/mutationUpdatePublication";
 
 
-export default function NewProcessManual() {
+export default function ManagePublication() {
 
   const navigate = useNavigate();
-  const isEditing = false;
+  const { id } = useParams()
+  const isEditing = !!id;
+  const titleSection = !isEditing ? 
+    "Criar publicação manualmente" :
+    "Atualizar publicação"
 
   const [openToast, setOpenToast] = useState("")
-
-  const form = useForm<NewProcessManualFormData>({
-    resolver:
-      zodResolver(newProcessManualSchema),
-  })
-  const { errors } = form.formState
-
-  const clientId = form.watch("clientId");
 
   const {
     data: listProcessTypeAsAOptions,
@@ -67,6 +66,52 @@ export default function NewProcessManual() {
   } = useQuery(
     optionsQueryListClientsWithOptions()
   )
+
+  const {
+    data: publication
+  } = useQuery(
+    optionsQueryGetPublication(id)
+  );
+
+  const form = useForm<NewProcessManualFormData>({
+    resolver:
+      zodResolver(newProcessManualSchema),
+    defaultValues:
+       isEditing && publication ?
+        {
+           ...publication,
+        grantDate: publication.grantDate
+          ? formatAsVisualOnlyDate(publication.grantDate)
+          : undefined,
+        publicationDate: publication.publicationDate
+          ? formatAsVisualOnlyDate(publication.publicationDate)
+          : undefined,
+        depositDate: publication.depositDate
+          ? formatAsVisualOnlyDate(publication.depositDate)
+          : undefined,
+        } : {}
+  })
+  const { errors } = form.formState
+
+
+  useEffect(() => {
+    if (publication) {
+      form.reset({
+        ...publication,
+        grantDate: publication.grantDate
+          ? formatAsVisualOnlyDate(publication.grantDate)
+          : undefined,
+        publicationDate: publication.publicationDate
+          ? formatAsVisualOnlyDate(publication.publicationDate)
+          : undefined,
+        depositDate: publication.depositDate
+          ? formatAsVisualOnlyDate(publication.depositDate)
+          : undefined,
+      });
+    }
+  }, [publication, clientsWithOptions]);
+
+  const clientId = form.watch("clientId");
 
   const {
     data: currentClient
@@ -91,7 +136,23 @@ export default function NewProcessManual() {
       },
     })
 
+  const mutationPatchPublication =
+    useMutationPatchPublication({
+      onSuccess: () => {
+        executeActionAfterRequest("success");
+      },
+      onError: () => {
+        executeActionAfterRequest("error");
+      },
+    })
+
   const { openDetails, closeDetails, payload } = useDetailsModal();
+
+  const hasTransferStarted = 
+    mutationPostPublication.isPending ||
+    mutationPatchPublication.isPending ||
+    mutationPostPublication.isSuccess ||
+    mutationPatchPublication.isSuccess
 
   const onSubmit: SubmitHandler<NewProcessManualFormData> = async (data) => {
 
@@ -107,6 +168,16 @@ export default function NewProcessManual() {
         ? new Date(convertDataToServerString(data.grantDate))
         : null,
       }
+
+    if (isEditing) {
+
+      mutationPatchPublication.mutate({
+        id,
+        ...payload
+      })
+
+      return;
+    }
     mutationPostPublication.mutate(payload)
   }
 
@@ -114,7 +185,7 @@ export default function NewProcessManual() {
     <>
       <Box component="section" sx={{ p: 8 }}>
         <HeaderResourceForm
-          title="Criar publicação manualmente"
+          title={titleSection}
           resource="PROCESSES"
         />
 
@@ -266,14 +337,8 @@ export default function NewProcessManual() {
                   type="submit"
                   variant="contained"
                   size="large"
-                  loading={
-                    mutationPostPublication.isSuccess ||
-                    mutationPostPublication.isPending
-                  }
-                  disabled={
-                    mutationPostPublication.isSuccess ||
-                    mutationPostPublication.isPending
-                  }
+                  loading={hasTransferStarted}
+                  disabled={hasTransferStarted}
                   fullWidth
                   sx={{ marginTop: 2 }}
                 >
