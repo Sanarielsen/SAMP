@@ -3,6 +3,7 @@ import { PrismaProcessHistoryRepository } from '@/repositories/prisma/prisma-pro
 import { PrismaProcessCategoryRepository } from '@/repositories/prisma/prisma-process-category-repository'
 import { LocalStorageProvider } from '@/storage/local-storage-provider'
 import { CreateProcessAsImportUseCase } from '@/services/service-process-imported/post-import'
+import { PDFParseMagazineParser } from '@/repositories/scripts/pdf-parse-magazine-parser'
 
 
 export function makeImportProcessUseCase() {
@@ -10,11 +11,14 @@ export function makeImportProcessUseCase() {
   const processHistoricRepository = new PrismaProcessHistoryRepository();
   const processCategoryRepository = new PrismaProcessCategoryRepository();
   const storageProvider = new LocalStorageProvider();
+  const magazineParser = new PDFParseMagazineParser();
+
   const useCase = new CreateProcessAsImportUseCase(
     importedProcessRepository, 
     processHistoricRepository,
     processCategoryRepository,
     storageProvider,
+    magazineParser
   )
 
   return useCase
