@@ -8,7 +8,7 @@ const provider = new common.SimpleAuthenticationDetailsProvider(
   getRequiredEnv("OCI_TENANCY"),
   getRequiredEnv("OCI_USER"),
   getRequiredEnv("OCI_FINGERPRINT"),
-  getRequiredEnv("OCI_PRIVATE_KEY"),
+  getRequiredEnv("OCI_PRIVATE_KEY").replace(/\\n/g, "\n"),
   null,
   common.Region.SA_SAOPAULO_1
 );

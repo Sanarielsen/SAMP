@@ -24,6 +24,8 @@ export class CreateProcessAsImportUseCase {
   ) {}
 
   async execute({ userId, categoryId, numberMagazine, fileMagazine }: CreateProcessImportedDTO): Promise<number | null> {
+
+    console.log("POST /process/imported INICIOI");
     let importedProcesses: CreatedProcessImportedDTO[]
     let magazineHistoric: ProcessHistory | null;
     let importedRowsQuantity: number = 0;
@@ -36,9 +38,14 @@ export class CreateProcessAsImportUseCase {
 
     if (!category) throw new ResourceNotFoundError();
 
+    console.log("POST /process/imported chegou no history");
     magazineHistoric = await this.processHistoricRepository.findByNumberMagazine(numberMagazine);
 
     if (!magazineHistoric) {
+
+      console.log("PDF:", (fileMagazine.length / 1024 / 1024).toFixed(2), "MB");
+
+      console.log("POST /process/imported comecou a parsear");
 
       try {
         const parser = new PDFParse({
@@ -46,6 +53,8 @@ export class CreateProcessAsImportUseCase {
         });
 
         const result = await parser.getText();
+
+        console.log("POST /process/imported parseou");
 
         checkMagazineWillBeUploaded(result.text, numberMagazine)
 
