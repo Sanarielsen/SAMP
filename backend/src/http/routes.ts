@@ -68,6 +68,7 @@ import { postPublication } from "./Controllers/publication/post";
 import { updatePublication } from "./Controllers/publication/update";
 import { getPublication } from "./Controllers/publication/get";
 import { deletePublication } from "./Controllers/publication/delete";
+import { updateUserPassword } from "./Controllers/user/update-password";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -75,6 +76,7 @@ export async function appRoutes(app: FastifyInstance) {
   
   app.get('/me', {onRequest: [verifyJWT]}, profile)
   app.patch('/me', {onRequest: [verifyJWT]}, updateProfile)
+  app.patch('/profile/:id/password', {onRequest: [verifyJWT]}, updateUserPassword)
   
   app.post('/user', register)
   app.get('/user/roles', {onRequest: [verifyJWT]}, listUserRoleLevelAuthorized)

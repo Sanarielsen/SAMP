@@ -6,12 +6,14 @@ import {
   UpdateUserDTO, 
   User, 
   UserDetailDTO, 
+  UserPasswordUpdateDTO, 
   UserPublicDTO
 } from "@shared/types/user"
 
 export interface UserRepository {
   create(data: CreateUserDTO): Promise<User>
   update(data: UpdateUserDTO): Promise<void>
+  updatePassword(data: UserPasswordUpdateDTO): Promise<void>
 
   findById(id: string): Promise<User | null>
   findByEmail(email: string): Promise<UserDetailDTO|null>

@@ -34,6 +34,7 @@ import ViewPublication from "./features/process/page/ViewPublications";
 import ViewImportedMagazine from "./features/process/page/ViewImportedMagazine";
 import ManagePublication from "./features/process/page/ManagePublication";
 import NewProcessAutomatic from "./features/process/page/NewProcessAutomatic";
+import UpdatePassword from "./features/profile/pages/UpdatePassword";
 
 
 export default function Router() {
@@ -74,6 +75,7 @@ export default function Router() {
         <Route path="processos/publicacao/:id" element={<ManagePublication />} />
 
         <Route path="perfil" element={<ProfilePage />} />
+        <Route path="perfil/:id/alterar-senha" element={<UpdatePassword />} />
         <Route path="admin/variaveis" element={<AdminManageVariablesPage />} />
         <Route path="admin/usuarios" element={<ManageUsers />} />
         <Route path="admin/usuario" element={<ManageUser />} />
