@@ -1,4 +1,4 @@
-import { DeleteOrderUseCase } from "@/services/service-orders/delete";
+import { DeleteOrderUseCase } from "@/services/service-order/delete";
 
 import { PrismaOrderRepository } from "@/repositories/prisma/prisma-order-repository";
 import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository";

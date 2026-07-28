@@ -1,33 +1,33 @@
 export const listInputNatureValues = [
   {
-    label: 'Produto e/ou serviço',
-    value: "1"
+    label: 'Produtos e/ou Serviço',
+    value: "Produtos e/ou Serviço"
   },
   {
     label: 'Certificação',
-    value: "2"
+    value: "Certificação"
   },
 ]
 
 export const listInputPresentationValues = [
   {
     label: 'Nomintativa',
-    value: "1"
+    value: "Nomintativa"
   },
   {
     label: 'Figurativa',
-    value: "2"
+    value: "Figurativa"
   },
   {
     label: 'Mista',
-    value: "3"
+    value: "Mista"
   },
   {
     label: 'Tridimencional',
-    value: "4"
+    value: "Tridimencional"
   },
   {
     label: 'Marca de posição',
-    value: "5"
+    value: "Marca de posição"
   },
 ]
