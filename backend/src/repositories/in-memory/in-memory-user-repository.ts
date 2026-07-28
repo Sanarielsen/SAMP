@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { hash } from 'bcryptjs'
 
 import { UserRepository } from "@/repositories/user-repository";
 
@@ -7,6 +8,7 @@ import {
   UpdateUserDTO,
   User,
   UserDetailDTO,
+  UserPasswordUpdateDTO,
 } from "@shared/types/user";
 import { UserRole } from "@shared/types/userRole";
 import { OptionsControlledBox } from "@shared/types/values";
@@ -46,6 +48,22 @@ export class InMemoryUserRepository implements UserRepository {
     }
 
     this.items[userIdenitity] = updatedUser
+  }
+
+  async updatePassword(data: UserPasswordUpdateDTO): Promise<void> {
+    const userIdentity = this.items.findIndex(user => {
+      return user.id === data.id
+    })
+
+    const updatedUser = {
+      ...this.items[userIdentity],
+      ...data,
+      password_hash: data.password
+      ? await hash(data.password, 6)
+      : this.items[userIdentity].password_hash,
+    }
+
+    this.items[userIdentity] = updatedUser
   }
   
   async findById(id: string): Promise<User | null> {
