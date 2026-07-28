@@ -1,23 +1,32 @@
 import { 
   IconButton, 
   Stack, 
-  Tooltip 
+  Tooltip,
 } from "@mui/material"
 import { 
   GridSearchIcon, 
+  GridDeleteIcon, 
+  GridLoadIcon,
   type GridColDef
 } from "@mui/x-data-grid"
+import ApartmentIcon from '@mui/icons-material/Apartment';
 
-import type { ImportedProcess } from "@shared/types/processImported";
+import type { ImportedProcessWithDetails } from "@shared/types/importedProcess";
 
 
-type ColumnsPublicationProps = {
-  onClickSeeItem: (currentItem: ImportedProcess) => void
+type ColumnsProcessProps = {
+  onClickSeeItem: (id: string) => void
+  onClickUpdateItem: (id: string) => void,
+  onClickDeleteItem: (id: string) => void,
+  onClickCheckClient: (currentClientId: string) => void
 }
 
 export default function DataTableImportedProcessColumns({
-  onClickSeeItem
-}: ColumnsPublicationProps): GridColDef<ImportedProcess>[] {
+  onClickSeeItem,
+  onClickUpdateItem,
+  onClickDeleteItem,
+  onClickCheckClient
+}: ColumnsProcessProps): GridColDef<ImportedProcessWithDetails>[] {
   return [
     {
       field: "processNumber",
@@ -30,15 +39,20 @@ export default function DataTableImportedProcessColumns({
       flex: 1,
     },
     {
-      field: "attorney",
-      headerName: "Procurador",
+      field: "brand",
+      headerName: "Marca",
+      flex: 1,
+    },
+    {
+      field: "clientName",
+      headerName: "Cliente",
       flex: 1,
     },
     {
       field: "actions",
       headerName: "Ações",
       sortable: false,
-      width: 160,
+      width: 200,
       renderCell: (params) => (
         <Stack direction="row" 
           spacing={1} 
@@ -47,11 +61,36 @@ export default function DataTableImportedProcessColumns({
             alignItems: "center",
           }}
         >
+
           <IconButton
-            onClick={() => onClickSeeItem(params.row)}
+            onClick={() => onClickCheckClient(params.row.clientId)}
+          >
+            <Tooltip title="Visualizar cliente">
+              <ApartmentIcon fontSize="small" />
+            </Tooltip>
+          </IconButton>
+
+          <IconButton
+            onClick={() => onClickSeeItem(params.row.id)}
           >
             <Tooltip title="Detalhes">
               <GridSearchIcon />
+            </Tooltip>
+          </IconButton>
+
+          <IconButton
+            onClick={() => onClickUpdateItem(params.row.id)}
+          >          
+            <Tooltip title="Atualizar">
+              <GridLoadIcon />
+            </Tooltip>
+          </IconButton>
+
+          <IconButton
+            onClick={() => onClickDeleteItem(params.row.id)}
+          >
+            <Tooltip title="Excluir">
+              <GridDeleteIcon />
             </Tooltip>
           </IconButton>
         </Stack>

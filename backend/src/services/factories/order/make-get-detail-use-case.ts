@@ -1,4 +1,4 @@
-import { GetOrderDetailUseCase } from "@/services/service-orders/get-detail";
+import { GetOrderDetailUseCase } from "@/services/service-order/get-detail";
 
 import { PrismaOrderRepository } from "@/repositories/prisma/prisma-order-repository";
 

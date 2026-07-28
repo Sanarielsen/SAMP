@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 
@@ -15,20 +16,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { optionsQueryGetUser } from "@/features/profile/api/queryGetMe";
 import { optionsQueryListRoleUserAuthorized } from "@/api/queryListRoleUserAuthorized";
 import { useMutationPatchUserProfile } from "@/features/profile/api/mutationUpdateMe";
+import { ControlledComboBox } from "@/components/ControlledComboBox";
+import { ControlledInput } from "@/components/ControlledInputText";
+import HeaderPage from "@/components/HeaderPage";
+import ToastContainer from "@/components/Toast";
 import { 
   updateProfileSchema, 
   type UpdateProfileSchemaFormData 
 } from "@/features/profile/schema/updateProfileSchema";
 import { formatAsVisualDate } from "@/utils/formatAsAVisualDate";
 
-import { ControlledComboBox } from "@/components/ControlledComboBox";
-import { ControlledInput } from "@/components/ControlledInputText";
-import HeaderPage from "@/components/HeaderPage";
-import ToastContainer from "@/components/Toast";
-
 
 export default function ProfilePage() {
 
+  const navigate = useNavigate()
   const [openToast, setOpenToast] = useState("")
 
   const {
@@ -87,11 +88,12 @@ export default function ProfilePage() {
       <HeaderPage title="Gerenciar perfil"> 
         <Typography variant="h4" component="h1">
           <Button
-            type="submit"
+            type="button"
             variant="contained"
             size="large"
             color="error"
             sx={{ marginTop: 2 }}
+            onClick={() => navigate(`/perfil/${currentUser.id}/alterar-senha`)}
           >
             Alterar senha
           </Button>

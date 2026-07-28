@@ -6,9 +6,11 @@ import {
   CreateUserDTO, 
   UpdateUserDTO, 
   UserDetailDTO,
-  User
+  User,
+  UserPasswordUpdateDTO
 } from "@shared/types/user";
 import { OptionsControlledBox } from "@shared/types/values";
+import { hash } from "bcryptjs";
 
 
 export class PrismaUserRepository implements UserRepository {
@@ -24,6 +26,17 @@ export class PrismaUserRepository implements UserRepository {
         id: data.id,
       },
       data,
+    })
+  }
+
+  async updatePassword(data: UserPasswordUpdateDTO): Promise<void> {
+    await prisma.user.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        password_hash: await hash(data.password, 6)
+      }
     })
   }
   

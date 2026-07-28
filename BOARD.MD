@@ -165,3 +165,17 @@ Essa é a sessão correspondente a todos as agendas que um cliente possui com a 
 - [x] Visualizacao do dashboard;
 - [x] Visualizacao do modal de endereco no mobile;
 - [x] Aumento do tempo da sessão ativa;
+
+Process (926450913)
+- N Processo
+- Data (Data de deposito) - depositDate
+- Data de concessao - ?
+- Data de vencimento (Data de vencimento) - 
+- Apresentacao
+- Natureza
+- Acompanhamento
+- Titular
+- Marca
+- Classes (?)
+
+- Acompanhamento ??? (Provavel que seja o historico lá)
