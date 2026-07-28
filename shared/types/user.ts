@@ -51,6 +51,19 @@ export type UserPublicDTO = {
   deletedAt:  Date | null,
 }
 
+export type UserPasswordUpdateVisualDTO = {
+  id:           string,
+  password:     string,
+  confirm:      string
+}
+
+export type UserPasswordUpdateDTO = {
+  id:           string,
+  userLoggedId: string,
+  password:     string,
+  confirm:      string
+}
+
 export type UserRoleOptionDTO = {
   label: string
   value: string

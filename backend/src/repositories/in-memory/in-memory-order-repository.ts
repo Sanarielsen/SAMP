@@ -125,7 +125,14 @@ async findByIdWithType(
     return orders
   }
 
-  async findManyOptionsByClientId(): Promise<OptionsControlledBox[] | null> {
-    throw new Error('Method not implemented')
+  async findManyOptionsByClientId(clientId: string): Promise<OptionsControlledBox[] | null> {
+    const orders = this.items.filter(item => 
+      item.clientId == clientId && item.deletedAt == null
+    )
+
+    return this.items.map((item) => ({
+      label: 'Option Text',
+      value: item.id
+    }))
   }
 }

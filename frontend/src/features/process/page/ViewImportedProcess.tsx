@@ -1,206 +1,43 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import {
-  Box,
-  Button,
+import { 
+  Box, 
+  Grid 
 } from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
 
-import { optionsQueryListProcessCategoryAsAOptions } from "@/features/process/api/queryListProcessCategoryAsAOptions";
-import { optionsQueryListProcessTypeAsAOptions } from "@/features/process/api/queryListProcessTypeAsAnOption";
-import { optionsQueryPostQueryImportedProcessWithDetails } from "@/features/process/api/queryPostQueryImportedProcessWithDetails";
-import DataTableImportedProcessColumns from "@/features/process/components/DataTableImportedProcessColumns";
-import { ControlledInput } from "@/components/ControlledInputText";
-import { ControlledComboBox } from "@/components/ControlledComboBox";
-import DataTable from "@/components/DataTable";
-import HeaderPage from "@/components/HeaderPage";
-import ModalNewMagazine from "@/features/process/components/ModalNewMagazine";
-import PanelFilterGroup from "@/components/PanelFilterGroup";
-import PanelFilterItem from "@/components/PanelFilterItem";
-import ToastContainer from "@/components/Toast";
-import {
-  filterImportedProcessesSchema,
-  type FilterImportedProcessesFormData
-} from "@/features/process/schema/filterImportedProcesses";
-
-import type { ImportedProcessFilter } from "@shared/types/processImported";
-import ModalViewEntityDetails from "@/components/ModalViewEntityDetails";
-import { processImportedFields } from "@/features/process/utils/getRowDetailProcessImported";
-import { useDetailsModal } from "@/hooks/useDetailsModal";
+import ImportedProcessInformation from "@/features/process/components/ImportedProcessInformation";
+import ImportedProcessClasses from "@/features/process/components/ImportedProcessClasses";
+import ImportedProcessPublications from "@/features/process/components/ImportedProcessPublications";
+import { optionsQueryGetProcess } from "../api/queryGetProcess";
+import { useRequiredParam } from "@/hooks/useRequiredParam";
+import { useQuery } from "@tanstack/react-query";
 
 
 export default function ViewImportedProcess() {
 
-  const [openToast, setOpenToast] = useState("")
-  const [modalNewMagazine, setModalNewMagazine] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [payloadFilter, setPayloadFilter] = useState<ImportedProcessFilter>({
-    categoryId: '',
-    historyId: '',
-    typeId: '',
-  });
-
-  const form = useForm<FilterImportedProcessesFormData>({
-    resolver:
-      zodResolver(filterImportedProcessesSchema),
-  });
-  const { errors } = form.formState
-
-  const searchValue = form.watch("search");
+  const processId = useRequiredParam('id')
 
   const {
-    data: listProcessCategoryAsAOptions,
-    isSuccess: isSuccessCategoryOptions,
-  } = useQuery(
-    optionsQueryListProcessCategoryAsAOptions()
-  );
-
-  const {
-    data: listProcessTypeAsAOptions,
-    isSuccess: isSuccessTypeOptions,
-  } = useQuery(
-    optionsQueryListProcessTypeAsAOptions()
-  );
-
-  const {
-    data: importedProcessWithDetails,
-    isSuccess,
-    isLoading,
-    isError,
-  } = useQuery(
-    optionsQueryPostQueryImportedProcessWithDetails({
-      search: searchValue ?? undefined,
-      payload: {
-        ...payloadFilter,
-        categoryId: payloadFilter.categoryId,
-      },
-      isSubmitted
-    })
-  )
-
-  const onSubmit: SubmitHandler<FilterImportedProcessesFormData> = async (data) => {
-    
-    setPayloadFilter({
-      ...data
-    })
-    setIsSubmitted(true)
-  }
-
-  const stateQuery =
-    isSuccess ? "SUCCESS" : 
-    isLoading ? "LOADING" :
-    isError ? "ERROR" : 
-    !isSubmitted ? "IDLE"
-    : 'IDLE'
-
-  const { openDetails, closeDetails, payload } = useDetailsModal();
+    data: currentProcess,
+    isSuccess: isSuccessProcess
+  } = useQuery(optionsQueryGetProcess(processId!))
 
   return (
-    <>
-      <Box component="section" sx={{ marginTop: 2 }}>
-        <HeaderPage title="Listagem de processos importados"/>
+    <Box component="section" sx={{ p: 2 }}>
 
-        <Box component="section" sx={{ px: 2 }}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <PanelFilterGroup title="Filtros da listagem de processos">
+      <Grid container spacing={2}>
+        <Grid size={{ xs: 12 }}>
+          <ImportedProcessInformation data={
+            isSuccessProcess ? currentProcess : undefined
+          } />
+        </Grid>
 
-              <PanelFilterItem>
-                <ControlledInput
-                  control={form.control}
-                  name={'search'}
-                  label='Campo de pesquisa dos processos'
-                  error={!!errors?.search}
-                  helperText={
-                    String(errors?.search?.message ?? "")
-                  }
-                  fullWidth
-                />
-              </PanelFilterItem>
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <ImportedProcessClasses />
+        </Grid>
 
-              <PanelFilterItem>
-                <ControlledComboBox
-                  control={form.control}
-                  name={'categoryId'}
-                  label='Categoria'
-                  placeholder='Categoria do processo'
-                  options={ isSuccessCategoryOptions ?
-                    listProcessCategoryAsAOptions :
-                    []
-                  }
-                />
-              </PanelFilterItem>
-
-              <PanelFilterItem>
-                <ControlledComboBox
-                  control={form.control}
-                  name={'typeId'}
-                  label='Tipo'
-                  placeholder='Tipo do processo'
-                  options={ isSuccessTypeOptions ?
-                    listProcessTypeAsAOptions :
-                    []
-                  }
-                />
-              </PanelFilterItem>
-
-              <PanelFilterItem>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ width: { xs: "100%", md: "auto" }, }}
-                >
-                  <SearchIcon fontSize="medium" />
-                  Pesquisar
-                </Button>
-              </PanelFilterItem>
-            </PanelFilterGroup>
-          </form>
-        </Box>
-
-        <Box component="section" sx={{ p: 2}}>
-          <DataTable
-            state={stateQuery}
-            rows={isSuccess ?
-              importedProcessWithDetails : []
-            }
-            columns={DataTableImportedProcessColumns({
-              onClickSeeItem: (currentData) =>
-                openDetails({
-                  title: 'Visualizando o processo importado',
-                  fields: processImportedFields,
-                  data: currentData,
-                }),
-            })}
-          />
-        </Box>
-      </Box>
-
-      <ModalViewEntityDetails
-        open={Boolean(payload)}
-        title={payload?.title ?? ""}
-        data={payload?.data}
-        fields={payload?.fields ?? []}
-        handleClose={closeDetails}
-      />
-
-      <ModalNewMagazine
-        open={modalNewMagazine}
-        onSubmitImport={(action) => {
-          setOpenToast(action);
-          setModalNewMagazine(false)
-        }}
-        handleClose={() => setModalNewMagazine(false)}
-      />
-
-      <ToastContainer
-        open={openToast === "error"}
-        message="Ocorreu um erro ao consultar os processos importados."
-        severity="error"
-        onClose={() => setOpenToast("")}
-      />
-    </>
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <ImportedProcessPublications />
+        </Grid>
+      </Grid>
+    </Box>
   )
 }
