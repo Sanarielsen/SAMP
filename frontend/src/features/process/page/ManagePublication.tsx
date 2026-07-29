@@ -20,6 +20,7 @@ import { useMutationPatchPublication } from "@/features/process/api/mutationUpda
 import { optionsQueryGetPublication } from "@/features/process/api/queryGetPublication";
 import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions";
 import { optionsQueryGetClient } from "@/api/queryGetClient";;
+import ModalLoadProcessINPI from "@/features/process/components/ModalLoadProcessINPI";
 import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
@@ -28,9 +29,9 @@ import ModalViewEntityDetails from "@/components/ModalViewEntityDetails";
 import ToastContainer from "@/components/Toast";
 import { useDetailsModal } from "@/hooks/useDetailsModal";
 import { 
-  manageProcessManualSchema, 
-  type ManageProcessManualFormData 
-} from "@/features/process/schema/manageProcessManualSchema";
+  managePublicationSchema, 
+  type ManagePublicationFormData 
+} from "@/features/process/schema/managePublicationSchema";
 import { 
   listInputNatureValues, 
   listInputPresentationValues 
@@ -52,6 +53,7 @@ export default function ManagePublication() {
     "Atualizar publicação"
 
   const [openToast, setOpenToast] = useState("")
+  const [openModalSearch, setOpenModalSearch] = useState<boolean>()
 
   const {
     data: listProcessTypeAsAOptions,
@@ -73,9 +75,9 @@ export default function ManagePublication() {
     optionsQueryGetPublication(id)
   );
 
-  const form = useForm<ManageProcessManualFormData>({
+  const form = useForm<ManagePublicationFormData>({
     resolver:
-      zodResolver(manageProcessManualSchema),
+      zodResolver(managePublicationSchema),
     defaultValues:
       isEditing && publication ? {
         ...publication,
@@ -90,7 +92,7 @@ export default function ManagePublication() {
           : undefined,
       } : {}
     })
-    const { errors } = form.formState
+  const { errors } = form.formState
 
 
   useEffect(() => {
@@ -153,7 +155,7 @@ export default function ManagePublication() {
     mutationPostPublication.isSuccess ||
     mutationPatchPublication.isSuccess
 
-  const onSubmit: SubmitHandler<ManageProcessManualFormData> = async (data) => {
+  const onSubmit: SubmitHandler<ManagePublicationFormData> = async (data) => {
 
     const payload: CreatePublicationDTO = {
       ...data,
@@ -191,6 +193,16 @@ export default function ManagePublication() {
         <Box component="section" sx={{ px: 8 }}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <Grid container spacing={4} sx={{ pt: 8, pb: 3 }}>
+              <Grid size={{ xs: 12 }}>
+                <Button              
+                  type="button"
+                  variant="outlined"
+                  fullWidth
+                  onClick={() => setOpenModalSearch(true)}
+                >
+                  Carregar dados do INPI
+                </Button>
+              </Grid>
               <Grid size={{ xs: 12 }}>
                 <ControlledComboBox
                   control={form.control}
@@ -353,6 +365,11 @@ export default function ManagePublication() {
           title={payload?.title ?? ""}
           data={payload?.data}
           fields={payload?.fields ?? []}
+          handleClose={closeDetails}
+        />
+
+        <ModalLoadProcessINPI
+          open={openModalSearch}
           handleClose={closeDetails}
         />
 
