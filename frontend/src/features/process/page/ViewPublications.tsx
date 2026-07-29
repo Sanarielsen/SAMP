@@ -4,13 +4,13 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { 
   Box, 
+  Button, 
   TextField 
 } from "@mui/material";
 
 import { optionsQueryListPublicationDetails } from "@/features/process/api/listPublicationDetails";
 import { useMutationDeletePublication } from "@/features/process/api/mutationDeletePublication";
 import DataTablePublicationColumns from "@/features/process/components/DataTablePublicationColumns";
-import ButtonMenu from "@/components/ButtonMenu";
 import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
 import ModalConfirmation from "@/components/ModalConfirmation";
@@ -66,18 +66,21 @@ export default function ViewPublication() {
     setOpenModalConfirmation(true);
   }
 
-  const optionsNewProcess = [
-    {
-      label: 'Adicionar publicacão integrada aos processos da importacao',
-      value: 'automatica',
-      onClickOption: () => navigate('/processo/automatico')
-    },
-    {
-      label: 'Adicionar publicação manualmente',
-      value: 'manual',
-      onClickOption: () => navigate('/processos/publicacao')
-    },
-  ]
+  //TODO: Current infracturure, its not possible to export the magazine. 
+  //But when have a necessity to do it, explore this feature!
+  // const optionsNewProcess = [
+    
+  //   {
+  //     label: 'Adicionar publicacão integrada aos processos da importacao',
+  //     value: 'automatica',
+  //     onClickOption: () => navigate('/processo/automatico')
+  //   },
+  //   {
+  //     label: 'Adicionar publicação manualmente',
+  //     value: 'manual',
+  //     onClickOption: () => navigate('/processos/publicacao')
+  //   },
+  // ]
 
   const stateQuery =
     isSuccess ? "SUCCESS" : 
@@ -96,10 +99,14 @@ export default function ViewPublication() {
               justifyContent: 'flex-end'
             }}
           >
-            <ButtonMenu
-              label="Cadastrar processo"
-              options={optionsNewProcess}
-            />
+            <Button              
+              type="button"
+              variant="contained"
+              fullWidth
+              onClick={() => navigate('/processos/publicacao')}
+            >
+              Cadastrar nova publicacao
+            </Button>
           </Box>
         </HeaderPage>
 

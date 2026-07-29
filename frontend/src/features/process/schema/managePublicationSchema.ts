@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 
-export const manageProcessManualSchema = z.object({
+export const managePublicationSchema = z.object({
   clientId: z.string({error: 'Informe o cliente a ser considerado nessa publicação.'}),
   processTypeId: z.string({error: 'Informe o tipo do processo a ser considerado nessa publicação.'}),
   processNumber: z.string({error: 'Informe o cliente a ser considerado nessa salvamento.'}).min(1, 'Informe o cliente a ser considerado nessa salvamento.'),
@@ -15,4 +15,4 @@ export const manageProcessManualSchema = z.object({
   grantDate: z.string().optional(),
 });
 
-export type ManageProcessManualFormData = z.infer<typeof manageProcessManualSchema>;
+export type ManagePublicationFormData = z.infer<typeof managePublicationSchema>;
