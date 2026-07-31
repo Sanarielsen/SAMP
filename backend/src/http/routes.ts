@@ -69,6 +69,7 @@ import { updatePublication } from "./Controllers/publication/update";
 import { getPublication } from "./Controllers/publication/get";
 import { deletePublication } from "./Controllers/publication/delete";
 import { updateUserPassword } from "./Controllers/user/update-password";
+import { getProcessFromINPI } from "./Controllers/processImported/get-from-inpi";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -142,6 +143,8 @@ export async function appRoutes(app: FastifyInstance) {
   app.get(`/process/type/options`, {onRequest: [verifyJWT]}, listProcessTypeAsAnOption)
   app.get('/process/historic/options', {onRequest: [verifyJWT]}, listProcessHistoricAsAOptions)
   app.get('/process/imported/:id/options', {onRequest: [verifyJWT]}, listImportedProcessesAsAOption)
+
+  app.get('/process/inpi/:processNumber', {onRequest: [verifyJWT]}, getProcessFromINPI)
 
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
   app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)

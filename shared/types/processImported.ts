@@ -81,3 +81,28 @@ export type ImportedProcessFilter = {
   typeId?: string,
   historyId?: string
 }
+
+export interface ImportedProcessFromINPI {
+  codPedido: string;
+  processNumber: string;
+  holder: string;
+  brand: string;
+  status: string;
+  class: string;
+  sourceBody: string;
+}
+
+//TODO: Verify if all is really can be null or not.
+export interface ImportedProcessDetailFromINPI {
+  processNumber: string | null;
+  status: string | null
+  holder: string | null;
+  brand: string | null;
+  nature: string | null;
+  presentation: string | null;
+  specification: string | null;
+  depositDate: string | null;
+  grantDate: string | null;
+  expirationDate: string | null;
+  sourceEntireProcess: string | null
+}
