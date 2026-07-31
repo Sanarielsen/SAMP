@@ -7,12 +7,16 @@ import {
   DetailsProcessImportedDTO,
   ImportedProcess,
   ImportedProcessFilter,
+  ImportedProcessFromINPI,
   ImportedProcessListWithDetails
 } from "@shared/types/processImported";
 import { OptionsControlledBox } from "@shared/types/values";
 
 
 export class PrismaProcessImportedRepository implements ImportedProcessRepository {
+  findByProcessNumber(processNumber: string): Promise<ImportedProcessFromINPI> {
+    throw new Error("Method not implemented.");
+  }
   create(data: CreatedProcessImportedDTO): Promise<ImportedProcess> {
     throw new Error("Method not implemented.");
   }

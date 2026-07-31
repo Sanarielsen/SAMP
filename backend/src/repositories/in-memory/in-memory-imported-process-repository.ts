@@ -6,7 +6,8 @@ import {
   CreatedProcessImportedDTO, 
   DetailsProcessImportedDTO, 
   ImportedProcess, 
-  ImportedProcessFilter 
+  ImportedProcessFilter, 
+  ImportedProcessFromINPI
 } from "@shared/types/processImported";
 import { OptionsControlledBox } from "@shared/types/values";
 
@@ -35,6 +36,10 @@ export class InMemoryImportedProcessRepository implements ImportedProcessReposit
   }
 
   findByIdDetails(id: string): Promise<DetailsProcessImportedDTO | null> {
+    throw new Error("Method not implemented.");
+  }
+
+  findByProcessNumber(processNumber: string): Promise<ImportedProcessFromINPI> {
     throw new Error("Method not implemented.");
   }
 
