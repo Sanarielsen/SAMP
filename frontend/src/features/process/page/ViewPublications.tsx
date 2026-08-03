@@ -131,7 +131,7 @@ export default function ViewPublication() {
             rows={listDetailPublications}
             columns={DataTablePublicationColumns({
               onClickUpdateItem: (id) => navigate(`/processos/publicacao/${id}`),
-              onClickSeeItem: (current) => navigate(`/processos/publicacao/detalhe/${current.id}`), 
+              onClickSeeItem: (current) => navigate(`/processo/${current.id}`), 
               onClickDeleteItem: (current) => handleDelete(current.id)
             })}
           />

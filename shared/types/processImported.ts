@@ -104,5 +104,12 @@ export interface ImportedProcessDetailFromINPI {
   depositDate: string | null;
   grantDate: string | null;
   expirationDate: string | null;
+
   sourceEntireProcess: string | null
+  updatedAtByMagazine?: Date | null
+
+  magazineNumber?: string | null
+  createdAt?: Date | null
+  updatedAt?: Date | null
+  deletedAt?: Date | null
 }
