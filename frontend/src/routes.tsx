@@ -28,13 +28,14 @@ import ManageUser from "@/features/admin/page/ManageUser";
 import { DetailsPanel as OrderDetailsPanel } from "@/features/order/pages/DetailsPanel";
 import OrderNewPayment from "@/features/order/pages/OrderNewPayment";
 import PaymentDetails from "@/features/payment/pages/PaymentDetails";
-import HomeProcess from "./features/process/page/ViewImportedProcess";
-import ViewImportedProcess from "@/features/process/page/ViewImportedProcess";
+import HomeProcess from "./features/process/page/ViewImportedProcessOld";
+//import ViewImportedProcess from "@/features/process/page/ViewImportedProcessOld";
 import ViewPublication from "./features/process/page/ViewPublications";
 import ViewImportedMagazine from "./features/process/page/ViewImportedMagazine";
 import ManagePublication from "./features/process/page/ManagePublication";
 import NewProcessAutomatic from "./features/process/page/NewProcessAutomatic";
 import UpdatePassword from "./features/profile/pages/UpdatePassword";
+import ViewImportedProcess from "./features/process/page/ViewImportedProcess";
 
 
 export default function Router() {
@@ -67,7 +68,8 @@ export default function Router() {
         <Route path="pagamento/:id/parcelas" element={<PaymentDetails />} />
 
         <Route path="processos" element={<HomeProcess />} />
-        <Route path="processos/importados" element={<ViewImportedProcess />} />
+        <Route path="processo/:id" element={<ViewImportedProcess />} />
+        {/* <Route path="processos/importados" element={<ViewImportedProcess />} /> */}
         <Route path="processos/revistas" element={<ViewImportedMagazine />} />
         <Route path="processo/automatico" element={<NewProcessAutomatic />} />
         <Route path="processos/publicacoes" element={<ViewPublication />} />
