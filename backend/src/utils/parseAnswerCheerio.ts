@@ -129,10 +129,8 @@ export function getDates($: cheerio.CheerioAPI) {
     .get()
     .filter(Boolean);
 
-  console.log("Parceador: ", dates)
-
   return {
-    depositDate: dates[0] ?? null,
+    filingDate: dates[0] ?? null,
     grantDate: dates[1] ?? null,
     expirationDate: dates[2] ?? null,
   };
@@ -183,7 +181,7 @@ export function buildProcessBody(
     `Apresentacao: ${process.presentation}`,
     `Natureza: ${process.nature}`,
     `Especificacao: ${process.specification}`,
-    `Data de depósito: ${process.depositDate}`,
+    `Data de depósito: ${process.filingDate}`,
     `Data de concessão: ${process.grantDate}`,
     `Data de vigência: ${process.expirationDate}`,
     updatedAtByMagazineLine,

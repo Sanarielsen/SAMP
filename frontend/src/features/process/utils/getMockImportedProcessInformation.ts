@@ -6,7 +6,7 @@ export const importedProcessInformation: ImportedProcessDetailFromINPI = {
   brand: 'Sanarielsen',
   nature: 'Natural',
   presentation: 'Apresentacao',
-  depositDate: String(new Date(Date.now())),
+  filingDate: String(new Date(Date.now())),
   grantDate: String(new Date(Date.now())),
   expirationDate: String(new Date(Date.now())),
   status: 'Status',

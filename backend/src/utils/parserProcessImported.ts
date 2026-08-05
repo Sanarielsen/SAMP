@@ -26,7 +26,7 @@ export function parseDetail(
     presentation: getValueByLabel($, "Apresentação"),
     nature: getValueByLabel($, "Natureza"),
     specification: getSpecification($),
-    depositDate: dates.depositDate,
+    filingDate: dates.filingDate,
     grantDate: dates.grantDate,
     expirationDate: dates.expirationDate,
     magazineNumber: magazine.magazineNumber,

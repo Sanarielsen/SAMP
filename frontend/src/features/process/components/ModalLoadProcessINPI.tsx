@@ -24,16 +24,18 @@ import {
 } from "@/features/process/schema/searchNewProcessFromINPI";
 import { ModalContainer } from "@/styles/modalContainer";
 
-import type { ImportedProcessDetailFromINPI } from "@shared/types/importedProcess";
+import type { ImportedProcessDetailFromINPI, ImportedProcessPayload } from "@shared/types/importedProcess";
+import { convertStringBrazilianDateToDate } from "@/utils/convertDataToServerString";
 
 
 interface ModalLoadProcessINPIProps {
   open: boolean
+  handleClickTransfer: (process: ImportedProcessPayload) => void
   handleClose: () => void
 }
 
 export default function ModalLoadProcessINPI({
-  open, handleClose
+  open, handleClickTransfer, handleClose
 }: ModalLoadProcessINPIProps) {
 
   const [ searchPermission, setSearchPermission ] = useState(false)
@@ -68,9 +70,21 @@ export default function ModalLoadProcessINPI({
   }, [isSuccess, processLoaded]);
 
 
-  const onSubmit: SubmitHandler<SearchNewProcessFromINPIFormData> = async (data) => {
+  const onSubmit: SubmitHandler<SearchNewProcessFromINPIFormData> = async () => {
 
-    console.log(data, searchPermission)
+    console.log("Filling date: ", new Date(importedProcessInformation.filingDate))
+
+    const processLoaded: ImportedProcessPayload = {
+      ...importedProcessInformation,
+      filingDate: convertStringBrazilianDateToDate(importedProcessInformation.filingDate),
+      grantDate: convertStringBrazilianDateToDate(importedProcessInformation.grantDate),
+      expirationDate: convertStringBrazilianDateToDate(importedProcessInformation.expirationDate),
+      updatedAtByMagazine: importedProcessInformation.updatedAtByMagazine,
+      processMagazine: importedProcessInformation.magazineNumber,
+      status: importedProcessInformation.status
+    }
+    
+    handleClickTransfer(processLoaded)
   }
   
   return (

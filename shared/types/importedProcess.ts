@@ -45,15 +45,16 @@ export type ImportedProcessCreateDTO = {
 
 export type ImportedProcessPayload = {
   processNumber:        string
+  processMagazine:      string
   status:               string
   holder:               string
   brand:                string
   nature:               string 
   presentation:         string
   specification:        string
-  updatedAtByMagazine:  string
+  updatedAtByMagazine:  Date
 
-  filingDate:     Date | null
+  filingDate:     Date
   grantDate:      Date | null
   expirationDate: Date | null
 
@@ -128,7 +129,7 @@ export type CreatedProcessImportedDTO = {
   sourceText:     string
   sourcePage:     number
   importedByUser: string
-  depositDate?:   Date | null
+  filingDate?:   Date | null
   receivedDate?:  Date | null
   grantDate?:     Date | null
 }
@@ -158,7 +159,7 @@ export interface ImportedProcessDetailFromINPI {
   nature: string | null;
   presentation: string | null;
   specification: string | null;
-  depositDate: string | null;
+  filingDate: string | null;
   grantDate: string | null;
   expirationDate: string | null;
 
@@ -181,7 +182,7 @@ export interface ImportedProcessDetailFromINPICreateDTO {
   nature: string;
   presentation: string;
   specification: string;
-  depositDate: string;
+  filingDate: string;
   grantDate: string | null;
   expirationDate: string | null;
 
