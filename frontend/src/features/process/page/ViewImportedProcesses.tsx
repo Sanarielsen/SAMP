@@ -10,14 +10,14 @@ import {
 
 import { optionsQueryListPublicationDetails } from "@/features/process/api/listPublicationDetails";
 import { useMutationDeletePublication } from "@/features/process/api/mutationDeletePublication";
-import DataTablePublicationColumns from "@/features/process/components/DataTablePublicationColumns";
-import DataTable from "@/components/DataTable";
+// import DataTablePublicationColumns from "@/features/process/components/DataTablePublicationColumns";
+//import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast";
 
 
-export default function ViewPublication() {
+export default function ViewImportedProcesses() {
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -26,13 +26,13 @@ export default function ViewPublication() {
   const [openModalConfirmation, setOpenModalConfirmation] = useState(false);
   const [searchBar, setSearchBar] = useState("");
   const [searchApplied, setSearchApplied] = useState("")
-  const [publicationIdClicked, setPublicationIdClicked] = useState("");
+  //const [publicationIdClicked, setPublicationIdClicked] = useState("");
 
   const { 
-    data: listDetailPublications,
-    isSuccess,
-    isLoading,
-    isError,
+    // data: listDetailPublications,
+    // isSuccess,
+    // isLoading,
+    // isError,
     refetch,
   } = useQuery(
     optionsQueryListPublicationDetails(searchApplied)
@@ -52,19 +52,21 @@ export default function ViewPublication() {
   function handleDeletePublication(action: boolean){
 
     setOpenModalConfirmation(false)
-    if (!action || !publicationIdClicked) return
+    if (!action
+      //|| !publicationIdClicked
+    ) return
     
     mutationDeletePublication.mutate(
-      publicationIdClicked
+      "" // publicationIdClicked
     )
 
     refetch()
   }
 
-  function handleDelete(id: string) {
-    setPublicationIdClicked(id);
-    setOpenModalConfirmation(true);
-  }
+  // function handleDelete(id: string) {
+  //   setPublicationIdClicked(id);
+  //   setOpenModalConfirmation(true);
+  // }
 
   //TODO: Current infracturure, its not possible to export the magazine. 
   //But when have a necessity to do it, explore this feature!
@@ -82,15 +84,15 @@ export default function ViewPublication() {
   //   },
   // ]
 
-  const stateQuery =
-    isSuccess ? "SUCCESS" : 
-    isLoading ? "LOADING" :
-    isError ? "ERROR" : "IDLE";
+  // const stateQuery =
+  //   isSuccess ? "SUCCESS" : 
+  //   isLoading ? "LOADING" :
+  //   isError ? "ERROR" : "IDLE";
 
   return (
     <>
       <Box component="section" sx={{ marginTop: 2 }}>
-        <HeaderPage title="Listagem de publicações"> 
+        <HeaderPage title="Listagem de processos"> 
           <Box
             component="div"
             sx={{
@@ -103,22 +105,22 @@ export default function ViewPublication() {
               type="button"
               variant="contained"
               fullWidth
-              onClick={() => navigate('/processos/publicacao')}
+              onClick={() => navigate('/processo')}
             >
-              Cadastrar nova publicacao
+              Cadastrar processo
             </Button>
           </Box>
         </HeaderPage>
 
         <Box component="section" sx={{ p: 2, px: 4 }}>
           <TextField
-            label="Pesquisa na listagem de publicações cadastradas"
+            label="Pesquisa na listagem de processos cadastrados"
             value={searchBar}
             onChange={(e) => setSearchBar(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 setSearchApplied(searchBar)
-                queryClient.invalidateQueries({ queryKey: ['publications'] })
+                queryClient.invalidateQueries({ queryKey: ['processes'] })
               }
             }}
             fullWidth
@@ -126,15 +128,11 @@ export default function ViewPublication() {
         </Box>
 
         <Box component="section" sx={{ p: 2, px: 4 }}>
-          <DataTable
+          {/* <DataTable
             state={stateQuery}
             rows={listDetailPublications}
-            columns={DataTablePublicationColumns({
-              onClickUpdateItem: (id) => navigate(`/processos/publicacao/${id}`),
-              onClickSeeItem: (current) => navigate(`/processo/${current.id}`), 
-              onClickDeleteItem: (current) => handleDelete(current.id)
-            })}
-          />
+            columns={{}}
+          /> */}
         </Box>
       </Box>
 

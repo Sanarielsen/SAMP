@@ -28,14 +28,12 @@ import ManageUser from "@/features/admin/page/ManageUser";
 import { DetailsPanel as OrderDetailsPanel } from "@/features/order/pages/DetailsPanel";
 import OrderNewPayment from "@/features/order/pages/OrderNewPayment";
 import PaymentDetails from "@/features/payment/pages/PaymentDetails";
-import HomeProcess from "./features/process/page/ViewImportedProcessOld";
-//import ViewImportedProcess from "@/features/process/page/ViewImportedProcessOld";
-import ViewPublication from "./features/process/page/ViewPublications";
-import ViewImportedMagazine from "./features/process/page/ViewImportedMagazine";
-import ManagePublication from "./features/process/page/ManagePublication";
-import NewProcessAutomatic from "./features/process/page/NewProcessAutomatic";
-import UpdatePassword from "./features/profile/pages/UpdatePassword";
+
+import ViewImportedProcesses from "./features/process/page/ViewImportedProcesses";
 import ViewImportedProcess from "./features/process/page/ViewImportedProcess";
+import ManageImportedProcess from "./features/process/page/ManageImportedProcess";
+
+import UpdatePassword from "./features/profile/pages/UpdatePassword";
 
 
 export default function Router() {
@@ -62,19 +60,14 @@ export default function Router() {
         <Route path="os/" element={<OrderServiceManagePage />} />
         <Route path="os/:id" element={<OrderServiceManagePage />} />
         <Route path="os/detalhes/:id" element={<OrderDetailsPanel />} />
-
         <Route path="os/detalhes/:id/pagamento" element={<OrderNewPayment />} />
 
         <Route path="pagamento/:id/parcelas" element={<PaymentDetails />} />
 
-        <Route path="processos" element={<HomeProcess />} />
-        <Route path="processo/:id" element={<ViewImportedProcess />} />
-        {/* <Route path="processos/importados" element={<ViewImportedProcess />} /> */}
-        <Route path="processos/revistas" element={<ViewImportedMagazine />} />
-        <Route path="processo/automatico" element={<NewProcessAutomatic />} />
-        <Route path="processos/publicacoes" element={<ViewPublication />} />
-        <Route path="processos/publicacao" element={<ManagePublication />} />
-        <Route path="processos/publicacao/:id" element={<ManagePublication />} />
+        <Route path="processos" element={<ViewImportedProcesses />} />
+        <Route path="processo" element={<ManageImportedProcess />} />
+        <Route path="processo/:id" element={<ManageImportedProcess />} />
+        <Route path="processo/:id/detalhes" element={<ViewImportedProcess />} />
 
         <Route path="perfil" element={<ProfilePage />} />
         <Route path="perfil/:id/alterar-senha" element={<UpdatePassword />} />

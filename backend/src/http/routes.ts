@@ -8,28 +8,14 @@ import {
   profile, 
   updateProfile 
 } from "@/http/Controllers/user/profile";
-import { 
-  getClient,
-  listClient,
-  listClientWithOptions,
-  postClient,
-  updateClient,
-  updateClientStatus 
-} from "@/http/Controllers/client"
+
 import { getClientAppointment } from "@/http/Controllers/appointment/get";
 import { getAppoimentWithDetails } from "@/http/Controllers/appointment/get-with-details";
 import { postClientAppointment } from "@/http/Controllers/appointment/post";
 import { listClientAppointments } from "@/http/Controllers/appointment/list";
 import { updateClientAppointment } from "@/http/Controllers/appointment/update";
 import { deleteAppointment } from "@/http/Controllers/appointment/delete";
-import { 
-  deleteRepresentative,
-  getRepresentative,
-  getRepresentativeOfClients,
-  listRepresentative, 
-  postRepresentative,
-  updateRepresentative
-} from "@/http/Controllers/representative";
+
 import { listUsersWithOptions } from "@/http/Controllers/user/list-options";
 import { listOrdersWithOptions } from "@/http/Controllers/order/list-options";
 import { postOrder } from "@/http/Controllers/order/post";
@@ -49,28 +35,25 @@ import { listPaymentInstallments } from "@/http/Controllers/paymentInstallment/l
 import { updatePaymentInstallment } from "@/http/Controllers/paymentInstallment/update";
 import { listPaymentMethods } from "@/http/Controllers/paymentMethod/list";
 import { updatePaymentInstallmentAsPaid } from "@/http/Controllers/paymentInstallment/update-paid";
-import { sendEmail } from "./Controllers/test";
+import { sendEmail } from "./Controllers/email/test";
 import { listAppointmentsByOrder } from "./Controllers/appointment/list-by-order";
 import { listRecentAppointments } from "./Controllers/appointment/list-recents";
-import { postProcessAsAImporter } from "./Controllers/importedProcess/post-many";
-import { listProcessCategoryAsAOptions } from "./Controllers/processCategory/list-options";
-import { listProcessHistoricAsAOptions } from "./Controllers/processHistory/list-as-a-option";
-import { listImportedProcessesAsAOption } from "./Controllers/importedProcess/list-imported-processes-as-a-option";
-import { getProcessHistoryDetails } from "./Controllers/processCategory/get-details";
-import { getProcessImportedDetails } from "./Controllers/importedProcess/get-with-details";
-import { postPublicationTransferImportedProcess } from "./Controllers/publication/post-transfer-imported-process";
-import { listPublicationDetails } from "./Controllers/publication/list";
-import { postQueryImportedProcessWithDetails } from "./Controllers/importedProcess/post-query-with-details";
-import { listProcessTypeAsAnOption } from "./Controllers/processType/list-as-an-option";
-import { listProcessHistoryWithDetails } from "./Controllers/processHistory/list-with-details";
-import { deleteProcessHistoryWithFile } from "./Controllers/processHistory/delete-with-file";
-import { postPublication } from "./Controllers/publication/post";
-import { updatePublication } from "./Controllers/publication/update";
-import { getPublication } from "./Controllers/publication/get";
-import { deletePublication } from "./Controllers/publication/delete";
+
 import { updateUserPassword } from "./Controllers/user/update-password";
 import { getProcessFromINPI } from "./Controllers/importedProcess/get-from-inpi";
 import { postImportedProcessFromINPI } from "./Controllers/importedProcess/post-from-inpi";
+import { listRepresentative } from "./Controllers/representative/list";
+import { getRepresentative } from "./Controllers/representative/get";
+import { getRepresentativeOfClients } from "./Controllers/representative/get-with-clients";
+import { postRepresentative } from "./Controllers/representative/post";
+import { updateRepresentative } from "./Controllers/representative/update";
+import { deleteRepresentative } from "./Controllers/representative/delete";
+import { getClient } from "./Controllers/client/get";
+import { listClient } from "./Controllers/client/list";
+import { listClientWithOptions } from "./Controllers/client/list-with-options";
+import { postClient } from "./Controllers/client/post";
+import { updateClient } from "./Controllers/client/update";
+import { updateClientStatus } from "./Controllers/client/delete";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -86,7 +69,6 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/option/client/:id/orders', {onRequest: [verifyJWT]}, listOrdersWithOptions)
 
   app.get('/admin/users', {onRequest: [verifyJWT]}, listUsersWithSearch)
-
   app.post('/admin/user/email', {onRequest: [verifyJWT]}, sendEmail)
   
   app.get('/client/:id', {onRequest: [verifyJWT]}, getClient)
@@ -97,6 +79,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/client/:id/status', {onRequest: [verifyJWT]}, updateClientStatus)
   app.post('/client/:id/appointment', {onRequest: [verifyJWT]}, postClientAppointment)
   app.get('/client/:id/appointments', {onRequest: [verifyJWT]}, listClientAppointments)
+
   app.get('/appointment/:id', {onRequest: [verifyJWT]}, getClientAppointment)
   app.get('/appointments/order/:id', {onRequest: [verifyJWT]}, listAppointmentsByOrder)
   app.get('/appointments/recents/:range', {onRequest: [verifyJWT]}, listRecentAppointments)
@@ -126,29 +109,12 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/payment/installment/:id/paid', {onRequest: [verifyJWT]}, updatePaymentInstallmentAsPaid)
   app.delete('/payment/:id', {onRequest: [verifyJWT]}, deletePayment)
 
-  //################################ Process ###########################################################
   app.post('/process/inpi', {onRequest: [verifyJWT]}, postImportedProcessFromINPI)
   app.get('/process/inpi/:processNumber', {onRequest: [verifyJWT]}, getProcessFromINPI)
-
-  //Antiga implementacao de importacao de processos via revista
-  // app.post('/process/import', {onRequest: [verifyJWT]}, postProcessAsAImporter)
-  // app.post('/process/import/query', {onRequest: [verifyJWT]}, postQueryImportedProcessWithDetails)
-  // app.get('/process/imported/:id', {onRequest: [verifyJWT]}, getProcessImportedDetails)
-  // app.delete('/process/imported/:id', {onRequest: [verifyJWT]}, deleteProcessHistoryWithFile)
-  // app.get('/process/history/:id', {onRequest: [verifyJWT]}, getProcessHistoryDetails)
-  // app.get('/process/histories', {onRequest: [verifyJWT]}, listProcessHistoryWithDetails)
-
-  // app.post('/publication', {onRequest: [verifyJWT]}, postPublication)
-  // app.post('/publication/imported', {onRequest: [verifyJWT]}, postPublicationTransferImportedProcess)
-  // app.get('/publications', {onRequest: [verifyJWT]}, listPublicationDetails)
-  // app.get('/publication/:id', {onRequest: [verifyJWT]}, getPublication)
-  // app.patch('/publication/:id', {onRequest: [verifyJWT]}, updatePublication)
-  // app.delete('/publication/:id', {onRequest: [verifyJWT]}, deletePublication)
-
-  // app.get(`/process/category/options`, {onRequest: [verifyJWT]}, listProcessCategoryAsAOptions)
-  // app.get(`/process/type/options`, {onRequest: [verifyJWT]}, listProcessTypeAsAnOption)
-  // app.get('/process/historic/options', {onRequest: [verifyJWT]}, listProcessHistoricAsAOptions)
-  // app.get('/process/imported/:id/options', {onRequest: [verifyJWT]}, listImportedProcessesAsAOption)
+  //Create update route
+  //Create list route with search param
+  //Create delete route
+  //Create list route with details keys
 
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
   app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)
