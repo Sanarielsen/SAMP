@@ -3,18 +3,18 @@ import { useMutation, type UseMutationOptions } from '@tanstack/react-query'
 import { api } from '@/api/axios'
 import type { AxiosResponse } from 'axios'
 
-import type { CreatePublicationDTO, Publication } from '@shared/types/publication'
+import type { ImportedProcess, ImportedProcessCreateDTO } from '@shared/types/importedProcess'
 
 
-async function postPublication(payload: CreatePublicationDTO): Promise<AxiosResponse<Publication>> {
-  return await api.post(`/proces/imported`, payload)
+async function postImportedProcess(payload: ImportedProcessCreateDTO): Promise<AxiosResponse<ImportedProcess>> {
+  return await api.post(`/process/inpi`, payload)
 }
 
-export function useMutationPostPublication(
-  options?: UseMutationOptions<AxiosResponse<Publication>, Error, CreatePublicationDTO>
+export function useMutationPostImportedProcess(
+  options?: UseMutationOptions<AxiosResponse<ImportedProcess>, Error, ImportedProcessCreateDTO>
 ) {
   return useMutation({
-    mutationFn: postPublication,
+    mutationFn: postImportedProcess,
     ...options,
   })
 }

@@ -14,8 +14,6 @@ import {
 } from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
 
-import { optionsQueryListProcessTypeAsAOptions } from "@/features/process/api/queryListProcessTypeAsAnOption";
-import { useMutationPostPublication } from "@/features/process/api/mutatePostPublication";
 import { useMutationPatchPublication } from "@/features/process/api/mutationUpdatePublication";
 import { optionsQueryGetPublication } from "@/features/process/api/queryGetPublication";
 import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions";
@@ -29,9 +27,9 @@ import ModalViewEntityDetails from "@/components/ModalViewEntityDetails";
 import ToastContainer from "@/components/Toast";
 import { useDetailsModal } from "@/hooks/useDetailsModal";
 import { 
-  managePublicationSchema, 
-  type ManagePublicationFormData 
-} from "@/features/process/schema/managePublicationSchema";
+  manageImportedProcessSchema, 
+  type ManageImportedProcessFormData 
+} from "@/features/process/schema/manageImportedProcessSchema";
 import { 
   listInputNatureValues, 
   listInputPresentationValues 
@@ -40,7 +38,8 @@ import { convertDataToServerString } from "@/utils/convertDataToServerString";
 import { clientFields } from "@/utils/getRowDetailClient";
 import { formatAsVisualOnlyDate } from "@/utils/formatDate2";
 
-import type { CreatePublicationDTO } from "@shared/types/publication";
+import type { ImportedProcessCreateDTO, ImportedProcessPayload } from "@shared/types/importedProcess";
+import { useMutationPostImportedProcess } from "../api/mutatePostImportedProcessFromINPI";
 
 
 export default function ManagePublication() {
@@ -55,13 +54,6 @@ export default function ManagePublication() {
   const [openToast, setOpenToast] = useState("")
   const [openModalSearch, setOpenModalSearch] = useState<boolean>()
 
-  const {
-    data: listProcessTypeAsAOptions,
-    isSuccess: isSuccessTypeOptions,
-  } = useQuery(
-    optionsQueryListProcessTypeAsAOptions()
-  );
-
   const { 
     data: clientsWithOptions,
     isSuccess: isSuccessClientsWithOptions
@@ -75,9 +67,9 @@ export default function ManagePublication() {
     optionsQueryGetPublication(id)
   );
 
-  const form = useForm<ManagePublicationFormData>({
+  const form = useForm<ManageImportedProcessFormData>({
     resolver:
-      zodResolver(managePublicationSchema),
+      zodResolver(manageImportedProcessSchema),
     defaultValues:
       isEditing && publication ? {
         ...publication,
@@ -127,8 +119,8 @@ export default function ManagePublication() {
     }
   }
 
-  const mutationPostPublication =
-    useMutationPostPublication({
+  const mutationPostImportedProcess =
+    useMutationPostImportedProcess({
       onSuccess: () => {
         executeActionAfterRequest("success");
       },
@@ -149,37 +141,55 @@ export default function ManagePublication() {
 
   const { openDetails, closeDetails, payload } = useDetailsModal();
 
+  function handleTransferProcess(process: ImportedProcessPayload) {
+    form.setValue("processNumber", process.processNumber ?? "")
+    form.setValue("holder", process.holder ?? "")
+    form.setValue("status", process.status ?? "")
+    form.setValue("brand", process.brand ?? "")
+    form.setValue("nature", process.nature ?? "")
+    form.setValue("presentation", process.presentation ?? "")
+    form.setValue("specification", process.specification ?? "")
+    form.setValue("magazineNumber", process.processMagazine ?? "")
+    form.setValue("filingDate", formatAsVisualOnlyDate(process.filingDate))
+    form.setValue("grantDate", formatAsVisualOnlyDate(process.grantDate))
+    form.setValue("expirationDate", formatAsVisualOnlyDate(process.expirationDate))
+    setOpenModalSearch(false)
+  }
+
   const hasTransferStarted = 
-    mutationPostPublication.isPending ||
+    mutationPostImportedProcess.isPending ||
     mutationPatchPublication.isPending ||
-    mutationPostPublication.isSuccess ||
+    mutationPostImportedProcess.isSuccess ||
     mutationPatchPublication.isSuccess
 
-  const onSubmit: SubmitHandler<ManagePublicationFormData> = async (data) => {
+  const onSubmit: SubmitHandler<ManageImportedProcessFormData> = async (data) => {
 
-    const payload: CreatePublicationDTO = {
+    const payload: ImportedProcessCreateDTO = {
       ...data,
-      publicationDate: data.depositDate 
-        ? new Date(convertDataToServerString(data.publicationDate ?? "")) 
-        : undefined,
-      depositDate: data.depositDate
-        ? new Date(convertDataToServerString(data.depositDate))
+      userIdLogged: 'aa',
+      filingDate: data.filingDate 
+        ? new Date(convertDataToServerString(data.filingDate ?? "")) 
         : undefined,
       grantDate: data.grantDate
         ? new Date(convertDataToServerString(data.grantDate))
         : undefined,
+      expirationDate: data.expirationDate
+        ? new Date(convertDataToServerString(data.expirationDate))
+        : undefined,
+      processStatus: data.status,
+      updatedAtByMagazine: data.magazineNumber
       }
 
-    if (isEditing) {
+    // if (isEditing) {
 
-      mutationPatchPublication.mutate({
-        id,
-        ...payload
-      })
+    //   mutationPatchPublication.mutate({
+    //     id,
+    //     ...payload
+    //   })
 
-      return;
-    }
-    mutationPostPublication.mutate(payload)
+    //   return;
+    // }
+    mutationPostImportedProcess.mutate(payload)
   }
 
   return (
@@ -193,16 +203,6 @@ export default function ManagePublication() {
         <Box component="section" sx={{ px: 8 }}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <Grid container spacing={4} sx={{ pt: 8, pb: 3 }}>
-              <Grid size={{ xs: 12 }}>
-                <Button              
-                  type="button"
-                  variant="outlined"
-                  fullWidth
-                  onClick={() => setOpenModalSearch(true)}
-                >
-                  Carregar dados do INPI
-                </Button>
-              </Grid>
               <Grid size={{ xs: 12 }}>
                 <ControlledComboBox
                   control={form.control}
@@ -222,16 +222,14 @@ export default function ManagePublication() {
                 />
               </Grid>
               <Grid size={{ xs: 12 }}>
-                <ControlledComboBox
-                  control={form.control}
-                  name={'processTypeId'}
-                  label='Tipo do processo:*'
-                  placeholder='Tipo do processo considerado'
-                  options={isSuccessTypeOptions ?
-                    listProcessTypeAsAOptions :
-                    []
-                  }
-                />
+                <Button              
+                  type="button"
+                  variant="outlined"
+                  fullWidth
+                  onClick={() => setOpenModalSearch(true)}
+                >
+                  Carregar dados do INPI
+                </Button>
               </Grid>
               <Grid size={{ xs: 12, lg: 6 }}>
                 <ControlledInput
@@ -249,6 +247,19 @@ export default function ManagePublication() {
               <Grid size={{ xs: 12, lg: 6 }}>
                 <ControlledInput
                   control={form.control}
+                  type="number"
+                  name="magazineNumber"
+                  label="Número da revista:*"
+                  fullWidth
+                  error={!!errors?.processNumber}
+                  helperText={
+                    String(errors?.processNumber?.message ?? "")
+                  }
+                />
+              </Grid>
+              <Grid size={{ xs: 12, lg: 6 }}>
+                <ControlledInput
+                  control={form.control}
                   name="holder"
                   label="Titular:*"
                   placeholder='Títular do processo considerado'
@@ -256,6 +267,18 @@ export default function ManagePublication() {
                   error={!!errors?.holder}
                   helperText={
                     String(errors?.holder?.message ?? "")
+                  }
+                />
+              </Grid>
+              <Grid size={{ xs: 12 }}>
+                <ControlledInput
+                  control={form.control}
+                  name="status"
+                  label="Status:*"
+                  fullWidth
+                  error={!!errors?.status}
+                  helperText={
+                    String(errors?.status?.message ?? "")
                   }
                 />
               </Grid>
@@ -306,40 +329,40 @@ export default function ManagePublication() {
                 />
               </Grid>
               
-              <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                 <ControlledInputMask
                   control={form.control}
-                  name="publicationDate"
+                  name="filingDate"
                   mask="99/99/9999"
                   variant="outlined"
-                  label="Data de prioridade"
+                  label="Data de Depósito"
                   fullWidth
-                  error={!!errors.publicationDate}
-                  helperText={errors.publicationDate?.message}
+                  error={!!errors.filingDate}
+                  helperText={errors.filingDate?.message}
                 />
               </Grid>
-              <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
-                <ControlledInputMask
-                  control={form.control}
-                  name="depositDate"
-                  mask="99/99/9999"
-                  variant="outlined"
-                  label="Data de publicação"
-                  fullWidth
-                  error={!!errors.depositDate}
-                  helperText={errors.depositDate?.message}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                 <ControlledInputMask
                   control={form.control}
                   name="grantDate"
                   mask="99/99/9999"
                   variant="outlined"
-                  label="Data de conclusão"
+                  label="Data de Concessão"
                   fullWidth
                   error={!!errors.grantDate}
                   helperText={errors.grantDate?.message}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 12, md: 4 }}>
+                <ControlledInputMask
+                  control={form.control}
+                  name="expirationDate"
+                  mask="99/99/9999"
+                  variant="outlined"
+                  label="Data de Vigência"
+                  fullWidth
+                  error={!!errors.expirationDate}
+                  helperText={errors.expirationDate?.message}
                 />
               </Grid>
 
@@ -370,7 +393,8 @@ export default function ManagePublication() {
 
         <ModalLoadProcessINPI
           open={openModalSearch}
-          handleClose={closeDetails}
+          handleClickTransfer={handleTransferProcess}
+          handleClose={() => setOpenModalSearch(false)}
         />
 
         <ToastContainer

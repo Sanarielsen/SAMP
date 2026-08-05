@@ -25,8 +25,6 @@ export class GetImportedProcessFromINPIUseCase {
 
       const detailHtml = await this.importedProcessFromINPIRepository.detail(process.codPedido);
 
-      console.log("Result 1: ", detailHtml)
-
       return parseDetail(detailHtml);
     } catch (err) {
       if (err instanceof ResourceNotFoundError) throw err;
