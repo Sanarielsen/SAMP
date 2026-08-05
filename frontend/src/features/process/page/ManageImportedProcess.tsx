@@ -42,7 +42,7 @@ import type { ImportedProcessCreateDTO, ImportedProcessPayload } from "@shared/t
 import { useMutationPostImportedProcess } from "../api/mutatePostImportedProcessFromINPI";
 
 
-export default function ManagePublication() {
+export default function ManageImportedProcess() {
 
   const navigate = useNavigate();
   const { id } = useParams()
