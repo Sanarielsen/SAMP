@@ -2,7 +2,7 @@ import { PrismaProcessImportedRepository } from '@/repositories/prisma/prisma-im
 import { PrismaProcessCategoryRepository } from '@/repositories/prisma/prisma-process-category-repository'
 import { PrismaProcessTypeRepository } from '@/repositories/prisma/prisma-process-type-repository'
 import { PrismaProcessHistoryRepository } from '@/repositories/prisma/prisma-process-history-repository'
-import { PostQueryImportedProcessDetailsUseCase } from '@/services/service-process-imported/post-query-with-details'
+import { PostQueryImportedProcessDetailsUseCase } from '@/services/service-imported-process/post-query-with-details'
 
 
 export function makePostQueryImportProcessesWithDetails() {

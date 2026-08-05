@@ -2,7 +2,7 @@ import * as cheerio from "cheerio";
 
 import { cleanText } from "@/utils/parseAnswerCheerio";
 
-import { ImportedProcessFromINPI } from "@shared/types/processImported";
+import { ImportedProcessFromINPI } from "@shared/types/importedProcess";
 
 
 export function parseSearchProcessFromINPI(

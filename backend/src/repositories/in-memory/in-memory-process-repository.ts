@@ -1,6 +1,6 @@
-import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
+import { ImportedProcessRepository } from "@/repositories/imported-process-repository";
 
-import { CreatedProcessImportedDTO, CreateProcessImportedDTO, DetailsProcessImportedDTO, ImportedProcess, ImportedProcessFilter, ImportedProcessFromINPI } from "@shared/types/processImported";
+import { CreatedProcessImportedDTO, CreateProcessImportedDTO, DetailsProcessImportedDTO, ImportedProcess, ImportedProcessFilter, ImportedProcessFromINPI } from "@shared/types/importedProcess";
 import { OptionsControlledBox } from "@shared/types/values";
 
 

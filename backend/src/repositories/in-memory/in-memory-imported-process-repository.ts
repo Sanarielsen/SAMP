@@ -1,25 +1,28 @@
 import { randomUUID } from "node:crypto";
 
-import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
+import { ImportedProcessRepository } from "@/repositories/imported-process-repository";
 
 import { 
   CreatedProcessImportedDTO, 
   DetailsProcessImportedDTO, 
   ImportedProcess, 
+  ImportedProcessCreateDTO, 
   ImportedProcessFilter, 
   ImportedProcessFromINPI
-} from "@shared/types/processImported";
+} from "@shared/types/importedProcess";
 import { OptionsControlledBox } from "@shared/types/values";
 
 
 export class InMemoryImportedProcessRepository implements ImportedProcessRepository {
   public items: ImportedProcess[] = []
 
-  async create(data: CreatedProcessImportedDTO): Promise<ImportedProcess> {
+  async create(data: ImportedProcessCreateDTO): Promise<ImportedProcess> {
     const newItem: ImportedProcess = {
       ...data,
       id: randomUUID(),
-      createdAt: new Date(Date.now())
+      createdAt: new Date(Date.now()),
+      createdByUser: data.userIdLogged,
+      updatedByUser: data.userIdLogged
     }
     
     this.items.push(newItem)
@@ -48,36 +51,38 @@ export class InMemoryImportedProcessRepository implements ImportedProcessReposit
   }
 
   async findManyByFilterWithSearch(search: string, filter: ImportedProcessFilter): Promise<ImportedProcess[]> {
-    return this.items.filter((process) => {
+    throw new Error("Method not implemented.");
+    // return this.items.filter((process) => {
 
-      const normalizedSearch = search.toLowerCase();
+    //   const normalizedSearch = search.toLowerCase();
 
-      const matchesSearch =
-        !search ||
-        process.processNumber.toLowerCase().includes(normalizedSearch) ||
-        process.holder.toLowerCase().includes(normalizedSearch);
+    //   const matchesSearch =
+    //     !search ||
+    //     process.processNumber.toLowerCase().includes(normalizedSearch) ||
+    //     process.holder.toLowerCase().includes(normalizedSearch);
 
-      const matchesCategory =
-        process.processCategoryId === filter.categoryId;
+    //   const matchesCategory =
+    //     process.processCategoryId === filter.categoryId;
 
-      const matchesType =
-        !filter.typeId ||
-        process.processTypeId === filter.typeId;
+    //   const matchesType =
+    //     !filter.typeId ||
+    //     process.processTypeId === filter.typeId;
 
-      const matchesHistory =
-        !filter.historyId ||
-        process.processHistoricId === filter.historyId;
+    //   const matchesHistory =
+    //     !filter.historyId ||
+    //     process.processHistoricId === filter.historyId;
 
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesType &&
-        matchesHistory
-      );
-    });
+    //   return (
+    //     matchesSearch &&
+    //     matchesCategory &&
+    //     matchesType &&
+    //     matchesHistory
+    //   );
+    // });
   }
 
   async deleteManyByProcessHistoricId(processHistoricId: string): Promise<void> {
-    this.items = this.items.filter((item) => item.processHistoricId !== processHistoricId);
+    throw new Error("Method not implemented.");
+    // this.items = this.items.filter((item) => item.processHistoricId !== processHistoricId);
   }
 }

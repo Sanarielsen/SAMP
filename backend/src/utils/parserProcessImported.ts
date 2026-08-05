@@ -3,11 +3,11 @@ import {
   buildProcessBody, 
   getDates, 
   getSpecification, 
-  getValueByLabel 
+  getValueByLabel,
+  getMagazineInformation,
 } from "@/utils/parseAnswerCheerio";
 
-import { ImportedProcessDetailFromINPI } from "@shared/types/processImported";
-
+import { ImportedProcessDetailFromINPI } from "@shared/types/importedProcess";
 
 export function parseDetail(
   html: string
@@ -16,6 +16,7 @@ export function parseDetail(
   const $ = cheerio.load(html);
 
   const dates = getDates($);
+  const magazine = getMagazineInformation($);
 
   const process = {
     processNumber: getValueByLabel($, "Nº do Processo"),
@@ -28,6 +29,8 @@ export function parseDetail(
     depositDate: dates.depositDate,
     grantDate: dates.grantDate,
     expirationDate: dates.expirationDate,
+    magazineNumber: magazine.magazineNumber,
+    updatedAtByMagazine: magazine.updatedAtByMagazine,
     sourceEntireProcess: ""
   }
 

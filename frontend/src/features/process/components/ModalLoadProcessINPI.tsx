@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { 
   useForm,
-  //useWatch,
+  useWatch,
   type SubmitHandler
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,15 +16,15 @@ import {
 } from "@mui/material";
 import { GridCloseIcon } from "@mui/x-data-grid";
 
+import { optionsQueryGetImportedProcessFromINPI } from "@/features/process/api/queryGetImportedProcessFromINPI";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { 
   searchNewProcessFromINPI, 
   type SearchNewProcessFromINPIFormData 
 } from "@/features/process/schema/searchNewProcessFromINPI";
 import { ModalContainer } from "@/styles/modalContainer";
-//import { useQuery } from "@tanstack/react-query";
-//import { useINPIProcess } from "@/services/api/queryGetImportedProcessFromINPI";
-import { useState } from "react";
+
+import type { ImportedProcessDetailFromINPI } from "@shared/types/importedProcess";
 
 
 interface ModalLoadProcessINPIProps {
@@ -35,21 +37,36 @@ export default function ModalLoadProcessINPI({
 }: ModalLoadProcessINPIProps) {
 
   const [ searchPermission, setSearchPermission ] = useState(false)
+  const [ processLoaded, setProcessLoaded ] = useState<ImportedProcessDetailFromINPI>()
 
   const form = useForm<SearchNewProcessFromINPIFormData>({
     resolver:
-      zodResolver(searchNewProcessFromINPI)
-    })
+      zodResolver(searchNewProcessFromINPI),
+    defaultValues: processLoaded
+  })
+
   const { errors } = form.formState
 
-  // const processNumberSource = useWatch({
-  //   control: form.control,
-  //   name: 'processNumber',
-  // })
+  const processNumberSource = useWatch({
+    control: form.control,
+    name: 'processNumber',
+  })
 
-  // const entireResult = useINPIProcess(processNumberSource)
+  const { 
+    data: importedProcessInformation,
+    isSuccess,
+    isLoading,
+  } = useQuery(
+    optionsQueryGetImportedProcessFromINPI(processNumberSource, searchPermission)
+  )
 
-  // console.log(entireResult)
+  useEffect(() => {
+    if (isSuccess) {
+      setProcessLoaded(importedProcessInformation);
+      form.setValue("entireAnswer", importedProcessInformation.sourceEntireProcess)
+    }
+  }, [isSuccess, processLoaded]);
+
 
   const onSubmit: SubmitHandler<SearchNewProcessFromINPIFormData> = async (data) => {
 
@@ -109,6 +126,8 @@ export default function ModalLoadProcessINPI({
                 fullWidth
                 //TODO: Check the correct way to follow same propers of text without message error.
                 sx={{ height: '56px' }}
+                disabled={isLoading}
+                loading={isLoading}
                 onClick={() => setSearchPermission(true)}
               >
                 Carregar

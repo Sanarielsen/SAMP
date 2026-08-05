@@ -1,4 +1,4 @@
-import type { ImportedProcessDetailFromINPI } from "@shared/types/processImported";
+import type { ImportedProcessDetailFromINPI } from "@shared/types/importedProcess";
 
 
 export const importedProcessInformation: ImportedProcessDetailFromINPI = {

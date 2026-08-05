@@ -4,7 +4,7 @@ import {
 } from "fastify";
 import { z } from "zod";
 
-import { makePostQueryImportProcessesWithDetails } from "@/services/factories/process-imported/make-post-query-with-details";
+import { makePostQueryImportProcessesWithDetails } from "@/services/factories/imported-process/make-post-query-with-details";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 

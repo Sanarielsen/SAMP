@@ -2,7 +2,7 @@ import { PDFParse } from "pdf-parse";
 import path from "node:path";
 
 import { StorageProvider } from "@/storage/storage-provider";
-import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
+import { ImportedProcessRepository } from "@/repositories/imported-process-repository";
 import { ProcessHistoryRepository } from "@/repositories/process-historic-repository";
 import { ProcessCategoryRepository } from "@/repositories/process-category-repository";
 import { ImportDataError } from "@/services/errors/import-data-error";
@@ -10,7 +10,7 @@ import { ResourceNotFoundError } from "@/services/errors/resource-not-found-erro
 import { importProcessesWithAPI } from "@/scripts/import-processes-with-api";
 import { checkMagazineWillBeUploaded } from "@/utils/checkMagazineWillBeUploaded";
 
-import { CreatedProcessImportedDTO, CreateProcessImportedDTO } from "@shared/types/processImported";
+import { CreatedProcessImportedDTO, CreateProcessImportedDTO } from "@shared/types/importedProcess";
 import { ProcessHistory } from "@shared/types/processHistory";
 import { getRequiredEnv } from "@/utils/getRequiredEnv";
 
@@ -25,7 +25,6 @@ export class CreateProcessAsImportUseCase {
 
   async execute({ userId, categoryId, numberMagazine, fileMagazine }: CreateProcessImportedDTO): Promise<number | null> {
 
-    console.log("POST /process/imported INICIOI");
     let importedProcesses: CreatedProcessImportedDTO[]
     let magazineHistoric: ProcessHistory | null;
     let importedRowsQuantity: number = 0;
@@ -38,7 +37,6 @@ export class CreateProcessAsImportUseCase {
 
     if (!category) throw new ResourceNotFoundError();
 
-    console.log("POST /process/imported chegou no history");
     magazineHistoric = await this.processHistoricRepository.findByNumberMagazine(numberMagazine);
 
     if (!magazineHistoric) {

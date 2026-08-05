@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 
-import { ImportedProcessDetailFromINPI } from "@shared/types/processImported";
+import { ImportedProcessDetailFromINPI } from "@shared/types/importedProcess";
 
 
 export function cleanText(value: string): string {
@@ -61,6 +61,63 @@ export function getValueByLabel(
   return value || null;
 }
 
+//v1
+// export function getMagazineInformation($: cheerio.CheerioAPI) {
+//   const fullText = $("body").text().replace(/\s+/g, " ").trim();
+//   const match = fullText.match(/dados atualizados até\s*[:]?\s*([0-3]?\d\/[0-1]?\d\/[0-9]{4})\s*[-–—]\s*n\.?º?\s*da revista\s*[:]?\s*([0-9]+)/i);
+
+//   if (!match) {
+//     return {
+//       magazineNumber: null,
+//       updatedAtByMagazine: null,
+//     };
+//   }
+
+//   const [, dateValue, magazineNumber] = match;
+//   const updatedAtByMagazine = parseDateDDMMYYYY(dateValue);
+
+//   return {
+//     magazineNumber,
+//     updatedAtByMagazine,
+//   };
+// }
+
+export function getMagazineInformation($: cheerio.CheerioAPI) {
+  const fullText = $("body").text().replace(/\s+/g, " ").trim();
+
+  const match = fullText.match(
+    /Dados atualizados até\s+(\d{2}\/\d{2}\/\d{4})\s*-\s*N[º°]?\s*da\s*Revista:\s*(\d+)/i,
+  );
+
+  if (!match) {
+    return {
+      magazineNumber: null,
+      updatedAtByMagazine: null,
+    };
+  }
+
+  return {
+    updatedAtByMagazine: parseDateDDMMYYYY(match[1]),
+    magazineNumber: match[2],
+  };
+}
+
+function parseDateDDMMYYYY(date: string): Date | null {
+  const [day, month, year] = date.split("/").map(Number);
+
+  if (!day || !month || !year) {
+    return null;
+  }
+
+  const parsedDate = new Date(year, month - 1, day);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return null;
+  }
+
+  return parsedDate;
+}
+
 export function getDates($: cheerio.CheerioAPI) {
   const dates = $("tr[bgcolor='#e9e9e9'] th")
     .map((_, el) =>
@@ -71,6 +128,8 @@ export function getDates($: cheerio.CheerioAPI) {
     )
     .get()
     .filter(Boolean);
+
+  console.log("Parceador: ", dates)
 
   return {
     depositDate: dates[0] ?? null,
@@ -111,18 +170,24 @@ export function getSpecification($: cheerio.CheerioAPI): string | null {
 export function buildProcessBody(
   process: ImportedProcessDetailFromINPI
 ): string {
+  const updatedAtByMagazineLine = process.updatedAtByMagazine
+    ? `Atualizado pela revista em: ${process.updatedAtByMagazine.toLocaleDateString("pt-BR")}`
+    : null;
+
   return [
-    `Process Number: ${process.processNumber}`,
+    process.magazineNumber && `Número da revista: ${process.magazineNumber}`,
+    `Número do processo: ${process.processNumber}`,
     `Status: ${process.status}`,
-    `Brand: ${process.brand}`,
-    `Holder: ${process.holder}`,
-    `Presentation: ${process.presentation}`,
-    `Nature: ${process.nature}`,
-    `Specification: ${process.specification}`,
-    `Deposit Date: ${process.depositDate}`,
-    `Grant Date: ${process.grantDate}`,
-    `Expiration Date: ${process.expirationDate}`,
+    `Marca: ${process.brand}`,
+    `Titular: ${process.holder}`,
+    `Apresentacao: ${process.presentation}`,
+    `Natureza: ${process.nature}`,
+    `Especificacao: ${process.specification}`,
+    `Data de depósito: ${process.depositDate}`,
+    `Data de concessão: ${process.grantDate}`,
+    `Data de vigência: ${process.expirationDate}`,
+    updatedAtByMagazineLine,
   ]
-    .filter(line => !line.endsWith(": null") && !line.endsWith(": undefined"))
+    .filter((line): line is string => typeof line === "string" && !line.endsWith(": null") && !line.endsWith(": undefined"))
     .join("\n");
 }

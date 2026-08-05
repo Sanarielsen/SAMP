@@ -1,12 +1,12 @@
 import { INPIClient } from "@/scripts/get-process-from-inpi";
-import { parseSearchProcessFromINPI } from "@/utils/parseSearchProcessFromINPI";
-import { parseDetail } from "@/utils/parserProcessImported";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { INPIUnavailableError } from "@/services/errors/inpi-unavailable-error";
+import { parseSearchProcessFromINPI } from "@/utils/parseSearchProcessFromINPI";
+import { parseDetail } from "@/utils/parserProcessImported";
 
 import { 
   ImportedProcessDetailFromINPI 
-} from "@shared/types/processImported";
+} from "@shared/types/importedProcess";
 
 
 export class GetImportedProcessFromINPIUseCase {
@@ -14,17 +14,18 @@ export class GetImportedProcessFromINPIUseCase {
     private importedProcessFromINPIRepository = new INPIClient
   ) {}
 
-  async execute(processNumber: string): Promise<ImportedProcessDetailFromINPI | null> {
+  async execute(processNumber: string): Promise<ImportedProcessDetailFromINPI> {
 
-    const client = new INPIClient();
     try {
-      await client.login();
-      const searchHtml = await client.search(processNumber);
+      await this.importedProcessFromINPIRepository.login();
+      const searchHtml = await this.importedProcessFromINPIRepository.search(processNumber);
 
       const process = parseSearchProcessFromINPI(searchHtml);
       if (!process) throw new ResourceNotFoundError();
 
-      const detailHtml = await client.detail(process.codPedido);
+      const detailHtml = await this.importedProcessFromINPIRepository.detail(process.codPedido);
+
+      console.log("Result 1: ", detailHtml)
 
       return parseDetail(detailHtml);
     } catch (err) {

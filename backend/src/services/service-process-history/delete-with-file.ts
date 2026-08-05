@@ -1,5 +1,5 @@
 import { ProcessHistoryRepository } from "@/repositories/process-historic-repository";
-import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
+import { ImportedProcessRepository } from "@/repositories/imported-process-repository";
 import { StorageProvider } from "@/storage/storage-provider";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";

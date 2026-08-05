@@ -1,31 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions } from "@tanstack/react-query"
 
-export async function getProcessFromINPI(
-  processNumber: string = ""
-): Promise<string> {
-  if (!processNumber) {
-    throw new Error("Invalid process number");
-  }
+import { api } from "@/api/axios"
 
-  const response = await fetch(
-    `https://busca.inpi.gov.br/pePI/servlet/MarcasServletController?Action=searchMarca&NumPedido=${processNumber}&Source=OAMI&tipoPesquisa=BY_NUM_PROC`
-  );
+import type { ImportedProcessDetailFromINPI } from "@shared/types/importedProcess"
 
-  if (!response.ok) {
-    throw new Error("Error searching process");
-  }
 
-  // The response is HTML, not JSON
-  return response.text();
-}
+export function optionsQueryGetImportedProcessFromINPI(processNumber: string, isEnabled: boolean) { 
+  return queryOptions({
+    queryKey: ["imported-process", processNumber],
+    enabled: !!isEnabled,
+    queryFn: async () => {
+      const { data } = await api.get<ImportedProcessDetailFromINPI>(`process/inpi/${processNumber}`)
 
-export function useINPIProcess(processNumber: string, isEnabled: boolean) {
-  return useQuery({
-    queryKey: ["inpi-process", processNumber],
-    queryFn: () => getProcessFromINPI(processNumber),
-
-    enabled: isEnabled,
-
-    staleTime: 1000 * 60 * 60,
-  });
+      return data
+    },
+  })
 }
