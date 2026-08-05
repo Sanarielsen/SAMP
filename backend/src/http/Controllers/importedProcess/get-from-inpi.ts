@@ -3,7 +3,7 @@ import {
 	FastifyRequest 
 } from "fastify";
 
-import { makeGetImportedProcessFromINPIUseCase } from "@/services/factories/process-imported/make-get-from-inpi";
+import { makeGetImportedProcessFromINPIUseCase } from "@/services/factories/imported-process/make-get-from-inpi";
 import { INPIUnavailableError } from "@/services/errors/inpi-unavailable-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 	

@@ -1,5 +1,5 @@
 import { PublicationRepository } from "@/repositories/publication-repository";
-import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
+import { ImportedProcessRepository } from "@/repositories/imported-process-repository";
 import { ClientRepository } from "@/repositories/client-repository";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";

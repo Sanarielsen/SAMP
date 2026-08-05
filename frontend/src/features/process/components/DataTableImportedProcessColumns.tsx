@@ -8,7 +8,7 @@ import {
   type GridColDef
 } from "@mui/x-data-grid"
 
-import type { ImportedProcess } from "@shared/types/processImported";
+import type { ImportedProcess } from "@shared/types/importedProcess";
 
 
 type ColumnsPublicationProps = {

@@ -4,7 +4,7 @@ import { api } from '@/api/axios'
 
 import type { 
   ImportedProcessFilter 
-} from '@shared/types/processImported';
+} from '@shared/types/importedProcess';
 
 
 interface QueryImportedProcessPayload {

@@ -1,6 +1,6 @@
 import { PrismaProcessImportedRepository } from '@/repositories/prisma/prisma-imported-process-repository'
 import { PrismaProcessHistoryRepository } from '@/repositories/prisma/prisma-process-history-repository'
-import { ListImportedProcessesAsAOptionUseCase } from '@/services/service-process-imported/list-imported-processes-as-a-option'
+import { ListImportedProcessesAsAOptionUseCase } from '@/services/service-imported-process/list-imported-processes-as-a-option'
 
 
 export function makeListImportProcessesAsAOption() {

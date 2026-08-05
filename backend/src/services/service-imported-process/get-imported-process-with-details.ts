@@ -1,8 +1,8 @@
-import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
+import { ImportedProcessRepository } from "@/repositories/imported-process-repository";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
-import { DetailsProcessImportedDTO } from "@shared/types/processImported";
+import { DetailsProcessImportedDTO } from "@shared/types/importedProcess";
 
 
 export class GetProcessImportedWithDetailsUseCase {

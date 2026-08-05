@@ -52,15 +52,15 @@ import { updatePaymentInstallmentAsPaid } from "@/http/Controllers/paymentInstal
 import { sendEmail } from "./Controllers/test";
 import { listAppointmentsByOrder } from "./Controllers/appointment/list-by-order";
 import { listRecentAppointments } from "./Controllers/appointment/list-recents";
-import { postProcessAsAImporter } from "./Controllers/processImported/post-many";
+import { postProcessAsAImporter } from "./Controllers/importedProcess/post-many";
 import { listProcessCategoryAsAOptions } from "./Controllers/processCategory/list-options";
 import { listProcessHistoricAsAOptions } from "./Controllers/processHistory/list-as-a-option";
-import { listImportedProcessesAsAOption } from "./Controllers/processImported/list-imported-processes-as-a-option";
+import { listImportedProcessesAsAOption } from "./Controllers/importedProcess/list-imported-processes-as-a-option";
 import { getProcessHistoryDetails } from "./Controllers/processCategory/get-details";
-import { getProcessImportedDetails } from "./Controllers/processImported/get-with-details";
+import { getProcessImportedDetails } from "./Controllers/importedProcess/get-with-details";
 import { postPublicationTransferImportedProcess } from "./Controllers/publication/post-transfer-imported-process";
 import { listPublicationDetails } from "./Controllers/publication/list";
-import { postQueryImportedProcessWithDetails } from "./Controllers/processImported/post-query-with-details";
+import { postQueryImportedProcessWithDetails } from "./Controllers/importedProcess/post-query-with-details";
 import { listProcessTypeAsAnOption } from "./Controllers/processType/list-as-an-option";
 import { listProcessHistoryWithDetails } from "./Controllers/processHistory/list-with-details";
 import { deleteProcessHistoryWithFile } from "./Controllers/processHistory/delete-with-file";
@@ -69,7 +69,8 @@ import { updatePublication } from "./Controllers/publication/update";
 import { getPublication } from "./Controllers/publication/get";
 import { deletePublication } from "./Controllers/publication/delete";
 import { updateUserPassword } from "./Controllers/user/update-password";
-import { getProcessFromINPI } from "./Controllers/processImported/get-from-inpi";
+import { getProcessFromINPI } from "./Controllers/importedProcess/get-from-inpi";
+import { postImportedProcessFromINPI } from "./Controllers/importedProcess/post-from-inpi";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -125,26 +126,29 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/payment/installment/:id/paid', {onRequest: [verifyJWT]}, updatePaymentInstallmentAsPaid)
   app.delete('/payment/:id', {onRequest: [verifyJWT]}, deletePayment)
 
-  app.post('/process/import', {onRequest: [verifyJWT]}, postProcessAsAImporter)
-  app.post('/process/import/query', {onRequest: [verifyJWT]}, postQueryImportedProcessWithDetails)
-  app.get('/process/imported/:id', {onRequest: [verifyJWT]}, getProcessImportedDetails)
-  app.delete('/process/imported/:id', {onRequest: [verifyJWT]}, deleteProcessHistoryWithFile)
-  app.get('/process/history/:id', {onRequest: [verifyJWT]}, getProcessHistoryDetails)
-  app.get('/process/histories', {onRequest: [verifyJWT]}, listProcessHistoryWithDetails)
-
-  app.post('/publication', {onRequest: [verifyJWT]}, postPublication)
-  app.post('/publication/imported', {onRequest: [verifyJWT]}, postPublicationTransferImportedProcess)
-  app.get('/publications', {onRequest: [verifyJWT]}, listPublicationDetails)
-  app.get('/publication/:id', {onRequest: [verifyJWT]}, getPublication)
-  app.patch('/publication/:id', {onRequest: [verifyJWT]}, updatePublication)
-  app.delete('/publication/:id', {onRequest: [verifyJWT]}, deletePublication)
-
-  app.get(`/process/category/options`, {onRequest: [verifyJWT]}, listProcessCategoryAsAOptions)
-  app.get(`/process/type/options`, {onRequest: [verifyJWT]}, listProcessTypeAsAnOption)
-  app.get('/process/historic/options', {onRequest: [verifyJWT]}, listProcessHistoricAsAOptions)
-  app.get('/process/imported/:id/options', {onRequest: [verifyJWT]}, listImportedProcessesAsAOption)
-
+  //################################ Process ###########################################################
+  app.post('/process/inpi', {onRequest: [verifyJWT]}, postImportedProcessFromINPI)
   app.get('/process/inpi/:processNumber', {onRequest: [verifyJWT]}, getProcessFromINPI)
+
+  //Antiga implementacao de importacao de processos via revista
+  // app.post('/process/import', {onRequest: [verifyJWT]}, postProcessAsAImporter)
+  // app.post('/process/import/query', {onRequest: [verifyJWT]}, postQueryImportedProcessWithDetails)
+  // app.get('/process/imported/:id', {onRequest: [verifyJWT]}, getProcessImportedDetails)
+  // app.delete('/process/imported/:id', {onRequest: [verifyJWT]}, deleteProcessHistoryWithFile)
+  // app.get('/process/history/:id', {onRequest: [verifyJWT]}, getProcessHistoryDetails)
+  // app.get('/process/histories', {onRequest: [verifyJWT]}, listProcessHistoryWithDetails)
+
+  // app.post('/publication', {onRequest: [verifyJWT]}, postPublication)
+  // app.post('/publication/imported', {onRequest: [verifyJWT]}, postPublicationTransferImportedProcess)
+  // app.get('/publications', {onRequest: [verifyJWT]}, listPublicationDetails)
+  // app.get('/publication/:id', {onRequest: [verifyJWT]}, getPublication)
+  // app.patch('/publication/:id', {onRequest: [verifyJWT]}, updatePublication)
+  // app.delete('/publication/:id', {onRequest: [verifyJWT]}, deletePublication)
+
+  // app.get(`/process/category/options`, {onRequest: [verifyJWT]}, listProcessCategoryAsAOptions)
+  // app.get(`/process/type/options`, {onRequest: [verifyJWT]}, listProcessTypeAsAnOption)
+  // app.get('/process/historic/options', {onRequest: [verifyJWT]}, listProcessHistoricAsAOptions)
+  // app.get('/process/imported/:id/options', {onRequest: [verifyJWT]}, listImportedProcessesAsAOption)
 
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
   app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)

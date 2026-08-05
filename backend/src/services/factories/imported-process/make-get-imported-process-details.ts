@@ -1,5 +1,5 @@
 import { PrismaProcessImportedRepository } from '@/repositories/prisma/prisma-imported-process-repository'
-import { GetProcessImportedWithDetailsUseCase } from '@/services/service-process-imported/get-imported-process-with-details'
+import { GetProcessImportedWithDetailsUseCase } from '@/services/service-imported-process/get-imported-process-with-details'
 
 
 export function makeGetProcessImportedWithDetails() {

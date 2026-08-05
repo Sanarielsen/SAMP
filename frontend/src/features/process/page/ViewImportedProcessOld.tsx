@@ -26,7 +26,7 @@ import {
   type FilterImportedProcessesFormData
 } from "@/features/process/schema/filterImportedProcesses";
 
-import type { ImportedProcessFilter } from "@shared/types/processImported";
+import type { ImportedProcessFilter } from "@shared/types/importedProcess";
 import ModalViewEntityDetails from "@/components/ModalViewEntityDetails";
 import { processImportedFields } from "@/features/process/utils/getRowDetailProcessImported";
 import { useDetailsModal } from "@/hooks/useDetailsModal";

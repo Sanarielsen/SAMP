@@ -1,4 +1,4 @@
-import { ImportedProcessRepository } from "@/repositories/process-imported-repository";
+import { ImportedProcessRepository } from "@/repositories/imported-process-repository";
 import { ProcessCategoryRepository } from "@/repositories/process-category-repository";
 import { ProcessTypeRepository } from "@/repositories/process-type-repository";
 import { ProcessHistoryRepository } from "@/repositories/process-historic-repository";
@@ -8,7 +8,7 @@ import { ResourceNotFoundError } from "@/services/errors/resource-not-found-erro
 import { 
   ImportedProcess,
   ImportedProcessFilter
-} from "@shared/types/processImported";
+} from "@shared/types/importedProcess";
 
 
 export class PostQueryImportedProcessDetailsUseCase {

@@ -1,0 +1,941 @@
+ 
+
+
+
+
+
+
+
+
+
+
+<html>
+    <head>
+        <title>INPI</title>
+        <meta content="text/html; charset=ISO-8859-1" http-equiv=Content-Type>
+        <link href="../jsp/css/inpi.css" rel=stylesheet type=text/css>
+        <link href="../jsp/css/captcha.css" rel=stylesheet type=text/css>
+        <link href="../jsp/css/accordions.css" rel=stylesheet type=text/css>
+        <link href="../jsp/css/MarcaDetalhe.css" rel=stylesheet type=text/css>
+        <script type="text/javascript" src="../jsp/funcoes/geral.js"></script>
+        <script type="text/javascript" src="../jsp/funcoes/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../jsp/funcoes/captcha.js"></script>
+   		<script type="text/javascript" src="../jsp/funcoes/meusPedidos.js"></script>
+   		<script type="text/javascript" src="../jsp/funcoes/MarcaDetalhe.js"></script>
+
+   		<!-- RECAPTCHA -->
+		<script src="//www.google.com/recaptcha/api.js"></script>
+   		    </head>
+    <body bgColor="#ffffff" leftMargin=0 text="#000000" topMargin=0 >
+    
+    <div id="janelaModalCaptchaDownload" class="janelaModal">
+
+            <div class="tituloModal">Digite o texto da imagem abaixo</div>            
+           
+           <!-- RECAPTCHA -->
+			<div class="g-recaptcha" data-sitekey="6LfhwSAaAAAAANyx2xt8Ikk-YkQ3PGeAVhCfF3i2"></div>
+		
+            <fieldset></fieldset>
+            <input type="hidden" id="NumeroID">
+            <input type="hidden" id="certificado">
+            <input type="hidden" id="ipasDoc">
+            <input type="hidden" id="ehTitularOuProcurador">
+            
+    </div> 
+     
+    <form name="MarcaPesquisa" method="POST" action="../servlet/MarcasServletController">
+		<input type="hidden" name="CodPedido" id="CodPedido" value="6625632">
+    	<input type="hidden" name="NumPedido" value="">
+    	<input type="hidden" name="Action" id="Action" value="">
+    
+        <div id="overlay"></div>
+
+        <div id="mainContainer">
+
+<div id="principal">
+<br/>
+<div id="barra-brasil" style="background:#7F7F7F; height: 20px; padding:0 0 0 10px;display:block;">
+	<ul id="menu-barra-temp" style="list-style:none;">
+	<li style="display:inline; float:left;padding-right:10px; margin-right:10px; borderright:1px solid #EDEDED">
+		<a href="http://brasil.gov.br" style="font-family:sans,sans-serif; text- Portal Padrão Barra de Identidade Visual do Governo Federal na Internet - APLICAÇÃO right:1px solid #EDEDED">
+		<a href="http://brasil.gov.br" style="font-family:sans,sans-serif; text- decoration:none; color:white;">Portal do Governo Brasileiro</a>
+		</li>
+		<li>
+			<a style="font-family:sans,sans-serif; text-decoration:none; color:white;" 
+			href="http://epwg.governoeletronico.gov.br/barra/atualize.html">Atualize sua Barra de Governo
+			</a>
+		</li>
+	</ul>
+</div>
+<div id="logo">
+	<a id="portal-logo" href="http://www.inpi.gov.br" title="O portal do Brasil">
+		<span id="portal-title-1">Instituto Nacional da</span>
+		<span id="portal-title" class="corto">Propriedade Industrial</span>
+		<span id="portal-description">Ministério do Desenvolvimento, Indústria, Comércio e Serviços</span>
+	</a>
+</div>
+<script src="/pePI/jsp/funcoes/barra.js" type="text/javascript"></script>
+
+
+
+        <table width="780px">
+            <tr>
+                <td align="center" colspan="2"><font class="titulo">Consulta à Base de Dados do INPI</font></td>
+            </tr>
+            <tr>
+                <td align="right" colspan="2">
+                    <font class=normal>
+						<div align="right">
+                            [ <a href="../jsp/Base_pesquisa.jsp" class="titulo">Início</a> |
+                            <a href="../jsp/Ajuda.jsp" class="normal">Ajuda?</a> ]
+						</div>
+                    </font>
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    <font class=normal>
+                        » Consultar por: <a class=titulo href="../jsp/marcas/Pesquisa_num_processo.jsp">No.Processo</a> | 
+                            <a class=titulo href="../jsp/marcas/Pesquisa_classe_basica.jsp">Marca</a> | 
+                            <a class=titulo href="../jsp/marcas/Pesquisa_titular.jsp">Titular</a> | 
+                            <a class=titulo href="../jsp/marcas/Pesquisa_figura.jsp">Cód. Figura</a> ]
+                    </font>
+                </td>
+	            <td align="right">
+	                <font class=normal>
+	                	
+						1/0
+						
+	                </font>
+	            </td>
+            </tr>
+            <tr>
+		  		<td colspan="2">
+	   	   			<hr class="hr">
+	    		</td>
+			</tr>
+            <tr>
+                <td colspan="2" align="center">
+                	<font class=normal>Marca</font>
+                </td>
+            </tr>
+            <tr>
+                
+            </tr>
+        </table>
+        <table width="780px" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td align="left" width=120>
+                	<font class=normal>Nº do Processo:</font>
+                </td>
+                <td align=left valign="middle">
+                	<font class=marcador>&nbsp;<b>943083290</b></font>
+                	<input type="hidden" id="numeroProcesso" name="numeroProcesso" value ="943083290" />
+                </td>
+                    
+                		<td align="right" valign="middle" rowspan="5">
+                        	<img border="0" height="220" width="220" src='/pePI/servlet/LogoMarcasServletController?Action=image&codProcesso=6625632'>
+               			</td>
+                        
+            </tr>
+            <tr>	
+			
+			
+			
+            <tr>
+                <td align="left">
+                	<font class=normal>Marca:</font>
+                </td>
+                <td align=left>
+                
+                        <font class=normal>&nbsp;BORA CITY</font>
+                        
+                </td>
+        	</tr>
+        	<tr>
+                <td align="left">
+                	<font class=normal>Situação:</font>
+                </td>
+                <td align=left>
+                    <font class=normal>&nbsp;
+                    Aguardando prazo de apresentação de oposição
+                    </font>
+                </td>
+            </tr>
+            
+            
+             <tr>
+                <td align="left">
+                	<font class=normal>Apresentação:</font>
+                </td>
+                <td align=left>
+                	<font class=normal>&nbsp;Mista</font>
+                </td>
+               </tr>
+                
+               <tr>
+                    <td align="left">
+                    	<font class=normal>Natureza:</font>
+                    </td>
+                    <td align=left>
+                    	<font class=normal>&nbsp;Produtos e/ou Serviço</font>
+                    </td>
+                </tr>
+<tr>
+                   
+                </tr>                
+        </table>
+        
+        <br/>
+         
+          <div class="accordions">
+			<div class="accordion-item">
+				<input type="checkbox" name="accordion" checked='checked' id="accordion-classe-nice" />
+				<label for= "accordion-classe-nice"><font class="titulo">Classificação de Produtos / Serviços</font>
+                        <font class=normal>
+                            <a class=normal href="javascript:void(0)"  onClick="DisableHide()">
+                            </a>
+                        </font>
+					</label>
+					<div class="accordion-content">
+					
+					<table width="780px">
+					    <thead> 
+					    	<tr bgcolor="#b5d6ad"> 
+					    		<th width="110"><font class=normal>Classe de Nice</font></th>
+                                <th width="230"><font class=normal>Situação da Classe</font></th>
+                                <th width="440"><font class=normal>Especificação</font></th>
+					    	</tr>
+					    </thead>
+					    
+					     <tbody>
+					     
+					     
+                               
+                        <tr bgColor="#e9e9e9" align="center">
+                        	<td>
+                               <font class="normal">
+	                               <a class="normal" href="javascript:void(0)" onmouseout="hideMe('cln0')" onmouseover="showMe('cln0')" onClick="DisableHide()">
+										NCL(13) 41
+	                               </a>
+                               </font>
+                               <div id='cln0' style="BACKGROUND-COLOR: #ffffff; BORDER-BOTTOM: #000000 1px; BORDER-LEFT: #000000 1px; BORDER-RIGHT: #000000 1px; BORDER-TOP: #000000 1px; HEIGHT: 20px; POSITION: absolute; VISIBILITY: hidden; WIDTH: 300px; Z-INDEX: 10; layer-background-color: #FFFFFF"> 
+                                   <table width="100%" border="1" cellspacing="0" cellpadding="5" bordercolor="#006363">
+                                       <tr>
+                                           <td align="left" bgcolor="#b5d6ad">
+                                               <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                   <tr>
+                                                       <td><font class="normal"><b>Classe Nice - Revisão: (13)</b></font></td>
+                                                       <td width="30">
+                                                           <a href="javascript:EnableHide('cln0');"><img src="../jsp/imagens/bt_layer.gif" width="26" height="16" border="0" name="class"></a>
+                                                       </td>
+                                                   </tr>
+                                               </table>
+                                           </td>
+                                       </tr>
+                                       <tr>
+                                           <td align="left" bgcolor="#ffffff">
+                                               <font class="normal">Educação; provimento de treinamento; entretenimento; atividades esportivas e culturais.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </font>
+                                           </td>
+                                       </tr>
+                                   </table>
+                               </div>
+                        	
+                        	</td>
+
+                            <td>
+                                <font class="normal">
+                                    Vide Situação do Processo
+                                </font></td>
+                            
+
+                        	<td>
+								
+                       			
+	                            <font class=normal >&nbsp;
+	                                <a class=normal href="javascript:void(0)" onmouseout="hideMe('especificacao0')" onmouseover="showMe('especificacao0')" onClick="DisableHide()"> 
+	                                    Assessoria, consultoria e informação em atividades desportiv...
+	                                </a>
+	                            </font>
+	                            <div id="especificacao0"  style="BACKGROUND-COLOR: #ffffff; BORDER-BOTTOM: #000000 1px; BORDER-LEFT: #000000 1px; BORDER-RIGHT: #000000 1px; BORDER-TOP: #000000 1px; HEIGHT: 20px; POSITION: absolute; VISIBILITY: hidden; WIDTH: 800px; Z-INDEX: 10; layer-background-color: #FFFFFF">
+	                                <table border=1 borderColor="#006363" cellPadding=5 cellSpacing=0 width="100%">
+	                                        <tr>
+	                                            <td align="center" bgColor="#b5d6ad">
+	                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	                                                    <tr>
+	                                                        <td><font class=normal>Especificação</font></td>
+	                                                        <td width="30">
+	                                                            <a href="javascript:EnableHide('especificacao0');"><img src="../jsp/imagens/bt_layer.gif" width="26" height="16" border="0" name="class"></a>
+	                                                        </td>
+	                                                    </tr>
+	                                                </table>
+	                                            </td>
+	                                        </tr>
+	                                        <tr>
+	                                            <td align=left bgColor="#ffffff">
+	                                                <font class=normal> 
+	                                                    Assessoria, consultoria e informação em atividades desportivas e culturais;Cronometragem de eventos desportivos;Organização de competições desportivas;Organização e realização de eventos esportivos;Promoção de eventos esportivos;Serviços de academia de ginástica [treinamento físico e para a saúde]
+	                                                </font>
+	                                            </td>
+	                                        </tr>
+	                                </table>
+	                            </div>
+	                            
+	                            
+	                            
+	                            
+	                            	<hr style="border: 1px solid #ffffff">
+	                            	<font class=normal></font>
+	                            
+	                            
+                        	</td>
+                        
+                        </tr>
+                        
+					    </tbody>
+		               
+					</table>		
+					</div>
+				</div>
+			</div>
+			<br/>
+			
+			
+			
+			 
+			
+			<div class="accordions">
+			<div class="accordion-item">
+				<input type="checkbox" name="accordion" checked='checked' id="accordion-classificacao-viena" />
+				<label for= "accordion-classificacao-viena"><font class="titulo">Classificação Internacional de Viena</font>
+                        <font class=normal>
+                            <a class=normal href="javascript:void(0)"  onClick="DisableHide()">
+                            </a>
+                        </font>
+					</label>
+					<div class="accordion-content">
+					
+					<table width="780px">
+					    <thead> 
+					    	<tr bgcolor="#b5d6ad" align="center"> 
+					    		<th width="15%"><font class=normal>Edição</font></th>
+					    		<th width="180"><font class=normal>Código</font></th>
+					    		<th width="600"><font class=normal>Descrição</font></th>
+					    	</tr>
+					    </thead>
+					    <tbody>
+					    
+                        <tr bgColor="#e9e9e9"  align="center">
+                        	<td><font class=normal>4                 </font></td>
+                        	<td><font class=normal>2.7.2     </font></td>
+                        	<td><font class=normal>Homem e mulher (casal)</font></td>
+                        </tr>
+                        
+                        
+                        
+                        <tr bgColor="#e9e9e9"  align="center">
+                        	<td><font class=normal>4                 </font></td>
+                        	<td><font class=normal>27.5.1    </font></td>
+                        	<td><font class=normal>Letras apresentando um grafismo especial</font></td>
+                        </tr>
+                        
+                        
+                        
+					    
+					    </tbody>
+		               
+					</table>		
+					</div>
+				</div>
+			</div>
+			<br/>
+			
+			
+					
+        
+         <div class="accordions">
+			<div class="accordion-item">
+				<input type="checkbox" name="accordion" checked='checked' id="accordion-titulares" />
+				<label for= "accordion-titulares"><font class="titulo">Titulares</font>
+                        <font class=normal>
+                            <a class=normal href="javascript:void(0)"  onClick="DisableHide()">
+                            </a>
+                        </font>
+					</label>
+					<div class="accordion-content">
+					
+					<table width="780px">
+					    <thead> 
+					    	<tr bgcolor="#b5d6ad"> 
+					    		<th width="20"><font class=normal></font></th>
+					    		<th width="400"><font class=normal>Nome</font></th>
+					    	</tr>
+					    </thead>
+					     <tbody>
+                         
+
+                         <tr bgColor="#e9e9e9" align="center">
+                             <td width="20"><font class=normal>Titular(1):</font></td>
+                             <td width="400"><font
+                                     class=normal>CLEODIMARA DIAS COSTA DE PAULA
+                             </font></td>
+                         </tr>
+                         
+
+					     </tbody>
+		               
+					</table>		
+					</div>
+				</div>
+			</div>
+			<br/>
+
+
+        <div class="accordions">
+            <div class="accordion-item">
+                <input type="checkbox" name="accordion" checked='checked' id="accordion-representantes" />
+                <label for= "accordion-representantes"><font class="titulo">Representante Legal</font>
+                    <font class=normal>
+                        <a class=normal href="javascript:void(0)"  onClick="DisableHide()">
+                        </a>
+                    </font>
+                </label>
+                <div class="accordion-content">
+
+                    <table width="780px">
+                        <thead>
+                        <tr bgcolor="#b5d6ad">
+                            <th width="20"><font class=normal></font></th>
+                            <th width="400"><font class=normal>Nome</font></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                        <tr bgColor="#e9e9e9" align="center">
+                            <td width="20"><font class=normal>Procurador:</font></td>
+                            <td width="400"><font class=normal>SEGMENTAR MARCAS E PATENTES</font></td>
+                        </tr>
+                        
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br/>
+
+        <div class="accordions">
+			<div class="accordion-item">
+				<input type="checkbox" name="accordion" checked='checked' id="accordion-datas" />
+				<label for= "accordion-datas"><font class="titulo">Datas</font>
+                        <font class=normal>
+                            <a class=normal href="javascript:void(0)"  onClick="DisableHide()">
+                            </a>
+                        </font>
+					</label>
+					<div class="accordion-content">
+					
+					<table width="780px">
+					    <thead> 
+					    	<tr bgcolor="#b5d6ad"> 
+					    		<th width="260"><font class=normal>Data de Depósito</font></th>
+					    		<th width="260"><font class=normal>Data de Concessão</font></th>
+					    		<th width="260"><font class=normal>Data de Vigência</font>
+						    		<font class=normal>
+	                     				<a class=normal href="javascript:void(0)" onmouseout="hideMe('helpdatavigencia')" onmouseover="showMe('helpdatavigencia')" onClick="DisableHide()">
+												<img src="../jsp/imagens/help.gif" width="13" height="15" border="0" name="class">
+										</a>
+									</font>
+									<div id='helpdatavigencia'
+											style="BACKGROUND-COLOR: #ffffff; BORDER-BOTTOM: #000000 1px; BORDER-LEFT: #000000 1px; BORDER-RIGHT: #000000 1px; BORDER-TOP: #000000 1px; HEIGHT: 20px; POSITION: absolute; VISIBILITY: hidden; WIDTH: 300px; Z-INDEX: 10; layer-background-color: #FFFFFF">
+											<table border=1 borderColor="#006363" cellPadding=5
+												cellSpacing=0 width="100%">
+												<tr>
+													<td align="center" bgColor="#b5d6ad">
+														<table width="100%" border="0" cellspacing="0"
+															cellpadding="0">
+															<tr>
+																<td><font class=normal>Leia-me</font></td>
+																<td width="30"><a
+																	href="javascript:EnableHide('helpdatavigencia');"><img
+																		src="../jsp/imagens/bt_layer.gif" width="26"
+																		height="16" border="0" name="class"></a></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td align=left bgColor="#ffffff"><font class=normal>
+															A data de vigência dos processos de marca designados ao Brasil, pela via do Protocolo de Madri,
+															acompanha o prazo de vigência da inscrição internacional junto à OMPI,
+															independentemente da data de concessão do registro de marca no Brasil. </font></td>
+												</tr>
+											</table>
+										</div>
+					    		</th>
+					    		
+					    	</tr>
+					    </thead>
+					    <tbody>
+					    	<tr bgColor="#e9e9e9">
+					    		<th><font class=normal>
+									18/03/2026	 		
+					    		
+					    			</font>
+					    		</th>
+					    		<th><font class=normal> 
+						    		
+                     				</font>
+                     			</th>
+					    		<th><font class=normal>
+					    			
+					    			</font>
+					    		</th>
+					    		
+					    		
+					    	</tr>
+					    </tbody>
+		               
+					</table>		
+					</div>
+				</div>
+			</div>
+			<br/>
+			
+			
+				 
+			
+			
+			 
+        
+        <div class="accordions">
+			<div class="accordion-item">
+				<input type="checkbox" name="accordion" checked='checked' id="accordion-1" />
+				<label for= "accordion-1"><font class="titulo">Petições</font>
+                        <font class=normal>
+                            <a class=normal href="javascript:void(0)" onmouseout="hideMe('helppeticoes')" onmouseover="showMe('helppeticoes')" onClick="DisableHide()">
+                                <img src="../jsp/imagens/help.gif" width="13" height="15" border="0" name="class">
+                            </a>
+                        </font>
+                        <div id='helppeticoes'  style="BACKGROUND-COLOR: #ffffff; BORDER-BOTTOM: #000000 1px; BORDER-LEFT: #000000 1px; BORDER-RIGHT: #000000 1px; BORDER-TOP: #000000 1px; HEIGHT: 20px; POSITION: absolute; VISIBILITY: hidden; WIDTH: 300px; Z-INDEX: 10; layer-background-color: #FFFFFF">
+                            <table border=1 borderColor="#006363" cellPadding=5 cellSpacing=0 width="100%">
+                                    <tr>
+                                        <td align="center" bgColor="#b5d6ad">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td><font class=normal>Leia-me</font></td>
+                                                    <td width="30">
+                                                        <a href="javascript:EnableHide('helppeticoes');"><img src="../jsp/imagens/bt_layer.gif" width="26" height="16" border="0" name="class"></a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align=left bgColor="#ffffff">
+                                            <font class=normal>
+                                                Só serão identificados nesta consulta os documentos (petições) 
+                                                apresentados por meio do sistema de Guia de Recolhimento da 
+                                                União - GRU - em vigor desde 2006. Documentos anteriores a 
+                                                esta data podem não estar relacionados.
+                                            </font>
+                                        </td>
+                                    </tr>
+                            </table>
+                        </div>
+						 
+					</label>
+					<div class="accordion-content">
+					
+					<table width="780px">
+					    <thead> 
+					    	<tr bgcolor="#b5d6ad"> 
+					    		<th width="10"><font class=normal>Pgo</font>
+					    		<th width="50"><font class=normal>Protocolo</font>
+					    		<th width="62"><font class=normal>Data</font>
+					    		<th width="10"><font class=normal>Img</font>
+					    		<th width="10">
+				                
+					    		<th width="30"><font class=normal>Serviço</font>
+					    		<th width="246"><font class=normal>Cliente</font>
+					    		<th width="10"><font class=normal>Delivery</font>
+			    				<th width="10"><font class=normal>Data</font>
+					    <tbody>
+		                
+		                    <tr bgColor=#e9e9e9>
+		                        <td align="center"  width=10>
+		                            <font class=normal>
+		                                
+		                                    <font class=normal>
+		                                        <a class=normal href="javascript:void(0)" onmouseout="hideMe('pgto0')" onmouseover="showMe('pgto0')" onClick="DisableHide()">
+		                                            <img src='../jsp/imagens/registro_em_exame.gif' width='17' height='13' border='0'  alt='Pagamento Conciliado'>
+		                                        </a>
+		                                    </font>
+		                                    <div id='pgto0' style="BACKGROUND-COLOR: #ffffff; BORDER-BOTTOM: #000000 1px; BORDER-LEFT: #000000 1px; BORDER-RIGHT: #000000 1px; BORDER-TOP: #000000 1px; HEIGHT: 20px; POSITION: absolute; VISIBILITY: hidden; WIDTH: 300px; Z-INDEX: 10; layer-background-color: #FFFFFF">
+		                                        <table border=1 borderColor="#006363" cellPadding=5 cellSpacing=0 width="100%">
+		                                                <tr>
+		                                                    <td align="center" bgColor="#b5d6ad">
+		                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		                                                            <tr>
+		                                                                <td><font class=normal>Informações do Banco:</font></td>
+		                                                                <td width="30">
+		                                                                    <a href="javascript:EnableHide('pgto0');"><img src="../jsp/imagens/bt_layer.gif" width="26" height="16" border="0" name="class"></a>
+		                                                                </td>
+		                                                            </tr>
+		                                                        </table>
+		                                                    </td>
+		                                                </tr>
+		                                                <tr>
+		                                                    <td align=left bgColor="#ffffff">
+		                                                        <font class=normal>
+		                                                            
+		                                                            <br>
+		                                                        </font>
+		                                                    </td>
+		                                                </tr>
+		                                        </table>
+		                                    </div>
+		                                    
+		                            </font>
+		                        </td>
+		                        <td align="center" width=50><font class=normal>850260201961</font></td>
+		                        <td align="center" width=62><font class=normal>29/04/2026</font></td>
+		                        <td align="center" width=10>
+		                            <font class=normal>
+		                            
+		                                -
+		                                
+		                            </font>
+		                        </td>
+		                        <td align="center" width=10>
+		                		<font class=normal>
+		                		
+				                </font>
+				                </td>
+		                        <td align="center" width=30>
+		                            <font class=normal>
+		                                <a class=normal href="javascript:void(0)" onmouseout="hideMe('338')" onmouseover="showMe('338')" onClick="DisableHide()">
+		                                    338
+		                                </a>
+		                            </font>
+		                            <div id='338'  style="BACKGROUND-COLOR: #ffffff; BORDER-BOTTOM: #000000 1px; BORDER-LEFT: #000000 1px; BORDER-RIGHT: #000000 1px; BORDER-TOP: #000000 1px; HEIGHT: 20px; POSITION: absolute; VISIBILITY: hidden; WIDTH: 300px; Z-INDEX: 10; layer-background-color: #FFFFFF">
+		                                <table border=1 borderColor="#006363" cellPadding=5 cellSpacing=0 width="100%">
+		                                        <tr>
+		                                            <td align="center" bgColor="#b5d6ad">
+		                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		                                                    <tr>
+		                                                        <td><font class=normal>Descrição do Serviço</font></td>
+		                                                        <td width="30">
+		                                                            <a href="javascript:EnableHide('338');"><img src="../jsp/imagens/bt_layer.gif" width="26" height="16" border="0" name="class"></a>
+		                                                        </td>
+		                                                    </tr>
+		                                                </table>
+		                                            </td>
+		                                        </tr>
+		                                        <tr>
+		                                            <td align=left bgColor="#ffffff">
+		                                                <font class=normal>
+		                                                    <b>338</b>
+		                                                    Cumprimento de exigência decorrente de exame formal em pedido de registro
+		                                                </font>
+		                                            </td>
+		                                        </tr>
+		                                </table>
+		                            </div>
+		                        </td>
+		                        <td align="center" width=246><font class=normal>CLEODIMARA DIAS COSTA DE PAULA</font></td>
+		                        <td align="center" width=10>
+		                            <font class=normal>
+		                                
+		                            </font>
+		                        </td>
+								<td align="center" width=10>
+									<font class="normal">&nbsp;                                
+										- 
+									</font>
+								</td>
+		                    </tr>
+		                    
+		                    <tr bgColor=white>
+		                        <td align="center"  width=10>
+		                            <font class=normal>
+		                                
+		                                    <font class=normal>
+		                                        <a class=normal href="javascript:void(0)" onmouseout="hideMe('pgto1')" onmouseover="showMe('pgto1')" onClick="DisableHide()">
+		                                            <img src='../jsp/imagens/registro_em_exame.gif' width='17' height='13' border='0'  alt='Pagamento Conciliado'>
+		                                        </a>
+		                                    </font>
+		                                    <div id='pgto1' style="BACKGROUND-COLOR: #ffffff; BORDER-BOTTOM: #000000 1px; BORDER-LEFT: #000000 1px; BORDER-RIGHT: #000000 1px; BORDER-TOP: #000000 1px; HEIGHT: 20px; POSITION: absolute; VISIBILITY: hidden; WIDTH: 300px; Z-INDEX: 10; layer-background-color: #FFFFFF">
+		                                        <table border=1 borderColor="#006363" cellPadding=5 cellSpacing=0 width="100%">
+		                                                <tr>
+		                                                    <td align="center" bgColor="#b5d6ad">
+		                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		                                                            <tr>
+		                                                                <td><font class=normal>Informações do Banco:</font></td>
+		                                                                <td width="30">
+		                                                                    <a href="javascript:EnableHide('pgto1');"><img src="../jsp/imagens/bt_layer.gif" width="26" height="16" border="0" name="class"></a>
+		                                                                </td>
+		                                                            </tr>
+		                                                        </table>
+		                                                    </td>
+		                                                </tr>
+		                                                <tr>
+		                                                    <td align=left bgColor="#ffffff">
+		                                                        <font class=normal>
+		                                                            
+		                                                            <br>
+		                                                        </font>
+		                                                    </td>
+		                                                </tr>
+		                                        </table>
+		                                    </div>
+		                                    
+		                            </font>
+		                        </td>
+		                        <td align="center" width=50><font class=normal>850260124259</font></td>
+		                        <td align="center" width=62><font class=normal>18/03/2026</font></td>
+		                        <td align="center" width=10>
+		                            <font class=normal>
+		                            
+		                                -
+		                                
+		                            </font>
+		                        </td>
+		                        <td align="center" width=10>
+		                		<font class=normal>
+		                		
+				                </font>
+				                </td>
+		                        <td align="center" width=30>
+		                            <font class=normal>
+		                                <a class=normal href="javascript:void(0)" onmouseout="hideMe('389')" onmouseover="showMe('389')" onClick="DisableHide()">
+		                                    389
+		                                </a>
+		                            </font>
+		                            <div id='389'  style="BACKGROUND-COLOR: #ffffff; BORDER-BOTTOM: #000000 1px; BORDER-LEFT: #000000 1px; BORDER-RIGHT: #000000 1px; BORDER-TOP: #000000 1px; HEIGHT: 20px; POSITION: absolute; VISIBILITY: hidden; WIDTH: 300px; Z-INDEX: 10; layer-background-color: #FFFFFF">
+		                                <table border=1 borderColor="#006363" cellPadding=5 cellSpacing=0 width="100%">
+		                                        <tr>
+		                                            <td align="center" bgColor="#b5d6ad">
+		                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		                                                    <tr>
+		                                                        <td><font class=normal>Descrição do Serviço</font></td>
+		                                                        <td width="30">
+		                                                            <a href="javascript:EnableHide('389');"><img src="../jsp/imagens/bt_layer.gif" width="26" height="16" border="0" name="class"></a>
+		                                                        </td>
+		                                                    </tr>
+		                                                </table>
+		                                            </td>
+		                                        </tr>
+		                                        <tr>
+		                                            <td align=left bgColor="#ffffff">
+		                                                <font class=normal>
+		                                                    <b>389</b>
+		                                                    Pedido de registro de marca (com especificação pré-aprovada) - valor por classe
+		                                                </font>
+		                                            </td>
+		                                        </tr>
+		                                </table>
+		                            </div>
+		                        </td>
+		                        <td align="center" width=246><font class=normal>CLEODIMARA DIAS COSTA DE PAULA</font></td>
+		                        <td align="center" width=10>
+		                            <font class=normal>
+		                                
+		                            </font>
+		                        </td>
+								<td align="center" width=10>
+									<font class="normal">&nbsp;                                
+										- 
+									</font>
+								</td>
+		                    </tr>
+		                    
+					</table>		
+					</div>					
+				</div>
+			</div>
+			
+			
+			<br/>
+			<div class="accordions">
+				<div class="accordion-item">
+					<input type="checkbox" name="accordion" checked="checked" id="accordion-2" />
+					<label for= "accordion-2"><font class="titulo">Publicações</font>
+		                <font class=normal>
+		                    <a class=normal href="javascript:void(0)" onmouseout="hideMe('helpdespacho')" onmouseover="showMe('helpdespacho')" onClick="DisableHide()">
+		                        <img src="../jsp/imagens/help.gif" width="13" height="15" border="0" name="class">
+		                    </a>
+		                </font>
+		                <div id='helpdespacho'  style="BACKGROUND-COLOR: #ffffff; BORDER-BOTTOM: #000000 1px; BORDER-LEFT: #000000 1px; BORDER-RIGHT: #000000 1px; BORDER-TOP: #000000 1px; HEIGHT: 20px; POSITION: absolute; VISIBILITY: hidden; WIDTH: 600px; Z-INDEX: 10; layer-background-color: #FFFFFF">
+		                    <table border=1 borderColor="#006363" borderColorLight="#b5d6ad" cellPadding=5 cellSpacing=0 width="100%">
+		                        <tbody>
+		                            <tr>
+		                                <td align="center" bgColor="#b5d6ad">
+		                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		                                        <tr>
+		                                            <td><font class=normal>Leia-me</font></td>
+		                                            <td width="30">
+		                                                <a href="javascript:EnableHide('helpdespacho');">
+		                                                <img src="../jsp/imagens/bt_layer.gif" width="26" height="16" border="0" name="class">
+		                                                </a>
+		                                            </td>
+		                                        </tr>
+		                                    </table>
+		                                </td>
+		                            </tr>
+		                            <tr>
+		                                <td align=left bgColor="#ffffff">
+		                                    <font class=normal>
+		                                        PRAZOS:
+												O direito de praticar qualquer ato perante o INPI se extingue ao final do prazo 
+												estabelecido pela LPI para realização do mesmo, a não ser que o interessado comprove 
+												que o não realizou por justa causa. Reputa-se justa causa o evento imprevisto, alheio à 
+												vontade da parte, e que a impediu de praticar o ato.
+												Os prazos previstos na LPI em relação às patentes são contados em dias, meses 
+												e anos. Os prazos expressos em dias contam-se de modo contínuo; os expressos em 
+												meses devem ser contados de data a data, ou seja, expiram no dia de número igual ao do 
+												dia do início da contagem, ou no dia imediatamente subseqüente, caso falte esta
+												correspondência.
+												No cômputo dos prazos, exclui-se o dia do começo e inclui-se o do vencimento. Se 
+												este cair em dia sem expediente, o prazo será prorrogado até o primeiro dia útil após o 
+												vencimento.
+												Os prazos somente começam a correr a partir do primeiro dia útil após a
+												intimação, que será feita mediante publicação na RPI, ressalvados:
+												- os que expressamente independerem de notificação ou publicação por força do 
+												disposto na LPI; 
+												- as decisões administrativas, quando feita notificação por via postal ou por ciência 
+												dada ao interessado no processo; e
+												- os pareceres e despachos internos que não necessitem ser do conhecimento das 
+												partes (art. 226 da LPI). 
+												Não havendo expressa estipulação na LPI, o prazo para a prática de um ato será 
+												de 60 (sessenta) dias
+		                                    </font>
+		                                </td>
+		                            </tr>
+		                        </tbody>
+		                    </table>
+		            	</div>
+					</label>
+					<div class="accordion-content">
+
+					<table>
+					    <thead> 
+					    	<tr bgcolor="#b5d6ad"> 
+					    		<th width="10"><font class=normal>RPI</font>
+					    		<th width="50"><font class=normal>Data RPI</font>
+					    		<th width="62"><font class=normal>Despacho</font>
+					    		<th width="30"><font class=normal>Certificado</font>
+					    		<th width="30"><font class=normal>Inteiro Teor</font>
+					    		<th width="10"><font class=normal>Complemento do Despacho</font>
+					    <tbody>
+		                
+		                    <tr bgColor=#e9e9e9>
+		                        <td align="center" width=28><font class=normal>2900</font></td>
+		                        <td align="center" width=55><font class=normal><b>04/08/2026</b></font></td>
+		                        <td align="center" width=74>
+		                        
+		                            <font class=normal>
+		                                Publicação de pedido de registro para oposição (exame formal concluído)
+		                            </font>
+		                            
+		                        </td>
+		                        <td align=center  width=10>
+		                            <font class=normal>
+		                            	-		                                
+		                            </font>
+		                        </td>
+		                        <td align=center  width=10>
+		                            <font class=normal>
+		                            	-		                                
+		                            </font>
+		                        </td>
+		                        <td align=left  width=623>
+		                             <font class=normal>
+		                                
+		                            </font>
+		                        </td>
+		                    </tr>
+		                    
+		                    <tr bgColor=white>
+		                        <td align="center" width=28><font class=normal>2886</font></td>
+		                        <td align="center" width=55><font class=normal><b>28/04/2026</b></font></td>
+		                        <td align="center" width=74>
+		                        
+		                            <font class=normal>
+		                                Exigência de pagamento
+		                            </font>
+		                            
+		                        </td>
+		                        <td align=center  width=10>
+		                            <font class=normal>
+		                            	-		                                
+		                            </font>
+		                        </td>
+		                        <td align=center  width=10>
+		                            <font class=normal>
+		                            	-		                                
+		                            </font>
+		                        </td>
+		                        <td align=left  width=623>
+		                             <font class=normal>
+		                                <b>Detalhes do despacho: </b>Considerando que o pedido foi protocolado após a entrada em vigor da atualização da tabela de retribuições, no dia 20/09/2025, complemente a retribuição devida no exato valor fixado na tabela vigente. Esse procedimento precisa ser realizado em duas etapas: 1) Gere e pague uma GRU de "Complementação de Retribuição", sob o código de serviço 800, na unidade ?Administração Geral?, no valor da diferença entre a quantia já paga e o valor vigente. A guia de complementação deverá ser vinculada ao número da GRU utilizada no protocolo do pedido de registro. Siga as orientações do item 3.3.1 do Manual de Marcas, subitem ?Complementação de Retribuições?; 2) Gere e pague uma nova GRU na unidade ?Marcas?, sob o código de serviço 338, referente ao serviço de ?Cumprimento de exigência formal?. Após o pagamento, efetue o protocolo da petição de cumprimento no sistema e-Marcas. No momento do protocolo da petição, anexe o comprovante de pagamento da GRU de código 800, paga na etapa 1. Prazo para cumprimento desta exigência: 5 dias (art. 157 e 221 da Lei da Propriedade Industrial).
+		                            </font>
+		                        </td>
+		                    </tr>
+		                    
+				</table>		
+				</div>
+			</div>
+		</div>
+        
+        <table border=0 width="780px" border="0" cellpadding="3" cellspacing="2" class="fundoportal">
+                <tr>
+                    <td align="center" colSpan=6>
+                        <font class=normal>
+                            &nbsp;<br>Dados atualizados  até 
+                            <b>
+                                04/08/2026
+                            </b>
+                            - Nº da Revista:
+                            <b>2900</b>
+                        </font>
+                    </td>
+                </tr>
+        </table>
+            </form>
+    <!-- RECAPTCHA -->
+        <div id="conteudoCaptcha" style="display: none">
+            <form id="captchaForm">
+            
+                <div id="captchaConteiner">
+                    <br /> 
+                    <input type="submit" id="captchaButton" class="button branco" value="Download" />
+                    <div id="msgErroCaptcha" class="errorMsgCaptcha" style="display: none"></div>
+                </div>
+                
+                <div id="loader" style="display: none">
+                    <img src="../jsp/imagens/loading.gif" style="margin-top: 75px; width: 180px" />
+                </div>
+                
+                <input type="hidden" value="300" id="codDiretoria" />
+                <input type="hidden" id="cdDespach" />
+                
+            </form>
+        </div>
+    <!-- RECAPTCHA -->
+    
+	<br/>
+      
+	<div id="bottom_principal"></div>
+	<div id="footer">
+		<div id="texto_footer">
+			<p>Rua Mayrink Veiga, 9 - Centro - RJ - CEP: 20090-910</p>
+		</div>
+		<div id="logo_ouvidoria">
+			<a href="http://faleconosco.inpi.gov.br/" target="blank"><img src="/pePI/jsp/imagens/faleconosco.png" border="0" alt="Fale Conosco" onmouseout="this.src='/pePI/jsp/imagens/faleconosco.png';"
+				title="Fale Conosco" onmouseover="this.src='/pePI/jsp/imagens/faleconosco.png';" /> </a>
+		</div>
+	</div>
+    </body>
+</html>
