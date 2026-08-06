@@ -9,6 +9,7 @@ import {
   ImportedProcessCreateDTO, 
   ImportedProcessFilter, 
   ImportedProcessFromINPI,
+  ImportedProcessUpdateDTO,
   ImportedProcessWithDetails
 } from "@shared/types/importedProcess";
 import { OptionsControlledBox } from "@shared/types/values";
@@ -33,6 +34,21 @@ export class InMemoryImportedProcessRepository implements ImportedProcessReposit
 
   createManyAsImport(importedProcesses: CreatedProcessImportedDTO[]): Promise<number> {
     throw new Error("Method not implemented.");
+  }
+
+  async update(data: ImportedProcessUpdateDTO): Promise<ImportedProcess> {
+    const importedProcessIdenitity = this.items.findIndex(process => {
+      return process.id === data.id
+    })
+
+    const updatedProcess = {
+      ...this.items[importedProcessIdenitity],
+      ...data,
+    }
+
+    this.items[importedProcessIdenitity] = updatedProcess
+
+    return updatedProcess
   }
 
   async findById(id: string): Promise<ImportedProcess | null> {
