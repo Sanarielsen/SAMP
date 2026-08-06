@@ -15,7 +15,7 @@ import type { ImportedProcessWithDetails } from "@shared/types/importedProcess";
 
 
 type ColumnsProcessProps = {
-  onClickSeeItem: (currentItem: ImportedProcessWithDetails) => void
+  onClickSeeItem: (id: string) => void
   onClickUpdateItem: (id: string) => void,
   onClickDeleteItem: (current: ImportedProcessWithDetails) => void,
   onClickCheckClient: (currentClientId: string) => void
@@ -71,7 +71,7 @@ export default function DataTableImportedProcessColumns({
           </IconButton>
 
           <IconButton
-            onClick={() => onClickSeeItem(params.row)}
+            onClick={() => onClickSeeItem(params.row.id)}
           >
             <Tooltip title="Detalhes">
               <GridSearchIcon />
