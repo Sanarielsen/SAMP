@@ -1,4 +1,4 @@
-import { PrismaProcessImportedRepository } from "@/repositories/prisma/prisma-imported-process-repository"
+import { PrismaImportedProcessRepository } from "@/repositories/prisma/prisma-imported-process-repository"
 import { PrismaProcessHistoryRepository } from "@/repositories/prisma/prisma-process-history-repository"
 import { LocalStorageProvider } from "@/storage/local-storage-provider";
 
@@ -6,7 +6,7 @@ import { DeleteProcessHistoryWithFileUseCase } from "@/services/service-process-
 
 
 export function makeDeleteProcessHistoryWithFileUseCase() {
-  const importedProcessRepository = new PrismaProcessImportedRepository();
+  const importedProcessRepository = new PrismaImportedProcessRepository();
   const processHistoryRepository = new PrismaProcessHistoryRepository();
   const storageProvider = new LocalStorageProvider()
 

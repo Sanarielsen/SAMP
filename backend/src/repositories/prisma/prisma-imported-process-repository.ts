@@ -9,13 +9,13 @@ import {
   ImportedProcessCreateDTO,
   ImportedProcessFilter,
   ImportedProcessFromINPI,
-  ImportedProcessListWithDetails
+  ImportedProcessListWithDetails,
+  ImportedProcessWithDetails
 } from "@shared/types/importedProcess";
 import { OptionsControlledBox } from "@shared/types/values";
 
 
-export class PrismaProcessImportedRepository implements ImportedProcessRepository {
-  
+export class PrismaImportedProcessRepository implements ImportedProcessRepository {  
   create(data: ImportedProcessCreateDTO): Promise<ImportedProcess> {
     return prisma.importedProcess.create({
       data: {
@@ -66,6 +66,73 @@ export class PrismaProcessImportedRepository implements ImportedProcessRepositor
     // }
     
     // return totalCount;
+  }
+
+  async findManyDetailsWithSearch(search: string): Promise<ImportedProcessWithDetails[] | null> {
+    const importedProcesses = await prisma.importedProcess.findMany({
+      where: {
+        OR: [
+          { processNumber: { contains: search, mode: 'insensitive' }},
+          { holder: { contains: search, mode: 'insensitive' }},
+          { brand: { contains: search, mode: 'insensitive' }},
+          { nature: { contains: search, mode: 'insensitive' }},
+          { presentation: { contains: search, mode: 'insensitive' }},
+          { specification: { contains: search, mode: 'insensitive' }},
+          { updatedAtByMagazine: { contains: search, mode: 'insensitive' }},
+          { client: { legalName: { contains: search, mode: 'insensitive' } } },
+          { client: { tradeName: { contains: search, mode: 'insensitive' } } },
+          { client: { protocol: { contains: search, mode: 'insensitive' } } },
+          { createdByUserId: { name: { contains: search, mode: 'insensitive' } } },
+          { createdByUserId: { email: { contains: search, mode: 'insensitive' } } },
+          { updatedByUserId: { name: { contains: search, mode: 'insensitive' } } },
+          { updatedByUserId: { email: { contains: search, mode: 'insensitive' } } },
+        ]
+      },
+      include: {
+        client: true,
+        createdByUserId: {
+          include: {
+            userRole: true,
+          }
+        },
+        updatedByUserId: true,
+      },
+      take: 100,
+    })
+
+    return importedProcesses.map((process) => ({
+      id: process.id,
+
+      clientId: process.clientId,
+      clientName: process.client.legalName,
+      clientLegalName: process.client.legalName,
+      clientTradeName: process.client.tradeName,
+      clientTypeName: String(process.client.type),
+      clientDocument: process.client.protocol,
+
+      processNumber: process.processNumber,
+      processStatus: process.processStatus,
+      holder: process.holder,
+      brand: process.brand,
+      nature: process.nature,
+      presentation: process.presentation,
+      specification: process.specification,
+      updatedAtByMagazine: process.updatedAtByMagazine,
+
+      filingDate: process.filingDate,
+      grantDate: process.grantDate,
+      expirationDate: process.expirationDate,
+
+      createdByUser: process.createdByUser,
+      updatedByUser: process.updatedByUser,
+      userName: process.createdByUserId?.name ?? process.updatedByUserId?.name ?? '',
+      userRoleName: process.createdByUserId?.userRole?.name ?? '',
+      userEmail: process.createdByUserId?.email ?? process.updatedByUserId?.email ?? '',
+
+      createdAt: process.createdAt,
+      updatedAt: process.updatedAt,
+      deletedAt: process.deletedAt,
+    }))
   }
 
   //TODO: Refine the data returned;

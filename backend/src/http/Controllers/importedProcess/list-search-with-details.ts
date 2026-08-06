@@ -1,0 +1,27 @@
+import { FastifyRequest, FastifyReply } from 'fastify'
+
+import { makeListImportProcessesAsAOption } from '@/services/factories/imported-process/make-list-imported-processes-as-a-option';
+import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
+import { makeListImportProcessesDetailsWithSearch } from '@/services/factories/imported-process/make-list-details-with-search';
+
+
+export async function listImportedProcessDetailsWithSearch(request: FastifyRequest, reply: FastifyReply) {
+  const { q: search } = request.query as { q: string }
+
+  const userLoggedId = request.user.sub
+
+  try {
+    const useCase = makeListImportProcessesDetailsWithSearch();
+
+    const importedProcesses = await useCase.execute(search, userLoggedId)
+
+    return reply.status(200).send(importedProcesses);
+
+  } catch (err) {
+    if (err instanceof ResourceNotFoundError) {
+      return reply.status(404).send({ message: err.message })
+    }
+
+    throw err
+  }
+}

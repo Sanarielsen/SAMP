@@ -15,8 +15,6 @@ export type ImportedProcess = {
   grantDate:      Date | null
   expirationDate: Date | null
 
-  sourceEntireProcess: string
-
   createdByUser: string
   updatedByUser: string
 
@@ -60,6 +58,43 @@ export type ImportedProcessPayload = {
 
   sourceEntireProcess:  string
 }
+
+export type ImportedProcessWithDetails = {
+
+  id: string
+
+  clientId:         string
+  clientName:       string
+  clientLegalName:  string
+  clientTradeName:  string
+  clientTypeName:   string
+  clientDocument:   string
+
+  processNumber:        string
+  processStatus:        string
+  holder:               string
+  brand:                string
+  nature:               string 
+  presentation:         string
+  specification:        string
+  updatedAtByMagazine:  string
+
+  filingDate:     Date | null
+  grantDate:      Date | null
+  expirationDate: Date | null
+
+  createdByUser: string
+  updatedByUser: string
+  userName: string
+  userRoleName: string
+  userEmail: string
+
+  createdAt:  Date
+  updatedAt?: Date | null
+  deletedAt?: Date | null
+}
+
+// #################3
 
 export type ImportedProcessUpdateDTO = {
   id: string
