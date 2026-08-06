@@ -6,7 +6,7 @@ import { makeListImportProcessesDetailsWithSearch } from '@/services/factories/i
 
 
 export async function listImportedProcessDetailsWithSearch(request: FastifyRequest, reply: FastifyReply) {
-  const { q: search } = request.query as { q: string }
+  const { search } = request.query as { search: string }
 
   const userLoggedId = request.user.sub
 

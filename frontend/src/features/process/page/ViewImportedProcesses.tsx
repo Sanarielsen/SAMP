@@ -8,10 +8,10 @@ import {
   TextField 
 } from "@mui/material";
 
-import { optionsQueryListPublicationDetails } from "@/features/process/api/listPublicationDetails";
-import { useMutationDeletePublication } from "@/features/process/api/mutationDeletePublication";
-// import DataTablePublicationColumns from "@/features/process/components/DataTablePublicationColumns";
-//import DataTable from "@/components/DataTable";
+import { optionsQueryListProcessDetailsWithSearch } from "@/features/process/api/queryListProcessDetailsWithDetails";
+// import { useMutationDeleteProcess } from "@/features/process/api/mutationDeleteProcess";
+import DataTableImportedProcessColumns from "@/features/process/components/DataTableImportedProcessColumns";
+import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast";
@@ -26,45 +26,47 @@ export default function ViewImportedProcesses() {
   const [openModalConfirmation, setOpenModalConfirmation] = useState(false);
   const [searchBar, setSearchBar] = useState("");
   const [searchApplied, setSearchApplied] = useState("")
-  //const [publicationIdClicked, setPublicationIdClicked] = useState("");
+  const [
+    processIdClicked
+    //,setProcessIdClicked
+  ] = useState("");
 
   const { 
-    // data: listDetailPublications,
-    // isSuccess,
-    // isLoading,
-    // isError,
+    data: listProcessesWithDetails,
+    isSuccess,
+    isLoading,
+    isError,
     refetch,
   } = useQuery(
-    optionsQueryListPublicationDetails(searchApplied)
+    optionsQueryListProcessDetailsWithSearch(searchApplied)
   )
 
-  const mutationDeletePublication =
-    useMutationDeletePublication({
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['publications'] })
-      setOpenToast("success"); 
-    },
-    onError: () => {
-      setOpenToast("error"); 
-    },
-  })
+  // const mutationDeleteProcess =
+  //   useMutationDeleteProcess({
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ['publications'] })
+  //     setOpenToast("success"); 
+  //   },
+  //   onError: () => {
+  //     setOpenToast("error"); 
+  //   },
+  // })
 
   function handleDeletePublication(action: boolean){
 
     setOpenModalConfirmation(false)
-    if (!action
-      //|| !publicationIdClicked
+    if (!action || !processIdClicked
     ) return
     
-    mutationDeletePublication.mutate(
-      "" // publicationIdClicked
-    )
+    // mutationDeleteProcess.mutate(
+    //   processIdClicked
+    // )
 
     refetch()
   }
 
   // function handleDelete(id: string) {
-  //   setPublicationIdClicked(id);
+  //   setProcessIdClicked(id);
   //   setOpenModalConfirmation(true);
   // }
 
@@ -84,10 +86,10 @@ export default function ViewImportedProcesses() {
   //   },
   // ]
 
-  // const stateQuery =
-  //   isSuccess ? "SUCCESS" : 
-  //   isLoading ? "LOADING" :
-  //   isError ? "ERROR" : "IDLE";
+  const stateQuery =
+    isSuccess ? "SUCCESS" : 
+    isLoading ? "LOADING" :
+    isError ? "ERROR" : "IDLE";
 
   return (
     <>
@@ -128,11 +130,16 @@ export default function ViewImportedProcesses() {
         </Box>
 
         <Box component="section" sx={{ p: 2, px: 4 }}>
-          {/* <DataTable
+          <DataTable
             state={stateQuery}
-            rows={listDetailPublications}
-            columns={{}}
-          /> */}
+            rows={listProcessesWithDetails}
+            columns={DataTableImportedProcessColumns({
+              onClickSeeItem: () => console.log("onClickSeeItem"),
+              onClickUpdateItem: () => console.log("onClickUpdateItem"),
+              onClickDeleteItem: () => console.log("onClickDeleteItem"),
+              onClickCheckClient: (clientId) => navigate(`/cliente/${clientId}/detalhes`),
+            })}
+          />
         </Box>
       </Box>
 
