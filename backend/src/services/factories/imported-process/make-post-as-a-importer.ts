@@ -1,4 +1,4 @@
-import { PrismaProcessImportedRepository } from '@/repositories/prisma/prisma-imported-process-repository'
+import { PrismaImportedProcessRepository } from '@/repositories/prisma/prisma-imported-process-repository'
 import { PrismaProcessHistoryRepository } from '@/repositories/prisma/prisma-process-history-repository'
 import { PrismaProcessCategoryRepository } from '@/repositories/prisma/prisma-process-category-repository'
 import { LocalStorageProvider } from '@/storage/local-storage-provider'
@@ -6,7 +6,7 @@ import { CreateProcessAsImportUseCase } from '@/services/service-imported-proces
 
 
 export function makeImportProcessUseCase() {
-  const importedProcessRepository = new PrismaProcessImportedRepository()
+  const importedProcessRepository = new PrismaImportedProcessRepository()
   const processHistoricRepository = new PrismaProcessHistoryRepository();
   const processCategoryRepository = new PrismaProcessCategoryRepository();
   const storageProvider = new LocalStorageProvider();

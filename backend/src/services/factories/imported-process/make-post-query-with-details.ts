@@ -1,4 +1,4 @@
-import { PrismaProcessImportedRepository } from '@/repositories/prisma/prisma-imported-process-repository'
+import { PrismaImportedProcessRepository } from '@/repositories/prisma/prisma-imported-process-repository'
 import { PrismaProcessCategoryRepository } from '@/repositories/prisma/prisma-process-category-repository'
 import { PrismaProcessTypeRepository } from '@/repositories/prisma/prisma-process-type-repository'
 import { PrismaProcessHistoryRepository } from '@/repositories/prisma/prisma-process-history-repository'
@@ -6,7 +6,7 @@ import { PostQueryImportedProcessDetailsUseCase } from '@/services/service-impor
 
 
 export function makePostQueryImportProcessesWithDetails() {
-  const importedProcessRepository = new PrismaProcessImportedRepository()
+  const importedProcessRepository = new PrismaImportedProcessRepository()
   const processCategoryRepository = new PrismaProcessCategoryRepository
   const processTypeRepository = new PrismaProcessTypeRepository();
   const processHistoricRepository = new PrismaProcessHistoryRepository()

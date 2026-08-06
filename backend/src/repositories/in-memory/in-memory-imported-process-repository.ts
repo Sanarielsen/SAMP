@@ -8,7 +8,8 @@ import {
   ImportedProcess, 
   ImportedProcessCreateDTO, 
   ImportedProcessFilter, 
-  ImportedProcessFromINPI
+  ImportedProcessFromINPI,
+  ImportedProcessWithDetails
 } from "@shared/types/importedProcess";
 import { OptionsControlledBox } from "@shared/types/values";
 
@@ -48,6 +49,21 @@ export class InMemoryImportedProcessRepository implements ImportedProcessReposit
 
   findManyByProcessHistoricIdAsAOption(processHistoricId: string, search?: string): Promise<OptionsControlledBox[]> {
     throw new Error("Method not implemented.");
+  }
+
+  async findManyDetailsWithSearch(search: string): Promise<ImportedProcessWithDetails[] | null> {
+    const normalizedSearch = search.toLowerCase();
+
+    return this.items.filter((process) => {
+      const matchesSearch =
+        !search ||
+        process.processNumber.toLowerCase().includes(normalizedSearch) ||
+        process.brand.toLowerCase().includes(normalizedSearch);
+
+      return (
+        matchesSearch,
+      );
+    });
   }
 
   async findManyByFilterWithSearch(search: string, filter: ImportedProcessFilter): Promise<ImportedProcess[]> {
