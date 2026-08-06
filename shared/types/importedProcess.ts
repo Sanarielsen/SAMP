@@ -41,6 +41,26 @@ export type ImportedProcessCreateDTO = {
   expirationDate: Date | null
 }
 
+export type ImportedProcessUpdateDTO = {
+  id:           string
+  userIdLogged: string
+
+  clientId?:            string
+  processNumber?:       string
+  processStatus?:       string
+  status?:              string
+  holder?:              string
+  brand?:               string
+  nature?:              string 
+  presentation?:        string
+  specification?:       string
+  updatedAtByMagazine?: string
+
+  filingDate?:     Date | null
+  grantDate?:      Date | null
+  expirationDate?: Date | null
+}
+
 export type ImportedProcessPayload = {
   processNumber:        string
   processMagazine:      string
@@ -95,30 +115,6 @@ export type ImportedProcessWithDetails = {
 }
 
 // #################3
-
-export type ImportedProcessUpdateDTO = {
-  id: string
-
-  processNumber?:        string
-  
-  status?:               string
-  holder?:               string
-  brand?:                string
-  nature?:               string 
-  presentation?:         string
-  specification?:        string
-  updatedAtByMagazine?:  string
-
-  filingDate?:     Date | null
-  grantDate?:      Date | null
-  expirationDate?: Date | null
-
-  sourceEntireProcess?: string
-
-  createdAt:  Date
-  updatedAt?: Date | null
-  deletedAt?: Date | null
-}
 
 export type ImportedProcessListWithDetails = ImportedProcess & {
   categoryName: string

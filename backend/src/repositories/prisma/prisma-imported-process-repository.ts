@@ -10,12 +10,13 @@ import {
   ImportedProcessFilter,
   ImportedProcessFromINPI,
   ImportedProcessListWithDetails,
+  ImportedProcessUpdateDTO,
   ImportedProcessWithDetails
 } from "@shared/types/importedProcess";
 import { OptionsControlledBox } from "@shared/types/values";
 
 
-export class PrismaImportedProcessRepository implements ImportedProcessRepository {  
+export class PrismaImportedProcessRepository implements ImportedProcessRepository {
   create(data: ImportedProcessCreateDTO): Promise<ImportedProcess> {
     return prisma.importedProcess.create({
       data: {
@@ -37,6 +38,31 @@ export class PrismaImportedProcessRepository implements ImportedProcessRepositor
       }
     })
   }
+
+  async update(data: ImportedProcessUpdateDTO): Promise<ImportedProcess> {
+    return prisma.importedProcess.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        clientId: data.clientId,
+        processNumber: data.processNumber,
+        processStatus: data.processStatus,
+        holder: data.holder,
+        brand: data.brand,
+        nature: data.nature,
+        presentation: data.presentation,
+        specification: data.specification,
+        updatedAtByMagazine: data.updatedAtByMagazine,
+        filingDate: data.filingDate,
+        grantDate: data.grantDate,
+        expirationDate: data.expirationDate,
+        createdByUser: data.userIdLogged,
+        updatedByUser: data.userIdLogged
+      }
+    })
+  }
+
   async findById(id: string): Promise<ImportedProcess | null> {
     const importedProcess = prisma.importedProcess.findUnique({
       where: {
