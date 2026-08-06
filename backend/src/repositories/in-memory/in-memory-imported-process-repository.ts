@@ -35,8 +35,14 @@ export class InMemoryImportedProcessRepository implements ImportedProcessReposit
     throw new Error("Method not implemented.");
   }
 
-  findById(id: string): Promise<ImportedProcess | null> {
-    throw new Error("Method not implemented.");
+  async findById(id: string): Promise<ImportedProcess | null> {
+    const importedProcess = this.items.find(item => item.id == id)
+
+    if (!importedProcess) {
+      return null
+    }
+
+    return importedProcess
   }
 
   findByIdDetails(id: string): Promise<DetailsProcessImportedDTO | null> {

@@ -8,11 +8,12 @@ export async function makeImportedProcess(
   override: Partial<ImportedProcess> = {},
 ) {
   return repository.create({
+    userIdLogged: "user-logged-id",
     clientId: "client-test",
 
     processNumber: "123456789",
 
-    status: "pending",
+    processStatus: "pending",
     holder: "Titular test",
     brand: "Marca test",
     nature: "Natureza test",
@@ -23,9 +24,6 @@ export async function makeImportedProcess(
     filingDate:     new Date("2026-01-10"),
     grantDate:      new Date("2026-01-11"),
     expirationDate: new Date("2026-01-12"),
-
-    sourceEntireProcess:
-      "Processo: 1234567890/nTitular: Titular test",
 
     createdByUser: "user-test-created",
     updatedByUser: "user-test-updated",

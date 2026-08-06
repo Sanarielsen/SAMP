@@ -37,9 +37,20 @@ export class PrismaImportedProcessRepository implements ImportedProcessRepositor
       }
     })
   }
-  findById(id: string): Promise<ImportedProcess | null> {
-    throw new Error("Method not implemented.");
+  async findById(id: string): Promise<ImportedProcess | null> {
+    const importedProcess = prisma.importedProcess.findUnique({
+      where: {
+        id,
+      },
+    })
+
+    if (!importedProcess) {
+      return null
+    }
+
+    return importedProcess
   }
+  
   findByIdDetails(id: string): Promise<DetailsProcessImportedDTO | null> {
     throw new Error("Method not implemented.");
   }
