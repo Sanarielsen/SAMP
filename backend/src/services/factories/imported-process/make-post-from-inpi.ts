@@ -4,6 +4,7 @@ import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-reposito
 import { PrismaUserRoleRepository } from "@/repositories/prisma/prisma-user-role-repository";
 import { PostImportedProcessFromINPIUseCase } from "@/services/service-imported-process/post-from-inpi";
 
+
 export function makePostImportedProcessFromINPI() {
   const userRoleRepository = new PrismaUserRoleRepository();
   const userRepository = new PrismaUserRepository();

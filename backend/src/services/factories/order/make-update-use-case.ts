@@ -1,5 +1,5 @@
 import { PrismaOrderRepository } from "@/repositories/prisma/prisma-order-repository";
-import { UpdateOrderUseCase } from "@/services/service-orders/update";
+import { UpdateOrderUseCase } from "@/services/service-order/update";
 
 export function makeUpdateOrderUseCase() {
   const orderRepository = new PrismaOrderRepository();
