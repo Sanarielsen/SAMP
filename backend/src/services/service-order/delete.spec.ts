@@ -5,7 +5,7 @@ import {
   it 
 } from "vitest";
 
-import { DeleteOrderUseCase } from "@/services/service-orders/delete";
+import { DeleteOrderUseCase } from "@/services/service-order/delete";
 
 import { OrderRepository } from "@/repositories/order-repository";
 import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";

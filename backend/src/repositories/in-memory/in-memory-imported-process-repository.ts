@@ -3,11 +3,8 @@ import { randomUUID } from "node:crypto";
 import { ImportedProcessRepository } from "@/repositories/imported-process-repository";
 
 import { 
-  CreatedProcessImportedDTO, 
-  DetailsProcessImportedDTO, 
   ImportedProcess, 
   ImportedProcessCreateDTO, 
-  ImportedProcessFilter,
   ImportedProcessUpdateDTO,
   ImportedProcessWithDetails
 } from "@shared/types/importedProcess";
@@ -45,10 +42,6 @@ export class InMemoryImportedProcessRepository implements ImportedProcessReposit
     this.items[importedProcessIdenitity] = updatedProcess
 
     return updatedProcess
-  }
-
-  createManyAsImport(importedProcesses: CreatedProcessImportedDTO[]): Promise<number> {
-    throw new Error("Method not implemented.");
   }
 
   async update(data: ImportedProcessUpdateDTO): Promise<ImportedProcess> {
@@ -89,9 +82,6 @@ export class InMemoryImportedProcessRepository implements ImportedProcessReposit
     return importedProcess
   }
 
-  findByIdDetails(id: string): Promise<DetailsProcessImportedDTO | null> {
-    throw new Error("Method not implemented.");
-  }
 
   async findByProcessNumber(processNumber: string): Promise<ImportedProcess | null> {
     const importedProcess = this.items.find(item => item.processNumber == processNumber)
@@ -120,41 +110,5 @@ export class InMemoryImportedProcessRepository implements ImportedProcessReposit
         matchesSearch,
       );
     });
-  }
-
-  async findManyByFilterWithSearch(search: string, filter: ImportedProcessFilter): Promise<ImportedProcess[]> {
-    throw new Error("Method not implemented.");
-    // return this.items.filter((process) => {
-
-    //   const normalizedSearch = search.toLowerCase();
-
-    //   const matchesSearch =
-    //     !search ||
-    //     process.processNumber.toLowerCase().includes(normalizedSearch) ||
-    //     process.holder.toLowerCase().includes(normalizedSearch);
-
-    //   const matchesCategory =
-    //     process.processCategoryId === filter.categoryId;
-
-    //   const matchesType =
-    //     !filter.typeId ||
-    //     process.processTypeId === filter.typeId;
-
-    //   const matchesHistory =
-    //     !filter.historyId ||
-    //     process.processHistoricId === filter.historyId;
-
-    //   return (
-    //     matchesSearch &&
-    //     matchesCategory &&
-    //     matchesType &&
-    //     matchesHistory
-    //   );
-    // });
-  }
-
-  async deleteManyByProcessHistoricId(processHistoricId: string): Promise<void> {
-    throw new Error("Method not implemented.");
-    // this.items = this.items.filter((item) => item.processHistoricId !== processHistoricId);
   }
 }

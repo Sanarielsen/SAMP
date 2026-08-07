@@ -1,8 +1,8 @@
 import { OrderRepository } from '@/repositories/order-repository';
 import { ClientRepository } from '@/repositories/client-repository';
+import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 
 import { OptionsControlledBox } from '@shared/types/values'
-import { ResourceAlreadyExistsError } from '../errors/resource-already-exists-error';
 
 
 export class ListOrdersWithOptionsUseCase {
@@ -16,7 +16,7 @@ export class ListOrdersWithOptionsUseCase {
     const client = await this.clientRepository.findById(clientId);
 
     if (!client) {
-      throw new ResourceAlreadyExistsError();
+      throw new ResourceNotFoundError();
     }
 
     return await this.orderRepository.findManyOptionsByClientId(clientId);

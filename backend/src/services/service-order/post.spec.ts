@@ -8,7 +8,7 @@ import {
 } from "vitest";
 import { hash } from "bcryptjs";
 
-import { CreateOrderUseCase } from "@/services/service-orders/post";
+import { CreateOrderUseCase } from "@/services/service-order/post";
 
 import { ClientRepository } from "@/repositories/client-repository";
 import { OrderRepository } from "@/repositories/order-repository";

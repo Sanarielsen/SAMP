@@ -2,6 +2,7 @@ import { INPIClient } from "@/scripts/get-process-from-inpi";
 
 import { GetImportedProcessFromINPIUseCase } from "@/services/service-imported-process/get-from-inpi";
 
+
 export function makeGetImportedProcessFromINPIUseCase() {
   const importedProcessFromINPIRepository = new INPIClient();
   

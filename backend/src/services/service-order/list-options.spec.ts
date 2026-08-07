@@ -10,7 +10,8 @@ import { makeClient } from "@/services/factories/client/make-entity";
 import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
 import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
 
-import { ListOrdersWithOptionsUseCase } from "@/services/service-orders/list-options";
+import { ListOrdersWithOptionsUseCase } from "@/services/service-order/list-options";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 
 let orderRepository: InMemoryOrderRepository;
@@ -37,5 +38,11 @@ describe('List Orders With Options Use Case', () => {
     const options = await sut.execute(newClient.id)
 
     expect(options).toHaveLength(2)
+  })
+
+  it('hould not list user options with a non-existent client', async () => {
+    await expect(() => 
+      sut.execute('client-id-invalid')
+    ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })

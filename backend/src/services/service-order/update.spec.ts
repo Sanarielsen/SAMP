@@ -5,7 +5,7 @@ import {
   it 
 } from "vitest";
 
-import { UpdateOrderUseCase } from "@/services/service-orders/update";
+import { UpdateOrderUseCase } from "@/services/service-order/update";
 
 import { OrderRepository } from "@/repositories/order-repository";
 
