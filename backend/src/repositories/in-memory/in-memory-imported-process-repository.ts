@@ -51,6 +51,19 @@ export class InMemoryImportedProcessRepository implements ImportedProcessReposit
     return updatedProcess
   }
 
+  async delete(id: string): Promise<void> {
+    const processIndex = this.items.findIndex(process => {
+      return process.id === id
+    })
+
+    const disabledProcess = {
+      ...this.items[processIndex],
+      deletedAt: new Date(),
+    }
+
+    this.items[processIndex] = disabledProcess
+  }
+
   async findById(id: string): Promise<ImportedProcess | null> {
     const importedProcess = this.items.find(item => item.id == id)
 
