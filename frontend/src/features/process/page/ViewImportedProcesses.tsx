@@ -134,8 +134,8 @@ export default function ViewImportedProcesses() {
             state={stateQuery}
             rows={listProcessesWithDetails}
             columns={DataTableImportedProcessColumns({
-              onClickSeeItem: (id) => navigate(`/processo/${id}`),
-              onClickUpdateItem: () => console.log("onClickUpdateItem"),
+              onClickSeeItem: (id) => navigate(`/processo/${id}/detalhes`),
+              onClickUpdateItem: (id) => navigate(`/processo/${id}`),
               onClickDeleteItem: () => console.log("onClickDeleteItem"),
               onClickCheckClient: (clientId) => navigate(`/cliente/${clientId}/detalhes`),
             })}

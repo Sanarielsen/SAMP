@@ -12,14 +12,13 @@ export async function makeImportedProcess(
     clientId: "client-test",
 
     processNumber: "123456789",
-
+    processMagazine: "1234",
     processStatus: "pending",
     holder: "Titular test",
     brand: "Marca test",
     nature: "Natureza test",
     presentation: "Apresentacao test",
     specification: "Specificacao test",
-    updatedAtByMagazine: "1234",
 
     filingDate:     new Date("2026-01-10"),
     grantDate:      new Date("2026-01-11"),

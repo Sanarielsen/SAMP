@@ -23,7 +23,7 @@ export class GetImportedProcessFromINPIUseCase {
       const process = parseSearchProcessFromINPI(searchHtml);
       if (!process) throw new ResourceNotFoundError();
 
-      const detailHtml = await this.importedProcessFromINPIRepository.detail(process.codPedido);
+      const detailHtml = await this.importedProcessFromINPIRepository.detail(process.pedidoNumber);
 
       return parseDetail(detailHtml);
     } catch (err) {

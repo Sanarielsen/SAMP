@@ -4,12 +4,12 @@ export type ImportedProcess = {
 
   processNumber:        string
   processStatus:        string
+  processMagazine:      string
   holder:               string
   brand:                string
   nature:               string 
   presentation:         string
   specification:        string
-  updatedAtByMagazine:  string
 
   filingDate:     Date | null
   grantDate:      Date | null
@@ -28,13 +28,13 @@ export type ImportedProcessCreateDTO = {
   clientId:      string
   processNumber: string
   processStatus: string
+  processMagazine: string
   
   holder:               string
   brand:                string
   nature:               string 
   presentation:         string
   specification:        string
-  updatedAtByMagazine:  string
 
   filingDate:     Date | null
   grantDate:      Date | null
@@ -45,26 +45,27 @@ export type ImportedProcessUpdateDTO = {
   id:           string
   userIdLogged: string
 
-  clientId?:            string
-  processNumber?:       string
-  processStatus?:       string
-  status?:              string
-  holder?:              string
-  brand?:               string
-  nature?:              string 
-  presentation?:        string
-  specification?:       string
-  updatedAtByMagazine?: string
+  clientId?:        string
+  processNumber?:   string
+  processStatus?:   string
+  processMagazine?: string
+  status?:          string
+  holder?:          string
+  brand?:           string
+  nature?:          string 
+  presentation?:    string
+  specification?:   string
 
   filingDate?:     Date | null
   grantDate?:      Date | null
   expirationDate?: Date | null
 }
 
-export type ImportedProcessPayload = {
+export type ImportedProcessFromINPI = {
+  pedidoNumber:         string
   processNumber:        string
   processMagazine:      string
-  status:               string
+  processStatus:        string
   holder:               string
   brand:                string
   nature:               string 
@@ -92,12 +93,12 @@ export type ImportedProcessWithDetails = {
 
   processNumber:        string
   processStatus:        string
+  processMagazine:  string
   holder:               string
   brand:                string
   nature:               string 
   presentation:         string
   specification:        string
-  updatedAtByMagazine:  string
 
   filingDate:     Date | null
   grantDate:      Date | null
@@ -171,15 +172,15 @@ export type ImportedProcessFilter = {
   historyId?: string
 }
 
-export interface ImportedProcessFromINPI {
-  codPedido: string;
-  processNumber: string;
-  holder: string;
-  brand: string;
-  status: string;
-  class: string;
-  sourceBody: string;
-}
+// export interface ImportedProcessFromINPI {
+//   codPedido: string;
+//   processNumber: string;
+//   holder: string;
+//   brand: string;
+//   status: string;
+//   class: string;
+//   sourceBody: string;
+// }
 
 //TODO: Verify if all is really can be null or not.
 export interface ImportedProcessDetailFromINPI {

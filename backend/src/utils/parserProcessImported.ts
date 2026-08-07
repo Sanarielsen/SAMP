@@ -20,7 +20,8 @@ export function parseDetail(
 
   const process = {
     processNumber: getValueByLabel($, "Nº do Processo"),
-    status: getValueByLabel($, "Situação"),
+    processStatus: getValueByLabel($, "Situação"),
+    processMagazine: magazine.magazineNumber,
     brand: getValueByLabel($, "Marca"),
     holder: getValueByLabel($, "Titular"),
     presentation: getValueByLabel($, "Apresentação"),
@@ -29,7 +30,6 @@ export function parseDetail(
     filingDate: dates.filingDate,
     grantDate: dates.grantDate,
     expirationDate: dates.expirationDate,
-    magazineNumber: magazine.magazineNumber,
     updatedAtByMagazine: magazine.updatedAtByMagazine,
     sourceEntireProcess: ""
   }

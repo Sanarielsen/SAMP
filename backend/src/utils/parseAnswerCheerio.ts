@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 
-import { ImportedProcessDetailFromINPI } from "@shared/types/importedProcess";
+import { ImportedProcessDetailFromINPI, ImportedProcessFromINPI } from "@shared/types/importedProcess";
 
 
 export function cleanText(value: string): string {
@@ -166,16 +166,16 @@ export function getSpecification($: cheerio.CheerioAPI): string | null {
 }
 
 export function buildProcessBody(
-  process: ImportedProcessDetailFromINPI
+  process: ImportedProcessFromINPI
 ): string {
   const updatedAtByMagazineLine = process.updatedAtByMagazine
     ? `Atualizado pela revista em: ${process.updatedAtByMagazine.toLocaleDateString("pt-BR")}`
     : null;
 
   return [
-    process.magazineNumber && `Número da revista: ${process.magazineNumber}`,
+    process.processMagazine && `Número da revista: ${process.processMagazine}`,
     `Número do processo: ${process.processNumber}`,
-    `Status: ${process.status}`,
+    `Status: ${process.processStatus}`,
     `Marca: ${process.brand}`,
     `Titular: ${process.holder}`,
     `Apresentacao: ${process.presentation}`,

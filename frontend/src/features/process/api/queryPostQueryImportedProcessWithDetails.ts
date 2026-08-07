@@ -7,7 +7,7 @@ import type {
 } from '@shared/types/importedProcess';
 
 
-interface QueryImportedProcessPayload {
+interface QueryImportedProcessFromINPI {
   search: string;
   payload: ImportedProcessFilter;
   isSubmitted: boolean
@@ -15,7 +15,7 @@ interface QueryImportedProcessPayload {
 
 export function optionsQueryPostQueryImportedProcessWithDetails({
   search, payload, isSubmitted 
-}: QueryImportedProcessPayload) { 
+}: QueryImportedProcessFromINPI) { 
   return queryOptions({
     queryKey: ["imported-process-with-details", payload],
     enabled: isSubmitted,

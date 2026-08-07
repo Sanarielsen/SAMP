@@ -14,8 +14,8 @@ import {
 } from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
 
-import { useMutationPatchPublication } from "@/features/process/api/mutationUpdatePublication";
-import { optionsQueryGetPublication } from "@/features/process/api/queryGetPublication";
+import { useMutationUpdateProcess } from "@/features/process/api/mutationUpdateImportedProcess";
+import { optionsQueryGetProcess } from "@/features/process/api/queryGetProcess";
 import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions";
 import { optionsQueryGetClient } from "@/api/queryGetClient";;
 import ModalLoadProcessINPI from "@/features/process/components/ModalLoadProcessINPI";
@@ -38,7 +38,7 @@ import { convertDataToServerString } from "@/utils/convertDataToServerString";
 import { clientFields } from "@/utils/getRowDetailClient";
 import { formatAsVisualOnlyDate } from "@/utils/formatDate2";
 
-import type { ImportedProcessCreateDTO, ImportedProcessPayload } from "@shared/types/importedProcess";
+import type { ImportedProcessCreateDTO, ImportedProcessFromINPI } from "@shared/types/importedProcess";
 import { useMutationPostImportedProcess } from "../api/mutatePostImportedProcessFromINPI";
 
 
@@ -48,8 +48,8 @@ export default function ManageImportedProcess() {
   const { id } = useParams()
   const isEditing = !!id;
   const titleSection = !isEditing ? 
-    "Criar publicação manualmente" :
-    "Atualizar publicação"
+    "Criar processo manualmente" :
+    "Atualizar processo"
 
   const [openToast, setOpenToast] = useState("")
   const [openModalSearch, setOpenModalSearch] = useState<boolean>()
@@ -62,47 +62,46 @@ export default function ManageImportedProcess() {
   )
 
   const {
-    data: publication
+    data: process
   } = useQuery(
-    optionsQueryGetPublication(id)
+    optionsQueryGetProcess(id)
   );
 
   const form = useForm<ManageImportedProcessFormData>({
     resolver:
       zodResolver(manageImportedProcessSchema),
     defaultValues:
-      isEditing && publication ? {
-        ...publication,
-        grantDate: publication.grantDate
-          ? formatAsVisualOnlyDate(publication.grantDate)
+      isEditing && process ? {
+        ...process,
+        filingDate: process.filingDate
+          ? formatAsVisualOnlyDate(process.filingDate)
           : undefined,
-        publicationDate: publication.publicationDate
-          ? formatAsVisualOnlyDate(publication.publicationDate)
+        grantDate: process.grantDate
+          ? formatAsVisualOnlyDate(process.grantDate)
           : undefined,
-        depositDate: publication.depositDate
-          ? formatAsVisualOnlyDate(publication.depositDate)
+        expirationDate: process.expirationDate
+          ? formatAsVisualOnlyDate(process.expirationDate)
           : undefined,
       } : {}
     })
   const { errors } = form.formState
 
-
   useEffect(() => {
-    if (publication) {
+    if (process) {
       form.reset({
-        ...publication,
-        grantDate: publication.grantDate
-          ? formatAsVisualOnlyDate(publication.grantDate)
+        ...process,
+        filingDate: process.filingDate
+          ? formatAsVisualOnlyDate(process.filingDate)
           : undefined,
-        publicationDate: publication.publicationDate
-          ? formatAsVisualOnlyDate(publication.publicationDate)
+        grantDate: process.grantDate
+          ? formatAsVisualOnlyDate(process.grantDate)
           : undefined,
-        depositDate: publication.depositDate
-          ? formatAsVisualOnlyDate(publication.depositDate)
+        expirationDate: process.expirationDate
+          ? formatAsVisualOnlyDate(process.expirationDate)
           : undefined,
       });
     }
-  }, [publication, clientsWithOptions]);
+  }, [process, clientsWithOptions]);
 
   const clientId = form.watch("clientId");
 
@@ -114,7 +113,7 @@ export default function ManageImportedProcess() {
     setOpenToast(result);
     if (result === "success") {
       setTimeout(() => {
-        navigate("/processos/publicacoes");
+        navigate("/processos");
       }, 5000);
     }
   }
@@ -129,8 +128,8 @@ export default function ManageImportedProcess() {
       },
     })
 
-  const mutationPatchPublication =
-    useMutationPatchPublication({
+  const mutationUpdateProcess =
+    useMutationUpdateProcess({
       onSuccess: () => {
         executeActionAfterRequest("success");
       },
@@ -141,15 +140,15 @@ export default function ManageImportedProcess() {
 
   const { openDetails, closeDetails, payload } = useDetailsModal();
 
-  function handleTransferProcess(process: ImportedProcessPayload) {
+  function handleTransferProcess(process: ImportedProcessFromINPI) {
     form.setValue("processNumber", process.processNumber ?? "")
+    form.setValue("processMagazine", process.processMagazine ?? "")
+    form.setValue("processStatus", process.processStatus ?? "")
     form.setValue("holder", process.holder ?? "")
-    form.setValue("status", process.status ?? "")
     form.setValue("brand", process.brand ?? "")
     form.setValue("nature", process.nature ?? "")
     form.setValue("presentation", process.presentation ?? "")
     form.setValue("specification", process.specification ?? "")
-    form.setValue("magazineNumber", process.processMagazine ?? "")
     form.setValue("filingDate", formatAsVisualOnlyDate(process.filingDate))
     form.setValue("grantDate", formatAsVisualOnlyDate(process.grantDate))
     form.setValue("expirationDate", formatAsVisualOnlyDate(process.expirationDate))
@@ -158,9 +157,9 @@ export default function ManageImportedProcess() {
 
   const hasTransferStarted = 
     mutationPostImportedProcess.isPending ||
-    mutationPatchPublication.isPending ||
+    mutationUpdateProcess.isPending ||
     mutationPostImportedProcess.isSuccess ||
-    mutationPatchPublication.isSuccess
+    mutationUpdateProcess.isSuccess
 
   const onSubmit: SubmitHandler<ManageImportedProcessFormData> = async (data) => {
 
@@ -171,24 +170,22 @@ export default function ManageImportedProcess() {
         ? new Date(convertDataToServerString(data.filingDate ?? "")) 
         : undefined,
       grantDate: data.grantDate
-        ? new Date(convertDataToServerString(data.grantDate))
+        ? new Date(convertDataToServerString(data.grantDate ?? ""))
         : undefined,
       expirationDate: data.expirationDate
-        ? new Date(convertDataToServerString(data.expirationDate))
+        ? new Date(convertDataToServerString(data.expirationDate ?? ""))
         : undefined,
-      processStatus: data.status,
-      updatedAtByMagazine: data.magazineNumber
       }
 
-    // if (isEditing) {
+    if (isEditing) {
 
-    //   mutationPatchPublication.mutate({
-    //     id,
-    //     ...payload
-    //   })
+      mutationUpdateProcess.mutate({
+        id,
+        ...payload
+      })
 
-    //   return;
-    // }
+      return;
+    }
     mutationPostImportedProcess.mutate(payload)
   }
 
@@ -248,7 +245,7 @@ export default function ManageImportedProcess() {
                 <ControlledInput
                   control={form.control}
                   type="number"
-                  name="magazineNumber"
+                  name="processMagazine"
                   label="Número da revista:*"
                   fullWidth
                   error={!!errors?.processNumber}
@@ -273,16 +270,16 @@ export default function ManageImportedProcess() {
               <Grid size={{ xs: 12 }}>
                 <ControlledInput
                   control={form.control}
-                  name="status"
+                  name="processStatus"
                   label="Status:*"
                   fullWidth
-                  error={!!errors?.status}
+                  error={!!errors?.processStatus}
                   helperText={
-                    String(errors?.status?.message ?? "")
+                    String(errors?.processStatus?.message ?? "")
                   }
                 />
               </Grid>
-              <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
+              <Grid size={{ xs: 12 }}>
                 <ControlledInput
                   control={form.control}
                   name="brand"
@@ -295,7 +292,7 @@ export default function ManageImportedProcess() {
                   }
                 />
               </Grid>
-              <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <ControlledComboBox
                   control={form.control}
                   name={'nature'}
@@ -304,7 +301,7 @@ export default function ManageImportedProcess() {
                   options={listInputNatureValues}
                 />
               </Grid>
-              <Grid size={{ xs: 12, lg: 4 }}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <ControlledComboBox
                   control={form.control}
                   name={'presentation'}
