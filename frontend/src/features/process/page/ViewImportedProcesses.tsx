@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 
 import { optionsQueryListProcessDetailsWithSearch } from "@/features/process/api/queryListProcessDetailsWithDetails";
-// import { useMutationDeleteProcess } from "@/features/process/api/mutationDeleteProcess";
+import { useMutationDeleteProcess } from "@/features/process/api/mutationDeleteProcess";
 import DataTableImportedProcessColumns from "@/features/process/components/DataTableImportedProcessColumns";
 import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
@@ -26,10 +26,7 @@ export default function ViewImportedProcesses() {
   const [openModalConfirmation, setOpenModalConfirmation] = useState(false);
   const [searchBar, setSearchBar] = useState("");
   const [searchApplied, setSearchApplied] = useState("")
-  const [
-    processIdClicked
-    //,setProcessIdClicked
-  ] = useState("");
+  const [processIdClicked, setProcessIdClicked] = useState("");
 
   const { 
     data: listProcessesWithDetails,
@@ -41,16 +38,16 @@ export default function ViewImportedProcesses() {
     optionsQueryListProcessDetailsWithSearch(searchApplied)
   )
 
-  // const mutationDeleteProcess =
-  //   useMutationDeleteProcess({
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ['publications'] })
-  //     setOpenToast("success"); 
-  //   },
-  //   onError: () => {
-  //     setOpenToast("error"); 
-  //   },
-  // })
+  const mutationDeleteProcess =
+    useMutationDeleteProcess({
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['processes', searchApplied] })
+        setOpenToast("success"); 
+      },
+      onError: () => {
+        setOpenToast("error"); 
+      },
+    })
 
   function handleDeletePublication(action: boolean){
 
@@ -58,33 +55,17 @@ export default function ViewImportedProcesses() {
     if (!action || !processIdClicked
     ) return
     
-    // mutationDeleteProcess.mutate(
-    //   processIdClicked
-    // )
+    mutationDeleteProcess.mutate(
+      processIdClicked
+    )
 
     refetch()
   }
 
-  // function handleDelete(id: string) {
-  //   setProcessIdClicked(id);
-  //   setOpenModalConfirmation(true);
-  // }
-
-  //TODO: Current infracturure, its not possible to export the magazine. 
-  //But when have a necessity to do it, explore this feature!
-  // const optionsNewProcess = [
-    
-  //   {
-  //     label: 'Adicionar publicacão integrada aos processos da importacao',
-  //     value: 'automatica',
-  //     onClickOption: () => navigate('/processo/automatico')
-  //   },
-  //   {
-  //     label: 'Adicionar publicação manualmente',
-  //     value: 'manual',
-  //     onClickOption: () => navigate('/processos/publicacao')
-  //   },
-  // ]
+  function handleDelete(id: string) {
+    setProcessIdClicked(id);
+    setOpenModalConfirmation(true);
+  }
 
   const stateQuery =
     isSuccess ? "SUCCESS" : 
@@ -136,7 +117,7 @@ export default function ViewImportedProcesses() {
             columns={DataTableImportedProcessColumns({
               onClickSeeItem: (id) => navigate(`/processo/${id}/detalhes`),
               onClickUpdateItem: (id) => navigate(`/processo/${id}`),
-              onClickDeleteItem: () => console.log("onClickDeleteItem"),
+              onClickDeleteItem: (id) => handleDelete(id),
               onClickCheckClient: (clientId) => navigate(`/cliente/${clientId}/detalhes`),
             })}
           />
@@ -145,14 +126,14 @@ export default function ViewImportedProcesses() {
 
       <ToastContainer
         open={openToast === "success"}
-        message="Publicação excluída com sucesso."
+        message="Processo excluído com sucesso."
         severity="success"
         onClose={() => setOpenToast("")}
       />
       
       <ToastContainer
         open={openToast === "error"}
-        message="Ocorreu um erro ao excluir essa publicação."
+        message="Ocorreu um erro ao excluir essa processo."
         severity="error"
         onClose={() => setOpenToast("")}
       />
@@ -160,7 +141,7 @@ export default function ViewImportedProcesses() {
       <ModalConfirmation
         open={openModalConfirmation}
         title={"Excluir a publicação atual"}
-        description={`Tem certeza que gostaria de excluir a publicação atual? Essa operacão é inversivel.`}
+        description={`Tem certeza que gostaria de excluir o processo atual? Essa operacão é inversivel.`}
         handleClose={() => setOpenModalConfirmation(false)}
         handleAnswer={(answer) => handleDeletePublication(answer)}
       />

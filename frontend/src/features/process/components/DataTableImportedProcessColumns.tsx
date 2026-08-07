@@ -17,7 +17,7 @@ import type { ImportedProcessWithDetails } from "@shared/types/importedProcess";
 type ColumnsProcessProps = {
   onClickSeeItem: (id: string) => void
   onClickUpdateItem: (id: string) => void,
-  onClickDeleteItem: (current: ImportedProcessWithDetails) => void,
+  onClickDeleteItem: (id: string) => void,
   onClickCheckClient: (currentClientId: string) => void
 }
 
@@ -87,7 +87,7 @@ export default function DataTableImportedProcessColumns({
           </IconButton>
 
           <IconButton
-            onClick={() => onClickDeleteItem(params.row)}
+            onClick={() => onClickDeleteItem(params.row.id)}
           >
             <Tooltip title="Excluir">
               <GridDeleteIcon />
