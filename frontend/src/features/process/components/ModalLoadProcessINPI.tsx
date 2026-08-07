@@ -18,6 +18,7 @@ import { GridCloseIcon } from "@mui/x-data-grid";
 
 import { optionsQueryGetImportedProcessFromINPI } from "@/features/process/api/queryGetImportedProcessFromINPI";
 import { ControlledInput } from "@/components/ControlledInputText";
+import ToastContainer from "@/components/Toast";
 import { 
   searchNewProcessFromINPI, 
   type SearchNewProcessFromINPIFormData 
@@ -40,6 +41,7 @@ export default function ModalLoadProcessINPI({
   const queryClient = useQueryClient()
   const [ searchPermission, setSearchPermission ] = useState(false)
   const [ processLoaded, setProcessLoaded ] = useState<ImportedProcessFromINPI>()
+  const [ openToast, setOpenToast ] = useState("")
 
   const form = useForm<SearchNewProcessFromINPIFormData>({
     resolver:
@@ -58,6 +60,7 @@ export default function ModalLoadProcessINPI({
     data: importedProcessInformation,
     isSuccess,
     isLoading,
+    isError,
   } = useQuery(
     optionsQueryGetImportedProcessFromINPI(processNumberSource, searchPermission)
   )
@@ -66,8 +69,15 @@ export default function ModalLoadProcessINPI({
     if (isSuccess) {
       setProcessLoaded(importedProcessInformation);
       form.setValue("entireAnswer", importedProcessInformation.sourceEntireProcess)
+      setOpenToast("success");
     }
   }, [isSuccess, processLoaded]);
+
+  useEffect(() => {
+    if (isError) {
+      setOpenToast("error");
+    }
+  }, [isError]);
 
   function resetQueryGetProcessFromINPI() {
     queryClient.resetQueries({ queryKey: ["imported-process"] })
@@ -95,6 +105,7 @@ export default function ModalLoadProcessINPI({
   }
   
   return (
+    <>
     <Modal
       open={open}
       onClose={handleCloseModal}
@@ -186,5 +197,20 @@ export default function ModalLoadProcessINPI({
         </form>
       </ModalContainer>
     </Modal>
+
+    <ToastContainer
+      open={openToast === "success"}
+      message="Processo carregado com sucesso."
+      severity="success"
+      onClose={() => setOpenToast("")}
+    />
+
+    <ToastContainer
+      open={openToast === "error"}
+      message="Ocorreu um erro ao carregar o processo."
+      severity="error"
+      onClose={() => setOpenToast("")}
+    />
+    </>
   )
 }

@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
 
+import { useMutationPostImportedProcess } from "@/features/process/api/mutatePostImportedProcessFromINPI";
 import { useMutationUpdateProcess } from "@/features/process/api/mutationUpdateImportedProcess";
 import { optionsQueryGetProcess } from "@/features/process/api/queryGetProcess";
 import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions";
@@ -39,7 +40,6 @@ import { clientFields } from "@/utils/getRowDetailClient";
 import { formatAsVisualOnlyDate } from "@/utils/formatDate2";
 
 import type { ImportedProcessCreateDTO, ImportedProcessFromINPI } from "@shared/types/importedProcess";
-import { useMutationPostImportedProcess } from "../api/mutatePostImportedProcessFromINPI";
 
 
 export default function ManageImportedProcess() {
@@ -256,7 +256,7 @@ export default function ManageImportedProcess() {
                   }
                 />
               </Grid>
-              <Grid size={{ xs: 12, lg: 6 }}>
+              <Grid size={{ xs: 12 }}>
                 <ControlledInput
                   control={form.control}
                   name="holder"
