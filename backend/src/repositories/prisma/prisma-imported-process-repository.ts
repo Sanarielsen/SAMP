@@ -8,7 +8,6 @@ import {
   ImportedProcess,
   ImportedProcessCreateDTO,
   ImportedProcessFilter,
-  ImportedProcessFromINPI,
   ImportedProcessListWithDetails,
   ImportedProcessUpdateDTO,
   ImportedProcessWithDetails
@@ -57,9 +56,34 @@ export class PrismaImportedProcessRepository implements ImportedProcessRepositor
         grantDate: data.grantDate,
         expirationDate: data.expirationDate,
         createdByUser: data.userIdLogged,
-        updatedByUser: data.userIdLogged
+        updatedByUser: data.userIdLogged,
       }
     })
+  }
+
+  async restore( id: string, data: ImportedProcessCreateDTO ): Promise<ImportedProcess> {
+    return prisma.importedProcess.update({
+      where: {
+        id,
+      },
+      data: {
+        clientId: data.clientId,
+        processNumber: data.processNumber,
+        processStatus: data.processStatus,
+        processMagazine: data.processMagazine, 
+        holder: data.holder,
+        brand: data.brand,
+        nature: data.nature,
+        presentation: data.presentation,
+        specification: data.specification,
+        filingDate: data.filingDate,
+        grantDate: data.grantDate,
+        expirationDate: data.expirationDate,
+        createdByUser: data.userIdLogged,
+        updatedByUser: data.userIdLogged,
+        deletedAt: null,
+      },
+    });
   }
 
   async delete(id: string): Promise<void> {
@@ -90,8 +114,13 @@ export class PrismaImportedProcessRepository implements ImportedProcessRepositor
   findByIdDetails(id: string): Promise<DetailsProcessImportedDTO | null> {
     throw new Error("Method not implemented.");
   }
-  findByProcessNumber(processNumber: string): Promise<ImportedProcessFromINPI> {
-    throw new Error("Method not implemented.");
+  
+  async findByProcessNumber(processNumber: string): Promise<ImportedProcess | null> {
+    return await prisma.importedProcess.findFirst({
+      where: {
+        processNumber
+      }
+    })
   }
   
   async createManyAsImport(importedProcesses: CreatedProcessImportedDTO[]): Promise<number> {

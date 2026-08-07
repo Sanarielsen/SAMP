@@ -7,8 +7,7 @@ import {
   DetailsProcessImportedDTO, 
   ImportedProcess, 
   ImportedProcessCreateDTO, 
-  ImportedProcessFilter, 
-  ImportedProcessFromINPI,
+  ImportedProcessFilter,
   ImportedProcessUpdateDTO,
   ImportedProcessWithDetails
 } from "@shared/types/importedProcess";
@@ -30,6 +29,22 @@ export class InMemoryImportedProcessRepository implements ImportedProcessReposit
     this.items.push(newItem)
     
     return newItem
+  }
+
+  async restore(id: string, data: ImportedProcessCreateDTO): Promise<ImportedProcess> {
+    const importedProcessIdenitity = this.items.findIndex(process => {
+      return process.id === id
+    })
+
+    const updatedProcess = {
+      ...this.items[importedProcessIdenitity],
+      ...data,
+      deletedAt: null,
+    }
+
+    this.items[importedProcessIdenitity] = updatedProcess
+
+    return updatedProcess
   }
 
   createManyAsImport(importedProcesses: CreatedProcessImportedDTO[]): Promise<number> {
@@ -78,8 +93,14 @@ export class InMemoryImportedProcessRepository implements ImportedProcessReposit
     throw new Error("Method not implemented.");
   }
 
-  findByProcessNumber(processNumber: string): Promise<ImportedProcessFromINPI> {
-    throw new Error("Method not implemented.");
+  async findByProcessNumber(processNumber: string): Promise<ImportedProcess | null> {
+    const importedProcess = this.items.find(item => item.processNumber == processNumber)
+
+    if (!importedProcess) {
+      return null
+    }
+
+    return importedProcess
   }
 
   findManyByProcessHistoricIdAsAOption(processHistoricId: string, search?: string): Promise<OptionsControlledBox[]> {
