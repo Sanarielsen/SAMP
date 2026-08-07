@@ -15,6 +15,7 @@ export interface ImportedProcessRepository {
   create(data: ImportedProcessCreateDTO): Promise<ImportedProcess>
   createManyAsImport(importedProcesses: CreatedProcessImportedDTO[]): Promise<number>
   update(data: Partial<ImportedProcessUpdateDTO>): Promise<ImportedProcess>
+  delete(id: string): Promise<void>
   deleteManyByProcessHistoricId(processHistoricId: string): Promise<void>
 
   findById(id: string): Promise<ImportedProcess | null> 

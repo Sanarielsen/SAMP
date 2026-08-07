@@ -57,6 +57,7 @@ import { updateClientStatus } from "./Controllers/client/delete";
 import { listImportedProcessDetailsWithSearch } from "./Controllers/importedProcess/list-search-with-details";
 import { getImportedProcess } from "./Controllers/importedProcess/get";
 import { updateImportedProcess } from "./Controllers/importedProcess/update";
+import { deleteImportedProcess } from "./Controllers/importedProcess/delete";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -117,6 +118,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/process/inpi/:processNumber', {onRequest: [verifyJWT]}, getProcessFromINPI)
   app.post('/process/inpi', {onRequest: [verifyJWT]}, postImportedProcessFromINPI)
   app.patch('/process/:id', {onRequest: [verifyJWT]}, updateImportedProcess)
+  app.delete('/process/:id', {onRequest: [verifyJWT]}, deleteImportedProcess)
   
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
   app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)

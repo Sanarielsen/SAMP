@@ -62,6 +62,17 @@ export class PrismaImportedProcessRepository implements ImportedProcessRepositor
     })
   }
 
+  async delete(id: string): Promise<void> {
+    await prisma.importedProcess.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date(Date.now())
+      }
+    })
+  }
+
   async findById(id: string): Promise<ImportedProcess | null> {
     const importedProcess = prisma.importedProcess.findUnique({
       where: {
@@ -107,6 +118,7 @@ export class PrismaImportedProcessRepository implements ImportedProcessRepositor
   async findManyDetailsWithSearch(search: string): Promise<ImportedProcessWithDetails[] | null> {
     const importedProcesses = await prisma.importedProcess.findMany({
       where: {
+        deletedAt: null,
         OR: [
           { processNumber: { contains: search, mode: 'insensitive' }},
           { holder: { contains: search, mode: 'insensitive' }},
