@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { 
   useForm,
   useWatch,
@@ -24,13 +24,12 @@ import {
 } from "@/features/process/schema/searchNewProcessFromINPI";
 import { ModalContainer } from "@/styles/modalContainer";
 
-import type { ImportedProcessDetailFromINPI, ImportedProcessPayload } from "@shared/types/importedProcess";
-import { convertStringBrazilianDateToDate } from "@/utils/convertDataToServerString";
+import type { ImportedProcessFromINPI } from "@shared/types/importedProcess";
 
 
 interface ModalLoadProcessINPIProps {
   open: boolean
-  handleClickTransfer: (process: ImportedProcessPayload) => void
+  handleClickTransfer: (process: ImportedProcessFromINPI) => void
   handleClose: () => void
 }
 
@@ -38,8 +37,9 @@ export default function ModalLoadProcessINPI({
   open, handleClickTransfer, handleClose
 }: ModalLoadProcessINPIProps) {
 
+  const queryClient = useQueryClient()
   const [ searchPermission, setSearchPermission ] = useState(false)
-  const [ processLoaded, setProcessLoaded ] = useState<ImportedProcessDetailFromINPI>()
+  const [ processLoaded, setProcessLoaded ] = useState<ImportedProcessFromINPI>()
 
   const form = useForm<SearchNewProcessFromINPIFormData>({
     resolver:
@@ -69,28 +69,35 @@ export default function ModalLoadProcessINPI({
     }
   }, [isSuccess, processLoaded]);
 
+  function resetQueryGetProcessFromINPI() {
+    queryClient.resetQueries({ queryKey: ["imported-process"] })
+    setSearchPermission(false)
+    setProcessLoaded(undefined)
+    form.reset()
+  }
 
   const onSubmit: SubmitHandler<SearchNewProcessFromINPIFormData> = async () => {
 
-    console.log("Filling date: ", new Date(importedProcessInformation.filingDate))
-
-    const processLoaded: ImportedProcessPayload = {
+    const processLoaded: ImportedProcessFromINPI = {
       ...importedProcessInformation,
-      filingDate: convertStringBrazilianDateToDate(importedProcessInformation.filingDate),
-      grantDate: convertStringBrazilianDateToDate(importedProcessInformation.grantDate),
-      expirationDate: convertStringBrazilianDateToDate(importedProcessInformation.expirationDate),
-      updatedAtByMagazine: importedProcessInformation.updatedAtByMagazine,
-      processMagazine: importedProcessInformation.magazineNumber,
-      status: importedProcessInformation.status
+      filingDate: importedProcessInformation.filingDate,
+      grantDate: importedProcessInformation.grantDate,
+      expirationDate: importedProcessInformation.expirationDate,
     }
     
     handleClickTransfer(processLoaded)
+    resetQueryGetProcessFromINPI()
+  }
+  
+  const handleCloseModal = () => {
+    resetQueryGetProcessFromINPI();
+    handleClose()
   }
   
   return (
     <Modal
       open={open}
-      onClose={handleClose}
+      onClose={handleCloseModal}
     >
       <ModalContainer>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -109,7 +116,7 @@ export default function ModalLoadProcessINPI({
               Carregar processo diretamente do INPI
             </Typography>
 
-            <Button onClick={handleClose}>
+            <Button onClick={handleCloseModal}>
               <GridCloseIcon />
             </Button>
           </Box>
