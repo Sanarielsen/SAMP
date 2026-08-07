@@ -72,7 +72,7 @@ model ImportedProcess {
   id       String @id @default(uuid())
   clientId String
 
-  processNumber   String
+  processNumber   String @unique
   processStatus   String
   processMagazine String
   holder          String

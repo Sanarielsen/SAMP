@@ -4,7 +4,7 @@ import {
   useForm, 
   type SubmitHandler
 } from "react-hook-form";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { 
@@ -40,14 +40,12 @@ import { formatAsVisualOnlyDate } from "@/utils/formatDate2";
 
 import type { ImportedProcessCreateDTO, ImportedProcessFromINPI } from "@shared/types/importedProcess";
 import { useMutationPostImportedProcess } from "../api/mutatePostImportedProcessFromINPI";
-import { useMutationDeleteProcess } from "../api/mutationDeleteProcess";
 
 
 export default function ManageImportedProcess() {
 
   const navigate = useNavigate();
   const { id } = useParams()
-  const queryClient = useQueryClient()
   const isEditing = !!id;
   const titleSection = !isEditing ? 
     "Criar processo manualmente" :

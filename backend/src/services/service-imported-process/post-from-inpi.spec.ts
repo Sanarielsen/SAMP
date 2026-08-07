@@ -14,6 +14,7 @@ import { makeUserRole } from "@/services/factories/user-role/make-entity";
 import { makeUser } from "@/services/factories/user/make-entity";
 import { makeClient } from "@/services/factories/client/make-entity";
 import { makeImportedProcess } from "@/services/factories/imported-process/make-entity";
+import { ResourceAlreadyExistsError } from "@/services/errors/resource-already-exists-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { UnauthorizedUserError } from "@/services/errors/unauthorized-user-error";
 
@@ -74,17 +75,38 @@ describe('Post Imported Process From INPI Use Case', () => {
     })
 
     newImportedProcess = await makeImportedProcess(importedProcessRepository, {
-      clientId: 'client-test-1'
+      clientId: 'client-test-1',
+      processNumber: '123456789',
+      deletedAt: null
+    })
+
+    await makeImportedProcess(importedProcessRepository, {
+      clientId: 'client-test-1',
+      processNumber: '22334455',
+      deletedAt: new Date(Date.now())
     })
   })
 
   it('should create a imported process', async () => {
     const newData = await sut.execute({
       ...newImportedProcess,
-      userIdLogged: 'user-admin'
+      userIdLogged: 'user-admin',
+      processNumber: '11223344',
     })
 
     expect(newData.brand).toBe('Marca test')
+  })
+
+  it('should create an imported process if the previous one was soft deleted', async () => {
+    const newData = await sut.execute({
+      ...newImportedProcess,
+      userIdLogged: 'user-admin',
+      processNumber: '22334455',
+      brand: 'Marca recarregada',
+    })
+
+    expect(newData.brand).toBe('Marca recarregada')
+    expect(newData.deletedAt).toBe(null)
   })
 
   it('should not create an imported process as a user with an invalid user role', async () => {
@@ -120,5 +142,14 @@ describe('Post Imported Process From INPI Use Case', () => {
       userIdLogged: 'user-normal',
       clientId: 'client-test-1',
     })).rejects.toBeInstanceOf(UnauthorizedUserError)
+  })
+
+  it('should not create an imported process if the process number already exists and was not deleted', async () => {
+    await expect(() => sut.execute({
+      ...newImportedProcess,
+      userIdLogged: 'user-admin',
+      clientId: 'client-test-1',
+      processNumber: '123456789',
+    })).rejects.toBeInstanceOf(ResourceAlreadyExistsError)
   })
 })

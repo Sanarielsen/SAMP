@@ -2,6 +2,7 @@ import { UserRoleRepository } from "@/repositories/user-role-repository";
 import { UserRepository } from "@/repositories/user-repository";
 import { ClientRepository } from "@/repositories/client-repository";
 import { ImportedProcessRepository } from "@/repositories/imported-process-repository";
+import { ResourceAlreadyExistsError } from "@/services/errors/resource-already-exists-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { UnauthorizedUserError } from "@/services/errors/unauthorized-user-error";
 
@@ -31,6 +32,18 @@ export class PostImportedProcessFromINPIUseCase {
     const client = await this.clientRepository.findById(data.clientId)
     if (!client) throw new ResourceNotFoundError();
 
-    return this.importedProcessRepository.create(data)
+    const importedProcess = await this.importedProcessRepository.findByProcessNumber(
+      data.processNumber,
+    );
+
+    if (importedProcess) {
+      if (importedProcess.deletedAt === null) {
+        throw new ResourceAlreadyExistsError();
+      }
+
+      return this.importedProcessRepository.restore(importedProcess.id, data);
+    }
+
+    return this.importedProcessRepository.create(data);
   }
 }
