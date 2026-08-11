@@ -25,17 +25,17 @@ export const processImportedFields: Field<ImportedProcess>[] = [
     title: 'Natureza',
     get: (field: ImportedProcess) => field.nature,
   },
-  // {
-  //   title: 'Nome da marca',
-  //   get: (field: ImportedProcess) => field.markName,
-  // },
-  // {
-  //   title: 'NCL',
-  //   get: (field: ImportedProcess) => field.ncl,
-  // },
+  {
+    title: 'Classe nice',
+    get: (field: ImportedProcess) => field.niceTitle,
+  },
+  {
+    title: 'Status da classe:',
+    get: (field: ImportedProcess) => field.niceStatus,
+  },
   {
     title: 'Especificação',
-    get: (field: ImportedProcess) => field.specification,
+    get: (field: ImportedProcess) => field.niceSpecification,
   },
   // {
   //   title: 'Especificação traduzida',

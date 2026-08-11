@@ -72,14 +72,16 @@ model ImportedProcess {
   id       String @id @default(uuid())
   clientId String
 
-  processNumber   String @unique
-  processStatus   String
-  processMagazine String
-  holder          String
-  brand           String
-  nature          String
-  presentation    String
-  specification   String @db.Text
+  processNumber       String @unique
+  processStatus       String
+  processMagazine     String
+  holder              String
+  brand               String
+  nature              String
+  presentation        String
+  niceTitle           String
+  niceStatus          String
+  niceSpecification   String @db.Text
 
   createdByUser String
   updatedByUser String

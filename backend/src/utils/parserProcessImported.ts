@@ -9,11 +9,11 @@ import {
   getMagazineInformation,
 } from "@/utils/parseAnswerCheerio";
 
-import { ImportedProcessDetailFromINPI } from "@shared/types/importedProcess";
+import { ImportedProcessFromINPI } from "@shared/types/importedProcess";
 
 export function parseDetail(
   html: string
-): ImportedProcessDetailFromINPI {
+): ImportedProcessFromINPI {
 
   const $ = cheerio.load(html);
 
@@ -26,12 +26,14 @@ export function parseDetail(
   const holder = getValueByLabel($, "Titular") ?? "";
   const presentation = getValueByLabel($, "Apresentação") ?? "";
   const nature = getValueByLabel($, "Natureza") ?? "";
-  const niceClass = getNiceClass($) ?? "";
-  const niceClassSituation = getNiceClassSituation($) ?? "";
-  const specification = getSpecification($) ?? "";
+  const niceTitle = getNiceClass($) ?? "";
+  const niceStatus = getNiceClassSituation($) ?? "";
+  const niceSpecification = getSpecification($) ?? "";
   const filingDate = dates.filingDate ?? "";
   const grantDate = dates.grantDate ?? "";
   const expirationDate = dates.expirationDate ?? "";
+
+  console.log(getValueByLabel($, "Situação"))
 
   const process = {
     processNumber,
@@ -41,9 +43,9 @@ export function parseDetail(
     holder,
     presentation,
     nature,
-    niceClass,
-    niceClassSituation,
-    specification,
+    niceTitle,
+    niceStatus,
+    niceSpecification,
     filingDate,
     grantDate,
     expirationDate,
@@ -52,9 +54,9 @@ export function parseDetail(
 
   const { processStatus: status, ...result } = process;
 
-  return {
+  return {  
     ...result,
-    status,
+    processStatus: process.processStatus,
     sourceEntireProcess: buildProcessBody(process),
   };
 }

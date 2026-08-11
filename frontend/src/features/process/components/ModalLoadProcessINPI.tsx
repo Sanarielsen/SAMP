@@ -61,7 +61,7 @@ export default function ModalLoadProcessINPI({
     isSuccess,
     isLoading,
     isError,
-  } = useQuery(
+  } = useQuery<ImportedProcessFromINPI>(
     optionsQueryGetImportedProcessFromINPI(processNumberSource, searchPermission)
   )
 
@@ -87,15 +87,9 @@ export default function ModalLoadProcessINPI({
   }
 
   const onSubmit: SubmitHandler<SearchNewProcessFromINPIFormData> = async () => {
+    if (!importedProcessInformation) return;
 
-    const processLoaded: ImportedProcessFromINPI = {
-      ...importedProcessInformation,
-      filingDate: importedProcessInformation.filingDate,
-      grantDate: importedProcessInformation.grantDate,
-      expirationDate: importedProcessInformation.expirationDate,
-    }
-    
-    handleClickTransfer(processLoaded)
+    handleClickTransfer(importedProcessInformation)
     resetQueryGetProcessFromINPI()
   }
   

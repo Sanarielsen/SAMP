@@ -206,22 +206,7 @@ export function getSpecification($: cheerio.CheerioAPI): string | null {
 }
 
 export function buildProcessBody(
-  process: {
-    processNumber: string | null;
-    processStatus: string | null;
-    processMagazine: string | null;
-    brand: string | null;
-    holder: string | null;
-    presentation: string | null;
-    nature: string | null;
-    niceClass?: string | null;
-    niceClassSituation?: string | null;
-    specification: string | null;
-    filingDate: string | null;
-    grantDate: string | null;
-    expirationDate: string | null;
-    updatedAtByMagazine: Date | null | undefined;
-  }
+  process: ImportedProcessFromINPI
 ): string {
   const updatedAtByMagazineLine = process.updatedAtByMagazine
     ? `Atualizado pela revista em: ${process.updatedAtByMagazine.toLocaleDateString("pt-BR")}`
@@ -235,9 +220,9 @@ export function buildProcessBody(
     `Titular: ${process.holder}`,
     `Apresentacao: ${process.presentation}`,
     `Natureza: ${process.nature}`,
-    `Classe de Nice: ${process.niceClass}`,
-    `Situação da Classe: ${process.niceClassSituation}`,
-    `Especificacao: ${process.specification}`,
+    `Classe de Nice: ${process.niceTitle}`,
+    `Situação da Classe: ${process.niceStatus}`,
+    `Especificacao: ${process.niceSpecification}`,
     `Data de depósito: ${process.filingDate}`,
     `Data de concessão: ${process.grantDate}`,
     `Data de vigência: ${process.expirationDate}`,

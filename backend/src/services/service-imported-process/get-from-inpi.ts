@@ -4,9 +4,7 @@ import { INPIUnavailableError } from "@/services/errors/inpi-unavailable-error";
 import { parseSearchProcessFromINPI } from "@/utils/parseSearchProcessFromINPI";
 import { parseDetail } from "@/utils/parserProcessImported";
 
-import { 
-  ImportedProcessDetailFromINPI 
-} from "@shared/types/importedProcess";
+import { ImportedProcessFromINPI } from "@shared/types/importedProcess";
 
 
 export class GetImportedProcessFromINPIUseCase {
@@ -14,7 +12,7 @@ export class GetImportedProcessFromINPIUseCase {
     private importedProcessFromINPIRepository = new INPIClient
   ) {}
 
-  async execute(processNumber: string): Promise<ImportedProcessDetailFromINPI> {
+  async execute(processNumber: string): Promise<ImportedProcessFromINPI> {
 
     try {
       await this.importedProcessFromINPIRepository.login();
