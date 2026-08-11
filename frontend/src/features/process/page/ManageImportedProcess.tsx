@@ -148,7 +148,9 @@ export default function ManageImportedProcess() {
     form.setValue("brand", process.brand ?? "")
     form.setValue("nature", process.nature ?? "")
     form.setValue("presentation", process.presentation ?? "")
-    form.setValue("specification", process.specification ?? "")
+    form.setValue("niceTitle", process.niceTitle ?? "")
+    form.setValue("niceStatus", process.niceStatus ?? "")
+    form.setValue("niceSpecification", process.niceSpecification ?? "")
     form.setValue("filingDate", formatAsVisualOnlyDate(process.filingDate))
     form.setValue("grantDate", formatAsVisualOnlyDate(process.grantDate))
     form.setValue("expirationDate", formatAsVisualOnlyDate(process.expirationDate))
@@ -312,18 +314,44 @@ export default function ManageImportedProcess() {
                   options={listInputPresentationValues}
                 />
               </Grid>
+              
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <ControlledInput
+                  control={form.control}
+                  name="niceTitle"
+                  label="Classe de nice:*"
+                  fullWidth
+                  error={!!errors?.niceTitle}
+                  helperText={
+                    String(errors?.niceTitle?.message ?? "")
+                  }
+                />
+              </Grid>
+              
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <ControlledInput
+                  control={form.control}
+                  name="niceStatus"
+                  label="Situação da classe:*"
+                  fullWidth
+                  error={!!errors?.niceStatus}
+                  helperText={
+                    String(errors?.niceStatus?.message ?? "")
+                  }
+                />
+              </Grid>
+
               <Grid size={{ xs: 12 }}>
                 <ControlledInput
-                  type="number"
                   control={form.control}
-                  name="specification"
+                  name="niceSpecification"
                   label="Especificações:*"
                   multiline
                   rows={4}
                   fullWidth
-                  error={!!errors?.specification}
+                  error={!!errors?.niceSpecification}
                   helperText={
-                    String(errors?.specification?.message ?? "")
+                    String(errors?.niceSpecification?.message ?? "")
                   }
                 />
               </Grid>

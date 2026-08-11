@@ -11,8 +11,8 @@ export const listInputNatureValues = [
 
 export const listInputPresentationValues = [
   {
-    label: 'Nomintativa',
-    value: "Nomintativa"
+    label: 'Nominativa',
+    value: 'Nominativa'
   },
   {
     label: 'Figurativa',

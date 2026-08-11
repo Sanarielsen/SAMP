@@ -2,14 +2,16 @@ export type ImportedProcess = {
   id:       string
   clientId: string
 
-  processNumber:   string
-  processStatus:   string
-  processMagazine: string
-  holder:          string
-  brand:           string
-  nature:          string 
-  presentation:    string
-  specification:   string
+  processNumber:      string
+  processStatus:      string
+  processMagazine:    string
+  holder:             string
+  brand:              string
+  nature:             string 
+  presentation:       string
+  niceTitle:          string
+  niceStatus:         string
+  niceSpecification:  string
 
   filingDate:     Date | null
   grantDate:      Date | null
@@ -30,11 +32,13 @@ export type ImportedProcessCreateDTO = {
   processStatus:    string
   processMagazine:  string
   
-  holder:         string
-  brand:          string
-  nature:         string 
-  presentation:   string
-  specification:  string
+  holder:             string
+  brand:              string
+  nature:             string 
+  presentation:       string
+  niceTitle:          string
+  niceStatus:         string
+  niceSpecification:  string
 
   filingDate:     Date | null
   grantDate:      Date | null
@@ -45,39 +49,22 @@ export type ImportedProcessUpdateDTO = {
   id:           string
   userIdLogged: string
 
-  clientId?:        string
-  processNumber?:   string
-  processStatus?:   string
-  processMagazine?: string
-  status?:          string
-  holder?:          string
-  brand?:           string
-  nature?:          string 
-  presentation?:    string
-  specification?:   string
+  clientId?:          string
+  processNumber?:     string
+  processStatus?:     string
+  processMagazine?:   string
+  status?:            string
+  holder?:            string
+  brand?:             string
+  nature?:            string 
+  presentation?:      string
+  niceTitle?:         string
+  niceStatus?:        string
+  niceSpecification?: string
 
   filingDate?:     Date | null
   grantDate?:      Date | null
   expirationDate?: Date | null
-}
-
-export type ImportedProcessFromINPI = {
-  pedidoNumber:         string
-  processNumber:        string
-  processMagazine:      string
-  processStatus:        string
-  holder:               string
-  brand:                string
-  nature:               string 
-  presentation:         string
-  specification:        string
-  updatedAtByMagazine:  Date
-
-  filingDate:     Date
-  grantDate:      Date | null
-  expirationDate: Date | null
-
-  sourceEntireProcess:  string
 }
 
 export type ImportedProcessWithDetails = {
@@ -90,14 +77,16 @@ export type ImportedProcessWithDetails = {
   clientTypeName:   string
   clientDocument:   string
 
-  processNumber:        string
-  processStatus:        string
-  processMagazine:  string
-  holder:               string
-  brand:                string
-  nature:               string 
-  presentation:         string
-  specification:        string
+  processNumber:      string
+  processStatus:      string
+  processMagazine:    string
+  holder:             string
+  brand:              string
+  nature:             string 
+  presentation:       string
+  niceTitle:          string
+  niceStatus:         string
+  niceSpecification:  string
 
   filingDate:     Date | null
   grantDate:      Date | null
@@ -114,24 +103,24 @@ export type ImportedProcessWithDetails = {
   deletedAt?: Date | null
 }
 
-//TODO: Verify if all is really can be null or not.
-export interface ImportedProcessDetailFromINPI {
-  processNumber: string | null;
-  status: string | null
-  holder: string | null;
-  brand: string | null;
-  nature: string | null;
-  presentation: string | null;
-  specification: string | null;
-  filingDate: string | null;
-  grantDate: string | null;
-  expirationDate: string | null;
 
-  sourceEntireProcess: string | null
-  updatedAtByMagazine?: Date | null
+export type ImportedProcessFromINPI = {
+  pedidoNumber:         string
+  processNumber:        string
+  processMagazine:      string
+  processStatus:        string
+  holder:               string
+  brand:                string
+  nature:               string 
+  presentation:         string
+  niceTitle:            string
+  niceStatus:           string
+  niceSpecification:    string
+  updatedAtByMagazine:  Date
 
-  magazineNumber?: string | null
-  createdAt?: Date | null
-  updatedAt?: Date | null
-  deletedAt?: Date | null
+  filingDate:     Date
+  grantDate:      Date | null
+  expirationDate: Date | null
+
+  sourceEntireProcess:  string
 }
