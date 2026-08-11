@@ -61,7 +61,7 @@ export default function ModalLoadProcessINPI({
     isSuccess,
     isLoading,
     isError,
-  } = useQuery(
+  } = useQuery<ImportedProcessFromINPI>(
     optionsQueryGetImportedProcessFromINPI(processNumberSource, searchPermission)
   )
 
@@ -87,15 +87,9 @@ export default function ModalLoadProcessINPI({
   }
 
   const onSubmit: SubmitHandler<SearchNewProcessFromINPIFormData> = async () => {
+    if (!importedProcessInformation) return;
 
-    const processLoaded: ImportedProcessFromINPI = {
-      ...importedProcessInformation,
-      filingDate: importedProcessInformation.filingDate,
-      grantDate: importedProcessInformation.grantDate,
-      expirationDate: importedProcessInformation.expirationDate,
-    }
-    
-    handleClickTransfer(processLoaded)
+    handleClickTransfer(importedProcessInformation)
     resetQueryGetProcessFromINPI()
   }
   
@@ -106,97 +100,97 @@ export default function ModalLoadProcessINPI({
   
   return (
     <>
-    <Modal
-      open={open}
-      onClose={handleCloseModal}
-    >
-      <ModalContainer>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              id="modal-modal-title"
-              variant="h5"
-              component="h5"
+      <Modal
+        open={open}
+        onClose={handleCloseModal}
+      >
+        <ModalContainer>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
-              Carregar processo diretamente do INPI
-            </Typography>
-
-            <Button onClick={handleCloseModal}>
-              <GridCloseIcon />
-            </Button>
-          </Box>
-
-          <Grid
-            container
-            spacing={4}
-            sx={{ pt: 3, pb: 2 }}
-          >
-            <Grid size={{ xs: 12, md: 6 }}>
-              <ControlledInput
-                control={form.control}
-                type="number"
-                name="processNumber"
-                label="Número do processo:*"
-                fullWidth
-                error={!!errors?.processNumber}
-                helperText={
-                  String(errors?.processNumber?.message ?? "")
-                }
-              />
-            </Grid>
-
-            <Grid size={{ xs: 12, md: 6 }}>
-              <Button              
-                type="button"
-                variant="outlined"
-                fullWidth
-                //TODO: Check the correct way to follow same propers of text without message error.
-                sx={{ height: '56px' }}
-                disabled={isLoading}
-                loading={isLoading}
-                onClick={() => setSearchPermission(true)}
+              <Typography
+                id="modal-modal-title"
+                variant="h5"
+                component="h5"
               >
-                Carregar
-              </Button>
-            </Grid>
+                Carregar processo diretamente do INPI
+              </Typography>
 
-            <Grid size={{ xs: 12 }}>
-              <ControlledInput
-                control={form.control}
-                label="Corpo do processo:*"
-                name="entireAnswer"
-                multiline
-                rows={8}
-                disabled
-                fullWidth
-                error={!!errors?.entireAnswer}
-                helperText={
-                  String(errors?.entireAnswer?.message ?? "")
-                }
-              />
-            </Grid>
-
-            <Grid size={{ xs: 12 }}>
-              <Button
-                sx={{ marginTop: 2 }}
-                type="submit"
-                variant="contained"
-                size="large"
-                fullWidth
-              >
-                Carregar processo
+              <Button onClick={handleCloseModal}>
+                <GridCloseIcon />
               </Button>
+            </Box>
+
+            <Grid
+              container
+              spacing={4}
+              sx={{ pt: 3, pb: 2 }}
+            >
+              <Grid size={{ xs: 12, md: 6 }}>
+                <ControlledInput
+                  control={form.control}
+                  type="number"
+                  name="processNumber"
+                  label="Número do processo:*"
+                  fullWidth
+                  error={!!errors?.processNumber}
+                  helperText={
+                    String(errors?.processNumber?.message ?? "")
+                  }
+                />
+              </Grid>
+
+              <Grid size={{ xs: 12, md: 6 }}>
+                <Button              
+                  type="button"
+                  variant="outlined"
+                  fullWidth
+                  //TODO: Check the correct way to follow same propers of text without message error.
+                  sx={{ height: '56px' }}
+                  disabled={isLoading}
+                  loading={isLoading}
+                  onClick={() => setSearchPermission(true)}
+                >
+                  Carregar
+                </Button>
+              </Grid>
+
+              <Grid size={{ xs: 12 }}>
+                <ControlledInput
+                  control={form.control}
+                  label="Corpo do processo:*"
+                  name="entireAnswer"
+                  multiline
+                  rows={8}
+                  disabled
+                  fullWidth
+                  error={!!errors?.entireAnswer}
+                  helperText={
+                    String(errors?.entireAnswer?.message ?? "")
+                  }
+                />
+              </Grid>
+
+              <Grid size={{ xs: 12 }}>
+                <Button
+                  sx={{ marginTop: 2 }}
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  fullWidth
+                >
+                  Carregar processo
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
-      </ModalContainer>
-    </Modal>
+          </form>
+        </ModalContainer>
+      </Modal>
 
     <ToastContainer
       open={openToast === "success"}

@@ -33,10 +33,12 @@ model User {
   roleId   String
   userRole UserRole? @relation(fields: [roleId], references: [id])
 
-  createdByUser            Client[]          @relation("CreatedBy")
-  linkedByUser             Client[]          @relation("ResponsibleBy")
-  importedProcessesCreated ImportedProcess[] @relation("createdByUser")
-  importedProcessesUpdated ImportedProcess[] @relation("updatedByUser")
+  createdByUser              Client[]             @relation("CreatedBy")
+  linkedByUser               Client[]             @relation("ResponsibleBy")
+  importedProcessesCreated   ImportedProcess[]    @relation("createdByUser")
+  importedProcessesUpdated   ImportedProcess[]    @relation("updatedByUser")
+  processPublicationsCreated ProcessPublication[] @relation("createdByUser")
+  processPublicationsUpdated ProcessPublication[] @relation("updatedByUser")
 
   @@map("users")
 }
@@ -58,9 +60,9 @@ model Client {
   responsibleById       String
   type                  Int
 
-  representatives    Representative[]
   createdBy          User                @relation("CreatedBy", fields: [createdById], references: [id])
   responsibleBy      User                @relation("ResponsibleBy", fields: [responsibleById], references: [id])
+  representatives    Representative[]
   orders             Order[]
   clientAppointments ClientAppointment[]
   ImportedProcess    ImportedProcess[]
@@ -72,31 +74,59 @@ model ImportedProcess {
   id       String @id @default(uuid())
   clientId String
 
-  processNumber   String @unique
-  processStatus   String
-  processMagazine String
-  holder          String
-  brand           String
-  nature          String
-  presentation    String
-  specification   String @db.Text
-
-  createdByUser String
-  updatedByUser String
+  processNumber     String @unique
+  processStatus     String
+  processMagazine   String
+  holder            String
+  brand             String
+  nature            String
+  presentation      String
+  niceTitle         String
+  niceStatus        String
+  niceSpecification String @db.Text
 
   filingDate     DateTime?
   grantDate      DateTime?
   expirationDate DateTime?
 
+  createdByUser String
+  updatedByUser String
+
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
-  createdByUserId User   @relation("createdByUser", fields: [createdByUser], references: [id])
-  updatedByUserId User   @relation("updatedByUser", fields: [updatedByUser], references: [id])
-  client          Client @relation(fields: [clientId], references: [id])
+  createdByUserId    User                 @relation("createdByUser", fields: [createdByUser], references: [id])
+  updatedByUserId    User                 @relation("updatedByUser", fields: [updatedByUser], references: [id])
+  client             Client               @relation(fields: [clientId], references: [id])
+  processPublication ProcessPublication[] @relation("importedProcessId")
 
   @@map("imported_processes")
+}
+
+model ProcessPublication {
+  id                String @id @default(uuid())
+  importedProcessId String
+
+  magazineNumber  String
+  publicationDate DateTime
+  dispatch        String
+  certificate     String?
+  description     String?
+  complement      String?
+
+  createdByUser String
+  updatedByUser String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  deletedAt DateTime?
+
+  createdByUserId User            @relation("createdByUser", fields: [createdByUser], references: [id])
+  updatedByUserId User            @relation("updatedByUser", fields: [updatedByUser], references: [id])
+  importedProcess ImportedProcess @relation("importedProcessId", fields: [importedProcessId], references: [id])
+
+  @@map("process_publications")
 }
 
 model ClientAppointment {

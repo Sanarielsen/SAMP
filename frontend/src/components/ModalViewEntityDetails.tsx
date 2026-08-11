@@ -75,7 +75,7 @@ export default function ModalViewEntityDetails<T>({
               <TableHead>
                 <TableRow>
                   <TableCell>Título</TableCell>
-                  <TableCell>Descricão</TableCell>
+                  <TableCell>Descrição</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
