@@ -2,6 +2,8 @@ import * as cheerio from "cheerio";
 import { 
   buildProcessBody, 
   getDates, 
+  getNiceClass,
+  getNiceClassSituation,
   getSpecification, 
   getValueByLabel,
   getMagazineInformation,
@@ -18,24 +20,41 @@ export function parseDetail(
   const dates = getDates($);
   const magazine = getMagazineInformation($);
 
+  const processNumber = getValueByLabel($, "Nº do Processo") ?? "";
+  const processStatus = getValueByLabel($, "Situação") ?? "";
+  const brand = getValueByLabel($, "Marca") ?? "";
+  const holder = getValueByLabel($, "Titular") ?? "";
+  const presentation = getValueByLabel($, "Apresentação") ?? "";
+  const nature = getValueByLabel($, "Natureza") ?? "";
+  const niceClass = getNiceClass($) ?? "";
+  const niceClassSituation = getNiceClassSituation($) ?? "";
+  const specification = getSpecification($) ?? "";
+  const filingDate = dates.filingDate ?? "";
+  const grantDate = dates.grantDate ?? "";
+  const expirationDate = dates.expirationDate ?? "";
+
   const process = {
-    processNumber: getValueByLabel($, "Nº do Processo"),
-    processStatus: getValueByLabel($, "Situação"),
-    processMagazine: magazine.magazineNumber,
-    brand: getValueByLabel($, "Marca"),
-    holder: getValueByLabel($, "Titular"),
-    presentation: getValueByLabel($, "Apresentação"),
-    nature: getValueByLabel($, "Natureza"),
-    specification: getSpecification($),
-    filingDate: dates.filingDate,
-    grantDate: dates.grantDate,
-    expirationDate: dates.expirationDate,
-    updatedAtByMagazine: magazine.updatedAtByMagazine,
-    sourceEntireProcess: ""
+    processNumber,
+    processStatus,
+    processMagazine: magazine.magazineNumber ?? "",
+    brand,
+    holder,
+    presentation,
+    nature,
+    niceClass,
+    niceClassSituation,
+    specification,
+    filingDate,
+    grantDate,
+    expirationDate,
+    updatedAtByMagazine: magazine.updatedAtByMagazine ?? undefined,
   }
 
+  const { processStatus: status, ...result } = process;
+
   return {
-    ...process,
+    ...result,
+    status,
     sourceEntireProcess: buildProcessBody(process),
   };
 }

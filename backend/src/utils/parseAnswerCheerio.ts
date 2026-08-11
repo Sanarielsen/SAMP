@@ -118,6 +118,54 @@ function parseDateDDMMYYYY(date: string): Date | null {
   return parsedDate;
 }
 
+function getNiceClassRow($: cheerio.CheerioAPI) {
+  const table = $("table")
+    .filter((_, table) => $(table).text().includes("Classe de Nice"))
+    .first();
+
+  if (!table.length) {
+    return null;
+  }
+
+  const row = table
+    .find("tr")
+    .filter((_, tr) => $(tr).find("td").length >= 2)
+    .first();
+
+  return row.length ? row : null;
+}
+
+export function getNiceClass($: cheerio.CheerioAPI): string | null {
+  const row = getNiceClassRow($);
+
+  if (!row) {
+    return null;
+  }
+
+  let text = cleanText(row.children("td").eq(0).text());
+
+  // Remove o trecho de revisão quando ele estiver no mesmo campo
+  text = text.split(/Classe Nice\s*-\s*Revisão:/i)[0].trim();
+
+  const match = text.match(/Classe de Nice\s*[:\-]?\s*(.+)$/i);
+
+  if (match) {
+    return match[1].trim();
+  }
+
+  return text;
+}
+
+export function getNiceClassSituation($: cheerio.CheerioAPI): string | null {
+  const row = getNiceClassRow($);
+
+  if (!row) {
+    return null;
+  }
+
+  return cleanText(row.children("td").eq(1).text());
+}
+
 export function getDates($: cheerio.CheerioAPI) {
   const dates = $("tr[bgcolor='#e9e9e9'] th")
     .map((_, el) =>
@@ -137,36 +185,43 @@ export function getDates($: cheerio.CheerioAPI) {
 }
 
 export function getSpecification($: cheerio.CheerioAPI): string | null {
-  const table = $("table").filter((_, table) => {
-    return $(table).text().includes("Classe de Nice");
-  }).first();
+  const row = getNiceClassRow($);
 
-  if (!table.length) {
+  if (!row) {
     return null;
   }
 
-  const row = table.find("tbody > tr").first();
+  const specificationCell = row.children("td").eq(2);
 
-  if (!row.length) {
-    return null;
-  }
-
-  const specification = row
-    .children("td")
-    .eq(2)
+  const specificationText = specificationCell
     .find("div[id^='especificacao']")
     .find("font.normal")
     .last()
-    .text()
-    .replace(/\u00a0/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+    .text();
 
-  return specification || null;
+  const cleanedSpecification = cleanText(specificationText);
+  const fallbackSpecification = cleanText(specificationCell.text());
+
+  return cleanedSpecification || fallbackSpecification || null;
 }
 
 export function buildProcessBody(
-  process: ImportedProcessFromINPI
+  process: {
+    processNumber: string | null;
+    processStatus: string | null;
+    processMagazine: string | null;
+    brand: string | null;
+    holder: string | null;
+    presentation: string | null;
+    nature: string | null;
+    niceClass?: string | null;
+    niceClassSituation?: string | null;
+    specification: string | null;
+    filingDate: string | null;
+    grantDate: string | null;
+    expirationDate: string | null;
+    updatedAtByMagazine: Date | null | undefined;
+  }
 ): string {
   const updatedAtByMagazineLine = process.updatedAtByMagazine
     ? `Atualizado pela revista em: ${process.updatedAtByMagazine.toLocaleDateString("pt-BR")}`
@@ -180,6 +235,8 @@ export function buildProcessBody(
     `Titular: ${process.holder}`,
     `Apresentacao: ${process.presentation}`,
     `Natureza: ${process.nature}`,
+    `Classe de Nice: ${process.niceClass}`,
+    `Situação da Classe: ${process.niceClassSituation}`,
     `Especificacao: ${process.specification}`,
     `Data de depósito: ${process.filingDate}`,
     `Data de concessão: ${process.grantDate}`,

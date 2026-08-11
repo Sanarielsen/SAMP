@@ -70,6 +70,8 @@ export type ImportedProcessFromINPI = {
   brand:                string
   nature:               string 
   presentation:         string
+  niceClass?:           string | null
+  niceClassSituation?:  string | null
   specification:        string
   updatedAtByMagazine:  Date
 
@@ -116,22 +118,24 @@ export type ImportedProcessWithDetails = {
 
 //TODO: Verify if all is really can be null or not.
 export interface ImportedProcessDetailFromINPI {
-  processNumber: string | null;
-  status: string | null
-  holder: string | null;
-  brand: string | null;
-  nature: string | null;
-  presentation: string | null;
-  specification: string | null;
-  filingDate: string | null;
-  grantDate: string | null;
-  expirationDate: string | null;
+  processNumber: string;
+  status: string
+  holder: string;
+  brand: string;
+  nature: string;
+  presentation: string;
+  niceClass: string;
+  niceClassSituation: string;
+  specification: string;
+  filingDate: string;
+  grantDate: string;
+  expirationDate: string;
 
-  sourceEntireProcess: string | null
-  updatedAtByMagazine?: Date | null
+  sourceEntireProcess: string
+  updatedAtByMagazine?: Date
 
-  magazineNumber?: string | null
-  createdAt?: Date | null
-  updatedAt?: Date | null
-  deletedAt?: Date | null
+  magazineNumber?: string
+  createdAt?: Date
+  updatedAt?: Date
+  deletedAt?: Date
 }
