@@ -11,6 +11,7 @@ import GroupTextDate from "@/components/GroupTextDate";
 import HeaderPage from "@/components/HeaderPage";
 
 import type { ImportedProcess } from "@shared/types/importedProcess";
+import BoxLoading from "@/components/BoxLoading";
 
 
 interface ImportedProcessInformationProps {
@@ -22,6 +23,10 @@ export default function ImportedProcessInformation({
 }: ImportedProcessInformationProps) {
 
   const navigate = useNavigate();
+
+  if (!data) {
+    return <BoxLoading description="Carregando os dados, aguarde..." />
+  }
 
   return (
     <Box component="section" sx={{ px: 2 }}>
@@ -56,7 +61,7 @@ export default function ImportedProcessInformation({
           />
         </Grid>
 
-        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 3 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
           <GroupText
             title="Apresentação:"
             value={data.presentation}
@@ -68,26 +73,47 @@ export default function ImportedProcessInformation({
             value={data.nature}
           />
         </Grid>
-          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 6 }}>
+        <Grid size={{ xs: 12 }}>
           <GroupText
             title="Marca:"
             value={data.brand}
           />
         </Grid>
 
-        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 6 }}>
+          <GroupText
+            title="Classe de nice:"
+            value={data.niceTitle}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 6 }}>
+          <GroupText
+            title="Situação da classe:"
+            value={data.niceStatus}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <GroupText
+            title="Especificação:"
+            value={data.niceSpecification}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, sm: 4 }}>
           <GroupText
             title="Revista:"
             value={data.processMagazine}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+        <Grid size={{ xs: 6, sm: 4 }}>
           <GroupTextDate
             title="Criado:"
             value={data.createdAt}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+        <Grid size={{ xs: 6, sm: 4 }}>
           <GroupTextDate
             title="Atualizado:"
             value={data.updatedAt}
