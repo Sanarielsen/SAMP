@@ -2,40 +2,60 @@ import * as cheerio from "cheerio";
 import { 
   buildProcessBody, 
   getDates, 
+  getNiceClass,
+  getNiceClassSituation,
   getSpecification, 
   getValueByLabel,
   getMagazineInformation,
 } from "@/utils/parseAnswerCheerio";
 
-import { ImportedProcessDetailFromINPI } from "@shared/types/importedProcess";
+import { ImportedProcessFromINPI } from "@shared/types/importedProcess";
+
 
 export function parseDetail(
   html: string
-): ImportedProcessDetailFromINPI {
+): ImportedProcessFromINPI {
 
   const $ = cheerio.load(html);
 
   const dates = getDates($);
   const magazine = getMagazineInformation($);
 
+  const processNumber = getValueByLabel($, "Nº do Processo") ?? "";
+  const processStatus = getValueByLabel($, "Situação") ?? "";
+  const brand = getValueByLabel($, "Marca") ?? "";
+  const holder = getValueByLabel($, "Titular") ?? "";
+  const presentation = getValueByLabel($, "Apresentação") ?? "";
+  const nature = getValueByLabel($, "Natureza") ?? "";
+  const niceTitle = getNiceClass($) ?? "";
+  const niceStatus = getNiceClassSituation($) ?? "";
+  const niceSpecification = getSpecification($) ?? "";
+  const filingDate = dates.filingDate ?? "";
+  const grantDate = dates.grantDate ?? "";
+  const expirationDate = dates.expirationDate ?? "";
+
   const process = {
-    processNumber: getValueByLabel($, "Nº do Processo"),
-    processStatus: getValueByLabel($, "Situação"),
-    processMagazine: magazine.magazineNumber,
-    brand: getValueByLabel($, "Marca"),
-    holder: getValueByLabel($, "Titular"),
-    presentation: getValueByLabel($, "Apresentação"),
-    nature: getValueByLabel($, "Natureza"),
-    specification: getSpecification($),
-    filingDate: dates.filingDate,
-    grantDate: dates.grantDate,
-    expirationDate: dates.expirationDate,
-    updatedAtByMagazine: magazine.updatedAtByMagazine,
-    sourceEntireProcess: ""
+    processNumber,
+    processStatus,
+    processMagazine: magazine.magazineNumber ?? "",
+    brand,
+    holder,
+    presentation,
+    nature,
+    niceTitle,
+    niceStatus,
+    niceSpecification,
+    filingDate,
+    grantDate,
+    expirationDate,
+    updatedAtByMagazine: magazine.updatedAtByMagazine ?? undefined,
   }
 
-  return {
-    ...process,
+  const { processStatus: status, ...result } = process;
+
+  return {  
+    ...result,
+    processStatus: process.processStatus,
     sourceEntireProcess: buildProcessBody(process),
   };
 }
