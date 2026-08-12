@@ -11,6 +11,7 @@ import {
 
 import { ImportedProcessFromINPI } from "@shared/types/importedProcess";
 
+
 export function parseDetail(
   html: string
 ): ImportedProcessFromINPI {
@@ -32,8 +33,6 @@ export function parseDetail(
   const filingDate = dates.filingDate ?? "";
   const grantDate = dates.grantDate ?? "";
   const expirationDate = dates.expirationDate ?? "";
-
-  console.log(getValueByLabel($, "Situação"))
 
   const process = {
     processNumber,
