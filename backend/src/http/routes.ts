@@ -58,6 +58,7 @@ import { listImportedProcessDetailsWithSearch } from "./Controllers/importedProc
 import { getImportedProcess } from "./Controllers/importedProcess/get";
 import { updateImportedProcess } from "./Controllers/importedProcess/update";
 import { deleteImportedProcess } from "./Controllers/importedProcess/delete";
+import { listProcessPublicationsFromINPI } from "./Controllers/processPublication/list-from-inpi";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -119,6 +120,9 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/process/inpi', {onRequest: [verifyJWT]}, postImportedProcessFromINPI)
   app.patch('/process/:id', {onRequest: [verifyJWT]}, updateImportedProcess)
   app.delete('/process/:id', {onRequest: [verifyJWT]}, deleteImportedProcess)
+
+  //publications
+  app.get('/process/inpi/:processNumber/publications', {onRequest: [verifyJWT]}, listProcessPublicationsFromINPI)
   
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
   app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)
