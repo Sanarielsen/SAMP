@@ -39,6 +39,7 @@ export type ProcessPublicationCreateFromINPIDTO = {
 
 export type ProcessPublicationUpdateDTO = {
   id: string
+  updatedByUser:    string
 
   importedProcessId?: string
   magazineNumber?:  string
@@ -47,7 +48,6 @@ export type ProcessPublicationUpdateDTO = {
   certificate?:      string
   description?:      string
   complement?:       string
-  updatedByUser?:    string
 }
 
 export type ProcessPublicationFromINPI = {
