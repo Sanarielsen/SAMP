@@ -12,8 +12,7 @@ import {
 
 
 export class PrismaProcessPublicationRepository implements ProcessPublicationRepository {
-  
-  create(data: ProcessPublicationCreateDTO): Promise<ProcessPublication> {
+  async create(data: ProcessPublicationCreateDTO): Promise<ProcessPublication> {
     throw new Error("Method not implemented.");
   }
 
@@ -44,6 +43,17 @@ export class PrismaProcessPublicationRepository implements ProcessPublicationRep
     })
   }
 
+  async delete(id: string): Promise<void> {
+    await prisma.processPublication.update({
+      where: {
+        id
+      },
+      data: {
+        deletedAt: new Date(Date.now())
+      },
+    })
+  }
+
   async findById(id: string): Promise<ProcessPublication | null> {
     return await prisma.processPublication.findUnique({
       where: {
@@ -55,7 +65,8 @@ export class PrismaProcessPublicationRepository implements ProcessPublicationRep
   async findManyByProcessId(processId: string): Promise<ProcessPublication[]> {
     return await prisma.processPublication.findMany({
       where: {
-        importedProcessId: processId
+        importedProcessId: processId,
+        deletedAt: null
       },
     })
   }

@@ -63,6 +63,19 @@ export class InMemoryProcessPublicationRepository implements ProcessPublicationR
     return updatedPublication
   }
 
+  async delete(id: string): Promise<void> {
+    const processPublicationIndex = this.items.findIndex(publication => {
+      return publication.id === id
+    })
+
+    const disabledProcessPublication = {
+      ...this.items[processPublicationIndex],
+      deletedAt: new Date(),
+    }
+
+    this.items[processPublicationIndex] = disabledProcessPublication
+  }
+
   async findById(id: string): Promise<ProcessPublication | null> {
     const processPublication = this.items.find(item => item.id == id)
 
