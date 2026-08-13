@@ -3,18 +3,18 @@ export type ProcessPublication = {
 
   importedProcessId: string
 
-  magazineNumber: string
-  publicationDate: Date
-  dispatch: string
-  certificate?: string
-  description?: string
-  complement?: string
+  magazineNumber:   string
+  publicationDate:  Date
+  dispatch:         string
+  certificate:      string | null
+  description:      string | null
+  complement:       string | null
 
   createdByUser: string
   updatedByUser: string
   
   createdAt: Date
-  updatedAt: Date
+  updatedAt: Date | null
   deletedAt: Date | null
 }
 
@@ -24,9 +24,9 @@ export type ProcessPublicationCreateDTO = {
   magazineNumber:  string
   publicationDate:  Date
   dispatch:         string
-  certificate?:      string
-  description?:      string
-  complement?:       string
+  certificate:      string | null
+  description:      string | null
+  complement:        string | null
   createdByUser:    string
 }
 

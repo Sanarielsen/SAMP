@@ -10,9 +10,12 @@ export async function makeProcessPublication(
 
   return repository.create({
 		importedProcessId: 'imported-process-id-test',
-    processMagazine: '1234',
+    magazineNumber: '1234',
     dispatch: 'dispatch-test',
+    certificate: 'certificate-test',
     publicationDate: new Date(Date.now()),
+    description: 'description-test',
+    complement: 'complement-test',
     createdByUser: 'user-test',
 
     ...override,

@@ -34,6 +34,14 @@ export class PrismaProcessPublicationRepository implements ProcessPublicationRep
     return count
   }
 
+  async findById(id: string): Promise<ProcessPublication | null> {
+    return await prisma.processPublication.findUnique({
+      where: {
+        id,
+      },
+    })
+  }
+
   findManyByProcessFromINPI(processNumber: string): Promise<ProcessPublication[]> {
     throw new Error("Method not implemented.");
   }
