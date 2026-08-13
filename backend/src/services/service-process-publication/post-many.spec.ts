@@ -112,8 +112,7 @@ describe('Post Process Publication Adaptative Use Case', () => {
           entireSource: 'ENTIRE'
         }
       ]
-    }
-    )).rejects.toBeInstanceOf(ResourceNotFoundError)
+    })).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 
   it('should not create any publication with non-existent user', async () => {
@@ -131,8 +130,7 @@ describe('Post Process Publication Adaptative Use Case', () => {
           entireSource: 'ENTIRE'
         }
       ]
-    }
-    )).rejects.toBeInstanceOf(ResourceNotFoundError)
+    })).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 
   it('should not create any publication using user non-admin', async () => {
@@ -161,8 +159,7 @@ describe('Post Process Publication Adaptative Use Case', () => {
           entireSource: 'ENTIRE'
         }
       ]
-    }
-    )).rejects.toBeInstanceOf(UnauthorizedUserError)
+    })).rejects.toBeInstanceOf(UnauthorizedUserError)
   })
 
   it('should not create any publication with non-existent imported process', async () => {
@@ -181,7 +178,6 @@ describe('Post Process Publication Adaptative Use Case', () => {
           entireSource: 'ENTIRE'
         }
       ]
-    }
-    )).rejects.toBeInstanceOf(ResourceNotFoundError)
+    })).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })

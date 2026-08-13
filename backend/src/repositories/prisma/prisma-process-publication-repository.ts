@@ -6,7 +6,8 @@ import { parseStringDateToBrazilianDate } from "@/utils/parseStringDateToBrazili
 import { 
   ProcessPublication,
   ProcessPublicationCreateDTO,
-  ProcessPublicationCreateFromINPIDTO, 
+  ProcessPublicationCreateFromINPIDTO,
+  ProcessPublicationUpdateDTO, 
 } from "@shared/types/processPublication";
 
 
@@ -32,6 +33,15 @@ export class PrismaProcessPublicationRepository implements ProcessPublicationRep
     })
 
     return count
+  }
+
+  async update(data: Partial<ProcessPublicationUpdateDTO>): Promise<ProcessPublication> {
+    return prisma.processPublication.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    })
   }
 
   async findById(id: string): Promise<ProcessPublication | null> {

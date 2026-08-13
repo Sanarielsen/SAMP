@@ -62,6 +62,7 @@ import { listProcessPublicationsFromINPI } from "./Controllers/processPublicatio
 import { postManyProcessPublications } from "./Controllers/processPublication/post-many";
 import { getProcessPublication } from "./Controllers/processPublication/get";
 import { listProcessPublications } from "./Controllers/processPublication/list";
+import { updateProcessPublication } from "./Controllers/processPublication/update";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -129,6 +130,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/process/:id/publications', {onRequest: [verifyJWT]}, listProcessPublications)
   app.get('/process/inpi/:processNumber/publications', {onRequest: [verifyJWT]}, listProcessPublicationsFromINPI)
   app.get('/publication/:id', {onRequest: [verifyJWT]}, getProcessPublication)
+  app.patch('/publication/:id', {onRequest: [verifyJWT]}, updateProcessPublication)
   
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
   app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)

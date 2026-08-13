@@ -5,7 +5,8 @@ import { ProcessPublicationRepository } from "@/repositories/process-publication
 import { 
   ProcessPublication,
   ProcessPublicationCreateDTO,
-  ProcessPublicationCreateFromINPIDTO, 
+  ProcessPublicationCreateFromINPIDTO,
+  ProcessPublicationUpdateDTO, 
 } from "@shared/types/processPublication";
 
 
@@ -44,6 +45,22 @@ export class InMemoryProcessPublicationRepository implements ProcessPublicationR
     this.items.push(...newProcessPublications);
 
     return newProcessPublications.length;
+  }
+
+  async update(data: Partial<ProcessPublicationUpdateDTO>): Promise<ProcessPublication> {
+    const publicationIndex = this.items.findIndex(current => {
+      return current.id === data.id
+    })
+
+    const updatedPublication = {
+      ...this.items[publicationIndex],
+      ...data,
+      updatedAt: new Date(),
+    }
+
+    this.items[publicationIndex] = updatedPublication
+
+    return updatedPublication
   }
 
   async findById(id: string): Promise<ProcessPublication | null> {
