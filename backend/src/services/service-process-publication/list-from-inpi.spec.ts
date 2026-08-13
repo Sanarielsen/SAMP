@@ -14,7 +14,7 @@ import { makeUserRole } from "@/services/factories/user-role/make-entity";
 import { makeUser } from "@/services/factories/user/make-entity";
 import { makeImportedProcess } from "@/services/factories/imported-process/make-entity";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
-import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";
+import { UnauthorizedUserError } from "@/services/errors/unauthorized-user-error";
 import * as parsers from "@/utils/parseSearchProcessFromINPI";
 
 import { UserRole } from "@shared/types/userRole";
@@ -113,7 +113,7 @@ describe('Get From INPI Process Publication Use Case', () => {
     await expect(() => sut.execute(
       newImportedProcess.processNumber,
       userNonAdmin.id
-    )).rejects.toBeInstanceOf(InvalidCredentialsError)
+    )).rejects.toBeInstanceOf(UnauthorizedUserError)
   })
 
   it('should not list publication of invalid imported process', async () => {

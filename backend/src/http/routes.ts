@@ -59,6 +59,7 @@ import { getImportedProcess } from "./Controllers/importedProcess/get";
 import { updateImportedProcess } from "./Controllers/importedProcess/update";
 import { deleteImportedProcess } from "./Controllers/importedProcess/delete";
 import { listProcessPublicationsFromINPI } from "./Controllers/processPublication/list-from-inpi";
+import { postManyProcessPublications } from "./Controllers/processPublication/post-many";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -123,6 +124,7 @@ export async function appRoutes(app: FastifyInstance) {
 
   //publications
   app.get('/process/inpi/:processNumber/publications', {onRequest: [verifyJWT]}, listProcessPublicationsFromINPI)
+  app.post('/process/:id/publication', {onRequest: [verifyJWT]}, postManyProcessPublications)
   
   app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
   app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)

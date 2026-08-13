@@ -108,7 +108,7 @@ model ProcessPublication {
   id                String @id @default(uuid())
   importedProcessId String
 
-  processMagazine String
+  magazineNumber  String
   publicationDate DateTime
   dispatch        String
   certificate     String?
