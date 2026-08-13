@@ -56,6 +56,10 @@ export class InMemoryProcessPublicationRepository implements ProcessPublicationR
     return processPublication
   }
 
+  async findManyByProcessId(processId: string): Promise<ProcessPublication[]> {
+    return this.items.filter(item => item.importedProcessId == processId)
+  }
+
   async findManyByProcessFromINPI(processNumber: string): Promise<ProcessPublication[]> {
     throw new Error("Method not implemented.");
   }
