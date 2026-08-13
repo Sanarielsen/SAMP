@@ -42,7 +42,15 @@ export class PrismaProcessPublicationRepository implements ProcessPublicationRep
     })
   }
 
-  findManyByProcessFromINPI(processNumber: string): Promise<ProcessPublication[]> {
+  async findManyByProcessId(processId: string): Promise<ProcessPublication[]> {
+    return await prisma.processPublication.findMany({
+      where: {
+        importedProcessId: processId
+      },
+    })
+  }
+
+  async findManyByProcessFromINPI(processNumber: string): Promise<ProcessPublication[]> {
     throw new Error("Method not implemented.");
   }
 }

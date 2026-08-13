@@ -10,5 +10,6 @@ export interface ProcessPublicationRepository {
   createMany(data: ProcessPublicationCreateFromINPIDTO): Promise<number>
 
   findById(id: string): Promise<ProcessPublication | null>
+  findManyByProcessId(processId: string): Promise<ProcessPublication[]>
   findManyByProcessFromINPI(processNumber: string): Promise<ProcessPublication[]>
 }
