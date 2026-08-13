@@ -3,7 +3,7 @@ export type ProcessPublication = {
 
   importedProcessId: string
 
-  processMagazine: string
+  magazineNumber: string
   publicationDate: Date
   dispatch: string
   certificate?: string
@@ -15,13 +15,13 @@ export type ProcessPublication = {
   
   createdAt: Date
   updatedAt: Date
-  deletedAt: Date
+  deletedAt: Date | null
 }
 
 export type ProcessPublicationCreateDTO = {
   importedProcessId: string
 
-  processMagazine:  string
+  magazineNumber:  string
   publicationDate:  Date
   dispatch:         string
   certificate?:      string
@@ -30,11 +30,18 @@ export type ProcessPublicationCreateDTO = {
   createdByUser:    string
 }
 
+export type ProcessPublicationCreateFromINPIDTO = {
+  importedProcessId:  string
+  createdByUser:      string
+
+  publications: ProcessPublicationFromINPI[]
+}
+
 export type ProcessPublicationUpdateDTO = {
   id: string
 
   importedProcessId?: string
-  processMagazine?:  string
+  magazineNumber?:  string
   publicationDate?:  Date
   dispatch?:         string
   certificate?:      string

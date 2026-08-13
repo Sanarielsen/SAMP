@@ -1,9 +1,9 @@
 import { UserRoleRepository } from "@/repositories/user-role-repository";
 import { UserRepository } from "@/repositories/user-repository";
 import { ImportedProcessRepository } from "@/repositories/imported-process-repository";
-import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
-import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";
 import { INPIClient } from "@/scripts/get-process-from-inpi";
+import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
+import { UnauthorizedUserError } from "@/services/errors/unauthorized-user-error";
 import { 
   parsePublicationsFromINPI,
   parseSearchProcessFromINPI
@@ -27,7 +27,7 @@ export class ListProcessPublicationFromINPIUseCase {
 
     const userRole = await this.userRoleRepository.findById(userLogged.roleId)
     if (!userRole) throw new ResourceNotFoundError();
-    if (userRole.level > 1) throw new InvalidCredentialsError();
+    if (userRole.level > 1) throw new UnauthorizedUserError();
 
     const importedProcess = await this.importedProcessRepository.findByProcessNumber(processNumber)
     if (!importedProcess) throw new ResourceNotFoundError();
