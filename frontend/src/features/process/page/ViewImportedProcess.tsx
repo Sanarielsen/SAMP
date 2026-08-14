@@ -1,14 +1,13 @@
+import { useQuery } from "@tanstack/react-query";
 import { 
   Box, 
   Grid 
 } from "@mui/material";
 
+import { optionsQueryGetProcess } from "@/features/process/api/queryGetProcess";
 import ImportedProcessInformation from "@/features/process/components/ImportedProcessInformation";
-import ImportedProcessClasses from "@/features/process/components/ImportedProcessClasses";
 import ImportedProcessPublications from "@/features/process/components/ImportedProcessPublications";
-import { optionsQueryGetProcess } from "../api/queryGetProcess";
 import { useRequiredParam } from "@/hooks/useRequiredParam";
-import { useQuery } from "@tanstack/react-query";
 
 
 export default function ViewImportedProcess() {
@@ -30,12 +29,13 @@ export default function ViewImportedProcess() {
           } />
         </Grid>
 
-        <Grid size={{ xs: 12, lg: 6 }}>
-          <ImportedProcessClasses />
-        </Grid>
-
-        <Grid size={{ xs: 12, lg: 6 }}>
-          <ImportedProcessPublications />
+        <Grid size={{ xs: 12 }}>
+          <ImportedProcessPublications 
+            processId={processId}
+            processNumber={
+              isSuccessProcess ? currentProcess.processNumber : undefined
+            }
+          />
         </Grid>
       </Grid>
     </Box>

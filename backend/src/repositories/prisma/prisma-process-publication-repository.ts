@@ -17,21 +17,109 @@ export class PrismaProcessPublicationRepository implements ProcessPublicationRep
   }
 
   async createMany(data: ProcessPublicationCreateFromINPIDTO): Promise<number> {
-    const { count } = await prisma.processPublication.createMany({
-      data: data.publications.map(publication => ({
-        ...publication,
-        importedProcessId: data.importedProcessId,
-        publicationDate: parseStringDateToBrazilianDate(publication.publicationDate),
-        createdByUser: data.createdByUser,
-        updatedByUser: data.createdByUser,
-        createdAt: new Date(),
-        updatedAt: null,
-        deletedAt: null,
-      })),
-      skipDuplicates: true,
+    
+    const incoming = data.publications.map(publication => ({
+      ...publication,
+      importedProcessId: data.importedProcessId,
+      publicationDate: parseStringDateToBrazilianDate(publication.publicationDate),
+      createdByUser: data.createdByUser,
+      updatedByUser: data.createdByUser,
+      createdAt: new Date(),
+      updatedAt: null,
+      deletedAt: null,
+    }))
+
+    const existing = await prisma.processPublication.findMany({
+      where: { importedProcessId: data.importedProcessId },
     })
 
-    return count
+    const toCreate: typeof incoming = []
+    const toRestoreIds: string[] = []
+
+    const normalize = (value: any) => {
+      if (value == null) return ""
+      return String(value)
+        .normalize("NFD")
+        .replace(/\p{Diacritic}/gu, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase()
+    }
+
+    const equals = (a: any, b: any) => {
+      if (normalize(a.magazineNumber) !== normalize(b.magazineNumber)) return false
+      if (normalize(a.dispatch) !== normalize(b.dispatch)) return false
+      if (normalize(a.certificate ?? null) !== normalize(b.certificate ?? null)) return false
+      if (normalize(a.description ?? null) !== normalize(b.description ?? null)) return false
+      if (normalize(a.complement ?? null) !== normalize(b.complement ?? null)) return false
+
+      const aDate = new Date(a.publicationDate)
+      const bDate = new Date(b.publicationDate)
+      aDate.setHours(0, 0, 0, 0)
+      bDate.setHours(0, 0, 0, 0)
+      return aDate.getTime() === bDate.getTime()
+    }
+
+    for (const inc of incoming) {
+      const match = existing.find(e => equals(e, inc))
+      if (!match) {
+        toCreate.push(inc)
+      } else {
+        if (match.deletedAt) {
+          toRestoreIds.push(match.id)
+        }
+      }
+    }
+
+    const txOperations: any[] = []
+
+    if (toCreate.length > 0) {
+      txOperations.push(
+        prisma.processPublication.createMany({
+          data: toCreate.map(p => ({
+            importedProcessId: p.importedProcessId,
+            magazineNumber: p.magazineNumber,
+            publicationDate: p.publicationDate,
+            dispatch: p.dispatch,
+            certificate: p.certificate,
+            description: p.description,
+            complement: p.complement,
+            createdByUser: p.createdByUser,
+            updatedByUser: p.updatedByUser,
+            createdAt: p.createdAt,
+            updatedAt: p.updatedAt,
+            deletedAt: p.deletedAt,
+          })),
+        })
+      )
+    }
+
+    for (const id of toRestoreIds) {
+      txOperations.push(
+        prisma.processPublication.update({
+          where: { id },
+          data: {
+            deletedAt: null,
+            updatedAt: new Date(),
+            updatedByUser: data.createdByUser,
+          },
+        })
+      )
+    }
+
+    if (txOperations.length === 0) return 0
+
+    const results = await prisma.$transaction(txOperations)
+
+    let createdCount = 0
+    if (toCreate.length > 0) {
+      const createResult = results[0]
+      createdCount = typeof createResult === "object" && createResult !== null && "count" in createResult ? (createResult as any).count : toCreate.length
+    }
+
+    const restoredCount = toRestoreIds.length
+
+    return createdCount + restoredCount
   }
 
   async update(data: Partial<ProcessPublicationUpdateDTO>): Promise<ProcessPublication> {
