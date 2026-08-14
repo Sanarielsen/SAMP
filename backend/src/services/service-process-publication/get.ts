@@ -2,7 +2,7 @@ import { ProcessPublicationRepository } from "@/repositories/process-publication
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
-import { ProcessPublication } from "@shared/types/processPublication";
+import { ProcessPublicationDetails } from "@shared/types/processPublication";
 
 
 export class GetProcessPublicationUseCase {
@@ -10,9 +10,9 @@ export class GetProcessPublicationUseCase {
     private processPublicationRepository: ProcessPublicationRepository
   ) {}
 
-  async execute(id: string): Promise<ProcessPublication> {
+  async execute(id: string): Promise<ProcessPublicationDetails> {
     
-    const processPublication = await this.processPublicationRepository.findById(id)
+    const processPublication = await this.processPublicationRepository.findByIdDetails(id)
 
     if (!processPublication) throw new ResourceNotFoundError();
 

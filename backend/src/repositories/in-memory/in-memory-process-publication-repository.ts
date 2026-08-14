@@ -6,6 +6,7 @@ import {
   ProcessPublication,
   ProcessPublicationCreateDTO,
   ProcessPublicationCreateFromINPIDTO,
+  ProcessPublicationDetails,
   ProcessPublicationUpdateDTO, 
 } from "@shared/types/processPublication";
 
@@ -84,6 +85,38 @@ export class InMemoryProcessPublicationRepository implements ProcessPublicationR
     }
 
     return processPublication
+  }
+
+  async findByIdDetails(id: string): Promise<ProcessPublicationDetails | null> {
+    const processPublication = this.items.find(item => item.id == id)
+
+    if (!processPublication) {
+      return null
+    }
+
+    return {
+      id: processPublication.id,
+
+      importedProcessId:  processPublication.importedProcessId,
+      processHolder:      'holder-test',
+      processBrand:       'brand-test',
+
+      magazineNumber:   processPublication.magazineNumber,
+      publicationDate:  processPublication.publicationDate,
+      dispatch:         processPublication.dispatch,
+      certificate:      processPublication.certificate,
+      description:      processPublication.description,
+      complement:       processPublication.complement,
+
+      createdByUser:  processPublication.createdByUser,
+      updatedByUser:  processPublication.updatedByUser,
+      createdBy:      'user-created-test',
+      updatedBy:      'user-updated-test',
+    
+      createdAt: processPublication.createdAt,
+      updatedAt: processPublication.updatedAt,
+      deletedAt: processPublication.deletedAt,
+    }
   }
 
   async findManyByProcessId(processId: string): Promise<ProcessPublication[]> {

@@ -3,6 +3,7 @@ import {
   ProcessPublicationCreateDTO,
   ProcessPublicationUpdateDTO,
   ProcessPublicationCreateFromINPIDTO,
+  ProcessPublicationDetails,
 } from "@shared/types/processPublication"
 
 
@@ -13,6 +14,7 @@ export interface ProcessPublicationRepository {
   delete(id: string): Promise<void>
 
   findById(id: string): Promise<ProcessPublication | null>
+  findByIdDetails(id: string): Promise<ProcessPublicationDetails | null>
   findManyByProcessId(processId: string): Promise<ProcessPublication[]>
   findManyByProcessFromINPI(processNumber: string): Promise<ProcessPublication[]>
 }

@@ -7,6 +7,7 @@ import {
   ProcessPublication,
   ProcessPublicationCreateDTO,
   ProcessPublicationCreateFromINPIDTO,
+  ProcessPublicationDetails,
   ProcessPublicationUpdateDTO, 
 } from "@shared/types/processPublication";
 
@@ -148,6 +149,45 @@ export class PrismaProcessPublicationRepository implements ProcessPublicationRep
         id,
       },
     })
+  }
+
+  async findByIdDetails(id: string): Promise<ProcessPublicationDetails | null> {
+    const processPublicationWithDetails = await prisma.processPublication.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        importedProcess: true,
+        createdByUserId: true,
+        updatedByUserId: true
+      }
+    })
+
+    if (!processPublicationWithDetails) return null
+
+    return {
+      id: processPublicationWithDetails.id,
+
+      importedProcessId:  processPublicationWithDetails.importedProcessId,
+      processHolder:      processPublicationWithDetails.importedProcess.holder,
+      processBrand:       processPublicationWithDetails.importedProcess.brand,
+
+      magazineNumber:   processPublicationWithDetails.magazineNumber,
+      publicationDate:  processPublicationWithDetails.publicationDate,
+      dispatch:         processPublicationWithDetails.dispatch,
+      certificate:      processPublicationWithDetails.certificate,
+      description:      processPublicationWithDetails.description,
+      complement:       processPublicationWithDetails.complement,
+
+      createdByUser:  processPublicationWithDetails.createdByUser,
+      updatedByUser:  processPublicationWithDetails.updatedByUser,
+      createdBy:      processPublicationWithDetails.createdByUserId.name,
+      updatedBy:      processPublicationWithDetails.updatedByUserId.name,
+    
+      createdAt: processPublicationWithDetails.createdAt,
+      updatedAt: processPublicationWithDetails.updatedAt,
+      deletedAt: processPublicationWithDetails.deletedAt,
+    }
   }
 
   async findManyByProcessId(processId: string): Promise<ProcessPublication[]> {

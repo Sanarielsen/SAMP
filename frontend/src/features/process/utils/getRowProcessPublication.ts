@@ -1,47 +1,47 @@
 import type { Field } from "@/utils/field";
 
-import type { ProcessPublication } from "@shared/types/processPublication";
+import type { ProcessPublicationDetails } from "@shared/types/processPublication";
 
 
-export const processPublicationFields: Field<ProcessPublication>[] = [
+export const processPublicationFields: Field<ProcessPublicationDetails>[] = [
   {
     title: 'Revista',
-    get: (pp: ProcessPublication) => pp.magazineNumber,
+    get: (pp: ProcessPublicationDetails) => pp.magazineNumber,
   },
   {
     title: 'Data de publicação',
-    get: (pp: ProcessPublication) => new Date(pp.publicationDate).toLocaleDateString(),
+    get: (pp: ProcessPublicationDetails) => new Date(pp.publicationDate).toLocaleDateString(),
   },
   {
     title: 'Despacho',
-    get: (pp: ProcessPublication) => pp.dispatch,
+    get: (pp: ProcessPublicationDetails) => pp.dispatch,
   },
   {
     title: 'Certificado',
-    get: (pp: ProcessPublication) => pp.certificate,
+    get: (pp: ProcessPublicationDetails) => pp.certificate,
   },
   {
     title: 'Inteiro Teor',
-    get: (pp: ProcessPublication) => pp.description,
+    get: (pp: ProcessPublicationDetails) => pp.description,
   },
   {
     title: 'Complemento do despacho',
-    get: (pp: ProcessPublication) => pp.complement,
+    get: (pp: ProcessPublicationDetails) => pp.complement,
   },
   {
     title: 'Criado por',
-    get: (pp: ProcessPublication) => pp.createdByUser,
+    get: (pp: ProcessPublicationDetails) => pp.createdBy,
   },
   {
     title: 'Atualizado por',
-    get: (pp: ProcessPublication) => pp.updatedByUser,
+    get: (pp: ProcessPublicationDetails) => pp.updatedBy,
   },
   {
     title: 'Criado em',
-    get: (pp: ProcessPublication) => new Date(pp.createdAt).toLocaleDateString(),
+    get: (pp: ProcessPublicationDetails) => new Date(pp.createdAt).toLocaleDateString(),
   },
   {
     title: 'Atualizado em',
-    get: (pp: ProcessPublication) => new Date(pp.updatedAt).toLocaleDateString(),
+    get: (pp: ProcessPublicationDetails) => new Date(pp.updatedAt).toLocaleDateString(),
   },
 ]
