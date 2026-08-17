@@ -6,18 +6,19 @@ import {
 } from "vitest";
 import { ListPaymentMethodsUseCase } from "@/services/service-payment-method/list";
 
-import { InMemoryPaymentMethodsRepository } from "@/repositories/in-memory/in-memory-payment-methods-repository";
+import { InMemoryPaymentMethodRepository } from "@/repositories/in-memory/in-memory-payment-method-repository";
 import { makePaymentMethod } from "@/services/factories/payment-method/make-entity";
 
 import { PaymentMethod } from "@shared/types/paymentMethod";
 
-let paymentMethodsRepository: InMemoryPaymentMethodsRepository
+let paymentMethodsRepository: InMemoryPaymentMethodRepository
 let sut: ListPaymentMethodsUseCase
 let newPaymentMethod: PaymentMethod
 
+
 describe('List Payment Method Use Case', () => {
   beforeEach( async () => {
-    paymentMethodsRepository = new InMemoryPaymentMethodsRepository()
+    paymentMethodsRepository = new InMemoryPaymentMethodRepository()
     sut = new ListPaymentMethodsUseCase(paymentMethodsRepository)
 
     newPaymentMethod = await makePaymentMethod(paymentMethodsRepository)

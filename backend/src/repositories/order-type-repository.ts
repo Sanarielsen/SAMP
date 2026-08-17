@@ -1,6 +1,16 @@
-import { OrderTypeOptions } from "@shared/types/orderType"
+import { 
+  OrderType, 
+  OrderTypeCreateDTO, 
+  OrderTypeUpdateDTO 
+} from "@shared/types/orderType"
+import { OptionsControlledBox } from "@shared/types/values"
 
 
 export interface OrderTypeRepository {
-  findAllOptions(): Promise<OrderTypeOptions[] | null>
+  create(data: OrderTypeCreateDTO): Promise<OrderType>
+  update(data: OrderTypeUpdateDTO): Promise<OrderType>
+  delete(id: number): Promise<void>
+
+  findById(id: number): Promise<OrderType | null>
+  findAllActiveAsOptions(): Promise<OptionsControlledBox[] | null>
 }

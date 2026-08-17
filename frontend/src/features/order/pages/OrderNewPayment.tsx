@@ -13,7 +13,7 @@ import {
 import { 
   useMutationPostPaymentWithInstallments 
 } from "@/features/order/api/mutationCreatePayment";
-import { optionsQueryListPaymentMethods } from "@/api/queryListPaymentMethods";
+import { optionsQueryListPaymentMethodOptions } from "@/api/queryListPaymentMethods";
 import { 
   newPaymentSchema, 
   type NewPaymentSchemaFormData 
@@ -41,7 +41,7 @@ export default function OrderNewPayment() {
     data: listPaymentMethods,
     isSuccess: isSuccessMethods,
   } = useQuery(
-    optionsQueryListPaymentMethods()
+    optionsQueryListPaymentMethodOptions()
   )
 
   const form = useForm<NewPaymentSchemaFormData>({

@@ -14,7 +14,6 @@ import {
 
 import { optionsQueryListUsers } from "@/features/admin/api/queryListUser";
 import DataTableColumnsUsers from "@/features/admin/components/DataTableColumnsUsers";
-
 import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
 
@@ -35,7 +34,6 @@ export default function ManageUsers() {
     isError,
     isSuccess, 
     isLoading,
-    //refetch
   } = useQuery(
     optionsQueryListUsers(searchApplied)
   )
