@@ -1,5 +1,5 @@
 import { PrismaProcessPublicationRepository } from "@/repositories/prisma/prisma-process-publication-repository"
-import { DeleteProcessPublicationUseCase } from "@/services/service-process-publication/delete"
+import { DeleteProcessPublicationUseCase } from "@/services/use-cases/process-publication/delete"
 
 
 export function makeDeleteProcessPublication() {

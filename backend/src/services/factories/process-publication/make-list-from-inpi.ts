@@ -2,7 +2,7 @@ import { PrismaUserRoleRepository } from "@/repositories/prisma/prisma-user-role
 import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository";
 import { PrismaImportedProcessRepository } from "@/repositories/prisma/prisma-imported-process-repository";
 import { INPIClient } from "@/scripts/get-process-from-inpi";
-import { ListProcessPublicationFromINPIUseCase } from "@/services/service-process-publication/list-from-inpi";
+import { ListProcessPublicationFromINPIUseCase } from "@/services/use-cases/process-publication/list-from-inpi";
 
 
 export function makeProcessPublicationFromINPIUseCase() {

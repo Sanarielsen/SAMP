@@ -1,5 +1,5 @@
 import { PrismaPaymentMethodsRepository } from "@/repositories/prisma/prisma-payment-method-repository";
-import { ListPaymentMethodsUseCase } from "@/services/service-payment-method/list";
+import { ListPaymentMethodsUseCase } from "@/services/use-cases/payment-method/list";
 
 export function makeListPaymentMethodsUseCase() {
   const paymentMethodsRepository = new PrismaPaymentMethodsRepository();

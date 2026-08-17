@@ -1,6 +1,6 @@
 import { PrismaRepresentativeRepository } from '@/repositories/prisma/prisma-representative-repository'
-import { DeleteRepresentativeUseCase } from '@/services/service-representative/delete'
-import { GetRepresentativeOfClientsUseCase } from '@/services/service-representative/get-of-clients'
+import { DeleteRepresentativeUseCase } from '@/services/use-cases/representative/delete'
+import { GetRepresentativeOfClientsUseCase } from '@/services/use-cases/representative/get-of-clients'
 
 export function makeGetRepresentativeOfClientsUseCase() {
   const representativeRepository = new PrismaRepresentativeRepository()

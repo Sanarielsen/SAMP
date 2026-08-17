@@ -1,4 +1,4 @@
-import { GetUserProfileUseCase } from '@/services/service-user/get-profile'
+import { GetUserProfileUseCase } from '@/services/use-cases/user/get-profile'
 
 import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository'
 

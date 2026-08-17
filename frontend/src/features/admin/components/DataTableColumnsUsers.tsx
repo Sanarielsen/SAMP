@@ -8,22 +8,24 @@ import {
 import { 
   IconButton, 
   Stack, 
-  Tooltip 
+  Tooltip,
 } from "@mui/material";
+import LockResetIcon from '@mui/icons-material/LockReset';
 import dayjs from "dayjs";
 
-import type { UserDetailDTO } from "@shared/types/user";
+import type { UserDetailsForAdminDTO } from "@shared/types/user";
 
 
 interface DataTableColumnsUsersProps {
+  onClickUpdatePasswordItem: (id: string) => void
   onClickUpdateItem: (id: string) => void
-  onClickViewItem: (item: UserDetailDTO) => void
-  onClickDeleteItem: (item: UserDetailDTO) => void
+  onClickViewItem: (item: UserDetailsForAdminDTO) => void
+  onClickDeleteItem: (item: UserDetailsForAdminDTO) => void
 }
 
 export default function DataTableColumnsUsers({
-  onClickUpdateItem, onClickViewItem, onClickDeleteItem
-}: DataTableColumnsUsersProps): GridColDef<UserDetailDTO>[] {
+  onClickUpdateItem, onClickUpdatePasswordItem, onClickViewItem, onClickDeleteItem
+}: DataTableColumnsUsersProps): GridColDef<UserDetailsForAdminDTO>[] {
   return [
     {
       field: "name",
@@ -36,18 +38,28 @@ export default function DataTableColumnsUsers({
       flex: 1,
     },
     {
-      field: "roleName",
+      field: "userRoleName",
       headerName: "Cargo",
       flex: 1,
+    },
+    {
+      field: "validated", 
+      headerName: "Valido",
+      renderCell: (params:  GridRenderCellParams<UserDetailsForAdminDTO>) => {
+        if (params.row.validated) {
+          return 'Sim'
+        } 
+        return 'Não'
+      },
     },
     {
       field: "updatedAt",
       headerName: "Atualizado em",
       flex: 1,
-      valueGetter: (_: unknown, row: UserDetailDTO) => {
+      valueGetter: (_: unknown, row: UserDetailsForAdminDTO) => {
         return row.updatedAt ?? row.createdAt;
       },
-      renderCell: (params: GridRenderCellParams<UserDetailDTO, Date>) => {
+      renderCell: (params: GridRenderCellParams<UserDetailsForAdminDTO, Date>) => {
         return dayjs(params.value).format("DD/MM/YYYY HH:mm")
       },
     },
@@ -56,7 +68,7 @@ export default function DataTableColumnsUsers({
       headerName: "Ações",
       sortable: false,
       flex: 1,
-      renderCell: (params: GridRenderCellParams<UserDetailDTO>) => (
+      renderCell: (params: GridRenderCellParams<UserDetailsForAdminDTO>) => (
         <Stack
           direction="row" 
           spacing={1} 
@@ -72,6 +84,16 @@ export default function DataTableColumnsUsers({
               <GridSearchIcon />
             </Tooltip>
           </IconButton>
+
+          <IconButton
+            onClick={() => onClickUpdatePasswordItem(params.row.id)}
+          >          
+            <Tooltip title="Atualizar a senha">
+              <LockResetIcon />
+              
+            </Tooltip>
+          </IconButton>
+
 
           <IconButton
             onClick={() => onClickUpdateItem(params.row.id)}

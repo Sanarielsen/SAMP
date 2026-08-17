@@ -22,7 +22,6 @@ import OrderServiceManagePage from "@/features/order/pages/OrderServicesManagePa
 import AboutPage from "@/features/about/pages/AboutPage";
 
 import ProfilePage from "@/features/profile/pages/ProfilePage";
-import AdminManageVariablesPage from "@/features/admin/page/ManageVariables";
 import ManageUsers from "@/features/admin/page/ManageUsers";
 import ManageUser from "@/features/admin/page/ManageUser";
 import { DetailsPanel as OrderDetailsPanel } from "@/features/order/pages/DetailsPanel";
@@ -34,6 +33,7 @@ import ViewImportedProcess from "./features/process/page/ViewImportedProcess";
 import ManageImportedProcess from "./features/process/page/ManageImportedProcess";
 
 import UpdatePassword from "./features/profile/pages/UpdatePassword";
+import ManageVariables from "@/features/admin/page/ManageVariables";
 
 
 export default function Router() {
@@ -71,9 +71,11 @@ export default function Router() {
 
         <Route path="perfil" element={<ProfilePage />} />
         <Route path="perfil/:id/alterar-senha" element={<UpdatePassword />} />
-        <Route path="admin/variaveis" element={<AdminManageVariablesPage />} />
+        <Route path="admin/variaveis" element={<ManageVariables />} />
         <Route path="admin/usuarios" element={<ManageUsers />} />
         <Route path="admin/usuario" element={<ManageUser />} />
+        <Route path="admin/usuario/:id" element={<ManageUser />} />
+        <Route path="admin/usuario/:id/alterar-senha" element={<UpdatePassword />} />
         
         <Route path="sobre" element={<AboutPage />} />
       </Route>

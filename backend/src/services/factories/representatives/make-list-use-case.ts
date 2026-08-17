@@ -1,6 +1,6 @@
 import { PrismaClientRepository } from '@/repositories/prisma/prisma-client-repository'
 import { PrismaRepresentativeRepository } from '@/repositories/prisma/prisma-representative-repository'
-import { ListRepresentativeUseCase } from '@/services/service-representative/list'
+import { ListRepresentativeUseCase } from '@/services/use-cases/representative/list'
 
 export function makeListRepresentativeUseCase() {
   const representativeRepository = new PrismaRepresentativeRepository()

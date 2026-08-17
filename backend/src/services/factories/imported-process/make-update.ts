@@ -2,7 +2,7 @@ import { PrismaUserRoleRepository } from "@/repositories/prisma/prisma-user-role
 import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository"
 import { PrismaClientRepository } from "@/repositories/prisma/prisma-client-repository"
 import { PrismaImportedProcessRepository } from "@/repositories/prisma/prisma-imported-process-repository"
-import { UpdateImportedProcessUseCase } from "@/services/service-imported-process/update"
+import { UpdateImportedProcessUseCase } from "@/services/use-cases/imported-process/update"
 
 
 export function makeUpdateImportedProcess() {

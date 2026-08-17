@@ -2,7 +2,7 @@ import { PrismaImportedProcessRepository } from "@/repositories/prisma/prisma-im
 import { PrismaProcessPublicationRepository } from "@/repositories/prisma/prisma-process-publication-repository"
 import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository"
 import { PrismaUserRoleRepository } from "@/repositories/prisma/prisma-user-role-repository"
-import { PostManyProcessPublicationUseCase } from "@/services/service-process-publication/post-many";
+import { PostManyProcessPublicationUseCase } from "@/services/use-cases/process-publication/post-many";
 
 
 export function makePostManyProcessPublications() {

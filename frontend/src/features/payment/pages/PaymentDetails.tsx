@@ -14,7 +14,7 @@ import {
 import { 
   useMutationPatchPaymentInstallment 
 } from "@/features/payment/api/mutationUpdatePaymentInstallment";
-import { optionsQueryListPaymentMethods } from "@/api/queryListPaymentMethods";
+import { optionsQueryListPaymentMethodOptions } from "@/api/queryListPaymentMethods";
 import InstallmentDetail from "@/features/payment/components/InstallmentDetail";
 import ModalInstallmentToPay from "@/features/payment/components/ModalInstallmentToPay";
 import HeaderPage from "@/components/HeaderPage";
@@ -35,10 +35,10 @@ export default function PaymentDetails() {
   const queryClient = useQueryClient();
 
   const { 
-    data: listPaymentMethods,
-    isSuccess: isSuccessMethods,
+    data: listPaymentMethodOptions,
+    isSuccess: isSuccessMethodOptions,
   } = useQuery(
-    optionsQueryListPaymentMethods()
+    optionsQueryListPaymentMethodOptions()
   )
 
   const { 
@@ -95,7 +95,7 @@ export default function PaymentDetails() {
               <Grid key={paymentInstallment.id} >
                 <InstallmentDetail 
                   currentPayment={paymentInstallment}
-                  listPaymentMethods={isSuccessMethods ? listPaymentMethods : []}
+                  listPaymentMethods={isSuccessMethodOptions ? listPaymentMethodOptions : []}
                   color={
                     paymentInstallment.installment % 2 == 0 ? "secondInstallment" : undefined
                   } 

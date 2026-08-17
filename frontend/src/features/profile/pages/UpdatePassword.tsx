@@ -45,7 +45,11 @@ export default function UpdatePassword() {
     setOpenToast(result);
     if (result === "success") {
       setTimeout(() => {
-        navigate("/perfil");
+        if (location.pathname.includes("/admin")) {
+          navigate("/admin/usuarios/");
+        } else {
+          navigate("/perfil");
+        }
       }, 5000);
     }
   }

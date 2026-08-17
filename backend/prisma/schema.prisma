@@ -166,7 +166,8 @@ model Representative {
 model OrderType {
   id          Int       @id @default(autoincrement())
   title       String
-  descripton  String
+  description String
+  order       Int       @default(0)
   observation String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
@@ -198,7 +199,7 @@ model Order {
 model Payment {
   id                String   @id @default(uuid())
   orderId           String
-  totalInstallments Int
+  totalInstallments Int      
   observation       String?
   firstDueDate      DateTime
 
@@ -216,7 +217,7 @@ model PaymentInstallment {
   id                String  @id @default(uuid())
   paymentId         String
   installment       Int
-  methodId          String
+  methodId          Int
   amountInCents     Int
   adjustmentInCents Int?
   observation       String?
@@ -236,7 +237,7 @@ model PaymentInstallment {
 }
 
 model PaymentMethod {
-  id          String  @id @default(uuid())
+  id          Int @id @default(autoincrement())
   name        String
   observation String?
   order       Int

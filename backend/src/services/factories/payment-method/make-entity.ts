@@ -1,16 +1,17 @@
 import { 
-  InMemoryPaymentMethodsRepository
-} from '@/repositories/in-memory/in-memory-payment-methods-repository'
+  InMemoryPaymentMethodRepository
+} from '@/repositories/in-memory/in-memory-payment-method-repository'
 
-import { CreatePaymentMethodDTO, PaymentMethod } from '@shared/types/paymentMethod'
+import { PaymentMethod } from '@shared/types/paymentMethod'
+
 
 export async function makePaymentMethod(
-  paymentMethodsRepository: InMemoryPaymentMethodsRepository,
+  paymentMethodsRepository: InMemoryPaymentMethodRepository,
   override: Partial<PaymentMethod> = {},
 ) {
 
   return paymentMethodsRepository.create({
-    name: 'Method Test',
+    name: 'payment-method-test',
     order: 1,
 
     ...override,

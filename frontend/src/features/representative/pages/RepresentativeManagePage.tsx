@@ -19,12 +19,13 @@ import {
   manageRepresentativeSchema,
   type ManageRepresentativeSchemaFormData
 } from '@/features/representative/schemas/updateRepresentativeSchema';
-
 import { emptyRepresentative } from '@/features/representative/utils/mockRepresentative';
 import { cleanValue } from '@/utils/cleanValue';
-
-import type { CreateRepresentativeDTO, UpdateRepresentativeDTO } from '@shared/types/representative';
 import { formatDocument } from '@/utils/formatDocument';
+
+import type { 
+  CreateRepresentativeDTO, 
+  UpdateRepresentativeDTO } from '@shared/types/representative';
 
 
 export default function RepresentativeManagePage() {
@@ -134,6 +135,12 @@ export default function RepresentativeManagePage() {
 
     mutationPostRepresentative.mutate(payload)  
   }
+
+  const hasExecutionRunning = 
+    mutationPostRepresentative.isPending ||
+    mutationPostRepresentative.isSuccess ||
+    mutationPatchRepresentative.isPending ||
+    mutationPatchRepresentative.isSuccess
 
   return (
     <FormProvider {...form}>
@@ -254,14 +261,8 @@ export default function RepresentativeManagePage() {
                 type="submit"
                 variant="contained"
                 size="large"
-                loading={isEditing ? 
-                  mutationPatchRepresentative.isPending :
-                  mutationPostRepresentative.isPending
-                }
-                disabled={isEditing ? 
-                  mutationPatchRepresentative.isPending :
-                  mutationPostRepresentative.isPending
-                }  
+                loading={hasExecutionRunning}
+                disabled={hasExecutionRunning}  
                 fullWidth
                 sx={{ marginTop: 4 }}
               >

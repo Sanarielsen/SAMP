@@ -1,5 +1,5 @@
 import { PrismaClientRepository } from '@/repositories/prisma/prisma-client-repository'
-import { ListClientWithOptionsUseCase } from '@/services/service-client/list-with-options'
+import { ListClientWithOptionsUseCase } from '@/services/use-cases/client/list-with-options'
 
 export function makeListClientWithOptionsUseCase() {
   const clientRepository = new PrismaClientRepository()
