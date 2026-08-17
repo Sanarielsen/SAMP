@@ -1,5 +1,5 @@
 export type PaymentMethod = {
-  id: string,
+  id: number,
   name: string,
   observation: string | null,
   order: number,
@@ -9,15 +9,15 @@ export type PaymentMethod = {
   deletedAt: Date | null,
 }
 
-export type CreatePaymentMethodDTO = {
+export type PaymentMethodCreateDTO = {
   name: string,
-  observation?: string | null,
   order: number,
+  observation?: string | null,
 }
 
 
-export type UpdatePaymentMethodDTO = {
-  id: string, 
+export type PaymentMethodUpdateDTO = {
+  id: number, 
 
   name?: string,
   observation?: string | null,

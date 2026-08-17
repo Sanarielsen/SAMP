@@ -1,13 +1,17 @@
-import { UpdatePaymentInstallmentDTO } from '@shared/types/paymentInstallments'
 import {
-  CreatePaymentMethodDTO,
-  PaymentMethod
+  PaymentMethodCreateDTO,
+  PaymentMethod,
+  PaymentMethodUpdateDTO
 } from '@shared/types/paymentMethod'
+import { OptionsControlledBox } from '@shared/types/values'
+
 
 export interface PaymentMethodRepository {
-  create(data: CreatePaymentMethodDTO): Promise<PaymentMethod>
-  delete(id: string): Promise<PaymentMethod>
+  create(data: PaymentMethodCreateDTO): Promise<PaymentMethod>
+  update(data: PaymentMethodUpdateDTO): Promise<PaymentMethod>
+  delete(id: number): Promise<void>
 
-  findById(id: string): Promise<PaymentMethod | null>
+  findById(id: number): Promise<PaymentMethod | null>
   findManyActive(): Promise<PaymentMethod[]>
+  findManyOptions(): Promise<OptionsControlledBox[]>
 }

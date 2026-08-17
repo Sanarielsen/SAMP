@@ -18,7 +18,7 @@ import {
 } from "@/features/order/schemas/manageOrderServiceSchema";
 
 import { optionsQueryGetOrder } from "@/features/order/api/queryGetOrder";
-import { optionsQueryListOrderTypesWithOptions } from "@/features/order/api/queryListOrderTypes";
+import { optionsQueryListOrderTypesAsOptions } from "@/api/queryListOrderTypeAsOptions";
 import { useMutationPatchOrder } from "@/features/order/api/mutationPatchOrder";
 import { useMutationPostOrder } from "@/features/order/api/mutationPostOrder";
 import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions";
@@ -60,7 +60,7 @@ export default function OrderServiceManagePage() {
     data: listOrderTypeWithOptions,
     isSuccess: isSuccessOrderTypeWithOptions
   } = useQuery(
-    optionsQueryListOrderTypesWithOptions()
+    optionsQueryListOrderTypesAsOptions()
   )
 
   const form = useForm<ManageOrderSchemaFormData>({
