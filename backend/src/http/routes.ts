@@ -23,7 +23,7 @@ import { getOrder } from "@/http/Controllers/order/get";
 import { listOrder } from "@/http/Controllers/order/list";
 import { updateOrder } from "@/http/Controllers/order/update";
 import { deleteOrder } from "@/http/Controllers/order/delete";
-import { listOrderType } from "@/http/Controllers/orderTypes/list";
+import { listOrderTypeAsOptions } from "@/http/Controllers/orderType/list";
 import { listUsersWithSearch } from "@/http/Controllers/user/list";
 import { listUserRoleLevelAuthorized } from "@/http/Controllers/userRole/list-level-authorized";
 import { getOrderDetails } from "@/http/Controllers/order/get-detail";
@@ -64,6 +64,19 @@ import { getProcessPublication } from "./Controllers/processPublication/get";
 import { listProcessPublications } from "./Controllers/processPublication/list";
 import { updateProcessPublication } from "./Controllers/processPublication/update";
 import { deleteProcessPublication } from "./Controllers/processPublication/delete";
+import { postPaymentMethod } from "./Controllers/paymentMethod/post";
+import { listPaymentMethodOptions } from "./Controllers/paymentMethod/list-options";
+import { getPaymentMethod } from "./Controllers/paymentMethod/get";
+import { updatePaymentMethod } from "./Controllers/paymentMethod/update";
+import { createOrderType } from "./Controllers/orderType/create";
+import { updateOrderType } from "./Controllers/orderType/update";
+import { deleteOrderType } from "./Controllers/orderType/delete";
+import { getOrderType } from "./Controllers/orderType/get";
+import { deletePaymentMethod } from "./Controllers/paymentMethod/delete";
+import { getUserWithoutPassword } from "./Controllers/user/get-without-password";
+import { postUserWithoutPassword } from "./Controllers/user/create-without-password";
+import { updateUser } from "./Controllers/user/update";
+import { deleteUser } from "./Controllers/user/delete";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -73,7 +86,11 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/me', {onRequest: [verifyJWT]}, updateProfile)
   app.patch('/profile/:id/password', {onRequest: [verifyJWT]}, updateUserPassword)
   
-  app.post('/user', register)
+  //app.post('/user', register)
+  app.post('/user', postUserWithoutPassword)
+  app.get('/user/:id', getUserWithoutPassword)
+  app.patch('/user/:id', {onRequest: [verifyJWT]}, updateUser)
+  app.delete('/user/:id', {onRequest: [verifyJWT]}, deleteUser)
   app.get('/user/roles', {onRequest: [verifyJWT]}, listUserRoleLevelAuthorized)
   app.get('/option/users', {onRequest: [verifyJWT]}, listUsersWithOptions)
   app.get('/option/client/:id/orders', {onRequest: [verifyJWT]}, listOrdersWithOptions)
@@ -110,14 +127,30 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/orders', {onRequest: [verifyJWT]}, listOrder)
   app.patch('/order/:id', {onRequest: [verifyJWT]}, updateOrder)
   app.delete('/order/:id', {onRequest: [verifyJWT]}, deleteOrder)
+  //TODO: Remove id order of this route and add on parameters
+  // app.post('/payment', {onRequest: [verifyJWT]}, postPayment) 
+  // app.post('/payment/installments', {onRequest: [verifyJWT]}, postPaymentWithInstallments)
   app.post('/order/:id/payment', {onRequest: [verifyJWT]}, postPayment) 
   app.post('/order/:id/payment/installments', {onRequest: [verifyJWT]}, postPaymentWithInstallments)
   app.get(`/order/:id/payments`, { onRequest: [verifyJWT] }, getOrderPayments)
+
+  app.post('/order/type', {onRequest: [verifyJWT]}, createOrderType)
+  app.get('/order/type/:id', {onRequest: [verifyJWT]}, getOrderType)
+  app.patch('/order/type/:id', {onRequest: [verifyJWT]}, updateOrderType)
+  app.delete('/order/type/:id', {onRequest: [verifyJWT]}, deleteOrderType)
+  app.get('/order/type/options', {onRequest: [verifyJWT]}, listOrderTypeAsOptions)
   
   app.get(`/payment/:id/installments`, {onRequest: [verifyJWT]}, listPaymentInstallments)
   app.patch('/payment/installment/:id', {onRequest: [verifyJWT]}, updatePaymentInstallment)
   app.patch('/payment/installment/:id/paid', {onRequest: [verifyJWT]}, updatePaymentInstallmentAsPaid)
   app.delete('/payment/:id', {onRequest: [verifyJWT]}, deletePayment)
+
+  app.get('/payment/method/:id', {onRequest: [verifyJWT]}, getPaymentMethod)
+  app.patch(`/payment/method/:id`, {onRequest: [verifyJWT]}, updatePaymentMethod)
+  app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)
+  app.get(`/payment/method/options`, {onRequest: [verifyJWT]}, listPaymentMethodOptions)
+  app.post(`/payment/method`, {onRequest: [verifyJWT]}, postPaymentMethod)
+  app.delete('/payment/method/:id', {onRequest: [verifyJWT]}, deletePaymentMethod)
 
   app.get('/processes', {onRequest: [verifyJWT]}, listImportedProcessDetailsWithSearch)
   app.get('/process/:id', {onRequest: [verifyJWT]}, getImportedProcess)
@@ -132,7 +165,4 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/publication/:id', {onRequest: [verifyJWT]}, getProcessPublication)
   app.patch('/publication/:id', {onRequest: [verifyJWT]}, updateProcessPublication)
   app.delete('/publication/:id', {onRequest: [verifyJWT]}, deleteProcessPublication)
-  
-  app.get('/order/types', {onRequest: [verifyJWT]}, listOrderType)
-  app.get(`/payment/methods`, {onRequest: [verifyJWT]}, listPaymentMethods)
 }

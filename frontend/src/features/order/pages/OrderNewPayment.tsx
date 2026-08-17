@@ -13,7 +13,7 @@ import {
 import { 
   useMutationPostPaymentWithInstallments 
 } from "@/features/order/api/mutationCreatePayment";
-import { optionsQueryListPaymentMethods } from "@/api/queryListPaymentMethods";
+import { optionsQueryListPaymentMethodOptions } from "@/api/queryListPaymentMethods";
 import { 
   newPaymentSchema, 
   type NewPaymentSchemaFormData 
@@ -41,7 +41,7 @@ export default function OrderNewPayment() {
     data: listPaymentMethods,
     isSuccess: isSuccessMethods,
   } = useQuery(
-    optionsQueryListPaymentMethods()
+    optionsQueryListPaymentMethodOptions()
   )
 
   const form = useForm<NewPaymentSchemaFormData>({
@@ -72,11 +72,11 @@ export default function OrderNewPayment() {
   const onSubmit: SubmitHandler<NewPaymentSchemaFormData> = async (data) => {
 
     const payload: CreatePaymentWithInstallmentsDTO = {
-      orderId: orderId!,
+      orderId,
       totalInstallments: Number(data.totalInstallments),
       totalAmountInCents: convertCurrencyToCents(Number(data.totalAmountInCents)),
       firstDueDate: parseBRDate(data.firstDueDate),
-      methodId: data.methodId,
+      methodId: Number(data.methodId),
       observation: data.observation
     }
     

@@ -1,7 +1,7 @@
 import { PrismaUserRoleRepository } from '@/repositories/prisma/prisma-user-role-repository'
 import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository'
 import { PrismaImportedProcessRepository } from '@/repositories/prisma/prisma-imported-process-repository'
-import { ListImportedProcessSearchWithDetailsUseCase } from '@/services/service-imported-process/list-search-with-details'
+import { ListImportedProcessSearchWithDetailsUseCase } from '@/services/use-cases/imported-process/list-search-with-details'
 
 
 export function makeListImportProcessesDetailsWithSearch() {

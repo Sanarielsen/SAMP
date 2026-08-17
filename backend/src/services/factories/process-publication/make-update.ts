@@ -2,7 +2,7 @@ import { PrismaImportedProcessRepository } from "@/repositories/prisma/prisma-im
 import { PrismaProcessPublicationRepository } from "@/repositories/prisma/prisma-process-publication-repository"
 import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository"
 import { PrismaUserRoleRepository } from "@/repositories/prisma/prisma-user-role-repository"
-import { UpdateProcessPublicationUseCase } from "@/services/service-process-publication/update";
+import { UpdateProcessPublicationUseCase } from "@/services/use-cases/process-publication/update";
 
 
 export function makeUpdateProcessPublication() {

@@ -1,8 +1,8 @@
-import { PostPaymentUseCase } from "@/services/service-payment/post";
+import { PostPaymentUseCase } from "@/services/use-cases/payment/post";
 
 import { PrismaOrderRepository } from "@/repositories/prisma/prisma-order-repository";
 import { PrismaPaymentsRepository } from "@/repositories/prisma/prisma-payments-repository";
-import { ListPaymentsUseCase } from "@/services/service-payment/list";
+import { ListPaymentsUseCase } from "@/services/use-cases/payment/list";
 
 export function makeListPaymentUseCase() {
   const paymentsRepository = new PrismaPaymentsRepository();

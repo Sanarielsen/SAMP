@@ -16,7 +16,7 @@ export async function postPaymentWithInstallments(
     totalInstallments: z.number().min(1),
     totalAmountInCents: z.number().positive(),
     firstDueDate: z.coerce.date(),
-    methodId: z.string(),
+    methodId: z.number(),
     observation: z.string().nullable().optional(),
   })
 

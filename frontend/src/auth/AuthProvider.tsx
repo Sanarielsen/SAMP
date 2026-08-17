@@ -1,19 +1,26 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from 'react'
 
 import { jwtDecode } from 'jwt-decode'
 
 type TokenPayload = {
   sub: string | null
   role: string | null
-} | null
+}
 
 interface AuthContextProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 type AuthContextType = {
   token: string | null
   role: string | null
+  isAdmin: boolean
   signIn: (token: string) => void
   signOut: () => void
   getUserId: () => string | null
@@ -22,10 +29,22 @@ type AuthContextType = {
 const AuthContext = createContext({} as AuthContextType)
 
 export function AuthProvider({ children }: AuthContextProps) {
-  const [role, setRole] = useState<string | null>(null)
-  const [token, setToken] = useState(
+  const [token, setToken] = useState<string | null>(
     localStorage.getItem('token')
   )
+
+  const [role, setRole] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!token) {
+      setRole(null)
+      return
+    }
+
+    const decoded = jwtDecode<TokenPayload>(token)
+
+    setRole(decoded.role ?? null)
+  }, [token])
 
   function signIn(token: string) {
     localStorage.setItem('token', token)
@@ -38,25 +57,30 @@ export function AuthProvider({ children }: AuthContextProps) {
   }
 
   function getUserId(): string | null {
-    const token = localStorage.getItem('token')
-
     if (!token) return null
 
     const decoded = jwtDecode<TokenPayload>(token)
 
-    setRole(decoded?.role ?? null)
-
-    return decoded?.sub ?? null
+    return decoded.sub ?? null
   }
 
+  const isAdmin = role === 'ADMIN'
+
   return (
-    <AuthContext.Provider value={{ token, role, signIn, signOut, getUserId }}>
+    <AuthContext.Provider
+      value={{
+        token,
+        role,
+        isAdmin,
+        signIn,
+        signOut,
+        getUserId,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )
 }
 
 /* eslint-disable react-refresh/only-export-components */
-export const useAuth = () => {
-  return useContext(AuthContext)
-};
+export const useAuth = () => useContext(AuthContext)

@@ -1,4 +1,4 @@
-import { ListByPaymentInstallmentsUseCase } from "@/services/service-payment-installment/get-by-payment";
+import { ListByPaymentInstallmentsUseCase } from "@/services/use-cases/payment-installment/get-by-payment";
 
 import { PrismaPaymentInstallmentsRepository } from "@/repositories/prisma/prisma-payment-instalments-repository";
 import { PrismaPaymentsRepository } from "@/repositories/prisma/prisma-payments-repository";

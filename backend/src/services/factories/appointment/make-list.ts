@@ -1,6 +1,6 @@
 import { PrismaClientRepository } from '@/repositories/prisma/prisma-client-repository'
 import { PrismaAppointmentRepository } from '@/repositories/prisma/prisma-appointment-repository'
-import { ListAppointmentUseCase } from '@/services/service-appointment/list'
+import { ListAppointmentUseCase } from '@/services/use-cases/appointment/list'
 
 export function makeListAppointmentUseCase() {
   const appointmentRepository = new PrismaAppointmentRepository()

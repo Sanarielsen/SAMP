@@ -1,5 +1,5 @@
 import { PrismaRepresentativeRepository } from '@/repositories/prisma/prisma-representative-repository'
-import { UpdateRepresentativeUseCase } from '@/services/service-representative/update'
+import { UpdateRepresentativeUseCase } from '@/services/use-cases/representative/update'
 
 
 export function makeUpdateRepresentativeUseCase() {

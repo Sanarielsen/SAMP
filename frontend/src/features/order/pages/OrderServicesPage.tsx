@@ -1,14 +1,25 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import { optionsQueryListOrders } from "../api/queryListOrders";
 
-import DataTable from "@/components/DataTable";
+import { 
+  Box, 
+  Button, 
+  Grid, 
+  TextField, 
+  Typography 
+} from "@mui/material";
+import { useNavigate } from "react-router";
+import { 
+  useQuery, 
+  useQueryClient 
+} from "@tanstack/react-query";
+
+import { optionsQueryListOrders } from "@/features/order/api/queryListOrders";
+import { useMutationDeleteOrder } from "@/features/order/api/mutationDeleteOrder";
 import DataTableColumnsOrder from "@/features/order/components/DataTableColumnsOrders";
-import ToastContainer from "@/components/Toast";
+import DataTable from "@/components/DataTable";
 import ModalConfirmation from "@/components/ModalConfirmation";
-import { useMutationDeleteOrder } from "../api/mutationDeleteOrder";
+import ToastContainer from "@/components/Toast";
+
 
 interface OrderDetailDTO {
   id:           string
