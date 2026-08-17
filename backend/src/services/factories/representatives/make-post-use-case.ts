@@ -1,7 +1,7 @@
 import { PrismaClientRepository } from '@/repositories/prisma/prisma-client-repository'
 import { PrismaRepresentativeRepository } from '@/repositories/prisma/prisma-representative-repository'
 import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository'
-import { PostRepresentativeUseCase } from '@/services/service-representative/post'
+import { PostRepresentativeUseCase } from '@/services/use-cases/representative/post'
 
 export function makePostRepresentativeUseCase() {
   const representativeRepository = new PrismaRepresentativeRepository()

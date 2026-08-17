@@ -2,24 +2,17 @@ import { queryOptions } from "@tanstack/react-query"
 
 import { api } from "@/api/axios"
 
-import { type PaymentMethod } from "@shared/types/paymentMethod"
-import { type OptionsControlledBox } from "@shared/types/values"
+import type { OptionsControlledBox } from "@shared/types/values"
 
-export function optionsQueryListPaymentMethods() { 
+
+export function optionsQueryListPaymentMethodOptions() { 
   return queryOptions({
-    queryKey: ["payment-methods"],
+    queryKey: ["payment-method-as-options"],
+
     queryFn: async () => {
-      const { data } = await api.get<PaymentMethod[]>(`/payment/methods`)
+      const { data } = await api.get<OptionsControlledBox[]>(`/payment/method/options`)
 
-      //Should be transfer to back-end ASAP
-      const formattedPaymentMethods: OptionsControlledBox[] = data.map(
-        paymentMethods => ({
-          label: paymentMethods.name,
-          value: paymentMethods.id,
-        }),
-      )
-
-      return formattedPaymentMethods
+      return data
     },
   })
 }

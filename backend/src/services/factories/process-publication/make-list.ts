@@ -1,6 +1,6 @@
 import { PrismaImportedProcessRepository } from "@/repositories/prisma/prisma-imported-process-repository"
 import { PrismaProcessPublicationRepository } from "@/repositories/prisma/prisma-process-publication-repository"
-import { ListProcessPublicationsUseCase } from "@/services/service-process-publication/list"
+import { ListProcessPublicationsUseCase } from "@/services/use-cases/process-publication/list"
 
 
 export function makeListProcessPublication() {

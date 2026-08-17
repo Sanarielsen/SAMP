@@ -1,4 +1,4 @@
-import { GetOrderUseCase } from "@/services/service-order/get";
+import { GetOrderUseCase } from "@/services/use-cases/order/get";
 
 import { PrismaOrderRepository } from "@/repositories/prisma/prisma-order-repository";
 import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository";

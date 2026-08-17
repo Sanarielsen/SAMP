@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
-import { useNavigate, useParams } from "react-router";
 
 import AllInboxIcon from '@mui/icons-material/AllInbox';
 import { 
@@ -9,30 +7,40 @@ import {
   Grid, 
   Typography 
 } from "@mui/material";
+import { 
+  FormProvider, 
+  useForm, 
+  type SubmitHandler 
+} from "react-hook-form";
+import { 
+  useNavigate, 
+  useParams 
+} from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { optionsQueryGetOrder } from "@/features/order/api/queryGetOrder";
+import { optionsQueryListOrderTypesAsOptions } from "@/api/queryListOrderTypeAsOptions";
+import { useMutationPatchOrder } from "@/features/order/api/mutationPatchOrder";
+import { useMutationPostOrder } from "@/features/order/api/mutationPostOrder";
+import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions";
+import { ControlledComboBox } from "@/components/ControlledComboBox";
+import { ControlledInputMask } from "@/components/ControlledInputMask";
+import { ControlledInput } from "@/components/ControlledInputText";
+import ToastContainer from "@/components/Toast";
 import { 
   manageOrderServiceSchema, 
   type ManageOrderSchemaFormData 
 } from "@/features/order/schemas/manageOrderServiceSchema";
-
-import { optionsQueryGetOrder } from "@/features/order/api/queryGetOrder";
-import { optionsQueryListOrderTypesWithOptions } from "@/features/order/api/queryListOrderTypes";
-import { useMutationPatchOrder } from "@/features/order/api/mutationPatchOrder";
-import { useMutationPostOrder } from "@/features/order/api/mutationPostOrder";
-import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions";
-
-import { ControlledComboBox } from "@/components/ControlledComboBox";
-import { ControlledInput } from "@/components/ControlledInputText";
-import { ControlledInputMask } from "@/components/ControlledInputMask";
-import ToastContainer from "@/components/Toast";
-
 import { emptyOrder } from "@/features/order/utils/emptyOrder";
 import { formatAsVisualDate } from "@/utils/formatAsAVisualDate";
 import { parseBRDate } from "@/utils/formatDate";
 
-import type { CreateOrderDTO, UpdateOrderDTO } from "@shared/types/orders";
+import type { 
+  CreateOrderDTO, 
+  UpdateOrderDTO 
+} from "@shared/types/orders";
+
 
 export default function OrderServiceManagePage() {
 
@@ -60,7 +68,7 @@ export default function OrderServiceManagePage() {
     data: listOrderTypeWithOptions,
     isSuccess: isSuccessOrderTypeWithOptions
   } = useQuery(
-    optionsQueryListOrderTypesWithOptions()
+    optionsQueryListOrderTypesAsOptions()
   )
 
   const form = useForm<ManageOrderSchemaFormData>({
@@ -151,6 +159,13 @@ export default function OrderServiceManagePage() {
 
     mutationPostOrder.mutate(payload)
   }
+
+  const hasExecutionRunning = 
+    mutationPostOrder.isPending ||
+    mutationPostOrder.isSuccess ||
+    mutationPatchOrder.isPending ||
+    mutationPatchOrder.isSuccess
+
 
   return (
     <FormProvider {...form}>
@@ -261,14 +276,8 @@ export default function OrderServiceManagePage() {
                 variant="contained"
                 type="submit"
                 size="large"
-                loading={isEditing ?
-                  mutationPostOrder.isPending :
-                  mutationPatchOrder.isPending
-                }
-                disabled={isEditing ?
-                  mutationPostOrder.isPending :
-                  mutationPatchOrder.isPending
-                }  
+                loading={hasExecutionRunning}
+                disabled={hasExecutionRunning}  
                 fullWidth
               >
                 {isEditing ? "Atualizar" : "Cadastrar"}
