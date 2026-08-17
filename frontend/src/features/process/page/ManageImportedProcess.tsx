@@ -426,14 +426,14 @@ export default function ManageImportedProcess() {
 
         <ToastContainer
           open={openToast === "success"}
-          message={isEditing ? "Publicacao atualizada com sucesso." : "Publicacao criada com sucesso."} 
+          message={isEditing ? "Processo atualizado com sucesso." : "Processo criado com sucesso."} 
           severity="success"
           onClose={() => setOpenToast("")}
         />
         
         <ToastContainer
           open={openToast === "error"}
-          message={isEditing ? "Ocorreu um erro ao atualizar essa publicacao." : "Ocorreu um erro ao criar essa publicacao."} 
+          message={isEditing ? "Ocorreu um erro ao atualizar esse processo." : "Ocorreu um erro ao criar esse processo."} 
           severity="error"
           onClose={() => setOpenToast("")}
         />

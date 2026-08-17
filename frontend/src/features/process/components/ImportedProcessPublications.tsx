@@ -114,14 +114,14 @@ export default function ImportedProcessPublications({
 
         <ToastContainer
           open={openToast === "success"}
-          message="Publicação desativada com sucesso."
+          message="Processo desativado com sucesso."
           severity="success"
           onClose={() => setOpenToast("")}
         />
         
         <ToastContainer
           open={openToast === "error"}
-          message="Ocorreu um erro ao desativar essa publicação."
+          message="Ocorreu um erro ao desativar esse processo."
           severity="error"
           onClose={() => setOpenToast("")}
         />

@@ -1,4 +1,3 @@
-import { formatAsVisualOnlyDate } from "@/utils/formatAsAVisualDate";
 import { 
   IconButton, 
   Stack, 
@@ -9,8 +8,10 @@ import {
   GridDeleteIcon,
   type GridColDef
 } from "@mui/x-data-grid"
+import FeedbackIcon from '@mui/icons-material/Feedback';
 
 import type { ProcessPublication } from "@shared/types/processPublication";
+import { formatDate } from "@/utils/formatDateCode";
 
 
 type ColumnsPublicationsProps = {
@@ -29,12 +30,32 @@ export default function DataTableProcessPublicationColumns({
       flex: 1
     },
     {
+      field: "dispatch",
+      headerName: "Despacho",
+      flex: 1,
+      renderCell: (params) => (
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ height: "100%" }}
+        >
+          {params.row.dispatch}
+
+          {params.row.complement && (
+            <Tooltip title={params.row.complement}>
+              <FeedbackIcon fontSize="small" />
+            </Tooltip>
+          )}
+        </Stack>
+      ),
+    },
+    {
       field: "publicationDate",
       headerName: "Data de publicacão",
       flex: 1,
       valueFormatter: (value) => {
         if (!value) return "-"
-        return formatAsVisualOnlyDate(value)
+        return formatDate(value);
       },
     },
     {

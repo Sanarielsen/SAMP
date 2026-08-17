@@ -38,6 +38,8 @@ export default function ModalLoadProcessPublicationINPI({
   open, processNumber, handleClose, processId
 }: ModalLoadProcessPublicationINPIProps) {
 
+  const queryClient = useQueryClient()
+
   const [searchPermission, setSearchPermission] = useState(false)
   const [openToast, setOpenToast] = useState("")
 
@@ -64,6 +66,19 @@ export default function ModalLoadProcessPublicationINPI({
     }
   }, [isSuccess]);
 
+  const mutationPostMany = useMutationPostManyProcessPublications({
+    onSuccess: () => {
+      setOpenToast("success")
+      queryClient.invalidateQueries({ queryKey: ['process-publications', processId] })
+      mutationPostMany.reset();
+      handleClose()
+    },
+    onError: () => setOpenToast("error")
+  })
+
+  const isRunningSomething = 
+    mutationPostMany.isPending ||
+    mutationPostMany.isSuccess
 
   const onSubmit: SubmitHandler<PublicationFormData> = async (data) => {
     if (!processId) {
@@ -82,17 +97,6 @@ export default function ModalLoadProcessPublicationINPI({
 
     mutationPostMany.mutate({ processId, publications })
   }
-
-  const queryClient = useQueryClient()
-
-  const mutationPostMany = useMutationPostManyProcessPublications({
-    onSuccess: () => {
-      setOpenToast("success")
-      queryClient.invalidateQueries({ queryKey: ['process-publications', processId] })
-      handleClose()
-    },
-    onError: () => setOpenToast("error")
-  })
 
   return (
     <>
@@ -160,6 +164,7 @@ export default function ModalLoadProcessPublicationINPI({
                   sx={{ marginTop: 2 }}
                   type="submit"
                   variant="contained"
+                  loading={isRunningSomething}
                   size="large"
                   fullWidth
                 >
