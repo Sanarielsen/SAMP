@@ -73,6 +73,10 @@ import { updateOrderType } from "./Controllers/orderType/update";
 import { deleteOrderType } from "./Controllers/orderType/delete";
 import { getOrderType } from "./Controllers/orderType/get";
 import { deletePaymentMethod } from "./Controllers/paymentMethod/delete";
+import { getUserWithoutPassword } from "./Controllers/user/get-without-password";
+import { postUserWithoutPassword } from "./Controllers/user/create-without-password";
+import { updateUser } from "./Controllers/user/update";
+import { deleteUser } from "./Controllers/user/delete";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -82,7 +86,11 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/me', {onRequest: [verifyJWT]}, updateProfile)
   app.patch('/profile/:id/password', {onRequest: [verifyJWT]}, updateUserPassword)
   
-  app.post('/user', register)
+  //app.post('/user', register)
+  app.post('/user', postUserWithoutPassword)
+  app.get('/user/:id', getUserWithoutPassword)
+  app.patch('/user/:id', {onRequest: [verifyJWT]}, updateUser)
+  app.delete('/user/:id', {onRequest: [verifyJWT]}, deleteUser)
   app.get('/user/roles', {onRequest: [verifyJWT]}, listUserRoleLevelAuthorized)
   app.get('/option/users', {onRequest: [verifyJWT]}, listUsersWithOptions)
   app.get('/option/client/:id/orders', {onRequest: [verifyJWT]}, listOrdersWithOptions)

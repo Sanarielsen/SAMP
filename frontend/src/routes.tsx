@@ -74,6 +74,7 @@ export default function Router() {
         <Route path="admin/variaveis" element={<ManageVariables />} />
         <Route path="admin/usuarios" element={<ManageUsers />} />
         <Route path="admin/usuario" element={<ManageUser />} />
+        <Route path="admin/usuario/:id" element={<ManageUser />} />
         
         <Route path="sobre" element={<AboutPage />} />
       </Route>

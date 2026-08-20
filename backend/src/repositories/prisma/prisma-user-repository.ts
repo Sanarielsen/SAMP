@@ -1,3 +1,4 @@
+import { hash } from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
 import { UserRepository } from "@/repositories/user-repository";
@@ -7,16 +8,26 @@ import {
   UpdateUserDTO, 
   UserDetailDTO,
   User,
-  UserPasswordUpdateDTO
+  UserPasswordUpdateDTO,
+  UserPublicDTO,
+  CreateUserWithoutPasswordDTO
 } from "@shared/types/user";
 import { OptionsControlledBox } from "@shared/types/values";
-import { hash } from "bcryptjs";
 
 
 export class PrismaUserRepository implements UserRepository {
   async create(data: CreateUserDTO): Promise<User> {
     return await prisma.user.create({
       data
+    })
+  }
+
+  async createWithoutPassword(data: CreateUserWithoutPasswordDTO): Promise<User> {
+    return await prisma.user.create({
+      data: {
+        ...data,
+        password_hash: null
+      }
     })
   }
 
@@ -39,6 +50,17 @@ export class PrismaUserRepository implements UserRepository {
       }
     })
   }
+
+  async delete(id: string): Promise<void> {
+    await prisma.user.update({
+      where: {
+        id
+      },
+      data: {
+        deletedAt: new Date(Date.now())
+      }
+    })
+  }
   
   async findById(id: string): Promise<User | null> {
     return await prisma.user.findUnique({
@@ -46,6 +68,26 @@ export class PrismaUserRepository implements UserRepository {
         id,
       },
     })
+  }
+
+  async findByIdWithoutPassword(id: string): Promise<UserPublicDTO | null> {
+    const user =  await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    })
+
+    if (!user) return null
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      roleId: user.roleId,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      deletedAt: user.deletedAt,
+    }
   }
 
   async findByEmail(email: string): Promise<UserDetailDTO | null> {
@@ -64,7 +106,8 @@ export class PrismaUserRepository implements UserRepository {
 
     return {
       ...user,
-      userRole: user.userRole
+      userRoleId: user.userRole.id,
+      userRoleName: user.userRole.name
     }
   }
 
@@ -83,7 +126,7 @@ export class PrismaUserRepository implements UserRepository {
     return user
   }
 
-  async findBySearch(search: string): Promise<UserDetailDTO[]> {
+  async findManyBySearchWithRelations(search: string): Promise<UserDetailDTO[]> {
     const users = await prisma.user.findMany({
       where: {
         deletedAt: null,
@@ -130,19 +173,19 @@ export class PrismaUserRepository implements UserRepository {
       id: user.id,
       name: user.name,
       email: user.email,
-      userRole: user.userRole
-        ? {
-            id: user.userRole.id,
-            name: user.userRole.name,
-          }
-        : null,
+      userRoleId: user.userRole!.id,
+      userRoleName: user.userRole!.name,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     }))
   }
 
   async findManyOptions(): Promise<OptionsControlledBox[] | null> {
-    const users = await prisma.user.findMany()
+    const users = await prisma.user.findMany({
+      where: {
+        deletedAt: null
+      }
+    })
 
     return users.map( (user) => ({
       label: user.name + ' - ' + user.email,

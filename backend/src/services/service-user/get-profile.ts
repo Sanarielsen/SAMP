@@ -14,7 +14,7 @@ export class GetUserProfileUseCase {
   async execute({
     userId,
   }: GetUserProfileUseCaseRequest): Promise<UserPublicDTO> {
-    const user = await this.userRepository.findById(userId)
+    const user = await this.userRepository.findByIdWithoutPassword(userId)
 
     if (!user) {
       throw new ResourceNotFoundError()

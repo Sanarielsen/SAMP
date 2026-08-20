@@ -41,6 +41,6 @@ export class ListUserUseCase {
       throw new UnauthorizedUserError();
     }
 
-    return await this.userRepository.findBySearch(search)
+    return await this.userRepository.findManyBySearchWithRelations(search)
   }
 }
