@@ -11,6 +11,7 @@ export interface User {
   updatedAt:     Date | null,
   deletedAt:     Date | null
 }
+
 export interface CreateUserDTO {
   id?:            string
 
@@ -21,6 +22,12 @@ export interface CreateUserDTO {
   joker?:         number,
 }
 
+export interface CreateUserWithoutPasswordDTO {
+  name:           string,
+  email:          string,
+  roleId:         string,
+}
+
 export interface UpdateUserDTO {
   id:       string
 
@@ -29,16 +36,25 @@ export interface UpdateUserDTO {
   roleId?:  string,
 }
 
+export interface UpdateUserWithPasswordDTO {
+  id: string
+
+  name?:      string,
+  email?:     string,
+  password?:  string,
+  roleId?:    string,
+}
+
 export type UserDetailDTO = {
-  id:         string,
+  id: string,
+
+  userRoleId:   string,
+  userRoleName: string,
+
   name:       string,
   email:      string,
-  userRole:   {
-    id:           string
-    name:         string
-  },
   createdAt:  Date,
-  updatedAt:  Date | null
+  updatedAt:  Date | null,
 }
 
 export type UserPublicDTO = {

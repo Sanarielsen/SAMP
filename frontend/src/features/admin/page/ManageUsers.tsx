@@ -13,9 +13,14 @@ import {
 } from "@mui/material";
 
 import { optionsQueryListUsers } from "@/features/admin/api/queryListUser";
+import { useMutationDeleteUser } from "@/features/admin/api/mutationDeleteUser";
 import DataTableColumnsUsers from "@/features/admin/components/DataTableColumnsUsers";
+import ModalUserWithDetails from "@/features/admin/components/ModalUserWIthDetails";
 import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
+import ModalConfirmation from "@/components/ModalConfirmation";
+import ToastContainer from "@/components/Toast";
+import { userFields } from "@/features/admin/utils/getRowUserWIthDetails";
 
 import type { UserDetailDTO } from "@shared/types/user";
 
@@ -28,6 +33,17 @@ export default function ManageUsers() {
 
   const [searchBar, setSearchBar] = useState("");
   const [searchApplied, setSearchApplied] = useState("")
+  const [userClicked, setUserClicked] = useState<UserDetailDTO>()
+  const [openModalDetails, setOpenModalDetails] = useState(false)
+  const [openToast, setOpenToast] = useState("")
+  const [openModalConfirmation, setOpenModalConfirmation] = useState(false)
+
+  function executeActionAfterRequest(result: string) {
+    setOpenToast(result);
+    if (result.includes("success")) {
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+    }
+  }
 
   const { 
     data: listUsers,
@@ -38,17 +54,38 @@ export default function ManageUsers() {
     optionsQueryListUsers(searchApplied)
   )
 
+  const mutationDeleteUser =
+    useMutationDeleteUser({
+      onSuccess: () => {
+        executeActionAfterRequest("success_deleted")
+      },
+      onError: () => {
+        executeActionAfterRequest("error_deleted")
+      },
+  })
+
   const stateQuery =
     isSuccess ? "SUCCESS" : 
     isLoading ? "LOADING" :
     isError ? "ERROR" : "IDLE";
 
   function handleView(current: UserDetailDTO) {
-    console.log("Usuário selecionado: ", current)
+    setUserClicked(current);
+    setOpenModalDetails(true);
   }
 
   function handleDelete(current: UserDetailDTO) {
-    console.log("Usuário selecionado: ", current)
+    setUserClicked(current);
+    setOpenModalConfirmation(true)
+  }
+
+  function handleDeactivateEntityRow(action: boolean){
+  
+    setOpenModalConfirmation(false)
+      
+    if (!action || !userClicked) return
+  
+    mutationDeleteUser.mutate(userClicked.id)
   }
 
   return (
@@ -86,7 +123,7 @@ export default function ManageUsers() {
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               setSearchApplied(searchBar)
-              queryClient.invalidateQueries({ queryKey: ['orders'] })
+              queryClient.invalidateQueries({ queryKey: ['users'] })
             }
           }}
           fullWidth
@@ -98,12 +135,43 @@ export default function ManageUsers() {
           state={stateQuery}
           rows={listUsers}
           columns={DataTableColumnsUsers({
-            onClickUpdateItem: (id) => navigate(`/os/${id}`),
+            onClickUpdateItem: (id) => navigate(`/admin/usuario/${id}`),
             onClickViewItem: (current) => handleView(current), 
             onClickDeleteItem: (current) => handleDelete(current),
           })}
         />
       </Box>
+
+      <ToastContainer
+        open={openToast === "success_deleted"}
+        message={"Usuário desativado com sucesso."}
+        severity="success"
+        onClose={() => setOpenToast("")}
+      />
+
+      <ToastContainer
+        open={openToast === "error_deleted"}
+        message={"Ocorreu um erro ao desativar esse usuário."}
+        severity="error"
+        onClose={() => setOpenToast("")}
+      />
+
+      {userClicked && (
+        <ModalUserWithDetails
+          open={openModalDetails}
+          data={userClicked}
+          fields={userFields}
+          handleClose={() => setOpenModalDetails(false)}
+        />
+      )}
+
+      <ModalConfirmation
+        open={openModalConfirmation}
+        title={"Desativar o usuário atual"}
+        description={`Tem certeza que gostaria de desativar o usuário atual? Essa operacão não é inversivel.`}
+        handleClose={() => setOpenModalConfirmation(false)}
+        handleAnswer={handleDeactivateEntityRow}
+      />
     </>
   )
 }
