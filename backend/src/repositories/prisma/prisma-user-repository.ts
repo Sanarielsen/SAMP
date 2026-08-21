@@ -10,7 +10,8 @@ import {
   User,
   UserPasswordUpdateDTO,
   UserPublicDTO,
-  CreateUserWithoutPasswordDTO
+  CreateUserWithoutPasswordDTO,
+  UserDetailsForAdminDTO
 } from "@shared/types/user";
 import { OptionsControlledBox } from "@shared/types/values";
 
@@ -126,7 +127,7 @@ export class PrismaUserRepository implements UserRepository {
     return user
   }
 
-  async findManyBySearchWithRelations(search: string): Promise<UserDetailDTO[]> {
+  async findManyBySearchWithRelations(search: string): Promise<UserDetailsForAdminDTO[]> {
     const users = await prisma.user.findMany({
       where: {
         deletedAt: null,
@@ -157,6 +158,7 @@ export class PrismaUserRepository implements UserRepository {
         id: true,
         name: true,
         email: true,
+        password_hash: true,
         roleId: true,
         userRole: {
           select: {
@@ -173,6 +175,7 @@ export class PrismaUserRepository implements UserRepository {
       id: user.id,
       name: user.name,
       email: user.email,
+      validated: user.password_hash ? true : false,
       userRoleId: user.userRole!.id,
       userRoleName: user.userRole!.name,
       createdAt: user.createdAt,

@@ -7,6 +7,7 @@ import {
   UpdateUserDTO, 
   User, 
   UserDetailDTO, 
+  UserDetailsForAdminDTO, 
   UserPasswordUpdateDTO, 
   UserPublicDTO
 } from "@shared/types/user"
@@ -22,7 +23,7 @@ export interface UserRepository {
   findByIdWithoutPassword(id: string): Promise<UserPublicDTO | null>
   findByEmail(email: string): Promise<UserDetailDTO|null>
   findAuthByEmail(email: string): Promise<User|null>
-  findManyBySearchWithRelations(search: string): Promise<UserDetailDTO[]>
+  findManyBySearchWithRelations(search: string): Promise<UserDetailsForAdminDTO[]>
 
   findManyOptions(): Promise<OptionsControlledBox[] | null>
 }

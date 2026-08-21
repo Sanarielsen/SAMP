@@ -64,10 +64,9 @@ export default function ManageUsers() {
       },
   })
 
-  const stateQuery =
-    isSuccess ? "SUCCESS" : 
-    isLoading ? "LOADING" :
-    isError ? "ERROR" : "IDLE";
+  function handleChangePassword(current: UserDetailDTO) {
+    console.log("Muda a senha: ", current)
+  }
 
   function handleView(current: UserDetailDTO) {
     setUserClicked(current);
@@ -87,6 +86,11 @@ export default function ManageUsers() {
   
     mutationDeleteUser.mutate(userClicked.id)
   }
+
+  const stateQuery =
+    isSuccess ? "SUCCESS" : 
+    isLoading ? "LOADING" :
+    isError ? "ERROR" : "IDLE";
 
   return (
     <>
@@ -135,6 +139,7 @@ export default function ManageUsers() {
           state={stateQuery}
           rows={listUsers}
           columns={DataTableColumnsUsers({
+            onClickUpdatePasswordItem: (id) => navigate(`/admin/usuario/${id}/alterar-senha`),
             onClickUpdateItem: (id) => navigate(`/admin/usuario/${id}`),
             onClickViewItem: (current) => handleView(current), 
             onClickDeleteItem: (current) => handleDelete(current),

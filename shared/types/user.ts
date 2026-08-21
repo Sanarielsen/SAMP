@@ -67,6 +67,17 @@ export type UserPublicDTO = {
   deletedAt:  Date | null,
 }
 
+export type UserDetailsForAdminDTO = {
+  id:           string,
+  name:         string,
+  email:        string,
+  userRoleId:   string,
+  userRoleName: string,
+  validated:    boolean,
+  createdAt:    Date,
+  updatedAt:    Date | null,
+}
+
 export type UserPasswordUpdateVisualDTO = {
   id:           string,
   password:     string,

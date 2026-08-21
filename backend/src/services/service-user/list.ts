@@ -5,7 +5,7 @@ import { NonExistUserError } from "@/services/errors/non-exist-user-error";
 import { UnauthorizedUserError } from "@/services/errors/unauthorized-user-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
-import { UserDetailDTO } from "@shared/types/user";
+import { UserDetailDTO, UserDetailsForAdminDTO } from "@shared/types/user";
 
 
 interface ListUserUseCaseRequest {
@@ -23,7 +23,7 @@ export class ListUserUseCase {
   async execute({
     id,
     search
-  }: ListUserUseCaseRequest): Promise<UserDetailDTO[]> {
+  }: ListUserUseCaseRequest): Promise<UserDetailsForAdminDTO[]> {
 
     const userLogged = await this.userRepository.findById(id)
 

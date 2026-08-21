@@ -75,6 +75,7 @@ export default function Router() {
         <Route path="admin/usuarios" element={<ManageUsers />} />
         <Route path="admin/usuario" element={<ManageUser />} />
         <Route path="admin/usuario/:id" element={<ManageUser />} />
+        <Route path="admin/usuario/:id/alterar-senha" element={<UpdatePassword />} />
         
         <Route path="sobre" element={<AboutPage />} />
       </Route>
