@@ -1,5 +1,5 @@
 import { PrismaPaymentMethodsRepository } from '@/repositories/prisma/prisma-payment-method-repository'
-import { PostPaymentMethodMethodUseCase } from '@/services/service-payment-method/post'
+import { PostPaymentMethodMethodUseCase } from '@/services/use-cases/payment-method/post'
 
 
 export function makePostPaymentMethod() {

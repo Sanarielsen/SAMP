@@ -1,6 +1,6 @@
 import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository"
 import { PrismaUserRoleRepository } from "@/repositories/prisma/prisma-user-role-repository"
-import { DeleteUserUseCase } from "@/services/service-user/delete"
+import { DeleteUserUseCase } from "@/services/use-cases/user/delete"
 
 
 export function makeDeleteUser() {

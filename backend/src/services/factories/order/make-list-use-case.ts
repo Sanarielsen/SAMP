@@ -1,4 +1,4 @@
-import { ListOrderUseCase } from "@/services/service-order/list";
+import { ListOrderUseCase } from "@/services/use-cases/order/list";
 
 import { PrismaOrderRepository } from "@/repositories/prisma/prisma-order-repository";
 import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository";

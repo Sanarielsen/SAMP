@@ -105,7 +105,7 @@ export class PrismaOrderRepository implements OrderRepository {
                 contains: search,
                 mode: 'insensitive'
               },
-              descripton: {
+              description: {
                 contains: search,
                 mode: 'insensitive'
               }

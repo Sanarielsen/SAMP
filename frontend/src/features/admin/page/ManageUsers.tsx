@@ -64,10 +64,6 @@ export default function ManageUsers() {
       },
   })
 
-  function handleChangePassword(current: UserDetailDTO) {
-    console.log("Muda a senha: ", current)
-  }
-
   function handleView(current: UserDetailDTO) {
     setUserClicked(current);
     setOpenModalDetails(true);

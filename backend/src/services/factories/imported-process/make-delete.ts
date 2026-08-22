@@ -1,5 +1,5 @@
 import { PrismaImportedProcessRepository } from "@/repositories/prisma/prisma-imported-process-repository"
-import { DeleteImportedProcessUseCase } from "@/services/service-imported-process/delete";
+import { DeleteImportedProcessUseCase } from "@/services/use-cases/imported-process/delete";
 
 
 export function makeDeleteImportedProcess() {

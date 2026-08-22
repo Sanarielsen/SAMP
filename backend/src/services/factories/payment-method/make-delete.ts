@@ -1,5 +1,5 @@
 import { PrismaPaymentMethodsRepository } from "@/repositories/prisma/prisma-payment-method-repository";
-import { DeletePaymentMethodUseCase } from "@/services/service-payment-method/delete";
+import { DeletePaymentMethodUseCase } from "@/services/use-cases/payment-method/delete";
 
 
 export function makeDeletePaymentMethod() {

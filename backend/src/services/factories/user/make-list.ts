@@ -1,4 +1,4 @@
-import { ListUserUseCase } from "@/services/service-user/list";
+import { ListUserUseCase } from "@/services/use-cases/user/list";
 
 import { PrismaUserRoleRepository } from "@/repositories/prisma/prisma-user-role-repository";
 import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository";

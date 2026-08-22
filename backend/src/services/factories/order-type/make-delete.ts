@@ -1,5 +1,5 @@
 import { PrismaOrderTypeRepository } from '@/repositories/prisma/order-type'
-import { DeleteOrderTypeUseCase } from '@/services/service-order-type/delete'
+import { DeleteOrderTypeUseCase } from '@/services/use-cases/order-type/delete'
 
 
 export function makeDeleteOrderType() {

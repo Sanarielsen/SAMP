@@ -72,11 +72,11 @@ export default function OrderNewPayment() {
   const onSubmit: SubmitHandler<NewPaymentSchemaFormData> = async (data) => {
 
     const payload: CreatePaymentWithInstallmentsDTO = {
-      orderId: orderId!,
+      orderId,
       totalInstallments: Number(data.totalInstallments),
       totalAmountInCents: convertCurrencyToCents(Number(data.totalAmountInCents)),
       firstDueDate: parseBRDate(data.firstDueDate),
-      methodId: data.methodId,
+      methodId: Number(data.methodId),
       observation: data.observation
     }
     

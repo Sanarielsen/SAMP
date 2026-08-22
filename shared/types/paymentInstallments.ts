@@ -2,7 +2,7 @@ export interface PaymentInstallment {
   id: string
 
   paymentId: string
-  methodId: string
+  methodId: number
   installment: number
   amountInCents: number
 
@@ -22,7 +22,7 @@ export type CreatePaymentInstallmentDTO = {
   installment:      number
   amountInCents:    number
   dueDate:          Date
-  methodId:           string
+  methodId:         number
 
   observation?:      string | null
 }
@@ -30,7 +30,7 @@ export type CreatePaymentInstallmentDTO = {
 export type UpdatePaymentInstallmentDTO = {
   id: string
 
-  methodId?:        string
+  methodId?:        number
   installment?:     number
   amountInCents?:   number
 

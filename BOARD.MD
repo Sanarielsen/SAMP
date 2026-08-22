@@ -183,3 +183,78 @@ Process (926450913)
 - OrderType
 - PaymentMethod
 - 
+
+- CHANGES FEATURE-22-fixes-some-features-to-the-last-version
+- 10 - Uma formatacao única de datas;
+- 9 - Os comprovantes do pagamento;
+- 8 - Mudar a forma como a consulta do CEP é feita;
+- 6 - Atualizacao de usuário nao desativa a senha de novo;
+- 5- Verificar porque a pesquisa dos usuários não funciona;
+
+#### Fixes
+- Organizacao de imports
+- Controle de estado no gerenciamento dos representantes.
+- Controle de estado no gerenciamento das ordens de servico.
+- Tratamento da O.S devido a troca do parametro de descripton para description.
+- Verificar o porque dos pagamentos não cria (Era o méotdo de pagamento).
+
+# Funcionalidades
+
+## Cliente
+- [OK] Adicionar novo cliente
+- [OK] Pesquisa de um cliente
+- [OK] Atualizar um cliente
+- [OK] Visualizar um cliente
+- [ ] "Deletar" um cliente
+
+## Agenda
+- [OK] Adicionar nova agenda
+- [ ] Pesquisa de uma agenda
+- [ ] Atualizar uma agenda
+- [ ] Visualizar uma agenda
+- [ ] "Deletar" uma agenda
+
+## Representante
+- [OK] Adicionar novo representante
+- [OK] Pesquisa de um representante
+- [OK] Atualizar um representante
+- [OK] Visualizar um representante
+- [OK] "Deletar" um representante
+
+## O.S
+- [OK] Adicionar nova Ordem de servico
+- [OK] Pesquisa de uma Ordem de servico
+- [OK] Atualizar uma Ordem de servico
+- [OK] Visualizar uma Ordem de servico
+- [ ] "Deletar" uma Ordem de servico
+- [OK] Adicionar novo pagamento
+- [ ] Atualizacao de uma parcela do pagamento
+- [OK] Listagem de parcelas do pagamento
+
+## Processos
+- [OK] Importar/adicionar novo processo
+- [OK] Pesquisa de um processo
+- [OK] Atualizar um processo
+- [OK] Visualizar um processo
+- [OK] Importar/adicionar nova publicacao
+- [OK] Pesquisa de uma publicacao
+- [OK] Atualizar uma publicacao
+- [OK] Visualizar uma publicacao
+- [OK] "Deletar" uma publicacao
+
+## Admin
+- [OK] Adicionar novo usuário
+- [?] Pesquisa de um usuário
+- [OK] Atualizar um usuário
+- [OK] Visualizar um usuário
+- [OK] "Deletar" uma usuário
+- [OK] Adicionar novo tipo de pagamento
+- [OK] Pesquisa de um tipo de pagamento
+- [OK] Atualizar um tipo de pagamento
+- [OK] Visualizar um tipo de pagamento
+- [OK] "Deletar" uma tipo de pagamento
+- [OK] Adicionar novo tipo de ordem de servico
+- [OK] Pesquisa de um tipo de ordem de servico
+- [OK] Atualizar um tipo de ordem de servico
+- [OK] Visualizar um tipo de ordem de servico
+- [OK] "Deletar" uma tipo de ordem de servico

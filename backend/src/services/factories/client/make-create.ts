@@ -1,5 +1,5 @@
 import { PrismaClientRepository } from '@/repositories/prisma/prisma-client-repository'
-import { CreateClientUseCase } from '@/services/service-client/post'
+import { CreateClientUseCase } from '@/services/use-cases/client/post'
 import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository'
 
 export function makeCreateClientUseCase() {

@@ -1,5 +1,5 @@
 import { PrismaClientRepository } from '@/repositories/prisma/prisma-client-repository'
-import { GetClientUseCase } from '@/services/service-client/get'
+import { GetClientUseCase } from '@/services/use-cases/client/get'
 
 export function makeGetClientProfileUseCase() {
   const clientRepository = new PrismaClientRepository()

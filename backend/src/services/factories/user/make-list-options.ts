@@ -1,5 +1,5 @@
 import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository";
-import { ListOptionsUserUseCase } from "@/services/service-user/list-options";
+import { ListOptionsUserUseCase } from "@/services/use-cases/user/list-options";
 
 
 export function makeListWithOptionsUserUseCase() {

@@ -1,5 +1,5 @@
 import { PrismaOrderTypeRepository } from "@/repositories/prisma/order-type";
-import { CreateOrderTypeUseCase } from "@/services/service-order-type/create";
+import { CreateOrderTypeUseCase } from "@/services/use-cases/order-type/create";
 
 
 export function makeCreateOrderType() {
