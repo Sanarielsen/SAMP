@@ -1,6 +1,6 @@
-import { OrderRepository } from "@/repositories/order-repository"
-import { PaymentRepository } from "@/repositories/payment-repository"
-import { PaymentInstallmentRepository } from "@/repositories/payment-installments-repository"
+import { OrderRepository } from "@/repositories/order"
+import { PaymentRepository } from "@/repositories/payment"
+import { PaymentInstallmentRepository } from "@/repositories/payment-installment"
 
 import { InvalidResourceError } from "@/services/errors/invalid-resource-error"
 

@@ -1,4 +1,5 @@
-import type { Field } from "@/utils/field";
+import type { Field } from "@/types/field";
+import { formatDate } from "@/utils/manageDate";
 
 import type { UserDetailDTO } from "@shared/types/user";
 
@@ -18,10 +19,10 @@ export const userFields: Field<UserDetailDTO>[] = [
   },
   {
     title: 'Criado em',
-    get: (c: UserDetailDTO) => new Date(c.createdAt).toLocaleDateString(),
+    get: (c: UserDetailDTO) => formatDate(c.createdAt, true),
   },
   {
     title: 'Atualizado em',
-    get: (c: UserDetailDTO) => c.updatedAt ? new Date(c.updatedAt).toLocaleDateString() : ""
+    get: (c: UserDetailDTO) => c.updatedAt ? formatDate(c.updatedAt, true) : ""
   },
 ]

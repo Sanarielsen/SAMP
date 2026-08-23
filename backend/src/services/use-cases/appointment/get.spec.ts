@@ -1,4 +1,4 @@
-import { InMemoryAppointmentRepository } from "@/repositories/in-memory/in-memory-appointment-repository";
+import { InMemoryAppointmentRepository } from "@/repositories/in-memory/appointment";
 import { 
   beforeEach,
   describe,

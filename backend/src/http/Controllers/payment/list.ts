@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
 import { InvalidCredentialsError } from '@/services/errors/invalid-credentials-error';
-import { makeListPaymentUseCase } from '@/services/factories/payment/make-list-payment-use-case';
+import { makeListPaymentUseCase } from '@/services/factories/payment/make-list-payment';
 
 export async function getOrderPayments(request: FastifyRequest, reply: FastifyReply) {
   

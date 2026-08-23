@@ -1,5 +1,5 @@
-import { UserRepository } from "@/repositories/user-repository";
-import { UserRoleRepository } from "@/repositories/user-role-repository";
+import { UserRepository } from "@/repositories/user";
+import { UserRoleRepository } from "@/repositories/user-role";
 
 import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";
 

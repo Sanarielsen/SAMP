@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { makeDeletePaymentUseCase } from '@/services/factories/payment/make-delete-use-case'
+import { makeDeletePaymentUseCase } from '@/services/factories/payment/make-delete'
 
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error'
 

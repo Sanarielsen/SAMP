@@ -1,4 +1,3 @@
-import { formatDateTimeBrazil } from "@/utils/formatDateTimeBrazil"
 import { 
   IconButton, 
   Stack, 
@@ -11,6 +10,8 @@ import {
   type GridColDef
 } from "@mui/x-data-grid"
 import InfoIcon from '@mui/icons-material/Info';
+
+import { formatDate } from "@/utils/manageDate";
 
 import type { Appointment } from "@shared/types/appointment"
 
@@ -29,7 +30,7 @@ export default function DataTableAppointmentColumns({
       field: "appointmentAt",
       headerName: "Data da agenda",
       flex: 1,
-      valueFormatter: (value) => formatDateTimeBrazil(value),
+      valueFormatter: (value) => formatDate(value),
     },
     {
       field: "description",

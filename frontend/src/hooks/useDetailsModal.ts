@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import type { Field } from "@/utils/field";
+import type { Field } from "@/types/field";
 
 type DetailsModalPayload<T = unknown> = {
   title: string;

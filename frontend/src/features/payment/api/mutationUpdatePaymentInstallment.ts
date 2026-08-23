@@ -2,7 +2,7 @@ import { useMutation, type UseMutationOptions } from '@tanstack/react-query'
 
 import { api } from '@/api/axios'
 
-import type { UpdatePaymentInstallmentDTO } from '@shared/types/paymentInstallments'
+import type { UpdatePaymentInstallmentDTO } from '@shared/types/paymentInstallment'
 
 
 export type PaymentInstallmentPatchPayload = UpdatePaymentInstallmentDTO 
@@ -11,7 +11,7 @@ async function patchPaymentInstallment(
   payload: PaymentInstallmentPatchPayload
 ): Promise<void> {
   const { data } = await api.patch(`/payment/installment/${payload.id}`, payload)
-  console.log("Payload: ", payload)
+
   return data
 }
 

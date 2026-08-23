@@ -1,6 +1,6 @@
 import { 
   InMemoryPaymentMethodRepository
-} from '@/repositories/in-memory/in-memory-payment-method-repository'
+} from '@/repositories/in-memory/payment-method'
 
 import { PaymentMethod } from '@shared/types/paymentMethod'
 

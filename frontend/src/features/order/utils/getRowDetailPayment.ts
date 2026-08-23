@@ -1,4 +1,5 @@
-import type { Field } from "@/utils/field";
+import type { Field } from "@/types/field";
+import { formatDate } from "@/utils/manageDate";
 
 import type { PaymentDetailDTO } from "@shared/types/payment";
 
@@ -10,7 +11,7 @@ export const paymentFields: Field<PaymentDetailDTO>[] = [
   {
     title: 'Último pagamento',
     get: (c: PaymentDetailDTO) => c.lastDueDate ? 
-      new Date(c.lastDueDate).toLocaleDateString() 
+      formatDate(c.lastDueDate)
       : "-",
   },
   {
@@ -19,13 +20,13 @@ export const paymentFields: Field<PaymentDetailDTO>[] = [
   },
   {
     title: 'Data de criação',
-    get: (c: PaymentDetailDTO) => new Date(c.createdAt).toLocaleDateString(),
+    get: (c: PaymentDetailDTO) => formatDate(c.createdAt, true),
     
   },
   {
     title: 'Data de atualização',
     get: (c: PaymentDetailDTO) => c.updatedAt ? 
-      new Date(c.updatedAt).toLocaleDateString() 
+      formatDate(c.updatedAt, true)
       : "-",
   },
 ]

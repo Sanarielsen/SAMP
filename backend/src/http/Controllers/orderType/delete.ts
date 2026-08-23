@@ -3,7 +3,7 @@ import {
   FastifyRequest 
 } from "fastify";
   
-import { makeDeleteOrderType } from "@/services/factories/order-type/make-delete";
+import { makeDeleteOrderTypeUseCase } from "@/services/factories/order-type/make-delete";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
   
@@ -12,7 +12,7 @@ export async function deleteOrderType(request: FastifyRequest, reply: FastifyRep
   const { id } = request.params as { id: number }
 
   try {
-    const useCase = makeDeleteOrderType();
+    const useCase = makeDeleteOrderTypeUseCase();
 
     await useCase.execute(Number(id))
 

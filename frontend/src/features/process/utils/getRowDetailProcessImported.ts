@@ -1,5 +1,5 @@
-import type { Field } from "@/utils/field";
-import { formatDateTimeBrazil } from "@/utils/formatDateTimeBrazil";
+import type { Field } from "@/types/field";
+import { formatDate } from "@/utils/manageDate";
 
 import type { ImportedProcess } from "@shared/types/importedProcess";
 
@@ -13,10 +13,6 @@ export const processImportedFields: Field<ImportedProcess>[] = [
     title: 'Titular',
     get: (field: ImportedProcess) => field.holder,
   },
-  // {
-  //   title: 'Procurador',
-  //   get: (field: ImportedProcess) => field.attorney,
-  // },
   {
     title: 'Apresentação',
     get: (field: ImportedProcess) => field.presentation,
@@ -37,32 +33,20 @@ export const processImportedFields: Field<ImportedProcess>[] = [
     title: 'Especificação',
     get: (field: ImportedProcess) => field.niceSpecification,
   },
-  // {
-  //   title: 'Especificação traduzida',
-  //   get: (field: ImportedProcess) => field.translatedSpecification,
-  // },
-  // {
-  //   title: 'Registro internacional',
-  //   get: (field: ImportedProcess) => field.internationalRegistrationNumber,
-  // },
-  // {
-  //   title: 'CFE',
-  //   get: (field: ImportedProcess) => field.cfe,
-  // },
   {
     title: 'Data de depósito',
-    get: (field: ImportedProcess) => formatDateTimeBrazil(field.filingDate),
+    get: (field: ImportedProcess) => formatDate(field.filingDate),
   },
   {
     title: 'Data de recebimento',
-    get: (field: ImportedProcess) => formatDateTimeBrazil(field.grantDate),
+    get: (field: ImportedProcess) => formatDate(field.grantDate),
   },
   {
     title: 'Data de concessão',
-    get: (field: ImportedProcess) => formatDateTimeBrazil(field.expirationDate),
+    get: (field: ImportedProcess) => formatDate(field.expirationDate),
   },
   {
     title: 'Criado em',
-    get: (field: ImportedProcess) => formatDateTimeBrazil(field.createdAt),
+    get: (field: ImportedProcess) => formatDate(field.createdAt),
   },
 ]

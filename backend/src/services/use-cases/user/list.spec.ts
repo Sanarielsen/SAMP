@@ -6,8 +6,8 @@ import {
 } from "vitest";
 
 import { ListUserUseCase } from "@/services/use-cases/user/list";
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
-import { InMemoryUserRoleRepository } from "@/repositories/in-memory/in-memory-user-role-repository";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
+import { InMemoryUserRoleRepository } from "@/repositories/in-memory/user-role";
 import { makeUser } from "@/services/factories/user/make-entity";
 import { makeUserRole } from "@/services/factories/user-role/make-entity";
 import { NonExistUserError } from "@/services/errors/non-exist-user-error";

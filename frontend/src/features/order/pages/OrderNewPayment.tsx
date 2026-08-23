@@ -24,14 +24,16 @@ import { ControlledInputAdornment } from "@/components/ControlledInputAdornment"
 import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { convertCurrencyToCents } from "@/features/order/utils/convertCurrencyToCents";
-import { parseBRDate } from "@/utils/formatDate";
 
 import type { CreatePaymentWithInstallmentsDTO } from "@shared/types/payment";
+import { parseDate } from "@/utils/manageDate";
 
 
 export default function OrderNewPayment() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const { id: orderId } = useParams();
 
@@ -62,9 +64,11 @@ export default function OrderNewPayment() {
   const mutationPostPaymentWithInstallments =
     useMutationPostPaymentWithInstallments({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success")
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error")
       },
   })
@@ -75,7 +79,7 @@ export default function OrderNewPayment() {
       orderId,
       totalInstallments: Number(data.totalInstallments),
       totalAmountInCents: convertCurrencyToCents(Number(data.totalAmountInCents)),
-      firstDueDate: parseBRDate(data.firstDueDate),
+      firstDueDate: parseDate(data.firstDueDate),
       methodId: Number(data.methodId),
       observation: data.observation
     }

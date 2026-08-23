@@ -1,5 +1,5 @@
-import { PaymentRepository } from "@/repositories/payment-repository";
-import { OrderRepository } from "@/repositories/order-repository";
+import { PaymentRepository } from "@/repositories/payment";
+import { OrderRepository } from "@/repositories/order";
 
 import { InvalidResourceError } from "@/services/errors/invalid-resource-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
@@ -19,6 +19,8 @@ export class PostPaymentUseCase {
   async execute(data: CreatePaymentDTO): Promise<PostPaymentUseCaseResponse> {
 
     const order = await this.orderRepository.findById(data.orderId);  
+
+    console.log("EVENTO: ", order);
   
     if (!order) {
       throw new ResourceNotFoundError();

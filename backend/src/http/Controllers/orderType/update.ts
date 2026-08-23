@@ -4,7 +4,7 @@ import {
 } from "fastify";
 import { z } from "zod";
 
-import { makeUpdateOrderType } from "@/services/factories/order-type/make-update";
+import { makeUpdateOrderTypeUseCase } from "@/services/factories/order-type/make-update";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 
@@ -20,7 +20,7 @@ export async function updateOrderType(request: FastifyRequest, reply: FastifyRep
   const { id } = request.params as { id: number }
 
   try {
-    const useCase = makeUpdateOrderType();
+    const useCase = makeUpdateOrderTypeUseCase();
 
     await useCase.execute({
       id: Number(id),

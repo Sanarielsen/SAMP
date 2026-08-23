@@ -1,6 +1,6 @@
 import { hash } from 'bcryptjs'
 
-import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-user-repository'
+import { InMemoryUserRepository } from '@/repositories/in-memory/user'
 
 import { CreateUserDTO } from '@shared/types/user'
 

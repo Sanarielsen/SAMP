@@ -1,10 +1,10 @@
 import { compare } from "bcryptjs";
 
-import { UserRepository } from "@/repositories/user-repository";
+import { UserRepository } from "@/repositories/user";
 import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";
 
 import { User, UserDetailDTO } from "@shared/types/user";
-import { UserRoleRepository } from "@/repositories/user-role-repository";
+import { UserRoleRepository } from "@/repositories/user-role";
 import { ResourceNotFoundError } from "../../errors/resource-not-found-error";
 
 

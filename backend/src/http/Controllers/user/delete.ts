@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { makeDeleteUser } from '@/services/factories/user/make-delete';
+import { makeDeleteUserUseCase } from '@/services/factories/user/make-delete';
 import { InvalidCredentialsError } from '@/services/errors/invalid-credentials-error';
 import { UnauthorizedUserError } from '@/services/errors/unauthorized-user-error';
 
@@ -11,7 +11,7 @@ export async function deleteUser(request: FastifyRequest, reply: FastifyReply) {
   const userLoggedId = request.user.sub
 
   try {
-    const useCase = makeDeleteUser();
+    const useCase = makeDeleteUserUseCase();
 
     await useCase.execute(
       userLoggedId,

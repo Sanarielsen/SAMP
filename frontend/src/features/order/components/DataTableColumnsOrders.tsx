@@ -1,5 +1,16 @@
-import { GridDeleteIcon, GridLoadIcon, GridSearchIcon, type GridColDef } from "@mui/x-data-grid";
-import { IconButton, Stack, Tooltip } from "@mui/material";
+import { 
+  GridDeleteIcon, 
+  GridLoadIcon, 
+  GridSearchIcon, 
+  type GridColDef 
+} from "@mui/x-data-grid";
+import { 
+  IconButton, 
+  Stack, 
+  Tooltip
+} from "@mui/material";
+import { formatDate } from "@/utils/manageDate";
+
 
 interface OrderDetailDTO {
   id:           string
@@ -19,7 +30,6 @@ type ColumnsOrdersProps = {
   onClickSeeItem: (currentItem: OrderDetailDTO) => void
   onClickDeleteItem: (currentItem: OrderDetailDTO) => void
 }
-
 
 export default function DataTableColumnsOrder({
   onClickUpdateItem, onClickSeeItem, onClickDeleteItem
@@ -41,7 +51,7 @@ export default function DataTableColumnsOrder({
       flex: 1,
       valueFormatter: (value) => {
         if (!value) return "-"
-        return new Date(value).toLocaleDateString("pt-BR")
+        return formatDate(value)
       },
     },
     {

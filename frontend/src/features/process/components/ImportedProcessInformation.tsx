@@ -12,6 +12,7 @@ import HeaderPage from "@/components/HeaderPage";
 
 import type { ImportedProcess } from "@shared/types/importedProcess";
 import BoxLoading from "@/components/BoxLoading";
+import { formatDate } from "@/utils/manageDate";
 
 
 interface ImportedProcessInformationProps {
@@ -110,13 +111,13 @@ export default function ImportedProcessInformation({
         <Grid size={{ xs: 6, sm: 4 }}>
           <GroupTextDate
             title="Criado:"
-            value={data.createdAt}
+            value={formatDate(data.createdAt, true)}
           />
         </Grid>
         <Grid size={{ xs: 6, sm: 4 }}>
           <GroupTextDate
             title="Atualizado:"
-            value={data.updatedAt}
+            value={formatDate(data.updatedAt, true)}
           />
         </Grid>
       </Grid>

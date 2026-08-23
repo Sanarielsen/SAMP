@@ -1,4 +1,4 @@
-import { PaymentMethodRepository } from "@/repositories/payment-method-repository";
+import { PaymentMethodRepository } from "@/repositories/payment-method";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 import { PaymentMethod } from "@shared/types/paymentMethod";

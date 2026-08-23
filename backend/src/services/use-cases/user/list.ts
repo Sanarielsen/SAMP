@@ -1,5 +1,5 @@
-import { UserRepository } from "@/repositories/user-repository";
-import { UserRoleRepository } from "@/repositories/user-role-repository";
+import { UserRepository } from "@/repositories/user";
+import { UserRoleRepository } from "@/repositories/user-role";
 
 import { NonExistUserError } from "@/services/errors/non-exist-user-error";
 import { UnauthorizedUserError } from "@/services/errors/unauthorized-user-error";

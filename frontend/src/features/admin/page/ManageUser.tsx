@@ -18,6 +18,7 @@ import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import HeaderManagePage from "@/components/HeaderManagePage";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { 
   manageUserSchema, 
   type ManageUserSchemaFormData 
@@ -27,6 +28,7 @@ import { emptyUser } from "@/features/admin/utils/getEmptyUser";
 
 export default function ManageUser() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = !!id;
@@ -55,9 +57,11 @@ export default function ManageUser() {
   const mutationPostUser =
     useMutationPostUserWithoutPassword({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success_created")
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error_created")
       },
   })
@@ -65,9 +69,11 @@ export default function ManageUser() {
   const mutationPatchUser =
     useMutationPatchUser({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success_updated")
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error_updated")
       },
   })

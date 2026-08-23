@@ -6,7 +6,7 @@ import {
   z
 } from "zod";
 
-import { makeUpdateRepresentativeUseCase } from "@/services/factories/representatives/make-update-use-case";
+import { makeUpdateRepresentativeUseCase } from "@/services/factories/representatives/make-update";
 
 
 export async function updateRepresentative(request: FastifyRequest, reply: FastifyReply) {

@@ -14,7 +14,7 @@ import {
 } from "@mui/material"
 import { GridCloseIcon } from "@mui/x-data-grid"
 
-import type { Field } from "@/utils/field"
+import type { Field } from "@/types/field"
 import type { RepresentativeDetailsDTO } from "@shared/types/representative"
 
 

@@ -1,4 +1,4 @@
-import { PaymentMethodRepository } from "@/repositories/payment-method-repository";
+import { PaymentMethodRepository } from "@/repositories/payment-method";
 
 import { PaymentMethod } from "@shared/types/paymentMethod";
 

@@ -1,7 +1,7 @@
 import { Client } from "@prisma/client"
-import { ClientRepository } from "@/repositories/client-repository"
+import { ClientRepository } from "@/repositories/client"
 import { ResourceAlreadyExistsError } from "@/services/errors/resource-already-exists-error"
-import { UserRepository } from "@/repositories/user-repository"
+import { UserRepository } from "@/repositories/user"
 import { NonExistUserError } from "@/services/errors/non-exist-user-error"
 import { randomUUID } from "node:crypto"
 

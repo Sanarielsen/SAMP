@@ -1,5 +1,6 @@
 import type { Client } from "@/features/client/types/clients";
-import type { Field } from "@/utils/field";
+import type { Field } from "@/types/field";
+import { formatDate } from "./manageDate";
 
 export const clientFields: Field<Client>[] = [
   {
@@ -20,7 +21,7 @@ export const clientFields: Field<Client>[] = [
   },
   {
     title: 'Data de fundacão',
-    get: (c: Client) => new Date(c.dataFundation).toLocaleDateString(),
+    get: (c: Client) => formatDate(c.dataFundation),
   },
   {
     title: 'Endereco de localidade',
@@ -40,10 +41,10 @@ export const clientFields: Field<Client>[] = [
   },
   {
     title: 'Criado em',
-    get: (c: Client) => new Date(c.createdAt).toLocaleDateString(),
+    get: (c: Client) => formatDate(c.createdAt, true),
   },
   {
     title: 'Atualizado em',
-    get: (c: Client) => new Date(c.updatedAt).toLocaleDateString(),
+    get: (c: Client) => formatDate(c.updatedAt, true),
   },
 ]

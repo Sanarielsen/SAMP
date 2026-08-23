@@ -6,5 +6,5 @@ export type OptionsMenuActions = {
 
 export type OptionsControlledBox = {
   label: string
-  value: string
+  value: string | number
 }

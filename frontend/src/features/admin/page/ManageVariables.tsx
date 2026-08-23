@@ -20,6 +20,7 @@ import { useMutationDeleteOrderType } from "@/features/admin/api/mutationDeleteO
 import { useMutationPatchPaymentMethod } from "@/features/admin/api/mutationUpdatePaymentMethod";
 import AccordionGroup from "@/components/AccordionGroup";
 import HeaderPage from "@/components/HeaderPage";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ModalVariableEntity from "@/components/ModalVariableEntity";
 import ToastContainer from "@/components/Toast";
@@ -33,7 +34,7 @@ import {
   type ManageOrderTypeFormInput, 
   type ManageOrderTypeFormOutput 
 } from "@/features/admin/schema/manageOrderType";
-import { updateRowPaymentMethodFields } from "@/features/admin/utils/updateRowPaymentMethodFields";
+import { manageRowPaymentMethodFields } from "@/features/admin/utils/managePaymentMethodFields";
 import { manageRowOrderTypeFields } from "@/features/admin/utils/manageRowOrderTypeFields";
 
 import type { 
@@ -48,6 +49,8 @@ import type {
 
 export default function ManageVariables() {
   const queryClient = useQueryClient();
+
+  const actionAudio = useAudioFeedback();
 
   const [openModalConfirmation, setOpenModalConfirmation] = useState(false)
   const [titleModalConfirmation, setTitleModalConfirmation] = useState("")
@@ -172,11 +175,13 @@ export default function ManageVariables() {
   const mutationPostPaymentMethod =
     useMutationPostPaymentMethod({
       onSuccess: () => {
+        actionAudio.playSuccess();
         setOpenToast("");
         executeActionAfterRequest("success_payment_method_created");
       },
 
       onError: () => {
+        actionAudio.playError();
         setOpenToast("error_payment_method_created");
       },
     });
@@ -184,11 +189,13 @@ export default function ManageVariables() {
   const mutationPatchPaymentMethod =
     useMutationPatchPaymentMethod({
       onSuccess: () => {
+        actionAudio.playSuccess();
         setOpenToast("");
         executeActionAfterRequest("success_payment_method_updated");
       },
 
       onError: () => {
+        actionAudio.playError();
         setOpenToast("error_payment_method_updated");
       },
     });
@@ -196,11 +203,13 @@ export default function ManageVariables() {
   const mutationPostOrderType =
     useMutationPostOrderType({
       onSuccess: () => {
+        actionAudio.playSuccess();
         setOpenToast("");
         executeActionAfterRequest("success_order_type_created");
       },
 
       onError: () => {
+        actionAudio.playError();
         setOpenToast("error_order_type_created");
       },
     });
@@ -208,11 +217,13 @@ export default function ManageVariables() {
   const mutationPatchOrderType =
     useMutationPatchOrderType({
       onSuccess: () => {
+        actionAudio.playSuccess();
         setOpenToast("");
         executeActionAfterRequest("success_order_type_updated");
       },
 
       onError: () => {
+        actionAudio.playError();
         setOpenToast("error_order_type_updated");
       },
     });
@@ -220,11 +231,13 @@ export default function ManageVariables() {
   const mutationDeletePaymentMethod =
     useMutationDeletePaymentMethod({
       onSuccess: () => {
+        actionAudio.playSuccess();
         setOpenToast("");
         executeActionAfterRequest("success_payment_method_deleted");
       },
 
       onError: () => {
+        actionAudio.playError();
         setOpenToast("error_payment_method_deleted");
       },
     });
@@ -232,11 +245,13 @@ export default function ManageVariables() {
   const mutationDeleteOrderType =
     useMutationDeleteOrderType({
       onSuccess: () => {
+        actionAudio.playSuccess();
         setOpenToast("");
         executeActionAfterRequest("success_order_type_deleted");
       },
 
       onError: () => {
+        actionAudio.playError();
         setOpenToast("error_order_type_deleted");
       },
     });
@@ -281,7 +296,6 @@ export default function ManageVariables() {
   }
 
   function handleDelete(id: number, entity: string) {
-    console.log("Entidade atual: ", entity)
     setEntitySelected(entity);
     switch (entity) {
       case "paymentMethod":
@@ -559,7 +573,7 @@ export default function ManageVariables() {
           open={openModalManage === "create_payment_method"}
           action="ADD"
           title="Adicionando um método de pagamento"
-          fields={updateRowPaymentMethodFields()}
+          fields={manageRowPaymentMethodFields()}
           control={formCreatePaymentMethod.control}
           errors={formCreatePaymentMethod.formState.errors}
           isSubmitting={
@@ -578,7 +592,7 @@ export default function ManageVariables() {
           open={openModalManage === "update_payment_method"}
           action="UPDATE"
           title="Atualizando o método de pagamento"
-          fields={updateRowPaymentMethodFields()}
+          fields={manageRowPaymentMethodFields()}
           control={formUpdatePaymentMethod.control}
           errors={formUpdatePaymentMethod.formState.errors}
           isSubmitting={

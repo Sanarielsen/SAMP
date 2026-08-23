@@ -5,10 +5,10 @@ import {
   it 
 } from "vitest";
 
-import { InMemoryUserRoleRepository } from "@/repositories/in-memory/in-memory-user-role-repository";
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
-import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
-import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/in-memory-imported-process-repository";
+import { InMemoryUserRoleRepository } from "@/repositories/in-memory/user-role";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
+import { InMemoryClientsRepository } from "@/repositories/in-memory/client";
+import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/imported-process";
 import { PostImportedProcessFromINPIUseCase } from "@/services/use-cases/imported-process/post-from-inpi";
 import { makeUserRole } from "@/services/factories/user-role/make-entity";
 import { makeUser } from "@/services/factories/user/make-entity";

@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
-import ReceiptIcon from '@mui/icons-material/Receipt';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 
 import { 
@@ -22,13 +21,14 @@ import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import GroupText from "@/components/GroupText";
-import { parseDMYDate } from "@/utils/formatDate";
+import { parseDate } from "@/utils/manageDate";
 
 import type { OptionsControlledBox } from "@shared/types/values";
 import { 
   type PaymentInstallment, 
   type UpdatePaymentInstallmentDTO 
-} from '@shared/types/paymentInstallments'
+} from '@shared/types/paymentInstallment'
+
 
 
 interface InstallmentDetailProps {
@@ -36,11 +36,17 @@ interface InstallmentDetailProps {
   listPaymentMethods: OptionsControlledBox[] | []
   color?: string
   onClickUpdatePayment: (data: UpdatePaymentInstallmentDTO) => void
+  onClickUpdateObservation: (data: PaymentInstallment) => void
   onClickSendPaidData: (current: PaymentInstallment) => void
 }
 
 export default function InstallmentDetail({
-  currentPayment, listPaymentMethods, color, onClickUpdatePayment, onClickSendPaidData
+  currentPayment, 
+  listPaymentMethods, 
+  color, 
+  onClickUpdatePayment, 
+  onClickUpdateObservation,
+  onClickSendPaidData,
 }: InstallmentDetailProps) {
 
   const form = useForm<UpdatePaymentInstallmentSchemaFormData>({
@@ -56,7 +62,7 @@ export default function InstallmentDetail({
       dueDate: dayjs(currentPayment.dueDate)
         .format("DD/MM/YYYY"),
 
-      methodId: currentPayment.methodId,
+      methodId: Number(currentPayment.methodId),
 
       obserservation: currentPayment.observation ?? "",
     }
@@ -84,9 +90,9 @@ export default function InstallmentDetail({
       id: currentPayment.id,
       installment: Number(form.getValues('installment')),
       amountInCents: Number(form.getValues('amountInCents')) * 100,
-      methodId: form.getValues('methodId'),
-      dueDate: parseDMYDate(dueDateValue)!,
-      paidAt: paidAtValue ? parseDMYDate(paidAtValue) : undefined,
+      methodId: Number(form.getValues('methodId')),
+      dueDate: parseDate(dueDateValue)!,
+      paidAt: paidAtValue ? parseDate(paidAtValue) : undefined,
       observation: form.getValues('obserservation') || null,
       receiptFilePath: form.getValues('receiptFilePath') || null,
     }
@@ -137,45 +143,121 @@ export default function InstallmentDetail({
               name="dueDate"
               mask="99/99/9999"
               fullWidth
-              error={!!errors?.amountInCents}
+              error={!!errors?.dueDate}
               helperText={
-                String(errors?.amountInCents?.message ?? "")
+                String(errors?.dueDate?.message ?? "")
               }
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 2 }}>
+          <Grid size={{ xs: 12, md: 2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <IconButton
+                onClick={() => onClickUpdateObservation(currentPayment)}
+                sx={{
+                  flex: "0 0 auto",
+                  width: 40,
+                  height: 40,
+                  minWidth: 40,
+                  minHeight: 40,
+                  p: 1,
+                  borderRadius: "50%",
+                  boxShadow: "none",
+                  backgroundColor: "transparent",
+                  transition: "box-shadow 0.2s ease, transform 0.2s ease",
+                  "&:hover": {
+                    boxShadow: "0 3px 10px rgba(0, 0, 0, 0.18)",
+                    backgroundColor: "rgba(0, 0, 0, 0.04)",
+                  },
+                  "&:focus-visible": {
+                    boxShadow: "0 3px 10px rgba(0, 0, 0, 0.18)",
+                  },
+                  "&:active": {
+                    boxShadow: "0 1px 5px rgba(0, 0, 0, 0.14)",
+                  },
+                }}
+              >
+                <Tooltip title="Inserir observacoes">
+                  <NoteAltIcon fontSize="large" />
+                </Tooltip>
+              </IconButton>
 
-            <IconButton
-              onClick={() => console.log("Adicionar observacao!")}
-            >          
-              <Tooltip title="Inserir observacoes">
-                <NoteAltIcon fontSize="large" />
-              </Tooltip>
-            </IconButton>
+              {/* <IconButton
+                onClick={() => console.log("Adicionar comprovante!")}
+              >
+                <Tooltip title="Enviar comprovante">
+                  <ReceiptIcon fontSize="large" />
+                </Tooltip>
+              </IconButton> */}
 
-            <IconButton
-              onClick={() => console.log("Adicionar comprovante!")}
-            >          
-              <Tooltip title="Enviar comprovante">
-                <ReceiptIcon fontSize="large" />
-              </Tooltip>
-            </IconButton>
+              {/* TODO: check how can I componize it, because dont have same structure if put it in a component */}
+              <IconButton
+                onClick={() => onClickSendPaidData(currentPayment)}
+                sx={{
+                  flex: "0 0 auto",
+                  width: 40,
+                  height: 40,
+                  minWidth: 40,
+                  minHeight: 40,
+                  p: 1,
+                  borderRadius: "50%",
+                  boxShadow: "none",
+                  backgroundColor: "transparent",
+                  transition: "box-shadow 0.2s ease, transform 0.2s ease",
+                  "&:hover": {
+                    boxShadow: "0 3px 10px rgba(0, 0, 0, 0.18)",
+                    backgroundColor: "rgba(0, 0, 0, 0.04)",
+                  },
+                  "&:focus-visible": {
+                    boxShadow: "0 3px 10px rgba(0, 0, 0, 0.18)",
+                  },
+                  "&:active": {
+                    boxShadow: "0 1px 5px rgba(0, 0, 0, 0.14)",
+                  },
+                }}
+              >
+                <Tooltip title="Marcar como pago">
+                  <CheckCircleIcon fontSize="large" />
+                </Tooltip>
+              </IconButton>
 
-            <IconButton
-              onClick={() => onClickSendPaidData(currentPayment)}
-            >          
-              <Tooltip title="Marcar como pago">
-                <CheckCircleIcon fontSize="large" />
-              </Tooltip>
-            </IconButton>
-
-            <IconButton
-              type="submit"
-            >          
-              <Tooltip title="Salvar">
-                <SaveAsIcon fontSize="large" />
-              </Tooltip>
-            </IconButton>
+              <IconButton
+                type="submit"
+                sx={{
+                  flex: "0 0 auto",
+                  width: 40,
+                  height: 40,
+                  minWidth: 40,
+                  minHeight: 40,
+                  p: 1,
+                  borderRadius: "50%",
+                  boxShadow: "none",
+                  backgroundColor: "transparent",
+                  transition: "box-shadow 0.2s ease, transform 0.2s ease",
+                  "&:hover": {
+                    boxShadow: "0 3px 10px rgba(0, 0, 0, 0.18)",
+                    backgroundColor: "rgba(0, 0, 0, 0.04)",
+                  },
+                  "&:focus-visible": {
+                    boxShadow: "0 3px 10px rgba(0, 0, 0, 0.18)",
+                  },
+                  "&:active": {
+                    boxShadow: "0 1px 5px rgba(0, 0, 0, 0.14)",
+                  },
+                }}
+              >
+                <Tooltip title="Salvar">
+                  <SaveAsIcon fontSize="large" />
+                </Tooltip>
+              </IconButton>
+            </Box>
           </Grid>
         </Grid>
         <Divider/>

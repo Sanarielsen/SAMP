@@ -1,7 +1,7 @@
-
-import { PrismaUserRoleRepository } from '@/repositories/prisma/prisma-user-role-repository'
-import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository'
+import { PrismaUserRoleRepository } from '@/repositories/prisma/user-role'
+import { PrismaUserRepository } from '@/repositories/prisma/user'
 import { GetUserRoleUseCase } from '@/services/use-cases/user-role/get'
+
 
 export function makeListUserRoleAuthorizedUseCase() {
   const userRoleRepository = new PrismaUserRoleRepository()

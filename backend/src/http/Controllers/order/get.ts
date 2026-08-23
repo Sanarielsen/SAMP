@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { makeGetOrderUseCase } from '@/services/factories/order/make-get-use-case';
+import { makeGetOrderUseCase } from '@/services/factories/order/make-get';
 import { InvalidCredentialsError } from '@/services/errors/invalid-credentials-error';
 
 export async function getOrder(request: FastifyRequest, reply: FastifyReply) {

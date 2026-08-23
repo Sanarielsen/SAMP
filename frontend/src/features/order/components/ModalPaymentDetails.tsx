@@ -16,7 +16,7 @@ import { GridCloseIcon } from "@mui/x-data-grid"
 
 import DataTableColumnsInstallments from "@/features/order/components/DataTableColumnsInstallments"
 import DataTable from "@/components/DataTable"
-import type { Field } from "@/utils/field"
+import type { Field } from "@/types/field"
 
 import type { PaymentDetailDTO } from "@shared/types/payment"
 

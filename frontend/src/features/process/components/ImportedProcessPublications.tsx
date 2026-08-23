@@ -15,6 +15,7 @@ import HeaderPage from "@/components/HeaderPage";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ModalViewEntityDetails from "@/components/ModalViewEntityDetails";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { useDetailsModal } from "@/hooks/useDetailsModal";
 import { processPublicationFields } from "@/features/process/utils/getRowProcessPublication";
 
@@ -29,6 +30,8 @@ export default function ImportedProcessPublications({
 }: ImportedProcessPublicationsProps) {
 
   const queryClient = useQueryClient();
+
+  const actionAudio = useAudioFeedback();
 
   const [openModalImporter, setOpenModalImporter] = useState(false)
   const [openModalConfirmation, setOpenModalConfirmation] = useState(false)
@@ -45,14 +48,16 @@ export default function ImportedProcessPublications({
 
   const mutationDeleteProcessPublication =
     useMutationDeleteProcessPublication({
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['process-publications', processId] })
-      setOpenToast("success"); 
-    },
-    onError: () => {
-      setOpenToast("error"); 
-    },
-  })
+      onSuccess: () => {
+        actionAudio.playSuccess();
+        queryClient.invalidateQueries({ queryKey: ['process-publications', processId] })
+        setOpenToast("success"); 
+      },
+      onError: () => {
+        actionAudio.playError();
+        setOpenToast("error"); 
+      },
+    })
 
   function handleDelete(id: string) {
     setOpenModalConfirmation(true);

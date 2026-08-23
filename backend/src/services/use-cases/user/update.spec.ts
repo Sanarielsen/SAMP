@@ -6,7 +6,7 @@ import {
 } from "vitest";
 import { hash } from "bcryptjs";
 
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
 import { UpdateUserProfileUseCase } from "@/services/use-cases/user/update";
 
 import { makeUser } from "@/services/factories/user/make-entity";

@@ -4,7 +4,7 @@ import {
 } from "fastify";
 import { z } from "zod";
 
-import { makeUpdateProcessPublication } from "@/services/factories/process-publication/make-update";
+import { makeUpdateProcessPublicationUseCase } from "@/services/factories/process-publication/make-update";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { UnauthorizedUserError } from "@/services/errors/unauthorized-user-error";
 
@@ -25,7 +25,7 @@ export async function updateProcessPublication(request: FastifyRequest, reply: F
   const userId = request.user.sub
 
   try {
-    const useCase = makeUpdateProcessPublication();
+    const useCase = makeUpdateProcessPublicationUseCase();
 
     await useCase.execute({
       id,
