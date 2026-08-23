@@ -11,8 +11,8 @@ import BoxError from "@/components/BoxError";
 import BoxLoading from "@/components/BoxLoading";
 import HeaderPage from "@/components/HeaderPage";
 import GroupText from "@/components/GroupText";
-import { formatAsVisualDate } from "@/utils/formatAsAVisualDate";
 import { formatDocument } from "@/utils/formatDocument";
+import { formatDate } from "@/utils/manageDate";
 
 
 export default function ClientInformation() {
@@ -43,8 +43,8 @@ export default function ClientInformation() {
 
     const lastUpdate = 
       currentClient.updatedAt ? 
-        formatAsVisualDate(String(currentClient.updatedAt)) : 
-          formatAsVisualDate(String(currentClient.createdAt))
+        formatDate(String(currentClient.updatedAt), true) : 
+          formatDate(String(currentClient.createdAt), true)
 
     return (
       <>
@@ -94,7 +94,7 @@ export default function ClientInformation() {
           <Grid size={{ xs: 6, md: 6, lg: 3 }}>
             <GroupText 
               title="Data de fundação"
-              value={new Date(currentClient.dataFundation).toLocaleDateString("pt-BR")}
+              value={formatDate(currentClient.dataFundation)}
             />
           </Grid>
 

@@ -4,17 +4,16 @@ import {
   GridSearchIcon, 
   type GridColDef 
 } from "@mui/x-data-grid";
-
 import { 
   IconButton,
   Stack,
   Tooltip, 
 } from "@mui/material";
 
-import { formatCPF } from "@/utils/formatCPF";
-import { formatCNPJ } from "@/utils/formatCNPJ";
+import { formatDocument } from "@/utils/formatDocument";
 
 import type { ClientDetailDTO } from "@shared/types/client";
+import { formatDate } from "@/utils/manageDate";
 
 
 type ColumnsClientProps = {
@@ -37,13 +36,7 @@ export default function DataTableColumnsClient({
       headerName: "Protocolo",
       flex: 1,
       valueFormatter: (value: string) => {
-        if (value.length === 11) {
-          return formatCPF(value)
-        }
-
-        if (value.length === 14) {
-          return formatCNPJ(value)
-        }
+        return formatDocument(value)
       },
     },
         {
@@ -57,7 +50,7 @@ export default function DataTableColumnsClient({
       flex: 1,
       valueFormatter: (value) => {
         if (!value) return "-"
-        return new Date(value).toLocaleDateString("pt-BR")
+        return formatDate(value)
       },
     },
     {

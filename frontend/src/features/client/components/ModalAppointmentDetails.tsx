@@ -18,7 +18,7 @@ import { GridCloseIcon } from "@mui/x-data-grid"
 
 import { optionsQueryGetAppointmentWithDetails } from "@/features/client/api/queryGetAppointmentWithDetails"
 import { emptyAppointmentWithDetails } from "@/features/client/utils/mockConstants"
-import type { Field } from "@/utils/field"
+import type { Field } from "@/types/field"
 
 import type { Appointment, DetailAppointmentDTO } from "@shared/types/appointment"
 

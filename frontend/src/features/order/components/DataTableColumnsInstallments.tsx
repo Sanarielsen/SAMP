@@ -8,10 +8,10 @@ import {
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 
 import { formatCurrency } from "@/features/order/utils/formatCurrency";
-
-import { formatAsVisualDate, formatAsVisualOnlyDate } from "@/utils/formatAsAVisualDate";
+import { formatDate } from "@/utils/manageDate";
 
 import type { PaymentInstallment } from "@shared/types/paymentInstallments";
+
 
 export default function DataTableColumnsInstallments(): GridColDef<PaymentInstallment>[] {
   return [
@@ -35,7 +35,7 @@ export default function DataTableColumnsInstallments(): GridColDef<PaymentInstal
       flex: 1,
       valueFormatter: (value) => {
         if (!value) return "-"
-        return formatAsVisualOnlyDate(value)
+        return formatDate(value)
       },
     },
     {
@@ -44,7 +44,7 @@ export default function DataTableColumnsInstallments(): GridColDef<PaymentInstal
       flex: 1,
       valueFormatter: (value) => {
         if (!value) return "-"
-        return formatAsVisualOnlyDate(value)
+        return formatDate(value)
       },
     },
     {
@@ -78,7 +78,7 @@ export default function DataTableColumnsInstallments(): GridColDef<PaymentInstal
       valueGetter: (_, row) => row.updatedAt ?? row.createdAt,
       valueFormatter: (value) => {
         if (!value) return "-";
-        return formatAsVisualDate(value);
+        return formatDate(value, true);
       },
     }
   ]

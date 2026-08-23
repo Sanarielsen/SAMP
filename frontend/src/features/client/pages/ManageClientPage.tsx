@@ -25,10 +25,10 @@ import { getDocumentMask } from "@/features/client/utils/getDocumentMask";
 import { optionsQueryGetClient } from "@/api/queryGetClient";
 import { useQuery } from "@tanstack/react-query";
 import { formatDocument } from "../../../utils/formatDocument";
-import { formatAsVisualDate } from "../../../utils/formatAsAVisualDate";
 import { parseAddress } from "../utils/formatAddressFromAPI";
 import { cleanValue } from "@/utils/cleanValue";
 import ToastContainer from "@/components/Toast";
+import { formatDate, parseDate } from "@/utils/manageDate";
 
 const optionsType = [
   {
@@ -95,7 +95,7 @@ export default function ManageClientPage() {
         protocol: formatDocument(
           currentClient.protocol
         ),
-        fundationDate: formatAsVisualDate(
+        fundationDate: formatDate(
           currentClient.dataFundation
         ),
         locationAddress: parseAddress(currentClient.locationAddress),
@@ -164,13 +164,13 @@ export default function ManageClientPage() {
         tradeName: data.tradeName,
         protocol: cleanValue(data.protocol),
         type: data.type,
-        dataFundation: new Date(data.fundationDate),
+        dataFundation: parseDate(data.fundationDate),
         locationAddress: formatAddress(data.locationAddress),
         correspondenceAddress: formatAddress(data.correspondenceAddress),
         nameContact: data.nameContact,
         numberContact: cleanValue(data.numberContact),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: new Date(Date.now()),
+        updatedAt: new Date(Date.now()),
         isActivated: true
       }
 
@@ -184,13 +184,13 @@ export default function ManageClientPage() {
       tradeName: data.tradeName,
       protocol: cleanValue(data.protocol),
       type: data.type,
-      dataFundation: new Date(data.fundationDate),
+      dataFundation: parseDate(data.fundationDate),
       locationAddress: formatAddress(data.locationAddress),
       correspondenceAddress: formatAddress(data.correspondenceAddress),
       nameContact: data.nameContact,
       numberContact: cleanValue(data.numberContact),
       createdAt: new Date(),
-      updatedAt: new Date(),
+      updatedAt: null,
       isActivated: true
     }
 

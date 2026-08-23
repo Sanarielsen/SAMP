@@ -18,8 +18,7 @@ import {
   updatePaymentInstallmentToPay, 
   type UpdatePaymentInstallmentToPaySchemaFormData 
 } from "@/features/payment/schema/updatePaymentInstallmentToPay"
-import { convertDataToServerString } from "@/utils/convertDataToServerString"
-import { formatAsVisualOnlyDate } from "@/utils/formatDate2"
+import { formatDate } from "@/utils/manageDate"
 
 import type { PaymentInstallment } from "@shared/types/paymentInstallments"
 
@@ -40,7 +39,7 @@ export default function ModalInstallmentToPay({
       zodResolver(updatePaymentInstallmentToPay),
     defaultValues: {
       paidAt: installment.paidAt
-    ? formatAsVisualOnlyDate(installment.paidAt)
+    ? formatDate(installment.paidAt)
     : "",
     },
   })
@@ -90,7 +89,7 @@ export default function ModalInstallmentToPay({
 
   const onSubmit: SubmitHandler<UpdatePaymentInstallmentToPaySchemaFormData> = async (data) => {
 
-    const convertPaidAt = convertDataToServerString(data.paidAt)
+    const convertPaidAt = formatDate(data.paidAt)
 
     mutationUpdateInstallmentToPay.mutate({
       id: installment.id,

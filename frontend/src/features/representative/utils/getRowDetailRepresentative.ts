@@ -1,6 +1,7 @@
 import { formatDocument } from "@/utils/formatDocument";
-import type { Field } from "@/utils/field";
+import type { Field } from "@/types/field";
 import type { RepresentativeDetailsDTO } from "@shared/types/representative";
+import { formatDate } from "@/utils/manageDate";
 
 export const representativeFields: Field<RepresentativeDetailsDTO>[] = [
   {
@@ -29,10 +30,10 @@ export const representativeFields: Field<RepresentativeDetailsDTO>[] = [
   },
   {
     title: 'Criado em',
-    get: (c: RepresentativeDetailsDTO) => new Date(c.createdAt).toLocaleDateString(),
+    get: (c: RepresentativeDetailsDTO) => formatDate(c.createdAt, true)
   },
   {
     title: 'Atualizado em',
-    get: (c: RepresentativeDetailsDTO) => c.updatedAt ? new Date(c.updatedAt).toLocaleDateString() : ""
+    get: (c: RepresentativeDetailsDTO) => c.updatedAt ? formatDate(c.updatedAt, true) : ""
   },
 ]

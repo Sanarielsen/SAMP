@@ -33,8 +33,7 @@ import {
   type ManageOrderSchemaFormData 
 } from "@/features/order/schemas/manageOrderServiceSchema";
 import { emptyOrder } from "@/features/order/utils/emptyOrder";
-import { formatAsVisualDate } from "@/utils/formatAsAVisualDate";
-import { parseBRDate } from "@/utils/formatDate";
+import { formatDate, parseDate } from "@/utils/manageDate";
 
 import type { 
   CreateOrderDTO, 
@@ -89,10 +88,10 @@ export default function OrderServiceManagePage() {
   } = form
 
   useEffect(() => {
-    if (currentOrder) {
+    if (isEditing && currentOrder) {
       reset({
         ...currentOrder,
-        eventDate: formatAsVisualDate(
+        eventDate: formatDate(
           currentOrder.eventDate
         ),
         orderTypeId: String(
@@ -108,6 +107,7 @@ export default function OrderServiceManagePage() {
     setOpenToast(result);
     if (result === "success") {
       setTimeout(() => {
+        reset(emptyOrder);
         navigate("/oss");
       }, 5000);
     }
@@ -142,7 +142,7 @@ export default function OrderServiceManagePage() {
         orderTypeId: Number(data.orderTypeId),
         description: data.description,
         observation: data.observation ?? '',
-        eventDate: parseBRDate(data.eventDate)
+        eventDate: parseDate(data.eventDate)
       }
 
       mutationPatchOrder.mutate(payload)
@@ -154,7 +154,7 @@ export default function OrderServiceManagePage() {
       orderTypeId: Number(data.orderTypeId),
       description: data.description,
       observation: data.observation ?? '',
-      eventDate: parseBRDate(data.eventDate)
+      eventDate: parseDate(data.eventDate)
     }
 
     mutationPostOrder.mutate(payload)

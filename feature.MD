@@ -19,3 +19,8 @@
 - [] Test
 - [] Route
 - [] Integration
+
+DATAS
+- [OK] Cliente -> Data de fundacao.
+- [OK] Ordem -> Data do servico.
+- [?] Processo -> Criacao

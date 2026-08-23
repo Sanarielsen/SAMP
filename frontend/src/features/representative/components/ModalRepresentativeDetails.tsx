@@ -14,7 +14,7 @@ import {
 } from "@mui/material"
 import { GridCloseIcon } from "@mui/x-data-grid"
 
-import type { Field } from "@/utils/field"
+import type { Field } from "@/types/field"
 import type { RepresentativeDetailsDTO } from "@shared/types/representative"
 
 
@@ -28,6 +28,8 @@ interface ModalRepresentativeDetailsProps {
 export default function ModalRepresentativeDetails({ 
   open, representative, fields, handleClose 
 }: ModalRepresentativeDetailsProps) {
+
+  console.log("Representante atual: ", representative)
 
   return (
     <Modal
