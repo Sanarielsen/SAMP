@@ -30,10 +30,8 @@ import {
   type ManageAppointmentSchemaFormData
 } from "@/features/client/schema/manageAppointment";
 import { emptyAppointment } from "@/features/client/utils/mockConstants";
-import { 
-  convertBrazilDateTimeToUTC, 
-  formatDateTimeBrazil 
-} from "@/utils/formatDateTimeBrazil";
+import { formatDate, parseDate } from "@/utils/manageDate";
+
 
 export default function ManageUpdateAppointment() {
 
@@ -86,7 +84,7 @@ export default function ManageUpdateAppointment() {
     if (currentAppointment) {
       reset({
         ...currentAppointment,
-        appointmentAt: formatDateTimeBrazil(currentAppointment.appointmentAt)
+        appointmentAt: formatDate(currentAppointment.appointmentAt)
       })
     }
   }, [currentAppointment, reset])
@@ -116,7 +114,7 @@ export default function ManageUpdateAppointment() {
 
   const onSubmit: SubmitHandler<ManageAppointmentSchemaFormData> = async (data) => {
 
-    const appointmentAtConverted = new Date(convertBrazilDateTimeToUTC(data.appointmentAt ?? undefined))
+    const appointmentAtConverted = new Date(parseDate(data.appointmentAt ?? undefined))
 
     mutationPatchAppointment.mutate({ 
       id: currentAppointment.id,

@@ -10,7 +10,15 @@ import dayjs from "dayjs";
 export class PrismaOrderRepository implements OrderRepository {
   async create(data: CreateOrderDTO): Promise<Order> {
     const order = await prisma.order.create({
-      data
+      data: {
+        orderTypeId: data.orderTypeId,
+        clientId: data.clientId,
+        eventDate: data.eventDate,
+        description: data.description,
+        observation: data.observation ?? null,
+        createdAt: new Date(Date.now()),
+        updatedAt: null
+      }
     })
     
     return order;
@@ -156,7 +164,7 @@ export class PrismaOrderRepository implements OrderRepository {
     })
 
     return orders.map( (order) => ({
-      label: order.orderType.title + ' - ' + dayjs(order.eventDate).format("DD/MM/YYYY HH:mm"),
+      label: order.orderType.title + ' - ' + dayjs(order.eventDate).format("DD/MM/YYYY"),
       value: order.id
     }))
   }

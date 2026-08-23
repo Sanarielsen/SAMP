@@ -1,5 +1,5 @@
-import type { Field } from "@/utils/field";
-import { formatDate } from "@/utils/formatDateCode";
+import type { Field } from "@/types/field";
+import { formatDate } from "@/utils/manageDate";
 
 import type { ProcessPublicationDetails } from "@shared/types/processPublication";
 
@@ -39,10 +39,10 @@ export const processPublicationFields: Field<ProcessPublicationDetails>[] = [
   },
   {
     title: 'Criado em',
-    get: (pp: ProcessPublicationDetails) => formatDate(pp.createdAt),
+    get: (pp: ProcessPublicationDetails) => formatDate(pp.createdAt, true),
   },
   {
     title: 'Atualizado em',
-    get: (pp: ProcessPublicationDetails) => formatDate(pp.updatedAt),
+    get: (pp: ProcessPublicationDetails) => formatDate(pp.updatedAt, true),
   },
 ]

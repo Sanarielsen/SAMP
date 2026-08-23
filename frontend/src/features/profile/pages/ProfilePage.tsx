@@ -24,7 +24,7 @@ import {
   updateProfileSchema, 
   type UpdateProfileSchemaFormData 
 } from "@/features/profile/schema/updateProfileSchema";
-import { formatAsVisualDate } from "@/utils/formatAsAVisualDate";
+import { formatDate } from "@/utils/manageDate";
 
 
 export default function ProfilePage() {
@@ -184,11 +184,11 @@ export default function ProfilePage() {
         }}
       >
         <Typography variant="body2" color="text.secondary">
-          Usuário criado em: {formatAsVisualDate(currentUser?.createdAt)}
+          Usuário criado em: {formatDate(currentUser?.createdAt, true)}
         </Typography>
 
         <Typography variant="body2" color="text.secondary">
-          Atualizado: {formatAsVisualDate(currentUser?.updatedAt)}
+          Atualizado: {formatDate(currentUser?.updatedAt, true)}
         </Typography>
       </Box>
 

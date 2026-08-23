@@ -37,7 +37,7 @@ export class CreateOrderUseCase {
       orderTypeId: order.orderTypeId,
       description: order.description,
       observation: order.observation,
-      eventDate: new Date(Date.now())
+      eventDate: order.eventDate
     })
 
     return newOrder

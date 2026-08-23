@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 
-import { ImportedProcessDetailFromINPI, ImportedProcessFromINPI } from "@shared/types/importedProcess";
+import { ImportedProcessFromINPI } from "@shared/types/importedProcess";
 
 
 export function cleanText(value: string): string {

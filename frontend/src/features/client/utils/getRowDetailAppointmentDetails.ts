@@ -1,5 +1,6 @@
-import type { Field } from "@/utils/field";
-import { formatDateTimeBrazil } from "@/utils/formatDateTimeBrazil";
+import type { Field } from "@/types/field";
+import { formatDate } from "@/utils/manageDate";
+
 
 import type { DetailAppointmentDTO } from "@shared/types/appointment";
 
@@ -10,7 +11,7 @@ export const appointmentFields: Field<DetailAppointmentDTO>[] = [
   },
   {
     title: 'Data da agenda',
-    get: (field: DetailAppointmentDTO) => formatDateTimeBrazil(field.appointmentAt)
+    get: (field: DetailAppointmentDTO) => formatDate(field.appointmentAt)
   },
   {
     title: 'Nome do cliente',
@@ -22,10 +23,10 @@ export const appointmentFields: Field<DetailAppointmentDTO>[] = [
   },
   {
     title: 'Criado em',
-    get: (field: DetailAppointmentDTO) => formatDateTimeBrazil(field.createdAt)
+    get: (field: DetailAppointmentDTO) => formatDate(field.createdAt)
   },
   {
     title: 'Atualizado em',
-    get: (field: DetailAppointmentDTO) => formatDateTimeBrazil(field.updatedAt)
+    get: (field: DetailAppointmentDTO) => formatDate(field.updatedAt)
   },
 ]

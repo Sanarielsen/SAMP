@@ -11,7 +11,8 @@ import {
 import { GridDeleteIcon, GridLoadIcon } from "@mui/x-data-grid";
 import FolderIcon from '@mui/icons-material/Folder';
 
-import { formatDateTimeBrazil } from "@/utils/formatDateTimeBrazil";
+import { formatDate } from "@/utils/manageDate";
+
 import type { AppoitmentItem } from "@shared/types/appointment";
 
 
@@ -61,7 +62,7 @@ export default function AppoinentmentListItem({
         </Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={`${appointment.description} - ${formatDateTimeBrazil(appointment.appointmentAt)}`}
+        primary={`${appointment.description} - ${formatDate(appointment.appointmentAt)}`}
         secondary={`${appointment.clientName} | ${orderTitle}`}
       />
     </ListItem>

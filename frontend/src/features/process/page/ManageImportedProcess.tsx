@@ -35,9 +35,8 @@ import {
   listInputNatureValues, 
   listInputPresentationValues 
 } from "@/features/process/utils/getMockInputValues";
-import { convertDataToServerString } from "@/utils/convertDataToServerString";
+import { formatDate } from "@/utils/manageDate";
 import { clientFields } from "@/utils/getRowDetailClient";
-import { formatAsVisualOnlyDate } from "@/utils/formatDate2";
 
 import type { ImportedProcessCreateDTO, ImportedProcessFromINPI } from "@shared/types/importedProcess";
 
@@ -74,13 +73,13 @@ export default function ManageImportedProcess() {
       isEditing && process ? {
         ...process,
         filingDate: process.filingDate
-          ? formatAsVisualOnlyDate(process.filingDate)
+          ? formatDate(process.filingDate)
           : undefined,
         grantDate: process.grantDate
-          ? formatAsVisualOnlyDate(process.grantDate)
+          ? formatDate(process.grantDate)
           : undefined,
         expirationDate: process.expirationDate
-          ? formatAsVisualOnlyDate(process.expirationDate)
+          ? formatDate(process.expirationDate)
           : undefined,
       } : {}
     })
@@ -91,13 +90,13 @@ export default function ManageImportedProcess() {
       form.reset({
         ...process,
         filingDate: process.filingDate
-          ? formatAsVisualOnlyDate(process.filingDate)
+          ? formatDate(process.filingDate)
           : undefined,
         grantDate: process.grantDate
-          ? formatAsVisualOnlyDate(process.grantDate)
+          ? formatDate(process.grantDate)
           : undefined,
         expirationDate: process.expirationDate
-          ? formatAsVisualOnlyDate(process.expirationDate)
+          ? formatDate(process.expirationDate)
           : undefined,
       });
     }
@@ -151,9 +150,12 @@ export default function ManageImportedProcess() {
     form.setValue("niceTitle", process.niceTitle ?? "")
     form.setValue("niceStatus", process.niceStatus ?? "")
     form.setValue("niceSpecification", process.niceSpecification ?? "")
-    form.setValue("filingDate", formatAsVisualOnlyDate(process.filingDate))
-    form.setValue("grantDate", formatAsVisualOnlyDate(process.grantDate))
-    form.setValue("expirationDate", formatAsVisualOnlyDate(process.expirationDate))
+    form.setValue("filingDate", formatDate(process.filingDate))
+    form.setValue("grantDate", formatDate(process.grantDate))
+    form.setValue("expirationDate", formatDate(process.expirationDate))
+
+    console.log("Processo atual: ", process)
+
     setOpenModalSearch(false)
   }
 
@@ -163,19 +165,21 @@ export default function ManageImportedProcess() {
     mutationPostImportedProcess.isSuccess ||
     mutationUpdateProcess.isSuccess
 
+  
+
   const onSubmit: SubmitHandler<ManageImportedProcessFormData> = async (data) => {
 
     const payload: ImportedProcessCreateDTO = {
       ...data,
       userIdLogged: 'aa',
       filingDate: data.filingDate 
-        ? new Date(convertDataToServerString(data.filingDate ?? "")) 
+        ? new Date(formatDate(data.filingDate ?? "")) 
         : undefined,
       grantDate: data.grantDate
-        ? new Date(convertDataToServerString(data.grantDate ?? ""))
+        ? new Date(formatDate(data.grantDate ?? ""))
         : undefined,
       expirationDate: data.expirationDate
-        ? new Date(convertDataToServerString(data.expirationDate ?? ""))
+        ? new Date(formatDate(data.expirationDate ?? ""))
         : undefined,
       }
 

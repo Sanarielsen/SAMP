@@ -22,13 +22,14 @@ import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import GroupText from "@/components/GroupText";
-import { parseDMYDate } from "@/utils/formatDate";
+import { parseDate } from "@/utils/manageDate";
 
 import type { OptionsControlledBox } from "@shared/types/values";
 import { 
   type PaymentInstallment, 
   type UpdatePaymentInstallmentDTO 
 } from '@shared/types/paymentInstallments'
+
 
 
 interface InstallmentDetailProps {
@@ -85,8 +86,8 @@ export default function InstallmentDetail({
       installment: Number(form.getValues('installment')),
       amountInCents: Number(form.getValues('amountInCents')) * 100,
       methodId: form.getValues('methodId'),
-      dueDate: parseDMYDate(dueDateValue)!,
-      paidAt: paidAtValue ? parseDMYDate(paidAtValue) : undefined,
+      dueDate: parseDate(dueDateValue)!,
+      paidAt: paidAtValue ? parseDate(paidAtValue) : undefined,
       observation: form.getValues('obserservation') || null,
       receiptFilePath: form.getValues('receiptFilePath') || null,
     }

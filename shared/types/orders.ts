@@ -14,7 +14,7 @@ export interface CreateOrderDTO {
   orderTypeId:  number
   description:  string
   observation:  string | null
-  eventDate:    Date
+  eventDate: Date
 }
 
 export interface UpdateOrderDTO {
