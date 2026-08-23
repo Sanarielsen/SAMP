@@ -2,7 +2,7 @@ import {
   FastifyReply, 
   FastifyRequest 
 } from "fastify";
-import { makeGetProcessPublication } from "@/services/factories/process-publication/make-get";
+import { makeGetProcessPublicationUseCase } from "@/services/factories/process-publication/make-get";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 
@@ -11,7 +11,7 @@ export async function getProcessPublication(request: FastifyRequest, reply: Fast
   const { id } = request.params as { id: string }
 
   try {
-    const useCase = makeGetProcessPublication();
+    const useCase = makeGetProcessPublicationUseCase();
 
     const object = await useCase.execute(id)
 

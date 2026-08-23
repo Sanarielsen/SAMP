@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import HotelClassIcon from '@mui/icons-material/HotelClass';
 
-import { optionsGetRepresentative } from '@/features/representative/api/getRepresentative';
+import { optionsGetRepresentative } from '@/features/representative/api/queryGetRepresentative';
 import { optionsQueryListClientsWithOptions } from '@/api/listClientsWithOptions';
 import { useMutationPostRepresentative } from '@/features/representative/api/mutationPostRepresentative';
 import { useMutationPatchRepresentative } from '@/features/representative/api/mutationPatchRepresentative';
@@ -15,6 +15,7 @@ import { ControlledComboBox } from '@/components/ControlledComboBox';
 import { ControlledInputMask } from '@/components/ControlledInputMask';
 import { ControlledInput } from '@/components/ControlledInputText';
 import ToastContainer from '@/components/Toast';
+import { useAudioFeedback } from '@/hooks/useAudioFeedback';
 import {
   manageRepresentativeSchema,
   type ManageRepresentativeSchemaFormData
@@ -32,6 +33,7 @@ export default function RepresentativeManagePage() {
 
   const [openToast, setOpenToast] = useState("")
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = !!id;
@@ -88,9 +90,11 @@ export default function RepresentativeManagePage() {
   const mutationPostRepresentative =
     useMutationPostRepresentative({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success")
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error")
       },
   })
@@ -98,9 +102,11 @@ export default function RepresentativeManagePage() {
   const mutationPatchRepresentative =
     useMutationPatchRepresentative({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success")
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error")
       },
   })

@@ -6,12 +6,12 @@ import {
 } from 'vitest'
 import { compare } from 'bcryptjs'
 
-import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-user-repository'
+import { InMemoryUserRepository } from '@/repositories/in-memory/user'
 import { RegisterUseCase } from '@/services/use-cases/user/register'
 
 import { makeUser } from '@/services/factories/user/make-entity'
 import { makeUserRole } from '@/services/factories/user-role/make-entity'
-import { InMemoryUserRoleRepository } from '@/repositories/in-memory/in-memory-user-role-repository'
+import { InMemoryUserRoleRepository } from '@/repositories/in-memory/user-role'
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error'
 import { UserAlreadyExistsError } from '@/services/errors/user-already-exists'
 

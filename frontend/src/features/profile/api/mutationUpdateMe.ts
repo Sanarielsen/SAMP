@@ -1,10 +1,11 @@
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query'
 
 import { api } from '@/api/axios'
+
 import type { UpdateUserDTO } from '@shared/types/user'
 
-export type UserProfilePatchPayload = UpdateUserDTO 
 
+export type UserProfilePatchPayload = UpdateUserDTO 
 
 async function patchUserProfile(
   payload: UserProfilePatchPayload

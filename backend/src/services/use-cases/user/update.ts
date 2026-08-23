@@ -1,4 +1,4 @@
-import { UserRepository } from "@/repositories/user-repository";
+import { UserRepository } from "@/repositories/user";
 
 import { NonExistUserError } from "@/services/errors/non-exist-user-error";
 import { UserAlreadyExistsError } from "@/services/errors/user-already-exists";

@@ -1,4 +1,4 @@
-import { ProcessPublicationRepository } from "@/repositories/process-publication-repository";
+import { ProcessPublicationRepository } from "@/repositories/process-publication";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 

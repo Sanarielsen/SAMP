@@ -1,4 +1,4 @@
-import type { PaymentInstallment } from "./paymentInstallments"
+import type { PaymentInstallment } from "./paymentInstallment"
 
 export type Payment = {
   id: string

@@ -1,4 +1,4 @@
-import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/in-memory-imported-process-repository";
+import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/imported-process";
 
 import { ImportedProcess } from "@shared/types/importedProcess";
 
@@ -18,7 +18,9 @@ export async function makeImportedProcess(
     brand: "Marca test",
     nature: "Natureza test",
     presentation: "Apresentacao test",
-    specification: "Specificacao test",
+    niceSpecification: "Specificacao test",
+    niceStatus: 'nice-status-test',
+    niceTitle: 'nice-title-test',
 
     filingDate:     new Date("2026-01-10"),
     grantDate:      new Date("2026-01-11"),

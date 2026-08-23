@@ -2,7 +2,7 @@ import { FastifyRequest, FastifyReply } from 'fastify'
 
 import { makeListImportProcessesAsAOption } from '@/services/factories/imported-process/make-list-imported-processes-as-a-option';
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
-import { makeListImportProcessesDetailsWithSearch } from '@/services/factories/imported-process/make-list-details-with-search';
+import { makeListImportProcessesDetailsWithSearchUseCase } from '@/services/factories/imported-process/make-list-details-with-search';
 
 
 export async function listImportedProcessDetailsWithSearch(request: FastifyRequest, reply: FastifyReply) {
@@ -11,7 +11,7 @@ export async function listImportedProcessDetailsWithSearch(request: FastifyReque
   const userLoggedId = request.user.sub
 
   try {
-    const useCase = makeListImportProcessesDetailsWithSearch();
+    const useCase = makeListImportProcessesDetailsWithSearchUseCase();
 
     const importedProcesses = await useCase.execute(search, userLoggedId)
 

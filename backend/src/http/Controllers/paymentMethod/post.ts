@@ -4,7 +4,7 @@ import {
 } from "fastify";
 import { z } from "zod";
 
-import { makePostPaymentMethod } from "@/services/factories/payment-method/make-post";
+import { makePostPaymentMethodUseCase } from "@/services/factories/payment-method/make-post";
 
 
 export async function postPaymentMethod(request: FastifyRequest, reply: FastifyReply) {
@@ -18,7 +18,7 @@ export async function postPaymentMethod(request: FastifyRequest, reply: FastifyR
   const { id } = request.params as { id: string }
 
   try {
-    const useCase = makePostPaymentMethod();
+    const useCase = makePostPaymentMethodUseCase();
     useCase.execute(resultBody)
 
     return reply.status(201).send();

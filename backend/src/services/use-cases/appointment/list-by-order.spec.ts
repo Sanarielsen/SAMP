@@ -7,9 +7,9 @@ import {
 
 import { ListAppointmentsByOrderUseCase } from "@/services/use-cases/appointment/list-by-order";
 import { makeAppointment } from "@/services/factories/appointment/make-entity";
-import { makeOrder } from "@/services/factories/order/make-order-entity";
-import { InMemoryAppointmentRepository } from "@/repositories/in-memory/in-memory-appointment-repository";
-import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
+import { makeOrder } from "@/services/factories/order/make-entity";
+import { InMemoryAppointmentRepository } from "@/repositories/in-memory/appointment";
+import { InMemoryOrderRepository } from "@/repositories/in-memory/order";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 let appointmentRepository: InMemoryAppointmentRepository

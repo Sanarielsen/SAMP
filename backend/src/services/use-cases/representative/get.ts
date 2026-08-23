@@ -1,5 +1,5 @@
 import { Representative } from "@shared/types/representative";
-import { RepresentativeRepository } from "@/repositories/representative-repository";
+import { RepresentativeRepository } from "@/repositories/representative";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 

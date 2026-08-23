@@ -6,11 +6,11 @@ import {
 } from "vitest";
 import { UpdatePaymentInstallmentUseCase } from "@/services/use-cases/payment-installment/update";
 
-import { InMemoryPaymentInstallmentsRepository } from "@/repositories/in-memory/in-memory-payment-installment-repository";
-import { makePaymentInstallment } from "@/services/factories/payment-installment/make-payment-installment-entity";
+import { InMemoryPaymentInstallmentsRepository } from "@/repositories/in-memory/payment-installment";
+import { makePaymentInstallment } from "@/services/factories/payment-installment/make-entity";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
-import { PaymentInstallment } from "@shared/types/paymentInstallments";
+import { PaymentInstallment } from "@shared/types/paymentInstallment";
 
 
 let paymentInstallmentsRepository: InMemoryPaymentInstallmentsRepository

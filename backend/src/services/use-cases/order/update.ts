@@ -1,5 +1,5 @@
 import { Order, UpdateOrderDTO } from "@shared/types/orders";
-import { OrderRepository } from "@/repositories/order-repository";
+import { OrderRepository } from "@/repositories/order";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 

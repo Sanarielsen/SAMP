@@ -1,5 +1,6 @@
-import { PrismaClientRepository } from '@/repositories/prisma/prisma-client-repository'
+import { PrismaClientRepository } from '@/repositories/prisma/client'
 import { UpdateClientUseCase } from '@/services/use-cases/client/update'
+
 
 export function makeUpdateClientUseCase() {
   const clientRepository = new PrismaClientRepository()

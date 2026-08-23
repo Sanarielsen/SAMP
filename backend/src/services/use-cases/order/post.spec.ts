@@ -10,13 +10,13 @@ import { hash } from "bcryptjs";
 
 import { CreateOrderUseCase } from "@/services/use-cases/order/post";
 
-import { ClientRepository } from "@/repositories/client-repository";
-import { OrderRepository } from "@/repositories/order-repository";
-import { UserRepository } from "@/repositories/user-repository";
+import { ClientRepository } from "@/repositories/client";
+import { OrderRepository } from "@/repositories/order";
+import { UserRepository } from "@/repositories/user";
 
-import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
-import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
+import { InMemoryClientsRepository } from "@/repositories/in-memory/client";
+import { InMemoryOrderRepository } from "@/repositories/in-memory/order";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
 
 import { NonExistUserError } from "@/services/errors/non-exist-user-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";

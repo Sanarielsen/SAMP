@@ -1,4 +1,4 @@
-import { ClientRepository } from '@/repositories/client-repository'
+import { ClientRepository } from '@/repositories/client'
 import { formatDocument } from '@/utils/formatDocument'
 
 

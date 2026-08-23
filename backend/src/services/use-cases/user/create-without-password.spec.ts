@@ -6,8 +6,8 @@ import {
 } from 'vitest'
 
 import { CreateUserUseCase } from '@/services/use-cases/user/create-without-password'
-import { InMemoryUserRoleRepository } from '@/repositories/in-memory/in-memory-user-role-repository'
-import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-user-repository'
+import { InMemoryUserRoleRepository } from '@/repositories/in-memory/user-role'
+import { InMemoryUserRepository } from '@/repositories/in-memory/user'
 import { makeUser } from '@/services/factories/user/make-entity'
 import { makeUserRole } from '@/services/factories/user-role/make-entity'
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error'

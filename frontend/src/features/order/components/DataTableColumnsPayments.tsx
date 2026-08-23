@@ -11,8 +11,7 @@ import {
 } from "@mui/material";
 
 import { formatCurrency } from "@/features/order/utils/formatCurrency";
-
-import { formatAsVisualOnlyDate } from "@/utils/formatAsAVisualDate";
+import { formatDate } from "@/utils/manageDate";
 
 import { type PaymentDetailDTO } from "@shared/types/payment"
 
@@ -47,7 +46,7 @@ export default function DataTableColumnsPayments({
       flex: 1,
       valueFormatter: (value) => {
         if (!value) return "-"
-        return formatAsVisualOnlyDate(value)
+        return formatDate(value)
       },
     },
     {

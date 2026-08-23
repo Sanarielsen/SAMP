@@ -7,7 +7,7 @@ import {
 
 import { GetPaymentMethodUseCase } from "@/services/use-cases/payment-method/get";
 
-import { InMemoryPaymentMethodRepository } from "@/repositories/in-memory/in-memory-payment-method-repository";
+import { InMemoryPaymentMethodRepository } from "@/repositories/in-memory/payment-method";
 import { makePaymentMethod } from "@/services/factories/payment-method/make-entity";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 

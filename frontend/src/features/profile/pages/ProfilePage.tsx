@@ -20,15 +20,17 @@ import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import HeaderPage from "@/components/HeaderPage";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { 
   updateProfileSchema, 
   type UpdateProfileSchemaFormData 
 } from "@/features/profile/schema/updateProfileSchema";
-import { formatAsVisualDate } from "@/utils/formatAsAVisualDate";
+import { formatDate } from "@/utils/manageDate";
 
 
 export default function ProfilePage() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate()
   const [openToast, setOpenToast] = useState("")
 
@@ -58,9 +60,11 @@ export default function ProfilePage() {
   const mutationPatchUserProfile =
     useMutationPatchUserProfile({
       onSuccess: () => {
+        actionAudio.playSuccess();
         setOpenToast("success");
       },
       onError: () => {
+        actionAudio.playError();
         setOpenToast("error");
       },
   })
@@ -184,11 +188,11 @@ export default function ProfilePage() {
         }}
       >
         <Typography variant="body2" color="text.secondary">
-          Usuário criado em: {formatAsVisualDate(currentUser?.createdAt)}
+          Usuário criado em: {formatDate(currentUser?.createdAt, true)}
         </Typography>
 
         <Typography variant="body2" color="text.secondary">
-          Atualizado: {formatAsVisualDate(currentUser?.updatedAt)}
+          Atualizado: {formatDate(currentUser?.updatedAt, true)}
         </Typography>
       </Box>
 

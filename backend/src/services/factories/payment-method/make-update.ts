@@ -1,8 +1,8 @@
-import { PrismaPaymentMethodsRepository } from '@/repositories/prisma/prisma-payment-method-repository'
+import { PrismaPaymentMethodsRepository } from '@/repositories/prisma/payment-method'
 import { UpdatePaymentMethodMethodUseCase } from '@/services/use-cases/payment-method/update'
 
 
-export function makeUpdatePaymentMethod() {
+export function makeUpdatePaymentMethodUseCase() {
   const paymentMethodRepository = new PrismaPaymentMethodsRepository()
 
   return new UpdatePaymentMethodMethodUseCase(

@@ -258,3 +258,21 @@ Process (926450913)
 - [OK] Atualizar um tipo de ordem de servico
 - [OK] Visualizar um tipo de ordem de servico
 - [OK] "Deletar" uma tipo de ordem de servico
+
+
+#### feature-22
+
+- Possuimos tres situacoes
+
+- O formato que manda para o prisma é:
+  - DD/MM/YYYY (Podendo ser MM/DD/YYYY ou YYYY/MM/DD)
+
+- O que vem do prisma é:
+- DATA COMPLETA               APENAS DATA
+- 2026-08-22T00:28:47.464Z ou 2026-08-22T00:00:00.000Z
+
+- A ideia é criar um componente onde eu possa ter uma data DD/MM/YYYY ou DD/MM/YYYY HH:MM
+- Assim quando a data tiver hora, converter para DD/MM/YYYY HH:MM
+- Assim quando a data NAO tiver hora, converter para DD/MM/YYYY
+
+- Na situacao que temos DD/MM/YYYY HH:M

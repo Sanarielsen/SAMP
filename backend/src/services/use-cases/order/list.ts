@@ -1,5 +1,5 @@
-import { OrderRepository } from "@/repositories/order-repository";
-import { UserRepository } from "@/repositories/user-repository";
+import { OrderRepository } from "@/repositories/order";
+import { UserRepository } from "@/repositories/user";
 
 import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";
 

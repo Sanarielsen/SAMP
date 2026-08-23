@@ -3,7 +3,7 @@ import {
 	FastifyRequest 
 } from "fastify";
 
-import { makeGetImportedProcess } from "@/services/factories/imported-process/make-get";
+import { makeGetImportedProcessUseCase } from "@/services/factories/imported-process/make-get";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 	
 	
@@ -12,7 +12,7 @@ export async function getImportedProcess(request: FastifyRequest, reply: Fastify
 	const { id } = request.params as { id: string }
 
 	try {
-		const useCase = makeGetImportedProcess();
+		const useCase = makeGetImportedProcessUseCase();
 
 		const object = await useCase.execute(id)
 

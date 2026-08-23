@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   useFormContext,
   type FieldErrors,
@@ -13,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { GridCloseIcon } from "@mui/x-data-grid";
+import SearchIcon from "@mui/icons-material/Search";
 
 import { useCep } from "@/api/getAddressByCEP";
 import { ControlledInput } from "@/components/ControlledInputText";
@@ -76,6 +78,61 @@ export function ModalAddress({
     watch(`draft.${destination}.cep`) ?? "";
 
   const addressQuery = useCep(cep);
+
+  useEffect(() => {
+    if (open) {
+      setValue(`draft.${destination}.country`, "Brasil");
+    }
+  }, [open, destination, setValue]);
+
+  async function handleSearchCep() {
+    const cleanedCep =
+      (cep ?? "").replace(/\D/g, "");
+
+    if (cleanedCep.length !== 8) {
+      setError(
+        `draft.${destination}.cep`,
+        {
+          type: "manual",
+          message: "CEP deve conter 8 dígitos.",
+        }
+      );
+      return;
+    }
+
+    const {
+      data,
+      error,
+    } = await addressQuery.refetch();
+
+    if (error || !data) {
+      setError(
+        `draft.${destination}.cep`,
+        {
+          type: "manual",
+          message: "CEP inválido.",
+        }
+      );
+      return;
+    }
+
+    setValue(
+      `draft.${destination}.street`,
+      data.logradouro
+    );
+    setValue(
+      `draft.${destination}.district`,
+      data.bairro
+    );
+    setValue(
+      `draft.${destination}.city`,
+      data.localidade
+    );
+    setValue(
+      `draft.${destination}.state`,
+      data.uf
+    );
+  }
 
   async function handleSaveAddress() {
 
@@ -146,61 +203,28 @@ export function ModalAddress({
               variant="outlined"
               label="CEP"
               fullWidth
-              onChange={async () => {
-
-                const cleanedCep =
-                  (cep ?? "").replace(/\D/g, "");
-
-                if (cleanedCep.length !== 8) {
-                  return;
-                }
-
-                const {
-                  data,
-                  error,
-                } = await addressQuery.refetch();
-
-                if (error || !data) {
-                  setError(
-                    `${destination}.cep`,
-                    {
-                      type: "manual",
-                      message: "CEP inválido.",
-                    }
-                  );
-
-                  return;
-                }
-
-                setValue(
-                  `draft.${destination}.street`,
-                  data.logradouro
-                );
-                setValue(
-                  `draft.${destination}.district`,
-                  data.bairro
-                );
-                setValue(
-                  `draft.${destination}.city`,
-                  data.localidade
-                );
-                setValue(
-                  `draft.${destination}.state`,
-                  data.uf
-                );
-              }}
               error={!!fieldError?.cep}
               helperText={
                 String(fieldError?.cep?.message ?? "")
               }
               slotProps={{
                 input: {
-                  endAdornment:
-                    addressQuery.isLoading && (
-                      <InputAdornment position="end">
-                        <CircularProgress size={20} />
-                      </InputAdornment>
-                    ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Button
+                        size="small"
+                        onClick={handleSearchCep}
+                        disabled={addressQuery.isLoading}
+                        sx={{ minWidth: "auto", p: 0.5 }}
+                      >
+                        {addressQuery.isLoading ? (
+                          <CircularProgress size={20} />
+                        ) : (
+                          <SearchIcon fontSize="small" />
+                        )}
+                      </Button>
+                    </InputAdornment>
+                  ),
                 },
               }}
             />

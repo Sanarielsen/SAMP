@@ -16,6 +16,7 @@ import ComboBox from "@/components/ComboBox";
 import HeaderPage from "@/components/HeaderPage";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { exportToExcel, exportToPdf } from "@/features/home/utils/exportData";
 import { getFileTimestamp } from "@/utils/getFIleTimestamp";
 
@@ -27,6 +28,7 @@ export default function AppointmentsTimeline() {
 
   const { getUserId } = useAuth()
   const userId = getUserId() ?? ""
+  const actionAudio = useAudioFeedback();
 
   const queryClient = useQueryClient();
 
@@ -47,10 +49,12 @@ export default function AppointmentsTimeline() {
   const mutationChangeDeleteAppointment =
     useMutationDeleteAppointment({
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['recent-appointments', userId, daysCanBeConsidered] })
+      actionAudio.playSuccess();
+      queryClient.invalidateQueries({ queryKey: ['recent-appointments', userId, daysCanBeConsidered] })
       setOpenToast("success"); 
     },
     onError: () => {
+      actionAudio.playError();
       setOpenToast("error"); 
     },
   })

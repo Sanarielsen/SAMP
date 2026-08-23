@@ -3,7 +3,7 @@ import {
   FastifyRequest
 } from "fastify";
 
-import { makeGetRepresentativeOfClientsUseCase } from "@/services/factories/representatives/make-get-of-clients-use-case";
+import { makeGetRepresentativeOfClientsUseCase } from "@/services/factories/representatives/make-get-of-clients";
 
 
 export async function getRepresentativeOfClients(request: FastifyRequest, reply: FastifyReply) {

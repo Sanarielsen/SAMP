@@ -1,6 +1,7 @@
-import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository";
-import { PrismaUserRoleRepository } from "@/repositories/prisma/prisma-user-role-repository"
+import { PrismaUserRepository } from "@/repositories/prisma/user";
+import { PrismaUserRoleRepository } from "@/repositories/prisma/user-role"
 import { UpdateUserPasswordUseCase } from "@/services/use-cases/user/update-password";
+
 
 export function makeUpdateUserPasswordUseCase() {
   const userRoleRepository = new PrismaUserRoleRepository();

@@ -1,4 +1,4 @@
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
 import { 
   beforeEach,
   describe,

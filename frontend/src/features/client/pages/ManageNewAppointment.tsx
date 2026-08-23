@@ -24,6 +24,7 @@ import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { useRequiredParam } from "@/hooks/useRequiredParam";
 import { 
   manageAppointmentSchema, 
@@ -33,6 +34,7 @@ import {
 
 export default function ManageNewAppointment() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const clientId = useRequiredParam('id')
 
@@ -75,9 +77,11 @@ export default function ManageNewAppointment() {
   const mutationPostAppointment =
     useMutationPostAppointment({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success");
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error");
       },
     })

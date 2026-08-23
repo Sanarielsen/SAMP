@@ -7,8 +7,8 @@ import {
 
 import { DeletePaymentUseCase } from "@/services/use-cases/payment/delete";
 
-import { InMemoryPaymentRepository } from "@/repositories/in-memory/in-memory-payment-repository";
-import { makePayment } from "@/services/factories/payment/make-payment-entity";
+import { InMemoryPaymentRepository } from "@/repositories/in-memory/payment";
+import { makePayment } from "@/services/factories/payment/make-entity";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 import { Payment } from "@shared/types/payment";

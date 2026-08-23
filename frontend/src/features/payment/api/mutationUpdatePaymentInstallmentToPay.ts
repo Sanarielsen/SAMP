@@ -1,37 +1,19 @@
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query'
 
 import { api } from '@/api/axios'
+import type { PaymentInstallmentProof } from '@shared/types/paymentInstallment';
 
 
-export type UpdatePaymentInstallmentToPayPayload = {
-  id: string,
-  paidAt: string
-  file: File | undefined,
-}
-
-async function updatePaymentInstallmentToPay({
-  id,
-  paidAt,
-  file,
-}: UpdatePaymentInstallmentToPayPayload) {
-  const formData = new FormData();
-
-  formData.append("paidAt", paidAt);
-
-  if (file) {
-    formData.append("proofPayment", file);
-  }
-
-  const { data } = await api.patch(
-    `/payment/installment/${id}/paid`,
-    formData
-  );
-
-  return data;
+async function updatePaymentInstallmentToPay(
+  payload: PaymentInstallmentProof
+): Promise<void> {
+  const { data } = await api.patch(`/payment/installment/${payload.id}/paid`, payload)
+  
+  return data
 }
 
 export function useMutationUpdatePaymentInstallmentToPay(
-  options?: UseMutationOptions<void, Error, UpdatePaymentInstallmentToPayPayload>
+  options?: UseMutationOptions<void, Error, PaymentInstallmentProof>
 ) {
   return useMutation({
     mutationFn: updatePaymentInstallmentToPay,

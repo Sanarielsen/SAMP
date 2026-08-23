@@ -13,15 +13,14 @@ import { GridCloseIcon } from "@mui/x-data-grid"
 import { useMutationPatchPaymentInstallment } from "@/features/payment/api/mutationUpdatePaymentInstallment"
 import { useMutationUpdatePaymentInstallmentToPay } from "@/features/payment/api/mutationUpdatePaymentInstallmentToPay"
 import { ControlledInputMask } from "@/components/ControlledInputMask"
-import { ControlledFileInput } from "@/components/ControlledFIleInput"
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { 
   updatePaymentInstallmentToPay, 
   type UpdatePaymentInstallmentToPaySchemaFormData 
 } from "@/features/payment/schema/updatePaymentInstallmentToPay"
-import { convertDataToServerString } from "@/utils/convertDataToServerString"
-import { formatAsVisualOnlyDate } from "@/utils/formatDate2"
+import { formatDate, parseDate } from "@/utils/manageDate"
 
-import type { PaymentInstallment } from "@shared/types/paymentInstallments"
+import type { PaymentInstallment } from "@shared/types/paymentInstallment"
 
 
 interface ModalInstallmentToPayProps {
@@ -35,12 +34,14 @@ export default function ModalInstallmentToPay({
   open, installment, onSubmitPaidAt, handleClose
 }: ModalInstallmentToPayProps) {
 
+  const actionAudio = useAudioFeedback();
+
   const form = useForm<UpdatePaymentInstallmentToPaySchemaFormData>({
     resolver:
       zodResolver(updatePaymentInstallmentToPay),
     defaultValues: {
       paidAt: installment.paidAt
-    ? formatAsVisualOnlyDate(installment.paidAt)
+    ? formatDate(installment.paidAt)
     : "",
     },
   })
@@ -48,6 +49,7 @@ export default function ModalInstallmentToPay({
   const mutationPatchInstallment =
     useMutationPatchPaymentInstallment({
       onSuccess: () => {
+        actionAudio.playSuccess();
         onSubmitPaidAt("success")
         setTimeout(() => {
           mutationPatchInstallment.reset();
@@ -55,6 +57,7 @@ export default function ModalInstallmentToPay({
         }, 5000);
       },
       onError: () => {
+        actionAudio.playError();
         onSubmitPaidAt("error")
       },
   })
@@ -62,6 +65,7 @@ export default function ModalInstallmentToPay({
   const mutationUpdateInstallmentToPay =
     useMutationUpdatePaymentInstallmentToPay({
       onSuccess: () => {
+        actionAudio.playSuccess();
         onSubmitPaidAt("success")
         setTimeout(() => {
           mutationUpdateInstallmentToPay.reset();
@@ -69,6 +73,7 @@ export default function ModalInstallmentToPay({
         }, 5000);
       },
       onError: () => {
+        actionAudio.playError();
         onSubmitPaidAt("error")
       },
   })
@@ -90,12 +95,9 @@ export default function ModalInstallmentToPay({
 
   const onSubmit: SubmitHandler<UpdatePaymentInstallmentToPaySchemaFormData> = async (data) => {
 
-    const convertPaidAt = convertDataToServerString(data.paidAt)
-
     mutationUpdateInstallmentToPay.mutate({
       id: installment.id,
-      paidAt: convertPaidAt,
-      file: data.file
+      paidAt: parseDate(data.paidAt),
     })
   }
 
@@ -157,13 +159,13 @@ export default function ModalInstallmentToPay({
               />
             </Grid>
 
-            <Grid size={{ xs: 12}}>
+            {/* <Grid size={{ xs: 12}}>
               <ControlledFileInput
                 control={form.control}
                 name="file"
               />
 
-              {installment.receiptFilePath && (
+              {/* {installment.receiptFilePath && (
                 <div>
                   <p>Comprovante atual:</p>
                   <a
@@ -174,8 +176,8 @@ export default function ModalInstallmentToPay({
                     Carregar arquivo
                   </a>
                 </div>
-              )}
-            </Grid>
+              )} 
+            </Grid> */}
             
             { hasPaidBefore === 6 && (
 
