@@ -1,4 +1,4 @@
-import { PrismaAppointmentRepository } from '@/repositories/prisma/prisma-appointment-repository'
+import { PrismaAppointmentRepository } from '@/repositories/prisma/appointment'
 import { GetWithDetailsAppointmentUseCase } from '@/services/use-cases/appointment/get-with-details'
 
 export function makeGetWithDetailsAppointmentUseCase() {

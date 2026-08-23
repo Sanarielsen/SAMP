@@ -4,7 +4,7 @@ import {
 } from "fastify";
 import { z } from "zod";
 
-import { makePostManyProcessPublications } from "@/services/factories/process-publication/make-post-many";
+import { makePostManyProcessPublicationsUseCase } from "@/services/factories/process-publication/make-post-many";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { UnauthorizedUserError } from "@/services/errors/unauthorized-user-error";
 
@@ -25,7 +25,7 @@ export async function postManyProcessPublications(request: FastifyRequest, reply
   const userId = request.user.sub
 
   try {
-    const useCase = makePostManyProcessPublications();
+    const useCase = makePostManyProcessPublicationsUseCase();
 
     const countInsertedPublications = await useCase.execute({
       createdByUser: userId,

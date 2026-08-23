@@ -1,5 +1,5 @@
-import { AppointmentRepository } from "@/repositories/appointment-repository";
-import { ClientRepository } from "@/repositories/client-repository";
+import { AppointmentRepository } from "@/repositories/appointment";
+import { ClientRepository } from "@/repositories/client";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 

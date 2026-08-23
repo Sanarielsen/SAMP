@@ -28,12 +28,24 @@ type AuthContextType = {
 
 const AuthContext = createContext({} as AuthContextType)
 
+function decodeRoleFromToken(token: string): string | null {
+  try {
+    const decoded = jwtDecode<TokenPayload>(token)
+    return decoded.role ?? null
+  } catch {
+    return null
+  }
+}
+
 export function AuthProvider({ children }: AuthContextProps) {
   const [token, setToken] = useState<string | null>(
     localStorage.getItem('token')
   )
 
-  const [role, setRole] = useState<string | null>(null)
+  const [role, setRole] = useState<string | null>(() => {
+    const storedToken = localStorage.getItem('token')
+    return storedToken ? decodeRoleFromToken(storedToken) : null
+  })
 
   useEffect(() => {
     if (!token) {
@@ -41,9 +53,7 @@ export function AuthProvider({ children }: AuthContextProps) {
       return
     }
 
-    const decoded = jwtDecode<TokenPayload>(token)
-
-    setRole(decoded.role ?? null)
+    setRole(decodeRoleFromToken(token))
   }, [token])
 
   function signIn(token: string) {

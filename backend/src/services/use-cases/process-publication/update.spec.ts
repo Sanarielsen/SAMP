@@ -1,10 +1,3 @@
-import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/in-memory-imported-process-repository";
-import { InMemoryProcessPublicationRepository } from "@/repositories/in-memory/in-memory-process-publication-repository";
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
-import { InMemoryUserRoleRepository } from "@/repositories/in-memory/in-memory-user-role-repository";
-import { ImportedProcess } from "@shared/types/importedProcess";
-import { User } from "@shared/types/user";
-import { UserRole } from "@shared/types/userRole";
 import { 
   beforeEach,
   describe,
@@ -13,6 +6,10 @@ import {
 } from "vitest";
 
 import { UpdateProcessPublicationUseCase } from "@/services/use-cases/process-publication/update";
+import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/imported-process";
+import { InMemoryProcessPublicationRepository } from "@/repositories/in-memory/process-publication";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
+import { InMemoryUserRoleRepository } from "@/repositories/in-memory/user-role";
 import { makeUserRole } from "@/services/factories/user-role/make-entity";
 import { makeUser } from "@/services/factories/user/make-entity";
 import { makeImportedProcess } from "@/services/factories/imported-process/make-entity";
@@ -20,6 +17,9 @@ import { makeProcessPublication } from "@/services/factories/process-publication
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { UnauthorizedUserError } from "@/services/errors/unauthorized-user-error";
 
+import { UserRole } from "@shared/types/userRole";
+import { User } from "@shared/types/user";
+import { ImportedProcess } from "@shared/types/importedProcess";
 import { ProcessPublication } from "@shared/types/processPublication";
 
 

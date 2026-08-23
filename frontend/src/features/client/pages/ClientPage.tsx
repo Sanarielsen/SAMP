@@ -19,6 +19,7 @@ import { optionsQueryClient } from "@/api/queryClients";
 import DataTableColumnsClient from "@/features/client/components/DataTableColumnsClient";
 import ModalClientDetails from "@/features/client/components/ModalClientDetails";
 import DataTable from "@/components/DataTable";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast"
 import type { ClientDetails } from "@/features/client/types/clients";
@@ -27,6 +28,7 @@ import { clientFields } from "@/utils/getRowDetailClient";
 
 export default function ClientPage() {
   
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const { getUserId } = useAuth();
 
@@ -54,10 +56,12 @@ export default function ClientPage() {
   const mutationChangeStatusClient =
     useMutationChangeStatusClient({
     onSuccess: () => {
+      actionAudio.playSuccess();
       queryClient.invalidateQueries({ queryKey: ['clients'] })
       setOpenToast("success"); 
     },
     onError: () => {
+      actionAudio.playError();
       setOpenToast("error"); 
     },
   })

@@ -5,10 +5,10 @@ import {
   it 
 } from "vitest";
 
-import { makeOrder } from "@/services/factories/order/make-order-entity";
+import { makeOrder } from "@/services/factories/order/make-entity";
 import { makeClient } from "@/services/factories/client/make-entity";
-import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
-import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
+import { InMemoryOrderRepository } from "@/repositories/in-memory/order";
+import { InMemoryClientsRepository } from "@/repositories/in-memory/client";
 
 import { ListOrdersWithOptionsUseCase } from "@/services/use-cases/order/list-options";
 import { ResourceNotFoundError } from "../../errors/resource-not-found-error";

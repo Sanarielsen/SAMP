@@ -4,7 +4,7 @@ import {
 } from 'fastify'
 import { z } from 'zod'
 
-import { makePostPaymentWithInstallmentsUseCase } from '@/services/factories/payment-installment/make-payment-installments-use-case'
+import { makePostPaymentWithInstallmentsUseCase } from '@/services/factories/payment-installment/make-payment-installments'
 
 
 export async function postPaymentWithInstallments(

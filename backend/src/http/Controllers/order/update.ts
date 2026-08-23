@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod';
 
-import { makeUpdateOrderUseCase } from '@/services/factories/order/make-update-use-case';
+import { makeUpdateOrderUseCase } from '@/services/factories/order/make-update';
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 
 export async function updateOrder(request: FastifyRequest, reply: FastifyReply) {

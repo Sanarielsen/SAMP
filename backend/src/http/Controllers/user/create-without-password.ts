@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 
-import { makeCreateUserWithoutPassword } from '@/services/factories/user/make-user-without-password'
+import { makeCreateUserWithoutPasswordUseCase } from '@/services/factories/user/make-user-without-password'
 import { UserAlreadyExistsError } from '@/services/errors/user-already-exists'
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error'
 
@@ -16,7 +16,7 @@ export async function postUserWithoutPassword(request: FastifyRequest, reply: Fa
   const bodySchema = postBodySchema.parse(request.body)
 
   try {
-    const useCase = makeCreateUserWithoutPassword();
+    const useCase = makeCreateUserWithoutPasswordUseCase();
 
     await useCase.execute(bodySchema)
 

@@ -24,19 +24,19 @@ import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import HeaderResourceForm from "@/components/HeaderResourceForm";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { useParamOptional } from "@/hooks/useRequiredParam";
 import { 
   manageAppointmentSchema, 
   type ManageAppointmentSchemaFormData
 } from "@/features/client/schema/manageAppointment";
 import { emptyAppointment } from "@/features/client/utils/mockConstants";
-import { 
-  convertBrazilDateTimeToUTC, 
-  formatDateTimeBrazil 
-} from "@/utils/formatDateTimeBrazil";
+import { formatDate, parseDate } from "@/utils/manageDate";
+
 
 export default function ManageUpdateAppointment() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   
   const clientId = useParamOptional('clienteId', true)
@@ -86,7 +86,7 @@ export default function ManageUpdateAppointment() {
     if (currentAppointment) {
       reset({
         ...currentAppointment,
-        appointmentAt: formatDateTimeBrazil(currentAppointment.appointmentAt)
+        appointmentAt: formatDate(currentAppointment.appointmentAt)
       })
     }
   }, [currentAppointment, reset])
@@ -103,9 +103,11 @@ export default function ManageUpdateAppointment() {
   const mutationPatchAppointment =
     useMutationPatchAppointment({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success");
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error");
       },
     })
@@ -116,7 +118,7 @@ export default function ManageUpdateAppointment() {
 
   const onSubmit: SubmitHandler<ManageAppointmentSchemaFormData> = async (data) => {
 
-    const appointmentAtConverted = new Date(convertBrazilDateTimeToUTC(data.appointmentAt ?? undefined))
+    const appointmentAtConverted = new Date(parseDate(data.appointmentAt ?? undefined))
 
     mutationPatchAppointment.mutate({ 
       id: currentAppointment.id,

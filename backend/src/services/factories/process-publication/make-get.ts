@@ -1,8 +1,8 @@
-import { PrismaProcessPublicationRepository } from "@/repositories/prisma/prisma-process-publication-repository"
+import { PrismaProcessPublicationRepository } from "@/repositories/prisma/process-publication"
 import { GetProcessPublicationUseCase } from "@/services/use-cases/process-publication/get"
 
 
-export function makeGetProcessPublication() {
+export function makeGetProcessPublicationUseCase() {
   const processPublication = new PrismaProcessPublicationRepository()
   return new GetProcessPublicationUseCase(processPublication)
 }

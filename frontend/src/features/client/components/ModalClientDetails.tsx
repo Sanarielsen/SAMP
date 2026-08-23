@@ -15,7 +15,7 @@ import {
 import { GridCloseIcon } from "@mui/x-data-grid"
 
 import type { Client } from "@/features/client/types/clients"
-import type { Field } from "@/utils/field"
+import type { Field } from "@/types/field"
 
 
 interface ModalClientDetailsProps {

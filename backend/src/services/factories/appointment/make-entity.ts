@@ -1,9 +1,9 @@
 import { 
   InMemoryAppointmentRepository 
-} from '@/repositories/in-memory/in-memory-appointment-repository'
+} from '@/repositories/in-memory/appointment'
+import dayjs from 'dayjs'
 
 import { Appointment } from '@shared/types/appointment'
-import dayjs from 'dayjs'
 
 
 export async function makeAppointment(

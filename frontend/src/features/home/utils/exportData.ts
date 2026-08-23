@@ -2,6 +2,7 @@ import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import type { AppoitmentItem } from "@shared/types/appointment";
+import { parseDate } from "@/utils/manageDate";
 
 const headers = [
   "ID",
@@ -15,7 +16,7 @@ function toRows(appointments: AppoitmentItem[]) {
   return appointments.map((item) => [
     item.id,
     item.description,
-    new Date(item.appointmentAt).toLocaleString("pt-BR"),
+    String(parseDate(item.appointmentAt)),
     item.clientName,
     item.orderTitle ?? "-",
   ]);

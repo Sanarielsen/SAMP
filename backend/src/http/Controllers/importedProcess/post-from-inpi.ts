@@ -4,7 +4,7 @@ import {
 } from "fastify";
 import { z } from "zod";
 
-import { makePostImportedProcessFromINPI } from "@/services/factories/imported-process/make-post-from-inpi";
+import { makePostImportedProcessFromINPIUseCase } from "@/services/factories/imported-process/make-post-from-inpi";
 import { UnauthorizedUserError } from "@/services/errors/unauthorized-user-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 	
@@ -30,7 +30,7 @@ export async function postImportedProcessFromINPI(request: FastifyRequest, reply
   const resultBody = postBodySchema.parse(request.body)
 
   try {
-    const useCase = makePostImportedProcessFromINPI();
+    const useCase = makePostImportedProcessFromINPIUseCase();
 
     const object = await useCase.execute({
       ...resultBody,

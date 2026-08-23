@@ -7,9 +7,9 @@ import {
 
 import { UpdateOrderUseCase } from "@/services/use-cases/order/update";
 
-import { OrderRepository } from "@/repositories/order-repository";
+import { OrderRepository } from "@/repositories/order";
 
-import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
+import { InMemoryOrderRepository } from "@/repositories/in-memory/order";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 

@@ -1,29 +1,18 @@
-import { PaymentInstallmentRepository } from "@/repositories/payment-installments-repository";
-
+import { PaymentInstallmentRepository } from "@/repositories/payment-installment";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { InvalidResourceError } from "@/services/errors/invalid-resource-error";
 
-import { PaymentInstallment } from "@shared/types/paymentInstallments";
+import { PaymentInstallment, PaymentInstallmentProof } from "@shared/types/paymentInstallment";
 
-
-interface UpdatePaymentInstallmentPaidUseCaseRequest {
-  id: string,
-  paidAt: Date | null,
-  proofPaymentPath: string | null
-}
 
 export class UpdatePaymentInstallmentPaidUseCase {
   constructor(
     private paymentInstallmentsRepository: PaymentInstallmentRepository
   ) {}
 
-  async execute({
-    id,
-    paidAt,
-    proofPaymentPath
-  }: UpdatePaymentInstallmentPaidUseCaseRequest): Promise<PaymentInstallment> {
+  async execute( data: PaymentInstallmentProof ): Promise<PaymentInstallment> {
     
-    const paymentInstallments = await this.paymentInstallmentsRepository.findById(id)
+    const paymentInstallments = await this.paymentInstallmentsRepository.findById(data.id)
 
     if (!paymentInstallments) {
       throw new ResourceNotFoundError()
@@ -35,9 +24,7 @@ export class UpdatePaymentInstallmentPaidUseCase {
 
     const updatedPaymentInstallment =
       await this.paymentInstallmentsRepository.updateInstallmentPaid(
-        id, 
-        paidAt,
-        proofPaymentPath
+        data
       )
 
     return updatedPaymentInstallment

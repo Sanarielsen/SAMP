@@ -1,5 +1,5 @@
-import { ClientRepository } from "@/repositories/client-repository";
-import { RepresentativeRepository } from "@/repositories/representative-repository";
+import { ClientRepository } from "@/repositories/client";
+import { RepresentativeRepository } from "@/repositories/representative";
 
 import { CreateRepresentativeDTO } from "@shared/types/representative";
 

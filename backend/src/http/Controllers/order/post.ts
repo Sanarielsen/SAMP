@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 
-import { makePostOrderUseCase } from '@/services/factories/order/make-post-use-case'
+import { makePostOrderUseCase } from '@/services/factories/order/make-post'
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error'
 import { NonExistUserError } from '@/services/errors/non-exist-user-error'
 

@@ -7,10 +7,10 @@ import {
 
 import { ListByPaymentInstallmentsUseCase } from "@/services/use-cases/payment-installment/get-by-payment";
 
-import { InMemoryPaymentInstallmentsRepository } from "@/repositories/in-memory/in-memory-payment-installment-repository";
-import { InMemoryPaymentRepository } from "@/repositories/in-memory/in-memory-payment-repository";
+import { InMemoryPaymentInstallmentsRepository } from "@/repositories/in-memory/payment-installment";
+import { InMemoryPaymentRepository } from "@/repositories/in-memory/payment";
 
-import { makePayment } from "@/services/factories/payment/make-payment-entity";
+import { makePayment } from "@/services/factories/payment/make-entity";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 import { Payment } from "@shared/types/payment";

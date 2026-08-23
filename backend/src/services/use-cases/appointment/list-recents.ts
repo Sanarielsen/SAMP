@@ -1,4 +1,4 @@
-import { AppointmentRepository } from "@/repositories/appointment-repository";
+import { AppointmentRepository } from "@/repositories/appointment";
 
 import { AppoitmentItem } from "@shared/types/appointment";
 

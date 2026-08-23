@@ -10,8 +10,9 @@ import {
 } from "@mui/x-data-grid"
 import FeedbackIcon from '@mui/icons-material/Feedback';
 
+import { formatDate } from "@/utils/manageDate";
+
 import type { ProcessPublication } from "@shared/types/processPublication";
-import { formatDate } from "@/utils/formatDateCode";
 
 
 type ColumnsPublicationsProps = {

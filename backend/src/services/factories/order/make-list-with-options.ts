@@ -1,6 +1,7 @@
-import { PrismaOrderRepository } from "@/repositories/prisma/prisma-order-repository";
-import { PrismaClientRepository } from "@/repositories/prisma/prisma-client-repository";
+import { PrismaOrderRepository } from "@/repositories/prisma/order";
+import { PrismaClientRepository } from "@/repositories/prisma/client";
 import { ListOrdersWithOptionsUseCase } from "@/services/use-cases/order/list-options";
+
 
 export function makeListOrderWithOptionsUseCase() {
   const orderRepository = new PrismaOrderRepository();

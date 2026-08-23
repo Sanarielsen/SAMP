@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { useParams } from "react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { useParams } from "react-router";
+import { 
+  useQuery, 
+  useQueryClient
+} from "@tanstack/react-query";
 import { 
   Box, 
   Grid 
 } from "@mui/material";
-
 
 import { 
   optionsQueryListPaymentInstallments 
@@ -15,21 +17,27 @@ import {
   useMutationPatchPaymentInstallment 
 } from "@/features/payment/api/mutationUpdatePaymentInstallment";
 import { optionsQueryListPaymentMethodOptions } from "@/api/queryListPaymentMethods";
+import ModalInstallmentToObs from "@/features/payment/components/ModalInstallmentToObs";
 import InstallmentDetail from "@/features/payment/components/InstallmentDetail";
 import ModalInstallmentToPay from "@/features/payment/components/ModalInstallmentToPay";
+import { FullScreenLoader } from "@/components/FullScreenLoader";
 import HeaderPage from "@/components/HeaderPage";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 
-import { type PaymentInstallment } from '@shared/types/paymentInstallments'
+import { type PaymentInstallment } from '@shared/types/paymentInstallment'
 
 
 export default function PaymentDetails() {
 
   const { id } = useParams();
 
+  const actionAudio = useAudioFeedback();
+
   const [currentPayment, setCurrentPayment] = useState<PaymentInstallment>();
 
   const [openToast, setOpenToast] = useState("")
+  const [modalPaymentToObs, setModalPaymentToObs] = useState(false);
   const [modalPaymentToPay, setModalPaymentToPay] = useState(false);
 
   const queryClient = useQueryClient();
@@ -53,6 +61,7 @@ export default function PaymentDetails() {
     if (result === "success") {
       setTimeout(() => {
         setModalPaymentToPay(false);
+        setModalPaymentToObs(false);
         queryClient.invalidateQueries({
           queryKey: ['payment-installments', id]
         })
@@ -63,12 +72,11 @@ export default function PaymentDetails() {
   const mutationPatchInstallment =
     useMutationPatchPaymentInstallment({
       onSuccess: () => {
+        actionAudio.playSuccess();
         setOpenToast("success")
-        queryClient.invalidateQueries({
-          queryKey: ['payment-installments', id]
-        })
       },
       onError: () => {
+        actionAudio.playError();
         setOpenToast("error")
       },
   })
@@ -77,11 +85,16 @@ export default function PaymentDetails() {
     setCurrentPayment(current)
     setModalPaymentToPay(true)
   }
+
+  function handleClickSendObservationInstallment(current: PaymentInstallment) {
+    setCurrentPayment(current)
+    setModalPaymentToObs(true)
+  }
   
   return (
     <>
       <HeaderPage 
-        title="Gerenciar as parcelas deste pagamento:"
+        title="Gerenciar as parcelas deste pagamento"
       />
        
       <Box component="section" sx={{
@@ -100,13 +113,16 @@ export default function PaymentDetails() {
                     paymentInstallment.installment % 2 == 0 ? "secondInstallment" : undefined
                   } 
                   onClickUpdatePayment={(data) => mutationPatchInstallment.mutate(data)}
+                  onClickUpdateObservation={(id) => handleClickSendObservationInstallment(id)}
                   onClickSendPaidData={(id) => handleClickSendPaidInstallment(id)}
-                  />
+                />
               </Grid>
             )
           } 
         )}
       </Box>
+
+      <FullScreenLoader open={mutationPatchInstallment.isPending} />
 
       <ToastContainer
         open={openToast === "success"}
@@ -123,12 +139,23 @@ export default function PaymentDetails() {
       />
 
       { currentPayment && (
-        <ModalInstallmentToPay
-          open={modalPaymentToPay}
-          installment={currentPayment}
-          onSubmitPaidAt={(action) => executeActionAfterRequest(action)}
-          handleClose={() => setModalPaymentToPay(false)}
-        />
+        <>
+          <ModalInstallmentToObs
+            key={currentPayment?.id ?? "obs-modal"}
+            open={modalPaymentToObs}
+            installment={currentPayment}
+            onSubmitObservation={(action) => executeActionAfterRequest(action)}
+            handleClose={() => setModalPaymentToObs(false)}
+          />
+
+          <ModalInstallmentToPay
+            open={modalPaymentToPay}
+            installment={currentPayment}
+            onSubmitPaidAt={(action) => executeActionAfterRequest(action)}
+            handleClose={() => setModalPaymentToPay(false)}
+          />
+        </>
+
       ) }
     </>
   )

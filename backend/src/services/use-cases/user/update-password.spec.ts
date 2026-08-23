@@ -7,8 +7,8 @@ import {
 import { compare } from "bcryptjs";
 
 import { UpdateUserPasswordUseCase } from "@/services/use-cases/user/update-password";
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
-import { InMemoryUserRoleRepository } from "@/repositories/in-memory/in-memory-user-role-repository";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
+import { InMemoryUserRoleRepository } from "@/repositories/in-memory/user-role";
 import { makeUserRole } from "@/services/factories/user-role/make-entity";
 import { makeUser } from "@/services/factories/user/make-entity";
 import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";

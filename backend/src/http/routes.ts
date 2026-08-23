@@ -77,6 +77,7 @@ import { getUserWithoutPassword } from "./Controllers/user/get-without-password"
 import { postUserWithoutPassword } from "./Controllers/user/create-without-password";
 import { updateUser } from "./Controllers/user/update";
 import { deleteUser } from "./Controllers/user/delete";
+import { updatePaymentInstallmentObservation } from "./Controllers/paymentInstallment/update-observation";
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -143,6 +144,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.get(`/payment/:id/installments`, {onRequest: [verifyJWT]}, listPaymentInstallments)
   app.patch('/payment/installment/:id', {onRequest: [verifyJWT]}, updatePaymentInstallment)
   app.patch('/payment/installment/:id/paid', {onRequest: [verifyJWT]}, updatePaymentInstallmentAsPaid)
+  app.patch('/payment/installment/:id/observation', {onRequest: [verifyJWT]}, updatePaymentInstallmentObservation)
   app.delete('/payment/:id', {onRequest: [verifyJWT]}, deletePayment)
 
   app.get('/payment/method/:id', {onRequest: [verifyJWT]}, getPaymentMethod)

@@ -28,13 +28,13 @@ import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import { ControlledInput } from "@/components/ControlledInputText";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { 
   manageOrderServiceSchema, 
   type ManageOrderSchemaFormData 
 } from "@/features/order/schemas/manageOrderServiceSchema";
 import { emptyOrder } from "@/features/order/utils/emptyOrder";
-import { formatAsVisualDate } from "@/utils/formatAsAVisualDate";
-import { parseBRDate } from "@/utils/formatDate";
+import { formatDate, parseDate } from "@/utils/manageDate";
 
 import type { 
   CreateOrderDTO, 
@@ -44,6 +44,7 @@ import type {
 
 export default function OrderServiceManagePage() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = !!id;
@@ -89,10 +90,10 @@ export default function OrderServiceManagePage() {
   } = form
 
   useEffect(() => {
-    if (currentOrder) {
+    if (isEditing && currentOrder) {
       reset({
         ...currentOrder,
-        eventDate: formatAsVisualDate(
+        eventDate: formatDate(
           currentOrder.eventDate
         ),
         orderTypeId: String(
@@ -108,6 +109,7 @@ export default function OrderServiceManagePage() {
     setOpenToast(result);
     if (result === "success") {
       setTimeout(() => {
+        reset(emptyOrder);
         navigate("/oss");
       }, 5000);
     }
@@ -116,9 +118,11 @@ export default function OrderServiceManagePage() {
   const mutationPostOrder =
     useMutationPostOrder({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success")
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error")
       },
   })
@@ -126,9 +130,11 @@ export default function OrderServiceManagePage() {
   const mutationPatchOrder =
     useMutationPatchOrder({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success")
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error")
       },
   })
@@ -142,7 +148,7 @@ export default function OrderServiceManagePage() {
         orderTypeId: Number(data.orderTypeId),
         description: data.description,
         observation: data.observation ?? '',
-        eventDate: parseBRDate(data.eventDate)
+        eventDate: parseDate(data.eventDate)
       }
 
       mutationPatchOrder.mutate(payload)
@@ -154,7 +160,7 @@ export default function OrderServiceManagePage() {
       orderTypeId: Number(data.orderTypeId),
       description: data.description,
       observation: data.observation ?? '',
-      eventDate: parseBRDate(data.eventDate)
+      eventDate: parseDate(data.eventDate)
     }
 
     mutationPostOrder.mutate(payload)

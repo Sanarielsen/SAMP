@@ -7,7 +7,7 @@ import {
   ZodError
 } from "zod";
 
-import { makePostRepresentativeUseCase } from "@/services/factories/representatives/make-post-use-case";
+import { makePostRepresentativeUseCase } from "@/services/factories/representatives/make-post";
 
 
 export async function postRepresentative(request: FastifyRequest, reply: FastifyReply) {

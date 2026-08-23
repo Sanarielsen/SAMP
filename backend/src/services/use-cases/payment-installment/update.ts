@@ -1,11 +1,11 @@
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
-import { PaymentInstallmentRepository } from "@/repositories/payment-installments-repository";
+import { PaymentInstallmentRepository } from "@/repositories/payment-installment";
 
 import { 
   PaymentInstallment,
   UpdatePaymentInstallmentDTO
-} from "@shared/types/paymentInstallments";
+} from "@shared/types/paymentInstallment";
 
 
 export class UpdatePaymentInstallmentUseCase {
@@ -17,9 +17,7 @@ export class UpdatePaymentInstallmentUseCase {
 
     const paymentInstallment = await this.paymentInstallmentsRepository.findById(data.id)
 
-    if (!paymentInstallment) {
-      throw new ResourceNotFoundError()
-    }
+    if (!paymentInstallment) throw new ResourceNotFoundError()
 
     const updatedPaymentInstallment =
       await this.paymentInstallmentsRepository.update({

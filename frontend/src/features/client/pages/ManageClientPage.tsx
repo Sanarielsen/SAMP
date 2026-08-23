@@ -15,6 +15,7 @@ import type { AddressSchemaFormData } from "@/schemas/addressSchema";
 
 import { ModalAddress } from "@/features/client/components/ModalAddress";
 import { CopyButton } from "@/features/client/components/CopyButton";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { getErrorMessage } from "@/features/client/utils/getErrorMessage";
 import { formatAddress } from "@/features/client/utils/formatAddress";
 import { emptyClient } from "@/features/client/utils/mockConstants";
@@ -25,10 +26,10 @@ import { getDocumentMask } from "@/features/client/utils/getDocumentMask";
 import { optionsQueryGetClient } from "@/api/queryGetClient";
 import { useQuery } from "@tanstack/react-query";
 import { formatDocument } from "../../../utils/formatDocument";
-import { formatAsVisualDate } from "../../../utils/formatAsAVisualDate";
 import { parseAddress } from "../utils/formatAddressFromAPI";
 import { cleanValue } from "@/utils/cleanValue";
 import ToastContainer from "@/components/Toast";
+import { formatDate, parseDate } from "@/utils/manageDate";
 
 const optionsType = [
   {
@@ -46,6 +47,7 @@ export default function ManageClientPage() {
   const { getUserId } = useAuth();
   const userId = getUserId()
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = !!id;
@@ -95,7 +97,7 @@ export default function ManageClientPage() {
         protocol: formatDocument(
           currentClient.protocol
         ),
-        fundationDate: formatAsVisualDate(
+        fundationDate: formatDate(
           currentClient.dataFundation
         ),
         locationAddress: parseAddress(currentClient.locationAddress),
@@ -137,9 +139,11 @@ export default function ManageClientPage() {
   const mutationPostClient =
     useMutationPostClient({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success");
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error");
       },
   })
@@ -147,9 +151,11 @@ export default function ManageClientPage() {
   const mutationPatchClient = 
     useMutationPatchClient({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success");
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error");
       },
   })
@@ -164,13 +170,13 @@ export default function ManageClientPage() {
         tradeName: data.tradeName,
         protocol: cleanValue(data.protocol),
         type: data.type,
-        dataFundation: new Date(data.fundationDate),
+        dataFundation: parseDate(data.fundationDate),
         locationAddress: formatAddress(data.locationAddress),
         correspondenceAddress: formatAddress(data.correspondenceAddress),
         nameContact: data.nameContact,
         numberContact: cleanValue(data.numberContact),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: new Date(Date.now()),
+        updatedAt: new Date(Date.now()),
         isActivated: true
       }
 
@@ -184,13 +190,13 @@ export default function ManageClientPage() {
       tradeName: data.tradeName,
       protocol: cleanValue(data.protocol),
       type: data.type,
-      dataFundation: new Date(data.fundationDate),
+      dataFundation: parseDate(data.fundationDate),
       locationAddress: formatAddress(data.locationAddress),
       correspondenceAddress: formatAddress(data.correspondenceAddress),
       nameContact: data.nameContact,
       numberContact: cleanValue(data.numberContact),
       createdAt: new Date(),
-      updatedAt: new Date(),
+      updatedAt: null,
       isActivated: true
     }
 

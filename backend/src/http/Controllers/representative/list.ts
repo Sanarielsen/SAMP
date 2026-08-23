@@ -3,7 +3,7 @@ import {
   FastifyRequest
 } from "fastify";
 
-import { makeListRepresentativeUseCase } from "@/services/factories/representatives/make-list-use-case";
+import { makeListRepresentativeUseCase } from "@/services/factories/representatives/make-list";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 

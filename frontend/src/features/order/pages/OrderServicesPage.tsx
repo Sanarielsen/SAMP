@@ -19,6 +19,7 @@ import DataTableColumnsOrder from "@/features/order/components/DataTableColumnsO
 import DataTable from "@/components/DataTable";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 
 
 interface OrderDetailDTO {
@@ -36,6 +37,7 @@ interface OrderDetailDTO {
 
 export default function OrderServicesPage() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
 
   const queryClient = useQueryClient()
@@ -59,10 +61,12 @@ export default function OrderServicesPage() {
   const mutationDeleteOrder =
     useMutationDeleteOrder({
     onSuccess: () => {
+      actionAudio.playSuccess();
       queryClient.invalidateQueries({ queryKey: ['orders'] })
       setOpenToast("success"); 
     },
     onError: () => {
+      actionAudio.playError();
       setOpenToast("error"); 
     },
   })

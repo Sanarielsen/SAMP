@@ -1,7 +1,5 @@
 import { Typography } from "@mui/material"
 
-import { formatStringToVisualDate } from "@/utils/fomartToVisualDate"
-
 
 interface GroupTextDateProps {
   title: string,
@@ -19,7 +17,7 @@ export default function GroupTextDate({
       </Typography>
 
       <Typography>
-        {formatStringToVisualDate(value)}
+        {String(value)}
       </Typography>
 
       {observation && (
