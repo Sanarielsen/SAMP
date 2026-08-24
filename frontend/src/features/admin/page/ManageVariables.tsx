@@ -281,7 +281,6 @@ export default function ManageVariables() {
   }
 
   function handleDelete(id: number, entity: string) {
-    console.log("Entidade atual: ", entity)
     setEntitySelected(entity);
     switch (entity) {
       case "paymentMethod":

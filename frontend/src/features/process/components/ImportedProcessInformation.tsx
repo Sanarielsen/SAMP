@@ -29,8 +29,6 @@ export default function ImportedProcessInformation({
     return <BoxLoading description="Carregando os dados, aguarde..." />
   }
 
-  console.log("Processo atual: ", data)
-
   return (
     <Box component="section" sx={{ px: 2 }}>
       <HeaderPage title="Dados do processo">

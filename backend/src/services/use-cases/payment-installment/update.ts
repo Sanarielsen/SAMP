@@ -17,9 +17,7 @@ export class UpdatePaymentInstallmentUseCase {
 
     const paymentInstallment = await this.paymentInstallmentsRepository.findById(data.id)
 
-    if (!paymentInstallment) {
-      throw new ResourceNotFoundError()
-    }
+    if (!paymentInstallment) throw new ResourceNotFoundError()
 
     const updatedPaymentInstallment =
       await this.paymentInstallmentsRepository.update({

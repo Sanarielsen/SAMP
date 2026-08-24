@@ -1,10 +1,11 @@
 import { PrismaPaymentInstallmentsRepository } from "@/repositories/prisma/prisma-payment-instalments-repository";
-import { UpdatePaymentInstallmentUseCase } from "@/services/use-cases/payment-installment/update";
+import { UpdatePaymentInstallmentObservationUseCase } from "@/services/use-cases/payment-installment/update-observation";
 
-export function makeUpdatePaymentInstallment() {
+
+export function makeUpdatePaymentInstallmentObservation() {
   const paymentInstallmentsRepository = new PrismaPaymentInstallmentsRepository();
   
-  const useCase = new UpdatePaymentInstallmentUseCase(
+  const useCase = new UpdatePaymentInstallmentObservationUseCase(
     paymentInstallmentsRepository,
   );
 

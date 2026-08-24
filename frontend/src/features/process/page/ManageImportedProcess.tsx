@@ -154,8 +154,6 @@ export default function ManageImportedProcess() {
     form.setValue("grantDate", formatDate(process.grantDate))
     form.setValue("expirationDate", formatDate(process.expirationDate))
 
-    console.log("Processo atual: ", process)
-
     setOpenModalSearch(false)
   }
 

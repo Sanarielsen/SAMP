@@ -3,8 +3,10 @@ import { prisma } from "@/lib/prisma";
 import { PaymentInstallmentRepository } from "@/repositories/payment-installments-repository";
 
 import { 
-  CreatePaymentInstallmentDTO, 
   PaymentInstallment, 
+  PaymentInstallmentObservation, 
+  PaymentInstallmentProof, 
+  CreatePaymentInstallmentDTO, 
   UpdatePaymentInstallmentDTO
 } from "@shared/types/paymentInstallments";
 
@@ -13,6 +15,18 @@ export class PrismaPaymentInstallmentsRepository implements PaymentInstallmentRe
   create(data: CreatePaymentInstallmentDTO): Promise<PaymentInstallment> {
     throw new Error("Method not implemented.");
   }
+
+  async createMany(data: CreatePaymentInstallmentDTO[]): Promise<void> {
+    await prisma.paymentInstallment.createMany({
+      data: data.map(item => ({
+        ...item,
+
+        createdAt: new Date(),
+        updatedAt: null,
+        deletedAt: null,
+      })),
+    })
+}
 
   async update(data: UpdatePaymentInstallmentDTO): Promise<PaymentInstallment> {
     const { id, ...updateData } = data;
@@ -28,30 +42,28 @@ export class PrismaPaymentInstallmentsRepository implements PaymentInstallmentRe
     })
   }
 
-  async createMany(data: CreatePaymentInstallmentDTO[]): Promise<void> {
-    await prisma.paymentInstallment.createMany({
-      data: data.map(item => ({
-        ...item,
-
-        createdAt: new Date(),
-        updatedAt: null,
-        deletedAt: null,
-      })),
-    })
-  }
-
   async updateInstallmentPaid(
-    id: string,
-    paidAt: Date | null,
-    proofPaymentPath: string | null,
+    data: PaymentInstallmentProof
   ): Promise<PaymentInstallment> {
 
     return await prisma.paymentInstallment.update({
-      where: { id },
+      where: { id: data.id },
       data: {
-        paidAt,
-        receiptFilePath: proofPaymentPath ?? null,
-        updatedAt: new Date(),
+        paidAt: data.paidAt,
+        updatedAt: new Date(Date.now())
+      },
+    })
+  }
+
+  async updateInstallmenObservation(
+    data: PaymentInstallmentObservation
+  ): Promise<PaymentInstallment> {
+
+    return await prisma.paymentInstallment.update({
+      where: { id: data.id },
+      data: {
+        observation: data.observation,
+        updatedAt: new Date(Date.now())
       },
     })
   }

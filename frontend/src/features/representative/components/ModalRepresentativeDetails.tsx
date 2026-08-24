@@ -29,8 +29,6 @@ export default function ModalRepresentativeDetails({
   open, representative, fields, handleClose 
 }: ModalRepresentativeDetailsProps) {
 
-  console.log("Representante atual: ", representative)
-
   return (
     <Modal
       open={open}

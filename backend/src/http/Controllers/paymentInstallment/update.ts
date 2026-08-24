@@ -2,12 +2,12 @@ import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod';
 
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
-import { makeUpdatePaymentInstallmentUseCase } from '@/services/factories/payment-installment/make-update-payment-installment-use-case';
+import { makeUpdatePaymentInstallment } from '@/services/factories/payment-installment/make-update-payment-installment-use-case';
 
 export async function updatePaymentInstallment(request: FastifyRequest, reply: FastifyReply) {
   const updatePaymentInstallmentBodySchema = z.object({
 
-    methodId: z.string().optional(),
+    methodId: z.number().optional(),
     installment: z.number().optional(),
     amountInCents: z.number().optional(),
     dueDate: z.coerce.date().optional(),
@@ -24,7 +24,7 @@ export async function updatePaymentInstallment(request: FastifyRequest, reply: F
   const { id } = request.params as { id: string }
 
   try {
-    const useCase = makeUpdatePaymentInstallmentUseCase();
+    const useCase = makeUpdatePaymentInstallment();
 
     const order = await useCase.execute({
       id,

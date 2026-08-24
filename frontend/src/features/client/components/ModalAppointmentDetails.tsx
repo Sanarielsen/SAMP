@@ -39,8 +39,6 @@ export default function ModalAppointmentDetails({ open, appointment, fields, han
     optionsQueryGetAppointmentWithDetails(appointment.id, !!appointment.id)
   )
 
-  console.log("Agenda: ", currentAppointmentWithDetails)
-
   return (
     <Modal
       open={open}
