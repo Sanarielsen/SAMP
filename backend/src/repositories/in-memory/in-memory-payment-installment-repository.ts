@@ -5,7 +5,9 @@ import { PaymentInstallmentRepository } from "@/repositories/payment-installment
 import { 
   CreatePaymentInstallmentDTO, 
   UpdatePaymentInstallmentDTO,
-  PaymentInstallment
+  PaymentInstallmentProof,
+  PaymentInstallment,
+  PaymentInstallmentObservation,
 } from "@shared/types/paymentInstallments";
 
 
@@ -53,17 +55,37 @@ export class InMemoryPaymentInstallmentsRepository implements PaymentInstallment
     return updatedPaymentInstallment
   }
 
-  async updateInstallmentPaid(id: string, paidAt: Date | null): Promise<PaymentInstallment> {
+  async updateInstallmentPaid( data: PaymentInstallmentProof ): Promise<PaymentInstallment> {
     const paymentInstallmentIndex =
       this.items.findIndex(
-        (item) => item.id === id
+        (item) => item.id === data.id
       )
 
     const paymentInstallment = this.items[paymentInstallmentIndex]
 
     const updatedPaymentInstallment = {
       ...paymentInstallment,
-      paidAt,
+      paidAt: data.paidAt,
+
+      updatedAt: new Date(),
+    }
+
+    this.items[paymentInstallmentIndex] = updatedPaymentInstallment
+
+    return updatedPaymentInstallment
+  }
+
+  async updateInstallmenObservation(data: PaymentInstallmentObservation): Promise<PaymentInstallment> {
+    const paymentInstallmentIndex =
+      this.items.findIndex(
+        (item) => item.id === data.id
+      )
+
+    const paymentInstallment = this.items[paymentInstallmentIndex]
+
+    const updatedPaymentInstallment = {
+      ...paymentInstallment,
+      observation: data.observation,
 
       updatedAt: new Date(),
     }

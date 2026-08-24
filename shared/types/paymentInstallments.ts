@@ -40,3 +40,13 @@ export type UpdatePaymentInstallmentDTO = {
   receiptFilePath?: string | null
   observation?:     string | null
 }
+
+export type PaymentInstallmentProof = {
+  id: string
+  paidAt: Date | null
+}
+
+export type PaymentInstallmentObservation = {
+  id: string
+  observation: string | null
+}

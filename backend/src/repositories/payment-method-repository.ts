@@ -1,7 +1,7 @@
 import {
-  PaymentMethodCreateDTO,
   PaymentMethod,
-  PaymentMethodUpdateDTO
+  PaymentMethodCreateDTO,
+  PaymentMethodUpdateDTO,
 } from '@shared/types/paymentMethod'
 import { OptionsControlledBox } from '@shared/types/values'
 

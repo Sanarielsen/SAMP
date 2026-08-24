@@ -222,7 +222,7 @@ model PaymentInstallment {
   adjustmentInCents Int?
   observation       String?
 
-  dueDate         DateTime
+  dueDate         DateTime @db.Date
   paidAt          DateTime?
   receiptFilePath String?
 

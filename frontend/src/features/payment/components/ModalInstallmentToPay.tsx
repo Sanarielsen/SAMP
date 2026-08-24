@@ -13,12 +13,11 @@ import { GridCloseIcon } from "@mui/x-data-grid"
 import { useMutationPatchPaymentInstallment } from "@/features/payment/api/mutationUpdatePaymentInstallment"
 import { useMutationUpdatePaymentInstallmentToPay } from "@/features/payment/api/mutationUpdatePaymentInstallmentToPay"
 import { ControlledInputMask } from "@/components/ControlledInputMask"
-import { ControlledFileInput } from "@/components/ControlledFIleInput"
 import { 
   updatePaymentInstallmentToPay, 
   type UpdatePaymentInstallmentToPaySchemaFormData 
 } from "@/features/payment/schema/updatePaymentInstallmentToPay"
-import { formatDate } from "@/utils/manageDate"
+import { formatDate, parseDate } from "@/utils/manageDate"
 
 import type { PaymentInstallment } from "@shared/types/paymentInstallments"
 
@@ -89,12 +88,9 @@ export default function ModalInstallmentToPay({
 
   const onSubmit: SubmitHandler<UpdatePaymentInstallmentToPaySchemaFormData> = async (data) => {
 
-    const convertPaidAt = formatDate(data.paidAt)
-
     mutationUpdateInstallmentToPay.mutate({
       id: installment.id,
-      paidAt: convertPaidAt,
-      file: data.file
+      paidAt: parseDate(data.paidAt),
     })
   }
 
@@ -156,13 +152,13 @@ export default function ModalInstallmentToPay({
               />
             </Grid>
 
-            <Grid size={{ xs: 12}}>
+            {/* <Grid size={{ xs: 12}}>
               <ControlledFileInput
                 control={form.control}
                 name="file"
               />
 
-              {installment.receiptFilePath && (
+              {/* {installment.receiptFilePath && (
                 <div>
                   <p>Comprovante atual:</p>
                   <a
@@ -173,8 +169,8 @@ export default function ModalInstallmentToPay({
                     Carregar arquivo
                   </a>
                 </div>
-              )}
-            </Grid>
+              )} 
+            </Grid> */}
             
             { hasPaidBefore === 6 && (
 
