@@ -20,6 +20,7 @@ import { ControlledPasswordInput } from "@/components/ControlledPasswordInput";
 import { ControlledInput } from "@/components/ControlledInputText";
 import HeaderPage from "@/components/HeaderPage";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { 
   updatePasswordSchema, 
   type UpdatePasswordSchemaFormData 
@@ -28,6 +29,7 @@ import {
 
 export default function UpdatePassword() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -57,9 +59,11 @@ export default function UpdatePassword() {
   const mutationUpdateUserPassword = 
     useMutationUpdateUserPassword({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success");
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error");
       },
   })

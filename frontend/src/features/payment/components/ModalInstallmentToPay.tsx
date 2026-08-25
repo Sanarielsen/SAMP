@@ -13,6 +13,7 @@ import { GridCloseIcon } from "@mui/x-data-grid"
 import { useMutationPatchPaymentInstallment } from "@/features/payment/api/mutationUpdatePaymentInstallment"
 import { useMutationUpdatePaymentInstallmentToPay } from "@/features/payment/api/mutationUpdatePaymentInstallmentToPay"
 import { ControlledInputMask } from "@/components/ControlledInputMask"
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { 
   updatePaymentInstallmentToPay, 
   type UpdatePaymentInstallmentToPaySchemaFormData 
@@ -33,6 +34,8 @@ export default function ModalInstallmentToPay({
   open, installment, onSubmitPaidAt, handleClose
 }: ModalInstallmentToPayProps) {
 
+  const actionAudio = useAudioFeedback();
+
   const form = useForm<UpdatePaymentInstallmentToPaySchemaFormData>({
     resolver:
       zodResolver(updatePaymentInstallmentToPay),
@@ -46,6 +49,7 @@ export default function ModalInstallmentToPay({
   const mutationPatchInstallment =
     useMutationPatchPaymentInstallment({
       onSuccess: () => {
+        actionAudio.playSuccess();
         onSubmitPaidAt("success")
         setTimeout(() => {
           mutationPatchInstallment.reset();
@@ -53,6 +57,7 @@ export default function ModalInstallmentToPay({
         }, 5000);
       },
       onError: () => {
+        actionAudio.playError();
         onSubmitPaidAt("error")
       },
   })
@@ -60,6 +65,7 @@ export default function ModalInstallmentToPay({
   const mutationUpdateInstallmentToPay =
     useMutationUpdatePaymentInstallmentToPay({
       onSuccess: () => {
+        actionAudio.playSuccess();
         onSubmitPaidAt("success")
         setTimeout(() => {
           mutationUpdateInstallmentToPay.reset();
@@ -67,6 +73,7 @@ export default function ModalInstallmentToPay({
         }, 5000);
       },
       onError: () => {
+        actionAudio.playError();
         onSubmitPaidAt("error")
       },
   })

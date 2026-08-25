@@ -24,6 +24,7 @@ import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import HeaderResourceForm from "@/components/HeaderResourceForm";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { useParamOptional } from "@/hooks/useRequiredParam";
 import { 
   manageAppointmentSchema, 
@@ -35,6 +36,7 @@ import { formatDate, parseDate } from "@/utils/manageDate";
 
 export default function ManageUpdateAppointment() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   
   const clientId = useParamOptional('clienteId', true)
@@ -101,9 +103,11 @@ export default function ManageUpdateAppointment() {
   const mutationPatchAppointment =
     useMutationPatchAppointment({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success");
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error");
       },
     })

@@ -10,6 +10,7 @@ import ModalAppointmentDetails from "@/features/client/components/ModalAppointme
 import DataTable from "@/components/DataTable";
 import DataTableAppointmentColumns from "@/components/DataTableAppointmentColumns";
 import HeaderPage from "@/components/HeaderPage"
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast";
 import { useRequiredParam } from "@/hooks/useRequiredParam";
@@ -20,6 +21,7 @@ import type { Appointment } from "@shared/types/appointment";
 
 export default function AppointmentInformation() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const clientId = useRequiredParam('id')
   const queryClient = useQueryClient()
@@ -42,10 +44,12 @@ export default function AppointmentInformation() {
   const mutationChangeDeleteAppointment =
     useMutationDeleteAppointment({
     onSuccess: () => {
+      actionAudio.playSuccess();
       queryClient.invalidateQueries({ queryKey: ['appointments', clientId] })
       setOpenToast("success"); 
     },
     onError: () => {
+      actionAudio.playError();
       setOpenToast("error"); 
     },
   })

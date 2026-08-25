@@ -13,11 +13,14 @@ import ModalRepresentativeDetails from "@/features/representative/components/Mod
 import DataTable from "@/components/DataTable";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 
 import type { RepresentativeDetailsDTO } from "@shared/types/representative";
 
 
 export default function RepresentativePage() {
+
+  const actionAudio = useAudioFeedback();
 
   const [searchBar, setSearchBar] = useState("");
   const [searchApplied, setSearchApplied] = useState("")
@@ -40,10 +43,12 @@ export default function RepresentativePage() {
   const mutationChangeDeleteRepresentative =
     useMutationDeleteRepresentative({
     onSuccess: () => {
+      actionAudio.playSuccess();
       queryClient.invalidateQueries({ queryKey: ['representatives'] })
       setOpenToast("success"); 
     },
     onError: () => {
+      actionAudio.playError();
       setOpenToast("error"); 
     },
   })

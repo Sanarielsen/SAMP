@@ -18,6 +18,7 @@ import DataTableColumnsUsers from "@/features/admin/components/DataTableColumnsU
 import ModalUserWithDetails from "@/features/admin/components/ModalUserWIthDetails";
 import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast";
 import { userFields } from "@/features/admin/utils/getRowUserWIthDetails";
@@ -25,8 +26,10 @@ import { userFields } from "@/features/admin/utils/getRowUserWIthDetails";
 import type { UserDetailDTO } from "@shared/types/user";
 
 
+
 export default function ManageUsers() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
@@ -57,9 +60,11 @@ export default function ManageUsers() {
   const mutationDeleteUser =
     useMutationDeleteUser({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success_deleted")
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error_deleted")
       },
   })

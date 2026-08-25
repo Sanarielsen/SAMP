@@ -28,6 +28,7 @@ import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import { ControlledInput } from "@/components/ControlledInputText";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { 
   manageOrderServiceSchema, 
   type ManageOrderSchemaFormData 
@@ -43,6 +44,7 @@ import type {
 
 export default function OrderServiceManagePage() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = !!id;
@@ -116,9 +118,11 @@ export default function OrderServiceManagePage() {
   const mutationPostOrder =
     useMutationPostOrder({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success")
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error")
       },
   })
@@ -126,9 +130,11 @@ export default function OrderServiceManagePage() {
   const mutationPatchOrder =
     useMutationPatchOrder({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success")
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error")
       },
   })

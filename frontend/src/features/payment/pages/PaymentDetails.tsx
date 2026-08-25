@@ -23,6 +23,7 @@ import ModalInstallmentToPay from "@/features/payment/components/ModalInstallmen
 import { FullScreenLoader } from "@/components/FullScreenLoader";
 import HeaderPage from "@/components/HeaderPage";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 
 import { type PaymentInstallment } from '@shared/types/paymentInstallment'
 
@@ -30,6 +31,8 @@ import { type PaymentInstallment } from '@shared/types/paymentInstallment'
 export default function PaymentDetails() {
 
   const { id } = useParams();
+
+  const actionAudio = useAudioFeedback();
 
   const [currentPayment, setCurrentPayment] = useState<PaymentInstallment>();
 
@@ -69,9 +72,11 @@ export default function PaymentDetails() {
   const mutationPatchInstallment =
     useMutationPatchPaymentInstallment({
       onSuccess: () => {
+        actionAudio.playSuccess();
         setOpenToast("success")
       },
       onError: () => {
+        actionAudio.playError();
         setOpenToast("error")
       },
   })

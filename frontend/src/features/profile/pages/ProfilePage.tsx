@@ -20,6 +20,7 @@ import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import HeaderPage from "@/components/HeaderPage";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { 
   updateProfileSchema, 
   type UpdateProfileSchemaFormData 
@@ -29,6 +30,7 @@ import { formatDate } from "@/utils/manageDate";
 
 export default function ProfilePage() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate()
   const [openToast, setOpenToast] = useState("")
 
@@ -58,9 +60,11 @@ export default function ProfilePage() {
   const mutationPatchUserProfile =
     useMutationPatchUserProfile({
       onSuccess: () => {
+        actionAudio.playSuccess();
         setOpenToast("success");
       },
       onError: () => {
+        actionAudio.playError();
         setOpenToast("error");
       },
   })
