@@ -16,6 +16,7 @@ import { optionsQueryListProcessPublicationFromINPI } from "@/features/process/a
 import { useMutationPostManyProcessPublications } from "@/features/process/api/mutationPostManyPublications";
 import { CheckBoxWithDetailsList } from "@/components/CheckBoxWithDetailsList";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { 
   publicationFormSchema,
   type PublicationFormData
@@ -37,6 +38,8 @@ interface ModalLoadProcessPublicationINPIProps {
 export default function ModalLoadProcessPublicationINPI({
   open, processNumber, handleClose, processId
 }: ModalLoadProcessPublicationINPIProps) {
+
+  const actionAudio = useAudioFeedback();
 
   const queryClient = useQueryClient()
 
@@ -68,12 +71,16 @@ export default function ModalLoadProcessPublicationINPI({
 
   const mutationPostMany = useMutationPostManyProcessPublications({
     onSuccess: () => {
+      actionAudio.playSuccess();
       setOpenToast("success")
       queryClient.invalidateQueries({ queryKey: ['process-publications', processId] })
       mutationPostMany.reset();
       handleClose()
     },
-    onError: () => setOpenToast("error")
+    onError: () => {
+      actionAudio.playError();
+      setOpenToast("error")
+    }
   })
 
   const isRunningSomething = 

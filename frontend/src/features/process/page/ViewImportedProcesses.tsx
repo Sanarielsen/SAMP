@@ -15,10 +15,12 @@ import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 
 
 export default function ViewImportedProcesses() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -41,10 +43,12 @@ export default function ViewImportedProcesses() {
   const mutationDeleteProcess =
     useMutationDeleteProcess({
       onSuccess: () => {
+        actionAudio.playSuccess();
         queryClient.invalidateQueries({ queryKey: ['processes', searchApplied] })
         setOpenToast("success"); 
       },
       onError: () => {
+        actionAudio.playError();
         setOpenToast("error"); 
       },
     })

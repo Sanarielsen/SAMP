@@ -15,6 +15,7 @@ import type { AddressSchemaFormData } from "@/schemas/addressSchema";
 
 import { ModalAddress } from "@/features/client/components/ModalAddress";
 import { CopyButton } from "@/features/client/components/CopyButton";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { getErrorMessage } from "@/features/client/utils/getErrorMessage";
 import { formatAddress } from "@/features/client/utils/formatAddress";
 import { emptyClient } from "@/features/client/utils/mockConstants";
@@ -46,6 +47,7 @@ export default function ManageClientPage() {
   const { getUserId } = useAuth();
   const userId = getUserId()
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = !!id;
@@ -137,9 +139,11 @@ export default function ManageClientPage() {
   const mutationPostClient =
     useMutationPostClient({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success");
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error");
       },
   })
@@ -147,9 +151,11 @@ export default function ManageClientPage() {
   const mutationPatchClient = 
     useMutationPatchClient({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success");
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error");
       },
   })

@@ -15,6 +15,7 @@ import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
 import ModalConfirmation from "@/components/ModalConfirmation";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { paymentFields } from "@/features/order/utils/getRowDetailPayment";
 
 import type { PaymentDetailDTO } from "@shared/types/payment";
@@ -22,6 +23,7 @@ import type { PaymentDetailDTO } from "@shared/types/payment";
 
 export default function PaymentInformation() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const { id: orderId } = useParams();
   const queryClient = useQueryClient();
@@ -42,14 +44,16 @@ export default function PaymentInformation() {
 
   const mutationDeletePayment =
     useMutationDeletePayment({
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['order-payments'] })
-      setOpenToast("success"); 
-    },
-    onError: () => {
-      setOpenToast("error"); 
-    },
-  })
+      onSuccess: () => {
+        actionAudio.playSuccess();
+        queryClient.invalidateQueries({ queryKey: ['order-payments'] })
+        setOpenToast("success"); 
+      },
+      onError: () => {
+        actionAudio.playError();
+        setOpenToast("error"); 
+      },
+    })
 
   const stateQuery = isSuccess ? "SUCCESS" : 
     isLoading ? "LOADING" :

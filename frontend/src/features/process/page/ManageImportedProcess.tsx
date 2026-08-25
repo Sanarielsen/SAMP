@@ -26,6 +26,7 @@ import { ControlledInputMask } from "@/components/ControlledInputMask";
 import HeaderResourceForm from "@/components/HeaderResourceForm";
 import ModalViewEntityDetails from "@/components/ModalViewEntityDetails";
 import ToastContainer from "@/components/Toast";
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { useDetailsModal } from "@/hooks/useDetailsModal";
 import { 
   manageImportedProcessSchema, 
@@ -43,6 +44,7 @@ import type { ImportedProcessCreateDTO, ImportedProcessFromINPI } from "@shared/
 
 export default function ManageImportedProcess() {
 
+  const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const { id } = useParams()
   const isEditing = !!id;
@@ -120,9 +122,11 @@ export default function ManageImportedProcess() {
   const mutationPostImportedProcess =
     useMutationPostImportedProcess({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success");
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error");
       },
     })
@@ -130,9 +134,11 @@ export default function ManageImportedProcess() {
   const mutationUpdateProcess =
     useMutationUpdateProcess({
       onSuccess: () => {
+        actionAudio.playSuccess();
         executeActionAfterRequest("success");
       },
       onError: () => {
+        actionAudio.playError();
         executeActionAfterRequest("error");
       },
     })

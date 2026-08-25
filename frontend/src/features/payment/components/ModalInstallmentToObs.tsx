@@ -15,6 +15,7 @@ import { useEffect } from "react"
 
 import { useMutationPatchPaymentInstallmentToObs } from "@/features/payment/api/mutationUpdatePaymentInstallmentToObs"
 import { ControlledInput } from "@/components/ControlledInputText"
+import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { 
   updatePaymentInstallmentToObs, 
   type UpdatePaymentInstallmentToObsSchemaFormData 
@@ -34,6 +35,8 @@ export default function ModalInstallmentToObs({
   open, installment, onSubmitObservation, handleClose
 }: ModalInstallmentToObsProps) {
 
+  const actionAudio = useAudioFeedback();
+
   const form = useForm<UpdatePaymentInstallmentToObsSchemaFormData>({
     resolver:
       zodResolver(updatePaymentInstallmentToObs),
@@ -51,6 +54,7 @@ export default function ModalInstallmentToObs({
   const mutationUpdateInstallmentToObs =
     useMutationPatchPaymentInstallmentToObs({
       onSuccess: () => {
+        actionAudio.playSuccess();
         onSubmitObservation("success")
         setTimeout(() => {
           mutationUpdateInstallmentToObs.reset();
@@ -58,6 +62,7 @@ export default function ModalInstallmentToObs({
         }, 5000);
       },
       onError: () => {
+        actionAudio.playError();
         onSubmitObservation("error")
       },
   })
