@@ -7,8 +7,8 @@ import {
 
 import { DeleteOrderUseCase } from "@/services/use-cases/order/delete";
 
-import { OrderRepository } from "@/repositories/order-repository";
-import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
+import { OrderRepository } from "@/repositories/order";
+import { InMemoryOrderRepository } from "@/repositories/in-memory/order";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 

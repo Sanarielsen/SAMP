@@ -1,4 +1,4 @@
-import { InMemoryUserRoleRepository } from '@/repositories/in-memory/in-memory-user-role-repository'
+import { InMemoryUserRoleRepository } from '@/repositories/in-memory/user-role'
 
 import { CreateUserRoleDTO } from '@shared/types/userRole'
 

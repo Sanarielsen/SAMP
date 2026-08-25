@@ -4,7 +4,7 @@ import {
 } from "fastify";
 import { z } from "zod";
 
-import { makeUpdatePaymentMethod } from "@/services/factories/payment-method/make-update";
+import { makeUpdatePaymentMethodUseCase } from "@/services/factories/payment-method/make-update";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 
@@ -19,7 +19,7 @@ export async function updatePaymentMethod(request: FastifyRequest, reply: Fastif
   const { id } = request.params as { id: number }
 
   try {
-    const useCase = makeUpdatePaymentMethod();
+    const useCase = makeUpdatePaymentMethodUseCase();
 
     await useCase.execute({
       id: Number(id),

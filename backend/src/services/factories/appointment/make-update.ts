@@ -1,6 +1,6 @@
-import { PrismaAppointmentRepository } from "@/repositories/prisma/prisma-appointment-repository";
-import { PrismaClientRepository } from "@/repositories/prisma/prisma-client-repository";
-import { PrismaOrderRepository } from "@/repositories/prisma/prisma-order-repository";
+import { PrismaAppointmentRepository } from "@/repositories/prisma/appointment";
+import { PrismaClientRepository } from "@/repositories/prisma/client";
+import { PrismaOrderRepository } from "@/repositories/prisma/order";
 import { UpdateAppointmentUseCase } from "@/services/use-cases/appointment/update";
 
 export function makeUpdateAppointmentUseCase() {

@@ -33,7 +33,7 @@ import {
   type ManageOrderTypeFormInput, 
   type ManageOrderTypeFormOutput 
 } from "@/features/admin/schema/manageOrderType";
-import { updateRowPaymentMethodFields } from "@/features/admin/utils/updateRowPaymentMethodFields";
+import { manageRowPaymentMethodFields } from "@/features/admin/utils/managePaymentMethodFields";
 import { manageRowOrderTypeFields } from "@/features/admin/utils/manageRowOrderTypeFields";
 
 import type { 
@@ -558,7 +558,7 @@ export default function ManageVariables() {
           open={openModalManage === "create_payment_method"}
           action="ADD"
           title="Adicionando um método de pagamento"
-          fields={updateRowPaymentMethodFields()}
+          fields={manageRowPaymentMethodFields()}
           control={formCreatePaymentMethod.control}
           errors={formCreatePaymentMethod.formState.errors}
           isSubmitting={
@@ -577,7 +577,7 @@ export default function ManageVariables() {
           open={openModalManage === "update_payment_method"}
           action="UPDATE"
           title="Atualizando o método de pagamento"
-          fields={updateRowPaymentMethodFields()}
+          fields={manageRowPaymentMethodFields()}
           control={formUpdatePaymentMethod.control}
           errors={formUpdatePaymentMethod.formState.errors}
           isSubmitting={

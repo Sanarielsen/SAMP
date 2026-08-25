@@ -7,7 +7,7 @@ import {
 import { DeleteAppointmentUseCase } from "./delete";
 
 import { makeAppointment } from "@/services/factories/appointment/make-entity";
-import { InMemoryAppointmentRepository } from "@/repositories/in-memory/in-memory-appointment-repository";
+import { InMemoryAppointmentRepository } from "@/repositories/in-memory/appointment";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 

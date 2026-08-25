@@ -1,7 +1,7 @@
 import { describe, beforeEach, it, expect, vi, afterEach } from "vitest";
 
-import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
-import { InMemoryRepresentativeRepository } from "@/repositories/in-memory/in-memory-representatives-repository";
+import { InMemoryClientsRepository } from "@/repositories/in-memory/client";
+import { InMemoryRepresentativeRepository } from "@/repositories/in-memory/representatives";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { UpdateRepresentativeUseCase } from "@/services/use-cases/representative/update";

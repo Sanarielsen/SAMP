@@ -11,7 +11,7 @@ import {
 import { GridCloseIcon } from "@mui/x-data-grid"
 
 import type { RepresentativeDetailsDTO, RepresentativeOptionDTO } from "@shared/types/representative"
-import { optionsGetRepresentativeWithClients } from "../api/getRepresentativeWithClients"
+import { optionsGetRepresentativeWithClients } from "../api/queryGetRepresentativeWithClients"
 import { useQuery } from "@tanstack/react-query"
 
 

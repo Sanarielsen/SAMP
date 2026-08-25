@@ -1,7 +1,7 @@
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query'
 
 import { api } from '@/api/axios'
-import type { PaymentInstallmentProof } from '@shared/types/paymentInstallments';
+import type { PaymentInstallmentProof } from '@shared/types/paymentInstallment';
 
 
 async function updatePaymentInstallmentToPay(

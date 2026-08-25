@@ -1,6 +1,6 @@
-import { AppointmentRepository } from "@/repositories/appointment-repository"
-import { OrderRepository } from "@/repositories/order-repository"
-import { ClientRepository } from "@/repositories/client-repository"
+import { AppointmentRepository } from "@/repositories/appointment"
+import { OrderRepository } from "@/repositories/order"
+import { ClientRepository } from "@/repositories/client"
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error"
 
@@ -8,7 +8,7 @@ import {
   Appointment, 
   CreateAppointmentDTO 
 } from "@shared/types/appointment"
-import { UserRepository } from "@/repositories/user-repository"
+import { UserRepository } from "@/repositories/user"
 import { UserNotResponsibleForClientError } from "../../errors/non-responsable-user"
 
 interface PostAppointmentUseCasePayload {

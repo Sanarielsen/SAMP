@@ -6,7 +6,7 @@ import {
 } from 'vitest';
 
 import { makeUser } from '@/services/factories/user/make-entity';
-import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-user-repository';
+import { InMemoryUserRepository } from '@/repositories/in-memory/user';
 import { GetUserProfileUseCase } from '@/services/use-cases/user/get-profile';
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 

@@ -2,7 +2,8 @@ import { queryOptions } from "@tanstack/react-query"
 
 import { api } from "@/api/axios"
 
-import { type UserDetailsForAdminDTO } from "@shared/types/user"
+import type { UserDetailsForAdminDTO } from "@shared/types/user"
+
 
 export function optionsQueryListUsers(search: string) { 
   return queryOptions({

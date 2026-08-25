@@ -1,4 +1,4 @@
-import { OrderTypeRepository } from "@/repositories/order-type-repository";
+import { OrderTypeRepository } from "@/repositories/order-type";
 
 import { OptionsControlledBox } from "@shared/types/values";
 

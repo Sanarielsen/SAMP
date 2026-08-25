@@ -19,7 +19,7 @@ import {
 } from "@/features/payment/schema/updatePaymentInstallmentToPay"
 import { formatDate, parseDate } from "@/utils/manageDate"
 
-import type { PaymentInstallment } from "@shared/types/paymentInstallments"
+import type { PaymentInstallment } from "@shared/types/paymentInstallment"
 
 
 interface ModalInstallmentToPayProps {

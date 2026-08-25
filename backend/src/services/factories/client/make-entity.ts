@@ -1,6 +1,6 @@
 import { 
   InMemoryClientsRepository 
-} from '@/repositories/in-memory/in-memory-client-repository'
+} from '@/repositories/in-memory/client'
 
 import { CreateClientDTO } from '@shared/types/client'
 

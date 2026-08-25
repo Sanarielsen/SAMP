@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
 
-import { useMutationPostImportedProcess } from "@/features/process/api/mutatePostImportedProcessFromINPI";
+import { useMutationPostImportedProcess } from "@/features/process/api/mutationPostImportedProcessFromINPI";
 import { useMutationUpdateProcess } from "@/features/process/api/mutationUpdateImportedProcess";
 import { optionsQueryGetProcess } from "@/features/process/api/queryGetProcess";
 import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions";

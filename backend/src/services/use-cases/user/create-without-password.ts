@@ -1,5 +1,5 @@
-import { UserRepository } from "@/repositories/user-repository"
-import { UserRoleRepository } from "@/repositories/user-role-repository"
+import { UserRepository } from "@/repositories/user"
+import { UserRoleRepository } from "@/repositories/user-role"
 import { UserAlreadyExistsError } from "@/services/errors/user-already-exists"
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error"
 

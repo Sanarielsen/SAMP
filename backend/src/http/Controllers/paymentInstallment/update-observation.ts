@@ -4,7 +4,7 @@ import {
 } from 'fastify'
 import { z } from 'zod';
 
-import { makeUpdatePaymentInstallmentObservation } from '@/services/factories/payment-installment/make-update-observation';
+import { makeUpdatePaymentInstallmentObservationUseCase } from '@/services/factories/payment-installment/make-update-observation';
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 
 
@@ -20,7 +20,7 @@ export async function updatePaymentInstallmentObservation(
   const { id } = request.params as { id: string }
 
   try {
-    const useCase = makeUpdatePaymentInstallmentObservation()
+    const useCase = makeUpdatePaymentInstallmentObservationUseCase()
 
     const installment = await useCase.execute({
       id,

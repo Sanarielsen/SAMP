@@ -1,7 +1,8 @@
+import { PrismaPaymentInstallmentsRepository } from "@/repositories/prisma/payment-instalments";
+import { PrismaPaymentsRepository } from "@/repositories/prisma/payments";
+
 import { ListByPaymentInstallmentsUseCase } from "@/services/use-cases/payment-installment/get-by-payment";
 
-import { PrismaPaymentInstallmentsRepository } from "@/repositories/prisma/prisma-payment-instalments-repository";
-import { PrismaPaymentsRepository } from "@/repositories/prisma/prisma-payments-repository";
 
 export function makeListByPaymentInstallmentUseCase() {
   const paymentsRepository = new PrismaPaymentsRepository();

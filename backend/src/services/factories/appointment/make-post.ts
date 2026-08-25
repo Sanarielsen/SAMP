@@ -1,8 +1,8 @@
-import { PrismaClientRepository } from '@/repositories/prisma/prisma-client-repository'
-import { PrismaOrderRepository } from '@/repositories/prisma/prisma-order-repository'
+import { PrismaClientRepository } from '@/repositories/prisma/client'
+import { PrismaOrderRepository } from '@/repositories/prisma/order'
 import { PostAppointmentUseCase } from '@/services/use-cases/appointment/post'
-import { PrismaAppointmentRepository } from '@/repositories/prisma/prisma-appointment-repository'
-import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository'
+import { PrismaAppointmentRepository } from '@/repositories/prisma/appointment'
+import { PrismaUserRepository } from '@/repositories/prisma/user'
 
 export function makePostAppointmentUseCase() {
   const appointmentRepository = new PrismaAppointmentRepository()

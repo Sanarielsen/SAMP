@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { makeListOptionsOrderTypeUseCase } from '@/services/factories/order-type/make-list-options-use-case';
+import { makeListOptionsOrderTypeUseCase } from '@/services/factories/order-type/make-list-options';
 
 
 export async function listOrderTypeAsOptions(request: FastifyRequest, reply: FastifyReply) {

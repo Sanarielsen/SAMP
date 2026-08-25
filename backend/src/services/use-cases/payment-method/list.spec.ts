@@ -6,7 +6,7 @@ import {
 } from "vitest";
 import { ListPaymentMethodsUseCase } from "@/services/use-cases/payment-method/list";
 
-import { InMemoryPaymentMethodRepository } from "@/repositories/in-memory/in-memory-payment-method-repository";
+import { InMemoryPaymentMethodRepository } from "@/repositories/in-memory/payment-method";
 import { makePaymentMethod } from "@/services/factories/payment-method/make-entity";
 
 import { PaymentMethod } from "@shared/types/paymentMethod";

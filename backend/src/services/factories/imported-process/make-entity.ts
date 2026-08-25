@@ -1,4 +1,4 @@
-import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/in-memory-imported-process-repository";
+import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/imported-process";
 
 import { ImportedProcess } from "@shared/types/importedProcess";
 

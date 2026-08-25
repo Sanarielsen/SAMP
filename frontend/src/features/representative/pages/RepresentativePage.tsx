@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
-import { optionsQueryClient } from "@/features/representative/api/listRepresentatives";
+import { optionsQueryClient } from "@/features/representative/api/queryListRepresentatives";
 import { useMutationDeleteRepresentative } from "@/features/representative/api/mutationDeleteRepresentative";
 import { representativeFields } from "@/features/representative/utils/getRowDetailRepresentative";
 import DataTableColumnsRepresentative from "@/features/representative/components/DataTableColumnsRepresentatives";

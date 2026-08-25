@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { makeDeleteOrderUseCase } from '@/services/factories/order/make-delete-use-case';
+import { makeDeleteOrderUseCase } from '@/services/factories/order/make-delete';
 
 import { InvalidCredentialsError } from '@/services/errors/invalid-credentials-error';
 

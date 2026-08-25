@@ -10,7 +10,7 @@ import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import { formatCurrency } from "@/features/order/utils/formatCurrency";
 import { formatDate } from "@/utils/manageDate";
 
-import type { PaymentInstallment } from "@shared/types/paymentInstallments";
+import type { PaymentInstallment } from "@shared/types/paymentInstallment";
 
 
 export default function DataTableColumnsInstallments(): GridColDef<PaymentInstallment>[] {

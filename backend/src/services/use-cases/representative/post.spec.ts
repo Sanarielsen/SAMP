@@ -8,9 +8,9 @@ import {
 } from "vitest";
 import { PostRepresentativeUseCase } from "@/services/use-cases/representative/post";
 
-import { InMemoryRepresentativeRepository } from "@/repositories/in-memory/in-memory-representatives-repository";
-import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
+import { InMemoryRepresentativeRepository } from "@/repositories/in-memory/representatives";
+import { InMemoryClientsRepository } from "@/repositories/in-memory/client";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
 
 import { ResourceNotFoundError } from "@/services//errors/resource-not-found-error";
 import { InvalidInactiveClientError } from "@/services/errors/invalid-inactive-client-error";

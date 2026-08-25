@@ -5,7 +5,7 @@ import {
   it 
 } from "vitest";
 import { PostPaymentMethodMethodUseCase } from "@/services/use-cases/payment-method/post";
-import { InMemoryPaymentMethodRepository } from "@/repositories/in-memory/in-memory-payment-method-repository";
+import { InMemoryPaymentMethodRepository } from "@/repositories/in-memory/payment-method";
 
 
 let paymentMethodRepository: InMemoryPaymentMethodRepository

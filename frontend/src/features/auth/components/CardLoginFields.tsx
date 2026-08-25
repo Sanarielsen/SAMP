@@ -8,7 +8,7 @@ import {
 } from '@mui/material'
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { loginSchema, type LoginSchemaFormData } from '@/features/auth/schemas/loginSchema';
+import { loginSchema, type LoginSchemaFormData } from '@/features/auth/schemas/login';
 import { SpanError } from '@/styles/spanError';
 import { useAuth } from '@/auth/AuthProvider';
 import { useLogin } from '@/features/auth/api/AuthMutation';

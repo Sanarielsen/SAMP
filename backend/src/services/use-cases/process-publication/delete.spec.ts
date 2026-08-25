@@ -6,7 +6,7 @@ import {
 } from "vitest";
 
 import { DeleteProcessPublicationUseCase } from "@/services/use-cases/process-publication/delete";
-import { InMemoryProcessPublicationRepository } from "@/repositories/in-memory/in-memory-process-publication-repository";
+import { InMemoryProcessPublicationRepository } from "@/repositories/in-memory/process-publication";
 import { makeProcessPublication } from "@/services/factories/process-publication/make-entity";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 

@@ -9,11 +9,11 @@ import { PostAppointmentUseCase } from "@/services/use-cases/appointment/post";
 import { makeAppointment } from "@/services/factories/appointment/make-entity";
 import { makeClient } from "@/services/factories/client/make-entity";
 import { makeUser } from "@/services/factories/user/make-entity";
-import { makeOrder } from "@/services/factories/order/make-order-entity";
-import { InMemoryAppointmentRepository } from "@/repositories/in-memory/in-memory-appointment-repository";
-import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
-import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
+import { makeOrder } from "@/services/factories/order/make-entity";
+import { InMemoryAppointmentRepository } from "@/repositories/in-memory/appointment";
+import { InMemoryClientsRepository } from "@/repositories/in-memory/client";
+import { InMemoryOrderRepository } from "@/repositories/in-memory/order";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { UserNotResponsibleForClientError } from "@/services/errors/non-responsable-user";
 

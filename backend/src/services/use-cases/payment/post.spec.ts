@@ -6,9 +6,9 @@ import {
 } from "vitest";
 import { PostPaymentUseCase } from "@/services/use-cases/payment/post";
 
-import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
-import { InMemoryPaymentRepository } from "@/repositories/in-memory/in-memory-payment-repository";
-import { makeOrder } from "@/services/factories/order/make-order-entity";
+import { InMemoryOrderRepository } from "@/repositories/in-memory/order";
+import { InMemoryPaymentRepository } from "@/repositories/in-memory/payment";
+import { makeOrder } from "@/services/factories/order/make-entity";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { InvalidResourceError } from "@/services/errors/invalid-resource-error";
 

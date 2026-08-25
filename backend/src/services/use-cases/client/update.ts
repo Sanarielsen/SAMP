@@ -1,4 +1,4 @@
-import { ClientRepository } from "@/repositories/client-repository"
+import { ClientRepository } from "@/repositories/client"
 import { Client } from "@prisma/client"
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error"
 

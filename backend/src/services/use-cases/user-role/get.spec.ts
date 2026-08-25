@@ -11,8 +11,8 @@ import { hash } from "bcryptjs";
 
 import { GetUserRoleUseCase } from "@/services/use-cases/user-role/get";
 
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
-import { InMemoryUserRoleRepository } from "@/repositories/in-memory/in-memory-user-role-repository";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
+import { InMemoryUserRoleRepository } from "@/repositories/in-memory/user-role";
 
 import { NonExistUserError } from "@/services/errors/non-exist-user-error";
 import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";

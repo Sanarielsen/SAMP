@@ -1,4 +1,4 @@
-import { UserRepository } from '@/repositories/user-repository'
+import { UserRepository } from '@/repositories/user'
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error'
 
 import { UserPublicDTO } from '@shared/types/user'

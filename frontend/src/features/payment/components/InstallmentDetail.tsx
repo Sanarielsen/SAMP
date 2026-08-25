@@ -27,7 +27,7 @@ import type { OptionsControlledBox } from "@shared/types/values";
 import { 
   type PaymentInstallment, 
   type UpdatePaymentInstallmentDTO 
-} from '@shared/types/paymentInstallments'
+} from '@shared/types/paymentInstallment'
 
 
 

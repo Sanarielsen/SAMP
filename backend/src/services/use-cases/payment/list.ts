@@ -1,5 +1,5 @@
-import { OrderRepository } from "@/repositories/order-repository";
-import { PaymentRepository } from "@/repositories/payment-repository";
+import { OrderRepository } from "@/repositories/order";
+import { PaymentRepository } from "@/repositories/payment";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 import { PaymentDetailDTO } from "@shared/types/payment";

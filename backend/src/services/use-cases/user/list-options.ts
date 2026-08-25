@@ -1,4 +1,4 @@
-import { UserRepository } from '@/repositories/user-repository'
+import { UserRepository } from '@/repositories/user'
 
 import { OptionsControlledBox } from '@shared/types/values'
 

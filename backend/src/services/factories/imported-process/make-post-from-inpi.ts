@@ -1,11 +1,11 @@
-import { PrismaClientRepository } from "@/repositories/prisma/prisma-client-repository";
-import { PrismaImportedProcessRepository } from "@/repositories/prisma/prisma-imported-process-repository"
-import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository";
-import { PrismaUserRoleRepository } from "@/repositories/prisma/prisma-user-role-repository";
+import { PrismaClientRepository } from "@/repositories/prisma/client";
+import { PrismaImportedProcessRepository } from "@/repositories/prisma/imported-process"
+import { PrismaUserRepository } from "@/repositories/prisma/user";
+import { PrismaUserRoleRepository } from "@/repositories/prisma/user-role";
 import { PostImportedProcessFromINPIUseCase } from "@/services/use-cases/imported-process/post-from-inpi";
 
 
-export function makePostImportedProcessFromINPI() {
+export function makePostImportedProcessFromINPIUseCase() {
   const userRoleRepository = new PrismaUserRoleRepository();
   const userRepository = new PrismaUserRepository();
   const clientRepository = new PrismaClientRepository();

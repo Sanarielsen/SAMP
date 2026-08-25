@@ -1,11 +1,9 @@
-import { GetUserProfileUseCase } from '@/services/use-cases/user/get-profile'
-
-import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository'
+import { PrismaUserRepository } from '@/repositories/prisma/user'
+import { PrismaUserRoleRepository } from '@/repositories/prisma/user-role'
 import { CreateUserUseCase } from '@/services/use-cases/user/create-without-password'
-import { PrismaUserRoleRepository } from '@/repositories/prisma/prisma-user-role-repository'
 
 
-export function makeCreateUserWithoutPassword() {
+export function makeCreateUserWithoutPasswordUseCase() {
   const userRoleRepository = new PrismaUserRoleRepository()
   const userRepository = new PrismaUserRepository()
 

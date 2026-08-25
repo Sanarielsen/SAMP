@@ -1,6 +1,6 @@
 import { describe, beforeEach, it, expect } from "vitest";
 
-import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
+import { InMemoryClientsRepository } from "@/repositories/in-memory/client";
 import { UpdateClientUseCase } from "@/services/use-cases/client/update";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";

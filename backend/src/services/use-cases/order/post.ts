@@ -1,6 +1,6 @@
-import { ClientRepository } from "@/repositories/client-repository";
-import { OrderRepository } from "@/repositories/order-repository";
-import { UserRepository } from "@/repositories/user-repository";
+import { ClientRepository } from "@/repositories/client";
+import { OrderRepository } from "@/repositories/order";
+import { UserRepository } from "@/repositories/user";
 
 import { NonExistUserError } from "@/services/errors/non-exist-user-error";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
