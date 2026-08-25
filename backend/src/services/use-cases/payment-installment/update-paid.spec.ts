@@ -1,4 +1,4 @@
-import { InMemoryPaymentInstallmentsRepository } from "@/repositories/in-memory/in-memory-payment-installment-repository";
+import { InMemoryPaymentInstallmentsRepository } from "@/repositories/in-memory/payment-installment";
 import { 
   beforeEach,
   describe,
@@ -6,8 +6,8 @@ import {
   it 
 } from "vitest";
 
-import { PaymentInstallment } from "@shared/types/paymentInstallments";
-import { makePaymentInstallment } from "../../factories/payment-installment/make-payment-installment-entity";
+import { PaymentInstallment } from "@shared/types/paymentInstallment";
+import { makePaymentInstallment } from "../../factories/payment-installment/make-entity";
 import { ResourceNotFoundError } from "../../errors/resource-not-found-error";
 import { InvalidResourceError } from "../../errors/invalid-resource-error";
 import { UpdatePaymentInstallmentPaidUseCase } from "./update-paid";

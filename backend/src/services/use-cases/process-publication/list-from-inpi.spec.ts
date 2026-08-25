@@ -7,9 +7,9 @@ import {
 } from "vitest";
 
 import { ListProcessPublicationFromINPIUseCase } from "@/services/use-cases/process-publication/list-from-inpi";
-import { InMemoryUserRoleRepository } from "@/repositories/in-memory/in-memory-user-role-repository";
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
-import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/in-memory-imported-process-repository";
+import { InMemoryUserRoleRepository } from "@/repositories/in-memory/user-role";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
+import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/imported-process";
 import { makeUserRole } from "@/services/factories/user-role/make-entity";
 import { makeUser } from "@/services/factories/user/make-entity";
 import { makeImportedProcess } from "@/services/factories/imported-process/make-entity";

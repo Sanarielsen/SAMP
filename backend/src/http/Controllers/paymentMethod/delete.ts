@@ -3,7 +3,7 @@ import {
   FastifyReply
 } from 'fastify'
 
-import { makeDeletePaymentMethod } from '@/services/factories/payment-method/make-delete';
+import { makeDeletePaymentMethodUseCase } from '@/services/factories/payment-method/make-delete';
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 
 
@@ -12,7 +12,7 @@ export async function deletePaymentMethod(request: FastifyRequest, reply: Fastif
   const { id } = request.params as { id: string }
   
   try {
-    const useCase = makeDeletePaymentMethod();
+    const useCase = makeDeletePaymentMethodUseCase();
 
     await useCase.execute(Number(id))
 

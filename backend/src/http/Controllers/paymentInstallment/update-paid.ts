@@ -4,7 +4,7 @@ import {
 } from 'fastify'
 import { z } from 'zod';
 
-import { makeUpdatePaymentInstallmentPaidUseCase } from '@/services/factories/payment-installment/make-update-paid-use-case';
+import { makeUpdatePaymentInstallmentPaidUseCase } from '@/services/factories/payment-installment/make-update-paid';
 
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 

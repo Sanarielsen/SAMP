@@ -1,5 +1,5 @@
-import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
-import { InMemoryPaymentRepository } from "@/repositories/in-memory/in-memory-payment-repository";
+import { InMemoryOrderRepository } from "@/repositories/in-memory/order";
+import { InMemoryPaymentRepository } from "@/repositories/in-memory/payment";
 import { 
   beforeEach,
   describe,
@@ -8,7 +8,7 @@ import {
 } from "vitest";
 import { ListPaymentsUseCase } from "@/services/use-cases/payment/list";
 
-import { makeOrder } from "@/services/factories/order/make-order-entity";
+import { makeOrder } from "@/services/factories/order/make-entity";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 import { Order } from "@shared/types/orders";

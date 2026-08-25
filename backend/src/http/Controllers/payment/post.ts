@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error'
 import { NonExistUserError } from '@/services/errors/non-exist-user-error'
-import { makePostPaymentUseCase } from '@/services/factories/payment/make-payment-use-case'
+import { makePostPaymentUseCase } from '@/services/factories/payment/make-payment'
 
 export async function postPayment(request: FastifyRequest, reply: FastifyReply) {
   const postBodySchema = z.object({

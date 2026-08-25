@@ -2,6 +2,7 @@ import { queryOptions } from "@tanstack/react-query"
 
 import { api } from "@/api/axios"
 
+
 export function optionsQueryGetUser() { 
   return queryOptions({
     queryKey: ["me"],

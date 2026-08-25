@@ -1,5 +1,5 @@
-import { OrderRepository } from '@/repositories/order-repository';
-import { ClientRepository } from '@/repositories/client-repository';
+import { OrderRepository } from '@/repositories/order';
+import { ClientRepository } from '@/repositories/client';
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 
 import { OptionsControlledBox } from '@shared/types/values'

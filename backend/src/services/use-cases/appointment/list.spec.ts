@@ -6,8 +6,8 @@ import {
 } from "vitest";
 import { ListAppointmentUseCase } from "@/services/use-cases/appointment/list";
 
-import { InMemoryAppointmentRepository } from "@/repositories/in-memory/in-memory-appointment-repository";
-import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
+import { InMemoryAppointmentRepository } from "@/repositories/in-memory/appointment";
+import { InMemoryClientsRepository } from "@/repositories/in-memory/client";
 import { makeClient } from "@/services/factories/client/make-entity";
 import { makeAppointment } from "@/services/factories/appointment/make-entity";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";

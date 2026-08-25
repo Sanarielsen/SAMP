@@ -1,4 +1,4 @@
-import { InMemoryProcessPublicationRepository } from "@/repositories/in-memory/in-memory-process-publication-repository";
+import { InMemoryProcessPublicationRepository } from "@/repositories/in-memory/process-publication";
 
 import { ProcessPublication } from "@shared/types/processPublication";
 

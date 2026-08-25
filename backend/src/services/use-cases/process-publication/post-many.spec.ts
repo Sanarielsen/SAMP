@@ -6,10 +6,10 @@ import {
 } from "vitest";
 
 import { PostManyProcessPublicationUseCase } from "@/services/use-cases/process-publication/post-many";
-import { InMemoryUserRoleRepository } from "@/repositories/in-memory/in-memory-user-role-repository";
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
-import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/in-memory-imported-process-repository";
-import { InMemoryProcessPublicationRepository } from "@/repositories/in-memory/in-memory-process-publication-repository";
+import { InMemoryUserRoleRepository } from "@/repositories/in-memory/user-role";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
+import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/imported-process";
+import { InMemoryProcessPublicationRepository } from "@/repositories/in-memory/process-publication";
 import { makeUserRole } from "@/services/factories/user-role/make-entity";
 import { makeUser } from "@/services/factories/user/make-entity";
 import { makeImportedProcess } from "@/services/factories/imported-process/make-entity";

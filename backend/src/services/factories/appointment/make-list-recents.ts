@@ -1,4 +1,4 @@
-import { PrismaAppointmentRepository } from '@/repositories/prisma/prisma-appointment-repository'
+import { PrismaAppointmentRepository } from '@/repositories/prisma/appointment'
 import { ListRecentAppointmentsUseCase } from '@/services/use-cases/appointment/list-recents'
 
 export function makeListRecentAppointmentUseCase() {

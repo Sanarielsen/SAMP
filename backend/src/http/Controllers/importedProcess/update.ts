@@ -3,7 +3,7 @@ import {
   FastifyRequest 
 } from "fastify";
 import { z } from "zod";
-import { makeUpdateImportedProcess } from "@/services/factories/imported-process/make-update";
+import { makeUpdateImportedProcessUseCase } from "@/services/factories/imported-process/make-update";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { UnauthorizedUserError } from "@/services/errors/unauthorized-user-error";
@@ -33,7 +33,7 @@ export async function updateImportedProcess(request: FastifyRequest, reply: Fast
   const { id } = request.params as { id: string }
 
   try {
-    const useCase = makeUpdateImportedProcess();
+    const useCase = makeUpdateImportedProcessUseCase();
 
     await useCase.execute({
       ...resultBody,

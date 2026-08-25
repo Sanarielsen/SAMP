@@ -1,7 +1,7 @@
-import { UserRoleRepository } from "@/repositories/user-role-repository";
-import { UserRepository } from "@/repositories/user-repository";
-import { ClientRepository } from "@/repositories/client-repository";
-import { ImportedProcessRepository } from "@/repositories/imported-process-repository";
+import { UserRoleRepository } from "@/repositories/user-role";
+import { UserRepository } from "@/repositories/user";
+import { ClientRepository } from "@/repositories/client";
+import { ImportedProcessRepository } from "@/repositories/imported-process";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { UnauthorizedUserError } from "@/services/errors/unauthorized-user-error";

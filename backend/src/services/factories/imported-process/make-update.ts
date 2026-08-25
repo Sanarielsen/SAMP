@@ -1,11 +1,11 @@
-import { PrismaUserRoleRepository } from "@/repositories/prisma/prisma-user-role-repository"
-import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository"
-import { PrismaClientRepository } from "@/repositories/prisma/prisma-client-repository"
-import { PrismaImportedProcessRepository } from "@/repositories/prisma/prisma-imported-process-repository"
+import { PrismaUserRoleRepository } from "@/repositories/prisma/user-role"
+import { PrismaUserRepository } from "@/repositories/prisma/user"
+import { PrismaClientRepository } from "@/repositories/prisma/client"
+import { PrismaImportedProcessRepository } from "@/repositories/prisma/imported-process"
 import { UpdateImportedProcessUseCase } from "@/services/use-cases/imported-process/update"
 
 
-export function makeUpdateImportedProcess() {
+export function makeUpdateImportedProcessUseCase() {
   const userRoleRepository = new PrismaUserRoleRepository()
   const userRepository = new PrismaUserRepository()
   const clientRepository=  new PrismaClientRepository()

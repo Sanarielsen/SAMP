@@ -1,9 +1,9 @@
-import { PaymentInstallmentRepository } from "@/repositories/payment-installments-repository";
-import { PaymentRepository } from "@/repositories/payment-repository";
+import { PaymentInstallmentRepository } from "@/repositories/payment-installment";
+import { PaymentRepository } from "@/repositories/payment";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
-import { PaymentInstallment } from "@shared/types/paymentInstallments";
+import { PaymentInstallment } from "@shared/types/paymentInstallment";
 
 interface ListByPaymentInstallmentsUseCaseRequest {
   paymentId: string

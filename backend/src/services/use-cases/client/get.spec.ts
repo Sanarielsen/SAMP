@@ -1,4 +1,4 @@
-import { InMemoryClientsRepository } from '@/repositories/in-memory/in-memory-client-repository'
+import { InMemoryClientsRepository } from '@/repositories/in-memory/client'
 
 import { expect, describe, it, beforeEach } from 'vitest'
 import { GetClientUseCase } from './get'

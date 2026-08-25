@@ -3,7 +3,7 @@ import { expect, describe, it, beforeEach } from 'vitest'
 import { GetClientUseCase } from '@/services/use-cases/client/get'
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 
-import { InMemoryClientsRepository } from '@/repositories/in-memory/in-memory-client-repository'
+import { InMemoryClientsRepository } from '@/repositories/in-memory/client'
 
 let clientRepository: InMemoryClientsRepository
 let sut: GetClientUseCase

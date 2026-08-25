@@ -1,4 +1,4 @@
-import { PaymentMethodRepository } from "@/repositories/payment-method-repository";
+import { PaymentMethodRepository } from "@/repositories/payment-method";
 
 import { OptionsControlledBox } from "@shared/types/values";
 

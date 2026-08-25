@@ -1,4 +1,4 @@
-import { PaymentRepository } from "@/repositories/payment-repository"
+import { PaymentRepository } from "@/repositories/payment"
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error"
 

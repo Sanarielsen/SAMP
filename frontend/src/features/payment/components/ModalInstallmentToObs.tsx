@@ -20,7 +20,7 @@ import {
   type UpdatePaymentInstallmentToObsSchemaFormData 
 } from "@/features/payment/schema/updatePaymentInstallmentToObs"
 
-import type { PaymentInstallment } from "@shared/types/paymentInstallments"
+import type { PaymentInstallment } from "@shared/types/paymentInstallment"
 
 
 interface ModalInstallmentToObsProps {

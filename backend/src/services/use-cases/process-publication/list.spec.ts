@@ -6,8 +6,8 @@ import {
 } from "vitest";
 
 import { ListProcessPublicationsUseCase } from "@/services/use-cases/process-publication/list";
-import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/in-memory-imported-process-repository";
-import { InMemoryProcessPublicationRepository } from "@/repositories/in-memory/in-memory-process-publication-repository";
+import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/imported-process";
+import { InMemoryProcessPublicationRepository } from "@/repositories/in-memory/process-publication";
 import { makeImportedProcess } from "@/services/factories/imported-process/make-entity";
 import { makeProcessPublication } from "@/services/factories/process-publication/make-entity";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";

@@ -4,7 +4,7 @@ import {
 } from 'fastify'
 import { z } from 'zod';
 
-import { makeCreateOrderType } from '@/services/factories/order-type/make-create';
+import { makeCreateOrderTypeUseCase } from '@/services/factories/order-type/make-create';
 
 
 export async function createOrderType(request: FastifyRequest, reply: FastifyReply) {
@@ -17,7 +17,7 @@ export async function createOrderType(request: FastifyRequest, reply: FastifyRep
 
   const resultBody = createBodySchema.parse(request.body)
 
-  const useCase = makeCreateOrderType();
+  const useCase = makeCreateOrderTypeUseCase();
 
   try {
     await useCase.execute(resultBody)

@@ -1,11 +1,11 @@
-import { PaymentInstallmentRepository } from "@/repositories/payment-installments-repository";
+import { PaymentInstallmentRepository } from "@/repositories/payment-installment";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { InvalidResourceError } from "@/services/errors/invalid-resource-error";
 
 import { 
   PaymentInstallment, 
   PaymentInstallmentObservation 
-} from "@shared/types/paymentInstallments";
+} from "@shared/types/paymentInstallment";
 
 
 export class UpdatePaymentInstallmentObservationUseCase {

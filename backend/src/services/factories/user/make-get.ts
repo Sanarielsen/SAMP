@@ -1,6 +1,5 @@
+import { PrismaUserRepository } from '@/repositories/prisma/user'
 import { GetUserProfileUseCase } from '@/services/use-cases/user/get-profile'
-
-import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository'
 
 
 export function makeGetUserProfileUseCase() {

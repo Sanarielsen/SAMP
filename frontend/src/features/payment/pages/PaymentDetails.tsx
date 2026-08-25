@@ -24,7 +24,7 @@ import { FullScreenLoader } from "@/components/FullScreenLoader";
 import HeaderPage from "@/components/HeaderPage";
 import ToastContainer from "@/components/Toast";
 
-import { type PaymentInstallment } from '@shared/types/paymentInstallments'
+import { type PaymentInstallment } from '@shared/types/paymentInstallment'
 
 
 export default function PaymentDetails() {

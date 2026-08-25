@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import HotelClassIcon from '@mui/icons-material/HotelClass';
 
-import { optionsGetRepresentative } from '@/features/representative/api/getRepresentative';
+import { optionsGetRepresentative } from '@/features/representative/api/queryGetRepresentative';
 import { optionsQueryListClientsWithOptions } from '@/api/listClientsWithOptions';
 import { useMutationPostRepresentative } from '@/features/representative/api/mutationPostRepresentative';
 import { useMutationPatchRepresentative } from '@/features/representative/api/mutationPatchRepresentative';

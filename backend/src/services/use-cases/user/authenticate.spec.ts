@@ -7,8 +7,8 @@ import {
 
 import { makeUser } from '@/services/factories/user/make-entity';
 import { makeUserRole } from '@/services/factories/user-role/make-entity';
-import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-user-repository';
-import { InMemoryUserRoleRepository } from '@/repositories/in-memory/in-memory-user-role-repository';
+import { InMemoryUserRepository } from '@/repositories/in-memory/user';
+import { InMemoryUserRoleRepository } from '@/repositories/in-memory/user-role';
 import { AuthenticateUseCase } from '@/services/use-cases/user/authenticate';
 import { InvalidCredentialsError } from '@/services/errors/invalid-credentials-error';
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';

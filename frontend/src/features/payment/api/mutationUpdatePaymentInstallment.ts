@@ -2,7 +2,7 @@ import { useMutation, type UseMutationOptions } from '@tanstack/react-query'
 
 import { api } from '@/api/axios'
 
-import type { UpdatePaymentInstallmentDTO } from '@shared/types/paymentInstallments'
+import type { UpdatePaymentInstallmentDTO } from '@shared/types/paymentInstallment'
 
 
 export type PaymentInstallmentPatchPayload = UpdatePaymentInstallmentDTO 

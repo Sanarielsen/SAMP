@@ -3,7 +3,7 @@ import {
   FastifyReply
 } from 'fastify'
 
-import { makeGetOrderType } from '@/services/factories/order-type/make-get';
+import { makeGetOrderTypeUseCase } from '@/services/factories/order-type/make-get';
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
 
 
@@ -12,7 +12,7 @@ export async function getOrderType(request: FastifyRequest, reply: FastifyReply)
   const { id } = request.params as { id: string }
   
   try {
-    const useCase = makeGetOrderType();
+    const useCase = makeGetOrderTypeUseCase();
 
     const orderType = await useCase.execute(Number(id))
 

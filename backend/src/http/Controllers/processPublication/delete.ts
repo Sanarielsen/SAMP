@@ -3,7 +3,7 @@ import {
   FastifyRequest 
 } from "fastify";
 
-import { makeDeleteProcessPublication } from "@/services/factories/process-publication/make-delete";
+import { makeDeleteProcessPublicationUseCase } from "@/services/factories/process-publication/make-delete";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 
@@ -12,7 +12,7 @@ export async function deleteProcessPublication(request: FastifyRequest, reply: F
   const { id } = request.params as { id: string }
 
   try {
-    const useCase = makeDeleteProcessPublication();
+    const useCase = makeDeleteProcessPublicationUseCase();
 
     await useCase.execute(id)
 

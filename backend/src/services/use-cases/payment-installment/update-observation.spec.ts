@@ -5,12 +5,12 @@ import {
   it 
 } from "vitest";
 import { UpdatePaymentInstallmentObservationUseCase } from "./update-observation";
-import { InMemoryPaymentInstallmentsRepository } from "@/repositories/in-memory/in-memory-payment-installment-repository";
-import { makePaymentInstallment } from "@/services/factories/payment-installment/make-payment-installment-entity";
+import { InMemoryPaymentInstallmentsRepository } from "@/repositories/in-memory/payment-installment";
+import { makePaymentInstallment } from "@/services/factories/payment-installment/make-entity";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 import { InvalidResourceError } from "@/services/errors/invalid-resource-error";
 
-import { PaymentInstallment } from "@shared/types/paymentInstallments";
+import { PaymentInstallment } from "@shared/types/paymentInstallment";
 
 
 let paymentInstallments: InMemoryPaymentInstallmentsRepository

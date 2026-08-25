@@ -1,4 +1,4 @@
-import { ImportedProcessRepository } from "@/repositories/imported-process-repository";
+import { ImportedProcessRepository } from "@/repositories/imported-process";
 
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 

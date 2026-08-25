@@ -1,7 +1,7 @@
 import { Client } from '@prisma/client'
 
 import { ClientRepository }
-  from '@/repositories/client-repository'
+  from '@/repositories/client'
 
 import { ResourceNotFoundError }
   from '@/services/errors/resource-not-found-error'

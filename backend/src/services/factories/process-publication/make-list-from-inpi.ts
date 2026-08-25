@@ -1,6 +1,6 @@
-import { PrismaUserRoleRepository } from "@/repositories/prisma/prisma-user-role-repository"
-import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository";
-import { PrismaImportedProcessRepository } from "@/repositories/prisma/prisma-imported-process-repository";
+import { PrismaUserRoleRepository } from "@/repositories/prisma/user-role"
+import { PrismaUserRepository } from "@/repositories/prisma/user";
+import { PrismaImportedProcessRepository } from "@/repositories/prisma/imported-process";
 import { INPIClient } from "@/scripts/get-process-from-inpi";
 import { ListProcessPublicationFromINPIUseCase } from "@/services/use-cases/process-publication/list-from-inpi";
 

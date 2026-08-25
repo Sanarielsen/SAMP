@@ -1,10 +1,10 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 
-import { makeListPaymentMethodOptions } from '@/services/factories/payment-method/make-list-options';
+import { makeListPaymentMethodOptionsUseCase } from '@/services/factories/payment-method/make-list-options';
 
 
 export async function listPaymentMethodOptions(_: FastifyRequest, reply: FastifyReply) {
-  const useCase = makeListPaymentMethodOptions();
+  const useCase = makeListPaymentMethodOptionsUseCase();
 
   const paymentMethods = await useCase.execute()
 

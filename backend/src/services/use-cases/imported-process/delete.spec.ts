@@ -6,7 +6,7 @@ import {
 } from "vitest";
 
 import { DeleteImportedProcessUseCase } from "@/services/use-cases/imported-process/delete";
-import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/in-memory-imported-process-repository";
+import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/imported-process";
 import { makeImportedProcess } from "@/services/factories/imported-process/make-entity";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 

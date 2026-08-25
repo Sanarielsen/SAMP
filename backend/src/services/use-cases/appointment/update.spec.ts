@@ -8,9 +8,9 @@ import { UpdateAppointmentUseCase } from "@/services/use-cases/appointment/updat
 
 import { makeAppointment } from "@/services/factories/appointment/make-entity";
 import { makeClient } from "@/services/factories/client/make-entity";
-import { InMemoryAppointmentRepository } from "@/repositories/in-memory/in-memory-appointment-repository";
-import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
-import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
+import { InMemoryAppointmentRepository } from "@/repositories/in-memory/appointment";
+import { InMemoryClientsRepository } from "@/repositories/in-memory/client";
+import { InMemoryOrderRepository } from "@/repositories/in-memory/order";
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
 import { Appointment } from "@shared/types/appointment";

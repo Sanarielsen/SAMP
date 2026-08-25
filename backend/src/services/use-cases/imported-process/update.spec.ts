@@ -6,10 +6,10 @@ import {
 } from "vitest";
 
 import { UpdateImportedProcessUseCase } from "@/services/use-cases/imported-process/update";
-import { InMemoryClientsRepository } from "@/repositories/in-memory/in-memory-client-repository";
-import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/in-memory-imported-process-repository";
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
-import { InMemoryUserRoleRepository } from "@/repositories/in-memory/in-memory-user-role-repository";
+import { InMemoryClientsRepository } from "@/repositories/in-memory/client";
+import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/imported-process";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
+import { InMemoryUserRoleRepository } from "@/repositories/in-memory/user-role";
 import { makeUserRole } from "@/services/factories/user-role/make-entity";
 import { makeUser } from "@/services/factories/user/make-entity";
 import { makeClient } from "@/services/factories/client/make-entity";

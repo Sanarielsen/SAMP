@@ -2,7 +2,7 @@ import { useMutation, type UseMutationOptions } from '@tanstack/react-query'
 
 import { api } from '@/api/axios'
 
-import type { PaymentInstallmentObservation } from '@shared/types/paymentInstallments'
+import type { PaymentInstallmentObservation } from '@shared/types/paymentInstallment'
 
 
 async function patchPaymentInstallmentToObs(

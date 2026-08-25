@@ -6,7 +6,7 @@ import {
   z
 } from "zod";
 
-import { makeDeleteRepresentativeUseCase } from "@/services/factories/representatives/make-delete-use-case";
+import { makeDeleteRepresentativeUseCase } from "@/services/factories/representatives/make-delete";
 
 
 export async function deleteRepresentative(request: FastifyRequest, reply: FastifyReply) {

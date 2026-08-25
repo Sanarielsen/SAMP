@@ -1,11 +1,11 @@
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error";
 
-import { PaymentInstallmentRepository } from "@/repositories/payment-installments-repository";
+import { PaymentInstallmentRepository } from "@/repositories/payment-installment";
 
 import { 
   PaymentInstallment,
   UpdatePaymentInstallmentDTO
-} from "@shared/types/paymentInstallments";
+} from "@shared/types/paymentInstallment";
 
 
 export class UpdatePaymentInstallmentUseCase {

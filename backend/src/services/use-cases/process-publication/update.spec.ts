@@ -1,7 +1,7 @@
-import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/in-memory-imported-process-repository";
-import { InMemoryProcessPublicationRepository } from "@/repositories/in-memory/in-memory-process-publication-repository";
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
-import { InMemoryUserRoleRepository } from "@/repositories/in-memory/in-memory-user-role-repository";
+import { InMemoryImportedProcessRepository } from "@/repositories/in-memory/imported-process";
+import { InMemoryProcessPublicationRepository } from "@/repositories/in-memory/process-publication";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
+import { InMemoryUserRoleRepository } from "@/repositories/in-memory/user-role";
 import { ImportedProcess } from "@shared/types/importedProcess";
 import { User } from "@shared/types/user";
 import { UserRole } from "@shared/types/userRole";

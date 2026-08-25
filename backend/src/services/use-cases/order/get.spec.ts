@@ -10,11 +10,11 @@ import {
 
 import { GetOrderUseCase } from "./get";
 
-import { OrderRepository } from "@/repositories/order-repository";
-import { UserRepository } from "@/repositories/user-repository";
+import { OrderRepository } from "@/repositories/order";
+import { UserRepository } from "@/repositories/user";
 
-import { InMemoryOrderRepository } from "@/repositories/in-memory/in-memory-order-repository";
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
+import { InMemoryOrderRepository } from "@/repositories/in-memory/order";
+import { InMemoryUserRepository } from "@/repositories/in-memory/user";
 
 import { InvalidCredentialsError } from "@/services/errors/invalid-credentials-error";
 

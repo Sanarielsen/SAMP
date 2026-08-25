@@ -1,4 +1,4 @@
-import { RepresentativeRepository } from "@/repositories/representative-repository"
+import { RepresentativeRepository } from "@/repositories/representative"
 import { RepresentativeOptionDTO } from "@shared/types/representative"
 import { ResourceNotFoundError } from "@/services/errors/resource-not-found-error"
 
