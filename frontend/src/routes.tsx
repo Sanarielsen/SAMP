@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router";
 
 import Dashboard from "@/layout/Dashboard";
+import { RequireAuth, RequireRole } from '@/auth/AuthAccess'
 
 import LoginPage from "@/features/auth/pages/Login";
 import ForgotPasswordPage from "@/features/auth/pages/ForgotPassword";
@@ -42,42 +43,47 @@ export default function Router() {
       <Route index element={<LoginPage />} />
       <Route path="recuperar-senha" element={<ForgotPasswordPage />} />
 
-      <Route element={<Dashboard />}>
-        <Route path="inicio" element={<Home />} />
+      <Route element={<RequireAuth />}>
+        <Route element={<Dashboard />}>
+          <Route path="inicio" element={<Home />} />
 
-        <Route path="clientes" element={<ClientPage />} />
-        <Route path="cliente" element={<ManageClientPage />} />
-        <Route path="cliente/:id" element={<ManageClientPage />} />
-        <Route path="cliente/:id/detalhes" element={<ClientPanelInformations />} />
-        <Route path="cliente/:id/agenda" element={<ManageNewAppointment />} />
-        <Route path="cliente/:clienteId/agenda/:agendaId" element={<ManageUpdateAppointment />} />
+          <Route path="clientes" element={<ClientPage />} />
+          <Route path="cliente" element={<ManageClientPage />} />
+          <Route path="cliente/:id" element={<ManageClientPage />} />
+          <Route path="cliente/:id/detalhes" element={<ClientPanelInformations />} />
+          <Route path="cliente/:id/agenda" element={<ManageNewAppointment />} />
+          <Route path="cliente/:clienteId/agenda/:agendaId" element={<ManageUpdateAppointment />} />
 
-        <Route path="representantes" element={<RepresentativePage />} />
-        <Route path="representante" element={<RepresentativeManagePage />} />
-        <Route path="representante/:id" element={<RepresentativeManagePage />} />
+          <Route path="representantes" element={<RepresentativePage />} />
+          <Route path="representante" element={<RepresentativeManagePage />} />
+          <Route path="representante/:id" element={<RepresentativeManagePage />} />
 
-        <Route path="oss" element={<OrderServicesPage />} />
-        <Route path="os/" element={<OrderServiceManagePage />} />
-        <Route path="os/:id" element={<OrderServiceManagePage />} />
-        <Route path="os/detalhes/:id" element={<OrderDetailsPanel />} />
-        <Route path="os/detalhes/:id/pagamento" element={<OrderNewPayment />} />
+          <Route path="oss" element={<OrderServicesPage />} />
+          <Route path="os/" element={<OrderServiceManagePage />} />
+          <Route path="os/:id" element={<OrderServiceManagePage />} />
+          <Route path="os/detalhes/:id" element={<OrderDetailsPanel />} />
+          <Route path="os/detalhes/:id/pagamento" element={<OrderNewPayment />} />
 
-        <Route path="pagamento/:id/parcelas" element={<PaymentDetails />} />
+          <Route path="pagamento/:id/parcelas" element={<PaymentDetails />} />
 
-        <Route path="processos" element={<ViewImportedProcesses />} />
-        <Route path="processo" element={<ManageImportedProcess />} />
-        <Route path="processo/:id" element={<ManageImportedProcess />} />
-        <Route path="processo/:id/detalhes" element={<ViewImportedProcess />} />
+          <Route path="processos" element={<ViewImportedProcesses />} />
+          <Route path="processo" element={<ManageImportedProcess />} />
+          <Route path="processo/:id" element={<ManageImportedProcess />} />
+          <Route path="processo/:id/detalhes" element={<ViewImportedProcess />} />
 
-        <Route path="perfil" element={<ProfilePage />} />
-        <Route path="perfil/:id/alterar-senha" element={<UpdatePassword />} />
-        <Route path="admin/variaveis" element={<ManageVariables />} />
-        <Route path="admin/usuarios" element={<ManageUsers />} />
-        <Route path="admin/usuario" element={<ManageUser />} />
-        <Route path="admin/usuario/:id" element={<ManageUser />} />
-        <Route path="admin/usuario/:id/alterar-senha" element={<UpdatePassword />} />
-        
-        <Route path="sobre" element={<AboutPage />} />
+          <Route path="perfil" element={<ProfilePage />} />
+          <Route path="perfil/:id/alterar-senha" element={<UpdatePassword />} />
+
+          <Route element={<RequireRole allowedRoles={['ADMIN']} />}>
+            <Route path="admin/variaveis" element={<ManageVariables />} />
+            <Route path="admin/usuarios" element={<ManageUsers />} />
+            <Route path="admin/usuario" element={<ManageUser />} />
+            <Route path="admin/usuario/:id" element={<ManageUser />} />
+            <Route path="admin/usuario/:id/alterar-senha" element={<UpdatePassword />} />
+          </Route>
+
+          <Route path="sobre" element={<AboutPage />} />
+        </Route>
       </Route>
     </Routes>
   )
