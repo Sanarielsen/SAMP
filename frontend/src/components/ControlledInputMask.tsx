@@ -22,14 +22,42 @@ export function ControlledInputMask<T extends FieldValues>({
 }: ControlledInputMaskProps<T>) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const getInitialMask = () => mask.replace(/9/g, " ");
+  const extractDigits = (value: string) => {
+    return value.replace(/\D/g, "");
+  };
+
+  const formatValueWithMask = (value: string) => {
+    if (!value) return "";
+    
+    const digits = extractDigits(value);
+    const formattedArr = mask.split("");
+    let digitIndex = 0;
+    
+    for (let i = 0; i < mask.length && digitIndex < digits.length; i++) {
+      if (mask[i] === "9") {
+        formattedArr[i] = digits[digitIndex];
+        digitIndex++;
+      }
+    }
+    
+    let result = "";
+    for (let i = 0; i < formattedArr.length; i++) {
+      if (formattedArr[i] === "9") break;
+      result += formattedArr[i];
+    }
+    
+    return result;
+  };
 
   return (
     <Controller
       name={name}
       control={control}
       render={({ field }) => {
-        const currentValue = field.value || getInitialMask();
+        
+        const storedValue = field.value || "";
+        
+        const displayValue = formatValueWithMask(storedValue);
 
         return (
           <TextField
@@ -39,65 +67,67 @@ export function ControlledInputMask<T extends FieldValues>({
               field.ref(e);
               inputRef.current = e;
             }}
-            value={currentValue}
+            value={displayValue}
             onChange={(event) => {
               const inputEl = event.target;
-              const newRawValue = inputEl.value;
-              const cursorStart = inputEl.selectionStart || 0;
+              const inputValue = inputEl.value;
+              const cursorPos = inputEl.selectionStart || 0;
 
-              let newValueArr = currentValue.split("");
-              
-              if (newRawValue.length < currentValue.length) {
-                
-                const deletedIndex = cursorStart;
+              const newDigits = extractDigits(inputValue);
+              const oldDigits = extractDigits(storedValue);
 
-                if (mask[deletedIndex] === "9") {
-                  newValueArr[deletedIndex] = " ";
-                } else {
-                  
-                  let prevIndex = deletedIndex - 1;
-                  while (prevIndex >= 0 && mask[prevIndex] !== "9") {
-                    prevIndex--;
-                  }
-                  if (prevIndex >= 0) {
-                    newValueArr[prevIndex] = " ";
+              if (newDigits.length < oldDigits.length) {
+                let digitsPassed = 0;
+                let deletedDigitPosition = -1;
+
+                for (let i = 0; i < mask.length && digitsPassed < oldDigits.length; i++) {
+                  if (mask[i] === "9") {
+                    if (i >= cursorPos) {
+                      deletedDigitPosition = digitsPassed;
+                      break;
+                    }
+                    digitsPassed++;
                   }
                 }
 
-                const updatedValue = newValueArr.join("");
+                if (deletedDigitPosition === -1) {
+                  deletedDigitPosition = oldDigits.length - 1;
+                }
+
+                const updatedValue = oldDigits.slice(0, deletedDigitPosition) + oldDigits.slice(deletedDigitPosition + 1);
                 field.onChange(updatedValue);
                 textFieldProps.onChange?.(event);
 
                 requestAnimationFrame(() => {
                   if (inputRef.current) {
-                    const targetPos = mask[deletedIndex] !== "9" ? deletedIndex : cursorStart;
-                    inputRef.current.setSelectionRange(targetPos, targetPos);
+                    let cursorIndex = 0;
+                    let digitsFound = 0;
+                    for (let i = 0; i < mask.length; i++) {
+                      if (mask[i] === "9") {
+                        if (digitsFound === deletedDigitPosition) {
+                          cursorIndex = i;
+                          break;
+                        }
+                        digitsFound++;
+                      }
+                      cursorIndex = i + 1;
+                    }
+                    inputRef.current.setSelectionRange(cursorIndex, cursorIndex);
                   }
                 });
-              } else {
-                const insertedChar = newRawValue[cursorStart - 1];
+              } else if (newDigits.length > oldDigits.length) {
+                const lastDigit = newDigits[newDigits.length - 1];
+                
+                if (/\d/.test(lastDigit)) {
+                  field.onChange(newDigits);
+                  textFieldProps.onChange?.(event);
 
-                if (/\d/.test(insertedChar)) {
-                  let writeIndex = cursorStart - 1;
-
-                  while (writeIndex < mask.length && mask[writeIndex] !== "9") {
-                    writeIndex++;
-                  }
-
-                  if (writeIndex < mask.length && mask[writeIndex] === "9") {
-                    newValueArr[writeIndex] = insertedChar;
-                    const nextCursor = writeIndex + 1;
-
-                    const updatedValue = newValueArr.join("");
-                    field.onChange(updatedValue);
-                    textFieldProps.onChange?.(event);
-
-                    requestAnimationFrame(() => {
-                      if (inputRef.current) {
-                        inputRef.current.setSelectionRange(nextCursor, nextCursor);
-                      }
-                    });
-                  }
+                  requestAnimationFrame(() => {
+                    if (inputRef.current) {
+                      const formattedDisplay = formatValueWithMask(newDigits);
+                      inputRef.current.setSelectionRange(formattedDisplay.length, formattedDisplay.length);
+                    }
+                  });
                 }
               }
             }}
