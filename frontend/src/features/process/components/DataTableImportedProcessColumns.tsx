@@ -12,6 +12,7 @@ import {
 import ApartmentIcon from '@mui/icons-material/Apartment';
 
 import type { ImportedProcessWithDetails } from "@shared/types/importedProcess";
+import { useAuth } from "@/auth/AuthProvider";
 
 
 type ColumnsProcessProps = {
@@ -27,6 +28,10 @@ export default function DataTableImportedProcessColumns({
   onClickDeleteItem,
   onClickCheckClient
 }: ColumnsProcessProps): GridColDef<ImportedProcessWithDetails>[] {
+
+  const { role } = useAuth()
+  const isAdmin = role === "ADMIN"
+
   return [
     {
       field: "processNumber",
@@ -70,29 +75,33 @@ export default function DataTableImportedProcessColumns({
             </Tooltip>
           </IconButton>
 
-          <IconButton
-            onClick={() => onClickSeeItem(params.row.id)}
-          >
-            <Tooltip title="Detalhes">
-              <GridSearchIcon />
-            </Tooltip>
-          </IconButton>
+          {isAdmin && (
+            <>
+              <IconButton
+                onClick={() => onClickSeeItem(params.row.id)}
+              >
+                <Tooltip title="Detalhes">
+                  <GridSearchIcon />
+                </Tooltip>
+              </IconButton>
 
-          <IconButton
-            onClick={() => onClickUpdateItem(params.row.id)}
-          >          
-            <Tooltip title="Atualizar">
-              <GridLoadIcon />
-            </Tooltip>
-          </IconButton>
+              <IconButton
+                onClick={() => onClickUpdateItem(params.row.id)}
+              >          
+                <Tooltip title="Atualizar">
+                  <GridLoadIcon />
+                </Tooltip>
+              </IconButton>
 
-          <IconButton
-            onClick={() => onClickDeleteItem(params.row.id)}
-          >
-            <Tooltip title="Excluir">
-              <GridDeleteIcon />
-            </Tooltip>
-          </IconButton>
+              <IconButton
+                onClick={() => onClickDeleteItem(params.row.id)}
+              >
+                <Tooltip title="Excluir">
+                  <GridDeleteIcon />
+                </Tooltip>
+              </IconButton>
+                </>
+              )}
         </Stack>
       ),
     }
