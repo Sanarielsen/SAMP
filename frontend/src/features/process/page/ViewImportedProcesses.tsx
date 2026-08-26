@@ -10,6 +10,7 @@ import {
 
 import { optionsQueryListProcessDetailsWithSearch } from "@/features/process/api/queryListProcessDetailsWithDetails";
 import { useMutationDeleteProcess } from "@/features/process/api/mutationDeleteProcess";
+import { useAuth } from "@/auth/AuthProvider";
 import DataTableImportedProcessColumns from "@/features/process/components/DataTableImportedProcessColumns";
 import DataTable from "@/components/DataTable";
 import HeaderPage from "@/components/HeaderPage";
@@ -23,6 +24,9 @@ export default function ViewImportedProcesses() {
   const actionAudio = useAudioFeedback();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const { role } = useAuth()
+  const isAdmin = role === "ADMIN"
 
   const [openToast, setOpenToast] = useState("");
   const [openModalConfirmation, setOpenModalConfirmation] = useState(false);
@@ -80,23 +84,28 @@ export default function ViewImportedProcesses() {
     <>
       <Box component="section" sx={{ marginTop: 2 }}>
         <HeaderPage title="Listagem de processos"> 
-          <Box
-            component="div"
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end'
-            }}
-          >
-            <Button              
-              type="button"
-              variant="contained"
-              fullWidth
-              onClick={() => navigate('/processo')}
-            >
-              Cadastrar processo
-            </Button>
-          </Box>
+
+          {isAdmin && (
+            <>
+              <Box
+                component="div"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end'
+                }}
+              >
+                <Button              
+                  type="button"
+                  variant="contained"
+                  fullWidth
+                  onClick={() => navigate('/processo')}
+                >
+                  Cadastrar processo
+                </Button>
+              </Box>
+            </>
+          )}
         </HeaderPage>
 
         <Box component="section" sx={{ p: 2, px: 4 }}>

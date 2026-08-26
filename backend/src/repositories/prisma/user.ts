@@ -47,7 +47,8 @@ export class PrismaUserRepository implements UserRepository {
         id: data.id,
       },
       data: {
-        password_hash: await hash(data.password, 6)
+        password_hash: await hash(data.password, 6),
+        updatedAt: new Date(Date.now())
       }
     })
   }

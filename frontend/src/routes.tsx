@@ -47,6 +47,9 @@ export default function Router() {
         <Route element={<Dashboard />}>
           <Route path="inicio" element={<Home />} />
 
+          <Route path="perfil" element={<ProfilePage />} />
+          <Route path="perfil/:id/alterar-senha" element={<UpdatePassword />} />
+
           <Route path="clientes" element={<ClientPage />} />
           <Route path="cliente" element={<ManageClientPage />} />
           <Route path="cliente/:id" element={<ManageClientPage />} />
@@ -67,12 +70,11 @@ export default function Router() {
           <Route path="pagamento/:id/parcelas" element={<PaymentDetails />} />
 
           <Route path="processos" element={<ViewImportedProcesses />} />
-          <Route path="processo" element={<ManageImportedProcess />} />
-          <Route path="processo/:id" element={<ManageImportedProcess />} />
-          <Route path="processo/:id/detalhes" element={<ViewImportedProcess />} />
-
-          <Route path="perfil" element={<ProfilePage />} />
-          <Route path="perfil/:id/alterar-senha" element={<UpdatePassword />} />
+          <Route element={<RequireRole allowedRoles={['ADMIN']} />}>
+            <Route path="processo" element={<ManageImportedProcess />} />
+            <Route path="processo/:id" element={<ManageImportedProcess />} />
+            <Route path="processo/:id/detalhes" element={<ViewImportedProcess />} />
+          </Route>
 
           <Route element={<RequireRole allowedRoles={['ADMIN']} />}>
             <Route path="admin/variaveis" element={<ManageVariables />} />
