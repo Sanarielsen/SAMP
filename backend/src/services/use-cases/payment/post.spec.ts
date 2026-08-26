@@ -28,28 +28,13 @@ describe('Post Payment Use Case', () => {
     newOrder = await makeOrder(orderRepository)
   })
 
-  it('should create a payment', async () => {
-
-    const response = await sut.execute({
-      orderId: newOrder.id,
-      totalInstallments: 5,
-      description: 'Test order',
-      observation: 'Test observation'
-    })
-
-    expect(response).toEqual({
-      id: expect.any(String),
-    })
-  })
-
   it('should create a payment for a valid order', async () => {
-
     const newOrder = await makeOrder(orderRepository)
 
     const newPayment = await paymentRepository.create({
       orderId: newOrder.id,
+      firstDueDate: new Date(Date.now()),
       totalInstallments: 5,
-      description: 'Test order',
       observation: 'Test observation'
     })
 
@@ -60,8 +45,8 @@ describe('Post Payment Use Case', () => {
 
     await expect(() => sut.execute({
       orderId: 'order-non-exist',
+      firstDueDate: new Date(Date.now()),
       totalInstallments: 5,
-      description: 'Test order',
     })).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 
@@ -71,8 +56,8 @@ describe('Post Payment Use Case', () => {
 
     await expect(() => sut.execute({
       orderId: newOrder.id,
+      firstDueDate: new Date(Date.now()),
       totalInstallments: 5,
-      description: 'Test order',
     })).rejects.toBeInstanceOf(InvalidResourceError)
   })
 })

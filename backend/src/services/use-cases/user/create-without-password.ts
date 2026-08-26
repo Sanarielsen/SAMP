@@ -14,11 +14,9 @@ export class CreateUserUseCase {
 
   async execute( data: CreateUserWithoutPasswordDTO ): Promise<User> {
     const userWithSameEmail = await this.userRepository.findByEmail(data.email)
-
     if (userWithSameEmail) throw new UserAlreadyExistsError();
     
     const userRole = await this.userRoleRepository.findById(data.roleId)
-
     if (!userRole) throw new ResourceNotFoundError();
     
     return await this.userRepository.createWithoutPassword(data)

@@ -9,6 +9,7 @@ import {
   UpdateUserDTO,
   User,
   UserDetailDTO,
+  UserDetailsForAdminDTO,
   UserPasswordUpdateDTO,
   UserPublicDTO,
 } from "@shared/types/user";
@@ -150,7 +151,7 @@ export class InMemoryUserRepository implements UserRepository {
     return user
   }
 
-  async findManyBySearchWithRelations(search: string): Promise<UserDetailDTO[]> {
+  async findManyBySearchWithRelations(search: string): Promise<UserDetailsForAdminDTO[]> {
     return this.items
       .filter(user =>
         user.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -161,6 +162,7 @@ export class InMemoryUserRepository implements UserRepository {
         roleName: this.roles.find(r => r.id === user.roleId)?.name ?? '',
         userRoleId: 'role-id',
         userRoleName: 'role-name',
+        validated: user.password_hash ? true : false,
       }))
   }
 

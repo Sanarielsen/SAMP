@@ -19,6 +19,8 @@ export class PostPaymentUseCase {
   async execute(data: CreatePaymentDTO): Promise<PostPaymentUseCaseResponse> {
 
     const order = await this.orderRepository.findById(data.orderId);  
+
+    console.log("EVENTO: ", order);
   
     if (!order) {
       throw new ResourceNotFoundError();
