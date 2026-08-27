@@ -6,3 +6,4 @@ export type Section =
   | "INSTALLMENTS"
   | "APPOINTMENTS"
   | "PROCESSES"
+  | "ABOUT"
