@@ -88,8 +88,8 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/profile/:id/password', {onRequest: [verifyJWT]}, updateUserPassword)
   
   //app.post('/user', register)
-  app.post('/user', postUserWithoutPassword)
-  app.get('/user/:id', getUserWithoutPassword)
+  app.post('/user', {onRequest: [verifyJWT]}, postUserWithoutPassword)
+  app.get('/user/:id', {onRequest: [verifyJWT]}, getUserWithoutPassword)
   app.patch('/user/:id', {onRequest: [verifyJWT]}, updateUser)
   app.delete('/user/:id', {onRequest: [verifyJWT]}, deleteUser)
   app.get('/user/roles', {onRequest: [verifyJWT]}, listUserRoleLevelAuthorized)

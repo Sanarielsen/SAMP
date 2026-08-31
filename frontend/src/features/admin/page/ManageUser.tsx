@@ -196,10 +196,9 @@ export default function ManageUser() {
         onClose={() => setOpenToast("")}
       />
 
-
       <ToastContainer
         open={openToast === "success_updated"}
-        message={"Usuário atualizado com sucesso. Ative o seu registro atribuindo uma senha na lista de usuários."}
+        message={"Usuário atualizado com sucesso."}
         severity="success"
         onClose={() => setOpenToast("")}
       />

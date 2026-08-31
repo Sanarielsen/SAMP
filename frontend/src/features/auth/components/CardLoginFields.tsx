@@ -1,18 +1,22 @@
-import { useForm, type SubmitHandler } from "react-hook-form"
-
 import { 
   Box, 
-  Button, 
-  Link, 
+  Button,
   TextField 
 } from '@mui/material'
+import { 
+  useForm, 
+  type SubmitHandler 
+} from "react-hook-form"
+import { useNavigate } from 'react-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { loginSchema, type LoginSchemaFormData } from '@/features/auth/schemas/login';
-import { SpanError } from '@/styles/spanError';
-import { useAuth } from '@/auth/AuthProvider';
 import { useLogin } from '@/features/auth/api/AuthMutation';
-import { useNavigate } from 'react-router';
+import { useAuth } from '@/auth/AuthProvider';
+import { 
+  loginSchema, 
+  type LoginSchemaFormData 
+} from '@/features/auth/schemas/login';
+import { SpanError } from '@/styles/spanError';
 
 
 export default function CardLoginFields() {
@@ -71,57 +75,46 @@ export default function CardLoginFields() {
             textAlign: 'center'
           }}
         />
-        <TextField
-          {...register("email")}
-          sx={{marginBottom: 4}}
-          placeholder="email@exemplo.com"
-          label="Email"
-          type="email"
-          fullWidth
-          variant="outlined"
-          helperText={
-            errors.email && <SpanError>{errors.email.message}</SpanError>
-          }
-        />
-        <TextField
-          {...register("password")}            
-          label="Password"
-          type="password"
-          fullWidth
-          variant="outlined"
-          helperText={
-            errors.password && <SpanError>{errors.password.message}</SpanError>
-          }
-        />
 
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            width: '100%',
-            marginBottom: 4
-          }}
+        <Box 
+          component="section" 
+          sx={{ py: 2 }}
         >
-          <Link
-            href="/forgot-password" 
-            underline="hover"
-            sx={{ cursor: 'pointer' }}
-          >
-            Esqueci a senha?
-          </Link>
+          <TextField
+            {...register("email")}
+            sx={{marginBottom: 4}}
+            placeholder="email@exemplo.com"
+            label="Email"
+            type="email"
+            fullWidth
+            variant="outlined"
+            helperText={
+              errors.email && <SpanError>{errors.email.message}</SpanError>
+            }
+          />
+          <TextField
+            {...register("password")}            
+            label="Password"
+            type="password"
+            fullWidth
+            variant="outlined"
+            helperText={
+              errors.password && <SpanError>{errors.password.message}</SpanError>
+            }
+          />
         </Box>
-
+        
         <Button
           type="submit"
           variant="contained"
           loading={mutation.isPending}
           disabled={mutation.isPending}
           fullWidth
-          sx={{ marginTop: 2 }}
+          sx={{ marginTop: 4 }}
         >
           Entrar
         </Button>
-        </form>
+      </form>
     </Box>    
   )
 }
