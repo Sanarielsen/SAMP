@@ -19,6 +19,7 @@ import {
   NavClose,
   NavHeader 
 } from "@/styles/menuContainer";
+import { useAuth } from "@/auth/AuthProvider";
 
 
 interface MenuProps {
@@ -34,6 +35,8 @@ export default function Menu({
   const location = useLocation();
   const navigate = useNavigate();
 
+  const { name } = useAuth()
+
   function handleChangePage(targetPage: string) {
     navigate(targetPage);
     handleChangeStatus();
@@ -48,7 +51,7 @@ export default function Menu({
       )}
       <NavHeader>
         <AccountCircleIcon color='inherit' fontSize='large' />
-        <p> Seja bem-vindo, Samuel Henrique </p>
+        <p> Seja bem-vindo, {name} </p>
       </NavHeader>
       <NavBody>
         <MenuItem

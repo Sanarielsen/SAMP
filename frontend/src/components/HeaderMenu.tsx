@@ -67,6 +67,7 @@ export default function HeaderMenu({ isMobile }: HeaderMenuProp) {
           open={Boolean(anchorEl)}
           anchorEl={anchorEl}
           onClose={handleProfileClose}
+          disableRestoreFocus
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >

@@ -10,6 +10,7 @@ import { jwtDecode } from 'jwt-decode'
 
 type TokenPayload = {
   sub: string | null
+  name: string | null
   role: string | null
 }
 
@@ -19,6 +20,7 @@ interface AuthContextProps {
 
 type AuthContextType = {
   token: string | null
+  name: string | null
   role: string | null
   isAdmin: boolean
   signIn: (token: string) => void
@@ -28,10 +30,19 @@ type AuthContextType = {
 
 const AuthContext = createContext({} as AuthContextType)
 
-function decodeRoleFromToken(token: string): string | null {
+function decodeFromToken(token: string, prop: string): string | null {
   try {
     const decoded = jwtDecode<TokenPayload>(token)
-    return decoded.role ?? null
+
+    switch (prop) {
+      case 'role':
+        return decoded.role ?? null
+      break;
+      case 'name':
+        return decoded.name ?? null
+      break
+    }
+    
   } catch {
     return null
   }
@@ -41,10 +52,11 @@ export function AuthProvider({ children }: AuthContextProps) {
   const [token, setToken] = useState<string | null>(
     localStorage.getItem('token')
   )
+  const [nameUser, setNameUser] = useState<string | null>()
 
   const [role, setRole] = useState<string | null>(() => {
     const storedToken = localStorage.getItem('token')
-    return storedToken ? decodeRoleFromToken(storedToken) : null
+    return storedToken ? decodeFromToken(storedToken, 'role') : null
   })
 
   useEffect(() => {
@@ -53,7 +65,8 @@ export function AuthProvider({ children }: AuthContextProps) {
       return
     }
 
-    setRole(decodeRoleFromToken(token))
+    setRole(decodeFromToken(token, 'role'))
+    setNameUser(decodeFromToken(token, 'name'))
   }, [token])
 
   function signIn(token: string) {
@@ -80,6 +93,7 @@ export function AuthProvider({ children }: AuthContextProps) {
     <AuthContext.Provider
       value={{
         token,
+        name: nameUser,
         role,
         isAdmin,
         signIn,

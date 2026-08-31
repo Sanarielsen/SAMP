@@ -4,7 +4,6 @@ import Dashboard from "@/layout/Dashboard";
 import { RequireAuth, RequireRole } from '@/auth/AuthAccess'
 
 import LoginPage from "@/features/auth/pages/Login";
-import ForgotPasswordPage from "@/features/auth/pages/ForgotPassword";
 
 import Home from "@/features/home/page/Home";
 
@@ -41,7 +40,8 @@ export default function Router() {
   return (
     <Routes>
       <Route index element={<LoginPage />} />
-      <Route path="recuperar-senha" element={<ForgotPasswordPage />} />
+      {/* //TODO: When the clients wants, use this page to request password */}
+      {/* <Route path="recuperar-senha" element={<ForgotPasswordPage />} /> */}
 
       <Route element={<RequireAuth />}>
         <Route element={<Dashboard />}>

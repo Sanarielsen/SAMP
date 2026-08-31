@@ -24,6 +24,7 @@ export async function authenticate(request: FastifyRequest, reply: FastifyReply)
       roleId: user.userRole.id,
       role: user.userRole.name,
       level: user.userRole.level,
+      name: user.name,
     }, {
       sign: {
         sub: user.id,
