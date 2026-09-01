@@ -1,139 +1,199 @@
-import { useRef } from "react";
-import {
-  Controller,
-  type Control,
-  type FieldValues,
-  type Path,
-} from "react-hook-form";
-import TextField, { type TextFieldProps } from "@mui/material/TextField";
+import { 
+  useRef, 
+  type RefCallback 
+} from 'react';
 
-type ControlledInputMaskProps<T extends FieldValues> = {
-  control: Control<T>;
-  name: Path<T>;
-  mask: string; 
-} & Omit<TextFieldProps, "name">;
+import { 
+  Controller, 
+  type FieldValues, 
+  type FieldPath, 
+  type UseControllerProps 
+} from 'react-hook-form';
+
+import 
+  TextField, 
+  { type TextFieldProps } 
+from '@mui/material/TextField';
 
 
-export function ControlledInputMask<T extends FieldValues>({
-  control,
-  name,
-  mask,
-  ...textFieldProps
-}: ControlledInputMaskProps<T>) {
-  const inputRef = useRef<HTMLInputElement | null>(null);
+export type MaskType = string | ((value: string) => string);
 
-  const extractDigits = (value: string) => {
-    return value.replace(/\D/g, "");
-  };
+export interface ControlledInputMaskProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+> extends Omit<TextFieldProps, 'name' | 'defaultValue'> {
+  name: TName;
+  control: UseControllerProps<TFieldValues, TName>['control'];
+  mask?: MaskType;
+  rules?: UseControllerProps<TFieldValues, TName>['rules'];
+  defaultValue?: UseControllerProps<TFieldValues, TName>['defaultValue'];
+}
 
-  const formatValueWithMask = (value: string) => {
-    if (!value) return "";
-    
-    const digits = extractDigits(value);
-    const formattedArr = mask.split("");
-    let digitIndex = 0;
-    
-    for (let i = 0; i < mask.length && digitIndex < digits.length; i++) {
-      if (mask[i] === "9") {
-        formattedArr[i] = digits[digitIndex];
-        digitIndex++;
+const applyGenericMask = (rawValue: string, maskProp?: MaskType): string => {
+  if (!rawValue || !maskProp) return rawValue;
+
+  if (typeof maskProp === 'function') {
+    return maskProp(rawValue);
+  }
+
+  if (typeof maskProp === 'string') {
+    const cleanDigits = rawValue.replace(/[^a-zA-Z0-9]/g, '');
+    let result = '';
+    let cleanIndex = 0;
+
+    for (let i = 0; i < maskProp.length && cleanIndex < cleanDigits.length; i++) {
+      const maskChar = maskProp[i];
+      const valChar = cleanDigits[cleanIndex];
+
+      if (maskChar === '9') {
+        if (/\d/.test(valChar)) {
+          result += valChar;
+          cleanIndex++;
+        } else {
+          cleanIndex++;
+          i--;
+        }
+      } else if (maskChar === 'A' || maskChar === 'a') {
+        if (/[a-zA-Z]/.test(valChar)) {
+          result += valChar;
+          cleanIndex++;
+        } else {
+          cleanIndex++;
+          i--;
+        }
+      } else if (maskChar === '*') {
+        result += valChar;
+        cleanIndex++;
+      } else {
+        result += maskChar;
+        if (valChar === maskChar) {
+          cleanIndex++;
+        }
       }
     }
-    
-    let result = "";
-    for (let i = 0; i < formattedArr.length; i++) {
-      if (formattedArr[i] === "9") break;
-      result += formattedArr[i];
-    }
-    
+
     return result;
+  }
+
+  return rawValue;
+};
+
+const getMaskMaxLength = (currentValue: string, maskProp?: MaskType): number => {
+  if (typeof maskProp === 'string') {
+    return maskProp.length;
+  }
+  if (typeof maskProp === 'function') {
+    const formatted = maskProp(currentValue);
+    return formatted ? formatted.length : Infinity;
+  }
+  return Infinity;
+};
+
+export const ControlledInputMask = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+>({
+  name,
+  control,
+  mask,
+  rules = undefined,
+  defaultValue = undefined,
+  onChange: customOnChange = undefined,
+  slotProps,
+  ...props
+}: ControlledInputMaskProps<TFieldValues, TName>) => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Backspace') {
+      const input = event.currentTarget;
+      const cursorPos = input.selectionStart ?? 0;
+
+      if (cursorPos > 0 && /[^a-zA-Z0-9]/.test(input.value[cursorPos - 1])) {
+        event.preventDefault();
+        input.setSelectionRange(cursorPos - 1, cursorPos - 1);
+      }
+    }
   };
 
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field }) => {
-        
-        const storedValue = field.value || "";
-        
-        const displayValue = formatValueWithMask(storedValue);
+      rules={rules}
+      defaultValue={defaultValue}
+      render={({ field: { onChange, value, ref: fieldRef, ...fieldProps } }) => {
+        const currentValue = (value as string) || '';
+
+        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+          const input = event.target;
+          const rawValue = input.value;
+          const cursorPos = input.selectionStart ?? 0;
+          const nativeEvent = event.nativeEvent as InputEvent;
+          const isInsert = nativeEvent.inputType === 'insertText';
+
+          const maxLength = getMaskMaxLength(currentValue, mask);
+
+          if (isInsert && currentValue.length >= maxLength) {
+            requestAnimationFrame(() => {
+              const originalPos = Math.max(0, cursorPos - 1);
+              if (inputRef.current) {
+                inputRef.current.setSelectionRange(originalPos, originalPos);
+              }
+            });
+            return;
+          }
+
+          const formattedValue = applyGenericMask(rawValue, mask);
+
+          onChange(formattedValue);
+
+          if (customOnChange) {
+            customOnChange(event);
+          }
+
+          requestAnimationFrame(() => {
+            let nextCursor = cursorPos;
+
+            if (isInsert && /[^a-zA-Z0-9]/.test(formattedValue[cursorPos - 1])) {
+              nextCursor = cursorPos + 1;
+            }
+
+            if (inputRef.current) {
+              inputRef.current.setSelectionRange(nextCursor, nextCursor);
+            }
+          });
+        };
+
+        const handleInputRef: RefCallback<HTMLInputElement> = (node) => {
+          inputRef.current = node;
+          if (typeof fieldRef === 'function') {
+            fieldRef(node);
+          } else if (fieldRef && typeof fieldRef === 'object') {
+            (fieldRef as React.MutableRefObject<HTMLInputElement | null>).current = node;
+          }
+        };
 
         return (
           <TextField
-            {...textFieldProps}
-            {...field}
-            inputRef={(e) => {
-              field.ref(e);
-              inputRef.current = e;
-            }}
-            value={displayValue}
-            onChange={(event) => {
-              const inputEl = event.target;
-              const inputValue = inputEl.value;
-              const cursorPos = inputEl.selectionStart || 0;
-
-              const newDigits = extractDigits(inputValue);
-              const oldDigits = extractDigits(storedValue);
-
-              if (newDigits.length < oldDigits.length) {
-                let digitsPassed = 0;
-                let deletedDigitPosition = -1;
-
-                for (let i = 0; i < mask.length && digitsPassed < oldDigits.length; i++) {
-                  if (mask[i] === "9") {
-                    if (i >= cursorPos) {
-                      deletedDigitPosition = digitsPassed;
-                      break;
-                    }
-                    digitsPassed++;
-                  }
-                }
-
-                if (deletedDigitPosition === -1) {
-                  deletedDigitPosition = oldDigits.length - 1;
-                }
-
-                const updatedValue = oldDigits.slice(0, deletedDigitPosition) + oldDigits.slice(deletedDigitPosition + 1);
-                field.onChange(updatedValue);
-                textFieldProps.onChange?.(event);
-
-                requestAnimationFrame(() => {
-                  if (inputRef.current) {
-                    let cursorIndex = 0;
-                    let digitsFound = 0;
-                    for (let i = 0; i < mask.length; i++) {
-                      if (mask[i] === "9") {
-                        if (digitsFound === deletedDigitPosition) {
-                          cursorIndex = i;
-                          break;
-                        }
-                        digitsFound++;
-                      }
-                      cursorIndex = i + 1;
-                    }
-                    inputRef.current.setSelectionRange(cursorIndex, cursorIndex);
-                  }
-                });
-              } else if (newDigits.length > oldDigits.length) {
-                const lastDigit = newDigits[newDigits.length - 1];
-                
-                if (/\d/.test(lastDigit)) {
-                  field.onChange(newDigits);
-                  textFieldProps.onChange?.(event);
-
-                  requestAnimationFrame(() => {
-                    if (inputRef.current) {
-                      const formattedDisplay = formatValueWithMask(newDigits);
-                      inputRef.current.setSelectionRange(formattedDisplay.length, formattedDisplay.length);
-                    }
-                  });
-                }
-              }
+            {...fieldProps}
+            {...props}
+            value={currentValue}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            inputRef={handleInputRef}
+            slotProps={{
+              ...slotProps,
+              htmlInput: {
+                autoComplete: 'off',
+                ...slotProps?.htmlInput,
+              },
             }}
           />
         );
       }}
     />
   );
-}
+};
+
+export default ControlledInputMask;
