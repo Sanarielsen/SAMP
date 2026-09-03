@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { 
+  useEffect, 
+  useState 
+} from "react";
 
-import AllInboxIcon from '@mui/icons-material/AllInbox';
 import { 
   Box, 
   Button, 
   Grid, 
-  Typography 
 } from "@mui/material";
 import { 
   FormProvider, 
@@ -27,6 +28,7 @@ import { optionsQueryListClientsWithOptions } from "@/api/listClientsWithOptions
 import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
 import { ControlledInput } from "@/components/ControlledInputText";
+import HeaderResourceForm from "@/components/HeaderResourceForm";
 import ToastContainer from "@/components/Toast";
 import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 import { 
@@ -177,40 +179,18 @@ export default function OrderServiceManagePage() {
     <FormProvider {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box component="section" sx={{ p: 8 }}>
-          <Grid
-            container 
-            spacing={4} 
-            sx={{
-              textAlign: { xs: "center", md: "left" }
-            }}
-          >
-            <Grid 
-              size={{ xs: 12}}
-              sx={{
-                textAlign:"center"
-              }}
-            >
-              <Typography variant="h4" component="h1">
-                { titleHeader }
-              </Typography>
-            </Grid>
 
-            <Grid 
-              size={{ xs: 12}}
-              sx={{
-                textAlign:"center"
-              }}
-            >
-              <AllInboxIcon fontSize="large" />
-            </Grid>
-          </Grid>
+          <HeaderResourceForm
+            title={titleHeader}
+            resource="ORDERS"
+          />
 
           <Grid container spacing={4} sx={{ pt: 8, pb: 3 }}>
             <Grid size={{ xs: 12 }}>
               <ControlledComboBox
                 control={control}
                 name={'clientId'}
-                label='Cliente atrelado'
+                label='Cliente atrelado:*'
                 placeholder='Clientes responsáveis por ti cadastrados'
                 options={isSuccesslistClientsWithOptions ? listClientsWithOptions : []}
               />
@@ -222,7 +202,7 @@ export default function OrderServiceManagePage() {
               <ControlledComboBox
                 control={control}
                 name={'orderTypeId'}
-                label='Tipo de O.S.'
+                label='Tipo de O.S:*'
                 placeholder='Tipo de ordem de servico a ser cadastrada'
                 options={isSuccessOrderTypeWithOptions ? listOrderTypeWithOptions : []}
               />
@@ -233,7 +213,7 @@ export default function OrderServiceManagePage() {
             <Grid size={{ xs: 12 }}>
               <ControlledInput
                 control={control}
-                label="Descricao"
+                label="Descricao:*"
                 name="description"
                 multiline
                 rows={4}
@@ -262,8 +242,9 @@ export default function OrderServiceManagePage() {
               <ControlledInputMask
                 control={control}
                 mask="99/99/9999"
-                label="Data do evento"
+                label="Data do evento:*"
                 name="eventDate"
+                showMaskHelperText
                 fullWidth
                 error={!!errors?.eventDate}
                 helperText={

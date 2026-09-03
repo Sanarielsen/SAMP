@@ -371,6 +371,7 @@ export default function ManageImportedProcess() {
                   mask="99/99/9999"
                   variant="outlined"
                   label="Data de Depósito"
+                  showMaskHelperText
                   fullWidth
                   error={!!errors.filingDate}
                   helperText={errors.filingDate?.message}
@@ -383,6 +384,7 @@ export default function ManageImportedProcess() {
                   mask="99/99/9999"
                   variant="outlined"
                   label="Data de Concessão"
+                  showMaskHelperText
                   fullWidth
                   error={!!errors.grantDate}
                   helperText={errors.grantDate?.message}
@@ -395,6 +397,7 @@ export default function ManageImportedProcess() {
                   mask="99/99/9999"
                   variant="outlined"
                   label="Data de Vigência"
+                  showMaskHelperText
                   fullWidth
                   error={!!errors.expirationDate}
                   helperText={errors.expirationDate?.message}

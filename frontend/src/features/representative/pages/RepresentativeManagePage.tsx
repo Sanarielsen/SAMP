@@ -1,11 +1,24 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
-import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form';
+import { 
+  useEffect, 
+  useState 
+} from 'react';
 
-import { Box, Button, Grid, Typography } from "@mui/material";
-import { useQuery } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
-import HotelClassIcon from '@mui/icons-material/HotelClass';
+import { 
+  Box, 
+  Button, 
+  Grid, 
+} from "@mui/material";
+import { useQuery } from '@tanstack/react-query';
+import { 
+  useNavigate, 
+  useParams 
+} from 'react-router';
+import { 
+  FormProvider, 
+  useForm, 
+  type SubmitHandler 
+} from 'react-hook-form';
 
 import { optionsGetRepresentative } from '@/features/representative/api/queryGetRepresentative';
 import { optionsQueryListClientsWithOptions } from '@/api/listClientsWithOptions';
@@ -14,6 +27,7 @@ import { useMutationPatchRepresentative } from '@/features/representative/api/mu
 import { ControlledComboBox } from '@/components/ControlledComboBox';
 import { ControlledInputMask } from '@/components/ControlledInputMask';
 import { ControlledInput } from '@/components/ControlledInputText';
+import HeaderResourceForm from '@/components/HeaderResourceForm';
 import ToastContainer from '@/components/Toast';
 import { useAudioFeedback } from '@/hooks/useAudioFeedback';
 import {
@@ -152,40 +166,18 @@ export default function RepresentativeManagePage() {
     <FormProvider {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box component="section" sx={{ p: 8 }}>
-          <Grid
-            container 
-            spacing={4} 
-            sx={{
-              textAlign: { xs: "center", md: "left" }
-            }}
-          >
-            <Grid 
-              size={{ xs: 12}}
-              sx={{
-                textAlign:"center"
-              }}
-            >
-              <Typography variant="h4" component="h1">
-                Adicionar novo representante
-              </Typography>
-            </Grid>
 
-            <Grid 
-              size={{ xs: 12}}
-              sx={{
-                textAlign:"center"
-              }}
-            >
-              <HotelClassIcon fontSize="large" />
-            </Grid>    
-          </Grid>
+          <HeaderResourceForm
+            title="Adicionar novo representante"
+            resource="REPRESENTATIVES"
+          />
 
           <Grid container spacing={4} sx={{ pt: 8, pb: 3 }}>
             <Grid size={{ xs: 12 }}>
               <ControlledComboBox
                 control={control}
                 name={'clientId'}
-                label='Cliente atrelado'
+                label='Cliente atrelado:*'
                 placeholder='Clientes responsáveis por ti cadastrados'
                 options={isSuccesslistClientsWithOptions ? listClientsWithOptions : []}
               />
@@ -197,7 +189,7 @@ export default function RepresentativeManagePage() {
               <ControlledInput
                 control={control}
                 name="name"
-                label="Nome completo"
+                label="Nome completo:*"
                 fullWidth
                 error={!!errors.name}
                 helperText={errors.name?.message}
@@ -207,7 +199,7 @@ export default function RepresentativeManagePage() {
               <ControlledInput
                 control={control}
                 name="nationality"
-                label="Nacionalidade"
+                label="Nacionalidade:*"
                 fullWidth
                 error={!!errors.nationality}
                 helperText={errors.nationality?.message}
@@ -219,7 +211,8 @@ export default function RepresentativeManagePage() {
                 name="documentRG"
                 mask={'99.999.999.9'}
                 variant="outlined"
-                label="RG"
+                label="RG:*"
+                showMaskHelperText
                 fullWidth
                 error={!!errors.documentRG}
                 helperText={errors.documentRG?.message}
@@ -231,7 +224,8 @@ export default function RepresentativeManagePage() {
                 name="documentCPF"
                 mask={'999.999.999-99'}
                 variant="outlined"
-                label="CPF"
+                label="CPF:*"
+                showMaskHelperText
                 fullWidth
                 error={!!errors.documentCPF}
                 helperText={errors.documentCPF?.message}
@@ -243,7 +237,7 @@ export default function RepresentativeManagePage() {
               <ControlledInput
                 control={control}
                 name="titleJob"
-                label="Profissão"
+                label="Profissão:*"
                 fullWidth
                 error={!!errors.titleJob}
                 helperText={errors.titleJob?.message}
@@ -253,7 +247,7 @@ export default function RepresentativeManagePage() {
               <ControlledInput
                 control={control}
                 name="roleJob"
-                label="Cargo"
+                label="Cargo:*"
                 fullWidth
                 error={!!errors.roleJob}
                 helperText={errors.roleJob?.message}

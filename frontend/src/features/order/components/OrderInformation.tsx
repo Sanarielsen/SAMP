@@ -10,6 +10,8 @@ import BoxLoading from "@/components/BoxLoading";
 import GroupText from "@/components/GroupText";
 import GroupTextDate from "@/components/GroupTextDate";
 import HeaderPage from "@/components/HeaderPage";
+import { formatDate } from "@/utils/manageDate";
+
 
 export default function OrderInformation() {
 
@@ -88,7 +90,7 @@ export default function OrderInformation() {
           <Grid size={{ xs: 6, md: 6, lg: 3}}>
             <GroupTextDate
               title="Prazo"
-              value={currentOrder.eventDate}
+              value={formatDate(currentOrder.eventDate)}
             />
           </Grid>
         </Grid>

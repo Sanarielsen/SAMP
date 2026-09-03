@@ -153,6 +153,7 @@ export default function ModalInstallmentToPay({
                 name="paidAt"
                 mask={"99/99/9999"}
                 label="Data de pagamento a ser registrada:*"
+                showMaskHelperText
                 fullWidth
                 error={!!form.formState.errors.paidAt}
                 helperText={form.formState.errors.paidAt?.message ?? ""}

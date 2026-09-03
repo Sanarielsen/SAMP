@@ -1,35 +1,58 @@
 import { useEffect, useState } from "react";
-import { FormProvider, useForm, useWatch, type SubmitHandler } from "react-hook-form";
-import { useNavigate, useParams } from "react-router";
 
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-
-import ApartmentIcon from '@mui/icons-material/Apartment';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateClientSchema, type UpdateSchemaFormData } from "@/features/client/schema/updateClientSchema";
+import { 
+  Box, 
+  Button, 
+  Grid, 
+  TextField, 
+  Typography
+} from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { 
+  FormProvider, 
+  useForm, 
+  useWatch, 
+  type SubmitHandler 
+} from "react-hook-form";
+import { 
+  useNavigate, 
+  useParams
+} from "react-router";
 
+import { 
+  updateClientSchema, 
+  type UpdateSchemaFormData
+} from "@/features/client/schema/updateClientSchema";
+
+import { 
+  useMutationPostClient, 
+  type ClientPostPayload 
+} from "@/features/client/api/mutationPostClient";
+import { 
+  useMutationPatchClient, 
+  type ClientPatchPayload 
+} from "@/features/client/api/mutationPatchClient";
+import { optionsQueryGetClient } from "@/api/queryGetClient";
+import { useAuth } from "@/auth/AuthProvider";
+import { ModalAddress } from "@/features/client/components/ModalAddress";
+import { CopyButton } from "@/features/client/components/CopyButton";
 import { ControlledComboBox } from "@/components/ControlledComboBox";
 import { ControlledInput } from "@/components/ControlledInputText";
 import { ControlledInputMask } from "@/components/ControlledInputMask";
-import type { AddressSchemaFormData } from "@/schemas/addressSchema";
-
-import { ModalAddress } from "@/features/client/components/ModalAddress";
-import { CopyButton } from "@/features/client/components/CopyButton";
+import HeaderResourceForm from "@/components/HeaderResourceForm";
+import ToastContainer from "@/components/Toast";
 import { useAudioFeedback } from "@/hooks/useAudioFeedback";
+import type { AddressSchemaFormData } from "@/schemas/addressSchema";
+import { getDocumentMask } from "@/features/client/utils/getDocumentMask";
 import { getErrorMessage } from "@/features/client/utils/getErrorMessage";
 import { formatAddress } from "@/features/client/utils/formatAddress";
+import { parseAddress } from "@/features/client/utils/formatAddressFromAPI";
 import { emptyClient } from "@/features/client/utils/mockConstants";
-import { useMutationPostClient, type ClientPostPayload } from "@/features/client/api/mutationPostClient";
-import { useMutationPatchClient, type ClientPatchPayload } from "@/features/client/api/mutationPatchClient";
-import { useAuth } from "@/auth/AuthProvider";
-import { getDocumentMask } from "@/features/client/utils/getDocumentMask";
-import { optionsQueryGetClient } from "@/api/queryGetClient";
-import { useQuery } from "@tanstack/react-query";
-import { formatDocument } from "../../../utils/formatDocument";
-import { parseAddress } from "../utils/formatAddressFromAPI";
 import { cleanValue } from "@/utils/cleanValue";
-import ToastContainer from "@/components/Toast";
+import { formatDocument } from "@/utils/formatDocument";
 import { formatDate, parseDate } from "@/utils/manageDate";
+
 
 const optionsType = [
   {
@@ -218,40 +241,17 @@ export default function ManageClientPage() {
     <FormProvider {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box component="section" sx={{ p: 8 }}>
-          <Grid
-            container 
-            spacing={4} 
-            sx={{
-              textAlign: { xs: "center", md: "left" }
-            }}
-          >
-            <Grid 
-              size={{ xs: 12}}
-              sx={{
-                textAlign:"center"
-              }}
-            >
-              <Typography variant="h4" component="h1">
-                Adicionar novo cliente
-              </Typography>
-            </Grid>
-
-            <Grid 
-              size={{ xs: 12}}
-              sx={{
-                textAlign:"center"
-              }}
-            >
-              <ApartmentIcon fontSize="large" />
-            </Grid>    
-          </Grid>
+          <HeaderResourceForm
+            title="Adicionar novo cliente"
+            resource="CLIENTS"
+          />
 
           <Grid container spacing={4} sx={{ pt: 8, pb: 3 }}>
             <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
               <ControlledInput
                 control={control}
                 name="legalName"
-                label="Razão social"
+                label="Razão social:*"
                 fullWidth
                 error={!!errors.legalName}
                 helperText={errors.legalName?.message}
@@ -261,7 +261,7 @@ export default function ManageClientPage() {
               <ControlledInput
                 control={control}
                 name="tradeName"
-                label="Nome Fantasia"
+                label="Nome Fantasia:*"
                 fullWidth
                 error={!!errors.tradeName}
                 helperText={errors.tradeName?.message}
@@ -271,7 +271,7 @@ export default function ManageClientPage() {
               <ControlledComboBox
                 name="type"
                 control={control}
-                label="Tipo de cliente"
+                label="Tipo de cliente:*"
                 placeholder="Select a company"
                 options={optionsType}
               />
@@ -283,7 +283,8 @@ export default function ManageClientPage() {
                 mask={protocolMask}
                 variant="outlined"
                 disabled={!documentType}
-                label="Documento"
+                label="Documento:*"
+                showMaskHelperText
                 fullWidth
                 error={!!errors.protocol}
                 helperText={errors.protocol?.message}
@@ -295,7 +296,8 @@ export default function ManageClientPage() {
                 name="fundationDate"
                 mask="99/99/9999"
                 variant="outlined"
-                label="Data de fundação"
+                label="Data de fundação:*"
+                showMaskHelperText
                 fullWidth
                 error={!!errors.fundationDate}
                 helperText={errors.fundationDate?.message}
@@ -306,7 +308,7 @@ export default function ManageClientPage() {
           <Grid container spacing={4} sx={{ py: 2 }}>
             <Grid size={{ xs: 12 }} sx={{ display: 'flex', gap: 1 }}>
               <TextField
-                label="Endereço de localização"
+                label="Endereço de localização:*"
                 fullWidth
                 value={formatAddress(
                   watch("locationAddress")
@@ -337,7 +339,7 @@ export default function ManageClientPage() {
           <Grid container spacing={4} sx={{ py: 3 }}>
             <Grid size={{ xs: 12 }} sx={{ display: 'flex', gap: 1 }}>
               <TextField
-                label="Endereço de correspondência"
+                label="Endereço de correspondência:*"
                 fullWidth
                 value={formatAddress(
                   watch("correspondenceAddress")
@@ -380,7 +382,7 @@ export default function ManageClientPage() {
               <ControlledInput
                 control={control}
                 name="nameContact"
-                label="Nome do contato"
+                label="Nome do contato:*"
                 fullWidth
                 error={!!errors.nameContact}
                 helperText={errors.nameContact?.message}
@@ -392,7 +394,8 @@ export default function ManageClientPage() {
                 name="numberContact"
                 mask="(99) 99999-9999"                  
                 variant="outlined"
-                label="Contato"
+                label="Contato:*"
+                showMaskHelperText
                 fullWidth
                 error={!!errors.numberContact}
                 helperText={errors.numberContact?.message}

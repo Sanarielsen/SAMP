@@ -15,27 +15,27 @@ export default function AboutPage() {
         resource="ABOUT"
         subtitle="Detalhes sobre o sistema"
       />
-        <Grid container spacing={4} sx={{ pt: 8, pb: 3 }}>
-          <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'center' }}>
-            <SectionBlock
-              title="Sistema"
-              subtitle="SAMP: Sistema de automatizacao de marcas e patentes"
-            />
+      <Grid container spacing={4} sx={{ pt: 8, pb: 3 }}>
+        <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'center' }}>
+          <SectionBlock
+            title="Sistema"
+            subtitle="SAMP: Sistema de automatizacao de marcas e patentes"
+          />
 
-            <SectionBlock
-              title="Versão"
-              subtitle="v1.0.0"
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'center' }}>
-
-            <SectionBlock
-              title="Desenvolvido por"
-              subtitle="@Sanarielsen"
-              redirect="https://github.com/Sanarielsen"
-            />
-          </Grid>
+          <SectionBlock
+            title="Versão"
+            subtitle="v1.0.0"
+          />
         </Grid>
+        <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'center' }}>
+
+          <SectionBlock
+            title="Desenvolvido por"
+            subtitle="@Sanarielsen"
+            redirect="https://github.com/Sanarielsen"
+          />
+        </Grid>
+      </Grid>
     </Box>
   )
 }

@@ -11,7 +11,7 @@ export async function postPaymentMethod(request: FastifyRequest, reply: FastifyR
   const postBodySchema = z.object({
     name: z.string(),
     order: z.number(),
-    observation: z.string().optional(),
+    observation: z.string().nullable().optional(),
   })
   const resultBody = postBodySchema.parse(request.body)
   

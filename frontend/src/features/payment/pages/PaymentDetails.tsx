@@ -21,7 +21,7 @@ import ModalInstallmentToObs from "@/features/payment/components/ModalInstallmen
 import InstallmentDetail from "@/features/payment/components/InstallmentDetail";
 import ModalInstallmentToPay from "@/features/payment/components/ModalInstallmentToPay";
 import { FullScreenLoader } from "@/components/FullScreenLoader";
-import HeaderPage from "@/components/HeaderPage";
+import HeaderResourceForm from "@/components/HeaderResourceForm";
 import ToastContainer from "@/components/Toast";
 import { useAudioFeedback } from "@/hooks/useAudioFeedback";
 
@@ -92,16 +92,19 @@ export default function PaymentDetails() {
   }
   
   return (
-    <>
-      <HeaderPage 
-        title="Gerenciar as parcelas deste pagamento"
-      />
-       
+    <> 
       <Box component="section" sx={{
         p: 4, 
         display: 'flex',
         flexDirection: "column",
       }}>
+        <Box component="section" sx={{ py: 4 }}> 
+          <HeaderResourceForm
+            title="Gerenciar as parcelas deste pagamento"
+            resource="PAYMENTS"
+          />
+        </Box>
+        
         { isSuccess && 
           listPaymentInstallments.map( ( paymentInstallment: PaymentInstallment ) => {
             return (

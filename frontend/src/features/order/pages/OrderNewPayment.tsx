@@ -94,18 +94,18 @@ export default function OrderNewPayment() {
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Box component="section" sx={{ p: 8 }}>
+          
           <HeaderResourceForm 
             title="Inserir nova ordem de pagamento"
             resource="PAYMENTS"
           />
 
           <Grid container spacing={4} sx={{ pt: 8, pb: 3 }}>
-
             <Grid size={{ xs: 12, sm: 6, lg: 8 }}>
               <ControlledInputAdornment
                 type="number"
                 control={form.control}
-                label="Valor total das parcelas"
+                label="Valor total das parcelas:*"
                 name="totalAmountInCents"
                 contextAdornment="R$"
                 positionAdornment="start"
@@ -121,7 +121,7 @@ export default function OrderNewPayment() {
               <ControlledInput
                 type="number"
                 control={form.control}
-                label="Parcelas (1 se for a vista)"
+                label="Parcelas (1 se for a vista):*"
                 name="totalInstallments"
                 fullWidth
                 error={!!errors?.totalInstallments}
@@ -135,7 +135,7 @@ export default function OrderNewPayment() {
               <ControlledComboBox
                 control={form.control}
                 name={'methodId'}
-                label='Método de pagamento'
+                label='Método de pagamento:*'
                 options={isSuccessMethods ? listPaymentMethods : []}
               />
             </Grid>
@@ -146,7 +146,8 @@ export default function OrderNewPayment() {
                 variant="outlined"
                 name="firstDueDate"
                 mask={"99/99/9999"}
-                label="Data do primeiro vencimento"
+                label="Data do primeiro vencimento:*"
+                showMaskHelperText
                 fullWidth
                 error={!!errors.firstDueDate}
                 helperText={errors.firstDueDate?.message}
@@ -156,8 +157,8 @@ export default function OrderNewPayment() {
             <Grid size={{ xs: 12, sm: 12, lg: 9 }}>
               <ControlledInput
                 control={form.control}
-                label="Descricao"
                 name="observation"
+                label="Observações"
                 fullWidth
                 error={!!errors?.observation}
                 helperText={
