@@ -9,7 +9,6 @@ import {
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import dayjs from "dayjs";
 import { 
   Box, 
   Button, 
@@ -30,6 +29,7 @@ import {
   manageAppointmentSchema, 
   type ManageAppointmentSchemaFormData
 } from "@/features/client/schema/manageAppointment";
+import { parseDate } from "@/utils/manageDate";
 
 
 export default function ManageNewAppointment() {
@@ -89,7 +89,7 @@ export default function ManageNewAppointment() {
 
   const onSubmit: SubmitHandler<ManageAppointmentSchemaFormData> = async (data) => {
 
-    const appointmentAtOnServer = dayjs(data.appointmentAt, 'DD/MM/YYYY HH:mm').toDate()
+    const appointmentAtOnServer = parseDate(data.appointmentAt);
 
     mutationPostAppointment.mutate({
       ...data,
@@ -146,8 +146,9 @@ export default function ManageNewAppointment() {
                 control={form.control}
                 variant="outlined"
                 name="appointmentAt"
-                mask={"99/99/9999 99:99"}
+                mask={"99/99/9999"}
                 label="Data da agenda:*"
+                showMaskHelperText
                 fullWidth
                 error={!!errors.appointmentAt}
                 helperText={errors.appointmentAt?.message}

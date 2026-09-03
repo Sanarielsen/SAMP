@@ -118,13 +118,13 @@ export default function ManageUpdateAppointment() {
 
   const onSubmit: SubmitHandler<ManageAppointmentSchemaFormData> = async (data) => {
 
-    const appointmentAtConverted = new Date(parseDate(data.appointmentAt ?? undefined))
+    const appointmentAtOnServer = parseDate(data.appointmentAt);
 
     mutationPatchAppointment.mutate({ 
       id: currentAppointment.id,
       orderId: data.orderId ?? null,
       clientId: data.clientId ?? undefined,
-      appointmentAt: appointmentAtConverted,
+      appointmentAt: appointmentAtOnServer,
       description: data.description ?? undefined,
     })
   }
@@ -179,6 +179,7 @@ export default function ManageUpdateAppointment() {
                 name="appointmentAt"
                 mask={"99/99/9999 99:99"}
                 label="Data da agenda:*"
+                showMaskHelperText
                 fullWidth
                 error={!!errors.appointmentAt}
                 helperText={errors.appointmentAt?.message}

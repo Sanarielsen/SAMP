@@ -201,8 +201,9 @@ export function ModalAddress({
               name={`draft.${destination}.cep`}
               mask="99999-999"
               variant="outlined"
-              label="CEP"
+              label="CEP:*"
               fullWidth
+              showMaskHelperText
               error={!!fieldError?.cep}
               helperText={
                 String(fieldError?.cep?.message ?? "")
@@ -240,7 +241,7 @@ export function ModalAddress({
             <ControlledInput
               control={control}
               name={`draft.${destination}.street`}
-              label="Logradouro"
+              label="Logradouro:*"
               fullWidth
               error={!!fieldError?.street}
               helperText={
@@ -253,7 +254,7 @@ export function ModalAddress({
             <ControlledInput
               control={control}
               name={`draft.${destination}.number`}
-              label="Número"
+              label="Número:*"
               fullWidth
               error={!!fieldError?.number}
               helperText={
@@ -266,7 +267,7 @@ export function ModalAddress({
             <ControlledInput
               control={control}
               name={`draft.${destination}.district`}
-              label="Bairro"
+              label="Bairro:*"
               fullWidth
               error={!!fieldError?.district}
               helperText={
@@ -279,7 +280,7 @@ export function ModalAddress({
             <ControlledInput
               control={control}
               name={`draft.${destination}.city`}
-              label="Cidade"
+              label="Cidade:*"
               fullWidth
               error={!!fieldError?.city}
               helperText={
@@ -292,7 +293,7 @@ export function ModalAddress({
             <ControlledInput
               control={control}
               name={`draft.${destination}.state`}
-              label="Estado"
+              label="Estado:*"
               fullWidth
               error={!!fieldError?.state}
               helperText={
@@ -305,7 +306,7 @@ export function ModalAddress({
             <ControlledInput
               control={control}
               name={`draft.${destination}.country`}
-              label="País"
+              label="País:*"
               fullWidth
               error={!!fieldError?.country}
               helperText={

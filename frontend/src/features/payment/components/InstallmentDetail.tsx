@@ -142,6 +142,7 @@ export default function InstallmentDetail({
               label="Vencimento"
               name="dueDate"
               mask="99/99/9999"
+              showMaskHelperText
               fullWidth
               error={!!errors?.dueDate}
               helperText={

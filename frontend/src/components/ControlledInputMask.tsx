@@ -27,6 +27,7 @@ export interface ControlledInputMaskProps<
   mask?: MaskType;
   rules?: UseControllerProps<TFieldValues, TName>['rules'];
   defaultValue?: UseControllerProps<TFieldValues, TName>['defaultValue'];
+  showMaskHelperText?: boolean;
 }
 
 const applyGenericMask = (rawValue: string, maskProp?: MaskType): string => {
@@ -99,6 +100,8 @@ export const ControlledInputMask = <
   rules = undefined,
   defaultValue = undefined,
   onChange: customOnChange = undefined,
+  showMaskHelperText = false,
+  helperText,
   slotProps,
   ...props
 }: ControlledInputMaskProps<TFieldValues, TName>) => {
@@ -116,13 +119,30 @@ export const ControlledInputMask = <
     }
   };
 
+  const getComputedHelperText = (currentValue: string) => {
+    if (helperText) return helperText;
+
+    if (!showMaskHelperText || !mask) return undefined;
+
+    if (typeof mask === 'string') {
+      return `Formato: ${mask}`;
+    }
+
+    if (typeof mask === 'function') {
+      const masked = mask(currentValue);
+      return masked ? `Formato: ${masked}` : undefined;
+    }
+
+    return undefined;
+  };
+
   return (
     <Controller
       name={name}
       control={control}
       rules={rules}
       defaultValue={defaultValue}
-      render={({ field: { onChange, value, ref: fieldRef, ...fieldProps } }) => {
+      render={({ field: { onChange, value, ref: fieldRef, ...fieldProps }, fieldState: { error } }) => {
         const currentValue = (value as string) || '';
 
         const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -174,6 +194,8 @@ export const ControlledInputMask = <
           }
         };
 
+        const finalHelperText = error?.message || getComputedHelperText(currentValue);
+
         return (
           <TextField
             {...fieldProps}
@@ -182,6 +204,8 @@ export const ControlledInputMask = <
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             inputRef={handleInputRef}
+            error={!!error}
+            helperText={finalHelperText}
             slotProps={{
               ...slotProps,
               htmlInput: {
