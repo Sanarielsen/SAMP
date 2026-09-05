@@ -12,7 +12,7 @@ export const newPaymentSchema = z.object({
       const num = Number(val);
       return Number.isInteger(num) && num > 0;
     }, "Parcelas devem ser maior que 0"),
-  methodId: z.string({
+  methodId: z.number({
     error: 'Informe o método de pagamento.'
   }).min(1),
   firstDueDate: z.string({

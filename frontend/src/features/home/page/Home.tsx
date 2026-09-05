@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { useLocation } from "react-router";
 
 import AppointmentsTimeline from "@/features/home/components/AppointmentsTimeline";
@@ -25,7 +26,7 @@ export default function Home() {
 
   return (
     <>
-      <HeaderPage title="SAMP - Sistema de automatizacao de marcas e patentes"/>
+      <HeaderPage title="Seja bem-vindo ao SIAMPI"/>
       <AppointmentsTimeline />
 
       <ToastContainer

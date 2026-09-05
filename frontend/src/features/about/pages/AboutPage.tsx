@@ -24,7 +24,7 @@ export default function AboutPage() {
 
           <SectionBlock
             title="Versão"
-            subtitle="v1.0.0"
+            subtitle="v1.1.2"
           />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'center' }}>
